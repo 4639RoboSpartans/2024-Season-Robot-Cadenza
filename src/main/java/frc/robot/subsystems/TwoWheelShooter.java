@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TwoWheelShooter extends SubsystemBase implements IShooterSubsystem {
@@ -11,6 +13,8 @@ public class TwoWheelShooter extends SubsystemBase implements IShooterSubsystem 
         motor2 = new TalonFX(motor2ID);
         motor1.setInverted(true);
         motor2.setInverted(false);
+        motor1.setNeutralMode(NeutralModeValue.Coast);
+        motor2.setNeutralMode(NeutralModeValue.Coast);
     }
 
     public void shoot(double speed) {
