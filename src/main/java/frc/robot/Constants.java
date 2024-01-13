@@ -18,6 +18,10 @@ public final class Constants {
         public static final int CLIMBER_LEFT = 15;
         public static final int CLIMBER_RIGHT = 16;
         public static final int AIM_MOTOR = 17;
+
+        public static final int LEFT_ROTATOR_MOTOR = 18;
+        public static final int RIGHT_ROTATOR_MOTOR = 19;
+        public static final int HOOK_MOTOR = 20;
     }
 
     public static final class RobotInfo {
@@ -32,6 +36,9 @@ public final class Constants {
         public static final double MOVEMENT_SPEED = 0.75;
         public static final double CLIMBER_LEFT_SPEED = 0.5;
         public static final double CLIMBER_RIGHT_SPEED = 0.5;
+        public static final double TRAMP_ROTATOR_SPEED = 0.5;
+        public static final double TRAMP_HOOK_RELEASE_SPEED = 0.5;
+        public static final double TRAMP_ROLLER_RELEASE_SPEED = 0.5;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
                 0.05,
