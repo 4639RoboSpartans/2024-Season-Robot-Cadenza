@@ -18,14 +18,10 @@ public class ExtendClimberCommand extends Command{
     }
 
     public void execute(){
-        climberSubsystem.moveUp(Constants.CLIMBER_SPEED);
+        climberSubsystem.setSpeed(1.0);
     }
 
     public void end(boolean interrupted){
         climberSubsystem.stop();
-    }
-
-    public boolean isFinished(){
-        return false;
     }
 }

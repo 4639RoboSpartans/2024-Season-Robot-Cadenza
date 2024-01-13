@@ -15,48 +15,8 @@ public final class Constants {
         public static final int SHOOTER_MOTOR_LEFT = 13;
         public static final int SHOOTER_MOTOR_RIGHT = 14;
 
-        public static final int CLAW_SOLENOID_CHANNEL = 0;    //pneumatics
-    }
-
-    public static final class SetPoints {
-        //Intake:
-        //Floor intake
-        public static final double FIWrist = -1;
-        public static final double FITelescope = 0;
-        public static final double FIArmPivot = -85;
-        public static final double FIElevator = 30;
-        //Platform intake
-        public static final double PIWrist = -3;//-4
-        public static final double PITelescope = 0;//0
-        public static final double PIArmPivot = -40;//-25
-        public static final double PIElevator = 42;//0
-
-        //Movement:
-        //Movement pos
-        public static final double MWrist = -1;
-        public static final double MTelescope = 5;
-        public static final double MArmPivot = 0;
-        public static final double MElevator = 10;
-
-
-        //Scoring:
-        //Ground
-        public static final double GSWrist = -1;
-        public static final double GSTelescope = 0;
-        public static final double GSArmPivot = -93.14;
-        public static final double GSElevator = 50;
-        //middle row cone
-        public static final double MCOWrist = -3;
-        public static final double MCOTelescope = 0;
-        public static final double MCOArmPivot = -33.73;
-        public static final double MCOElevator = 10;
-        //middle row cube is same as cone middle cube
-        //top row cone
-        public static final double TCOWrist = -2.2;
-        public static final double TCOTelescope = 40;
-        public static final double TCOArmPivot = -40;
-        public static final double TCOElevator = 55;
-        //top row cube is
+        public static final int CLIMBER_LEFT = 15;
+        public static final int CLIMBER_RIGHT = 16;
     }
 
     public static class LEDInfo {
@@ -101,6 +61,8 @@ public final class Constants {
         public static final double MOVEMENT_SPEED = 0.75; // 0 - 1
         public static final double MAX_VELOCITY = 4;
         public static final double MAX_ACCELERATION = 3;
+        public static final double CLIMBER_LEFT_SPEED = 0.5;
+        public static final double CLIMBER_RIGHT_SPEED = 0.5;
 
         //https://github.com/SeanSun6814/FRC0ToAutonomous/blob/master/%236%20Swerve%20Drive%20Auto/src/main/java/frc/robot/Constants.java#L57
 

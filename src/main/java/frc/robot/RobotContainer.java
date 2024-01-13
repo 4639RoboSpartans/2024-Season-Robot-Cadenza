@@ -23,7 +23,10 @@ public class RobotContainer
 
     public RobotContainer()
     {
-        shooter = new TwoWheelShooterNeos(13, 14);
+        shooter = new TwoWheelShooterNeos(
+                Constants.IDs.SHOOTER_MOTOR_LEFT,
+                Constants.IDs.SHOOTER_MOTOR_RIGHT
+        );
         navX = new NavX();
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
         configureBindings();
