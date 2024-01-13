@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -16,6 +17,7 @@ public final class Constants {
 
         public static final int CLIMBER_LEFT = 15;
         public static final int CLIMBER_RIGHT = 16;
+        public static final int AIM_MOTOR = 17;
     }
 
     public static final class RobotInfo {
@@ -31,8 +33,15 @@ public final class Constants {
         public static final double CLIMBER_LEFT_SPEED = 0.5;
         public static final double CLIMBER_RIGHT_SPEED = 0.5;
 
-        public static final double ROTATOR_MOTOR_KP = 0.05;
-        public static final double ROTATOR_MOTOR_KI = 0.07;
+        public static final PID SWERVE_ROTATOR_PID = new PID(
+                0.05,
+                0.07
+        );
+
+        // TODO: find actual values
+        public static final PID SHOOTER_AIM_PID = new PID(
+            0, 0, 0
+        );
     }
 
     public static final double DEADZONE_VALUE = 0.01;
@@ -43,4 +52,13 @@ public final class Constants {
             int encoderID,
             double rotationOffset
     ) {}
+
+    public record PID(double kp, double ki, double kd) {
+        public PID(double kp) { this(kp, 0); }
+        public PID(double kp, double ki) { this(kp, ki, 0); }
+
+        public PIDController create() {
+            return new PIDController(kp, ki, kd);
+        }
+    }
 }

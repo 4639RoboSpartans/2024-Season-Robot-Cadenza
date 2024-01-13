@@ -1,8 +1,12 @@
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class TwoWheelShooterNeos extends SubsystemBase implements IShooterSubsystem {
     private final CANSparkMax motor1, motor2;
@@ -22,4 +26,5 @@ public class TwoWheelShooterNeos extends SubsystemBase implements IShooterSubsys
         motor1.stopMotor();
         motor2.stopMotor();
     }
+
 }

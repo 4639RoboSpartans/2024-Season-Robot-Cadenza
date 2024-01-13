@@ -16,17 +16,13 @@ public class SwerveModule {
     private final PIDController rotationPID;
 
     private final double rotationOffset;
-    
-    private final double kp = 0.005;
-    private final double ki = 0;
-    private final double kd = 0;
 
     private double speed = 0;
 
     private final double DriveConversionFactor;
 
     public SwerveModule(SwerveModuleConfig swerveModuleData){
-        DriveConversionFactor = (1. /2048)*(1/6.55)*(0.1016)*Math.PI;
+        DriveConversionFactor = (1./2048)*(1/6.55)*(0.1016)*Math.PI;
 
         driver = new TalonFX(swerveModuleData.driveMotorID());
         rotator = new TalonFX(swerveModuleData.rotatorMotorID());
@@ -38,14 +34,9 @@ public class SwerveModule {
 
         rotationOffset = swerveModuleData.rotationOffset();
 
-        rotationPID = new PIDController(
-            Constants.RobotInfo.ROTATOR_MOTOR_KP,
-            Constants.RobotInfo.ROTATOR_MOTOR_KI,
-            0
-        );
+        rotationPID = Constants.RobotInfo.SWERVE_ROTATOR_PID.create();
         rotationPID.setTolerance(0.1);
         rotationPID.enableContinuousInput(-180, 180);
-
     }
 
     public void periodic() {

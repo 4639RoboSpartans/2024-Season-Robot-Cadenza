@@ -17,6 +17,8 @@ import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.shooter.TwoWheelShooterNeos;
+import frc.robot.subsystems.shooterPivot.FalconShooterPivotSubsystem;
+import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.tramp.DummyTrampSubsystem;
 import frc.robot.subsystems.tramp.ITrampSubsystem;
@@ -28,9 +30,10 @@ public class RobotContainer {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
 
     private final IShooterSubsystem shooter;
-    private final IIntakeSubsystem intakeSubsystem;
-    private final IClimberSubsystem climberSubsystem;
-    private final ITrampSubsystem trampSubsystem;
+    private final IShooterPivotSubsystem shooterPivot;
+    private final IIntakeSubsystem intake;
+    private final IClimberSubsystem climber;
+    private final ITrampSubsystem tramp;
 
 
     public RobotContainer() {
@@ -43,9 +46,13 @@ public class RobotContainer {
                 Constants.IDs.SHOOTER_MOTOR_LEFT,
                 Constants.IDs.SHOOTER_MOTOR_RIGHT
         );
-        intakeSubsystem = new DummyIntakeSubsystem();
-        climberSubsystem = new DummyClimberSubsystem();
-        trampSubsystem = new DummyTrampSubsystem();
+        shooterPivot = new FalconShooterPivotSubsystem(
+                // TODO
+                Constants.IDs.AIM_MOTOR
+        );
+        intake = new DummyIntakeSubsystem();
+        climber = new DummyClimberSubsystem();
+        tramp = new DummyTrampSubsystem();
 
         configureBindings();
     }
