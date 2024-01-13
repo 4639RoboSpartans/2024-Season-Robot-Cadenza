@@ -18,10 +18,12 @@ public final class Constants {
 
   public static final double CLIMBER_SPEED = 0.5;
 
-  public enum ClimberDirection { Normal, Reversed };
+  public enum MotorDirection { Normal, Reversed };
 
-  public static final ClimberDirection LEFT_CLIMBER_DIRECTION = ClimberDirection.Normal;
-  public static final ClimberDirection RIGHT_CLIMBER_DIRECTION = ClimberDirection.Normal;
+  public static final MotorDirection LEFT_CLIMBER_DIRECTION = MotorDirection.Normal;
+  public static final MotorDirection RIGHT_CLIMBER_DIRECTION = MotorDirection.Normal;
+
+  
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }

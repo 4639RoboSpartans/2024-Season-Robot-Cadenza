@@ -16,8 +16,8 @@ public class ClimberSubsystem implements IClimberSubsystem{
         leftMotor.setNeutralMode(NeutralModeValue.Brake);
         rightMotor.setNeutralMode(NeutralModeValue.Brake);
 
-        leftInvert = Constants.LEFT_CLIMBER_DIRECTION == Constants.ClimberDirection.Normal;
-        rightInvert = Constants.RIGHT_CLIMBER_DIRECTION == Constants.ClimberDirection.Normal;
+        leftInvert = Constants.LEFT_CLIMBER_DIRECTION == Constants.MotorDirection.Normal;
+        rightInvert = Constants.RIGHT_CLIMBER_DIRECTION == Constants.MotorDirection.Normal;
 
         leftMotor.setInverted(leftInvert);
         rightMotor.setInverted(rightInvert);
