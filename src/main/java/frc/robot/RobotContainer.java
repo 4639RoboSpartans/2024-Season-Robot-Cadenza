@@ -7,48 +7,59 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.ManualSwerveDriveCommand;
+import frc.robot.oi.OI;
+import frc.robot.subsystems.climber.DummyClimberSubsystem;
+import frc.robot.subsystems.climber.IClimberSubsystem;
+import frc.robot.subsystems.intake.DummyIntakeSubsystem;
+import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.shooter.TwoWheelShooterNeos;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.tramp.DummyTrampSubsystem;
+import frc.robot.subsystems.tramp.ITrampSubsystem;
 
 
-public class RobotContainer
-{
-    private final IShooterSubsystem shooter;
-
+public class RobotContainer {
+    private final OI oi;
+    private final NavX navX;
     private final SwerveDriveSubsystem swerveDriveSubsystem;
 
-    private final NavX navX;
+    private final IShooterSubsystem shooter;
+    private final IIntakeSubsystem intakeSubsystem;
+    private final IClimberSubsystem climberSubsystem;
+    private final ITrampSubsystem trampSubsystem;
 
-    public RobotContainer()
-    {
+
+    public RobotContainer() {
+        oi = new OI();
+        navX = new NavX();
+
+        swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
+
         shooter = new TwoWheelShooterNeos(
                 Constants.IDs.SHOOTER_MOTOR_LEFT,
                 Constants.IDs.SHOOTER_MOTOR_RIGHT
         );
-        navX = new NavX();
-        swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
+        intakeSubsystem = new DummyIntakeSubsystem();
+        climberSubsystem = new DummyClimberSubsystem();
+        trampSubsystem = new DummyTrampSubsystem();
+
         configureBindings();
     }
     
     
     private void configureBindings() {
-//        shooter.setDefaultCommand(new Command() {
-//            {
-//                addRequirements(shooter);
-//            }
-//
-//            @Override
-//            public void execute() {
-//                shooter.shoot(0.2);
-//            }
-//        });
+        swerveDriveSubsystem.setDefaultCommand(new ManualSwerveDriveCommand(
+            swerveDriveSubsystem, oi
+        ));
+
+
     }
     
     
-    public Command getAutonomousCommand()
-    {
+    public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");
     }
 }

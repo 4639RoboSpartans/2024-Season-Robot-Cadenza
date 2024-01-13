@@ -15,6 +15,10 @@ public class NavX extends SubsystemBase{
         ahrs = new AHRS(SPI.Port.kMXP);
     }
 
+    public double getHeading() {
+        return ahrs.getCompassHeading();
+    }
+
     public double getRoll(){
         return ahrs.getRoll();
     }
@@ -23,22 +27,10 @@ public class NavX extends SubsystemBase{
         return ahrs.getPitch();
     }
 
-    public double getHeading() {
-        return getGyroRotation2d().getDegrees();
-    }
-
-    public Rotation2d getRotation(){
+    public Rotation2d getRotation2d() {
         return ahrs.getRotation2d();
     }
-    public Rotation2d getGyroRotation2d() {
-        double angle = ((-ahrs.getYaw() + 180) % 360 + 360) % 360 - 180;
-        return Rotation2d.fromDegrees(angle);
-    }
 
-    public boolean isZero(){
-        double pitch = ahrs.getRoll();
-        return Math.abs(pitch) < 1.0;
-    }
     public void periodic() {
         SmartDashboard.putNumber("AHRS Value", ahrs.getRoll());
     }

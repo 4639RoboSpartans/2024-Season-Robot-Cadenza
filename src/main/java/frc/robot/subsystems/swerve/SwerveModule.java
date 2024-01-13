@@ -5,11 +5,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveModuleConfig;
+import math.math;
 
 public class SwerveModule {
     private final TalonFX driver, rotator;
@@ -50,8 +49,7 @@ public class SwerveModule {
     }
 
     public void periodic() {
-        double rotate = rotationPID.calculate(getRotationInDegrees());
-        rotator.setVoltage(-rotationPID.calculate(getRotationInDegrees()));
+        rotator.setVoltage(rotationPID.calculate(getRotationInDegrees()));
         driver.set(speed * Constants.RobotInfo.MOVEMENT_SPEED);
 
         // SmartDashboard.putNumber("Module Speed " + driver.getDeviceID(), speed);
@@ -63,8 +61,7 @@ public class SwerveModule {
 
     public double getRotationInDegrees(){
         double rawRotation = rotationEncoder.getAbsolutePosition().getValue() - rotationOffset;
-        // Constrain angle to be between -180 and 180
-        return ((rawRotation + 180) % 360 + 360) % 360 - 180;
+        return math.mod(rawRotation, -180, 180);
     }
 
     private void setSpeed(double speed){
@@ -82,23 +79,13 @@ public class SwerveModule {
         return driver.getPosition().getValue() * DriveConversionFactor;
     }
 
-    // public double getDriveDistance(){
-    //     return ((driver.getSelectedSensorPosition()/4096)/6.55)*(0.1*Math.PI);
-    // }
-    // public double getRadRotation(){
-    //     return Math.toRadians(rotationEncoder.getPosition());
-    // }
-    // public SwerveModulePosition getPosition(){
-    //     return new SwerveModulePosition(getDriveDistance(), new Rotation2d(getRadRotation()));
-    // }
-
     public double getTurningVelocity(){
         return rotationEncoder.getVelocity().getValue();
     }
     public double getTurningPosition(){
         double rawRotation = rotationEncoder.getAbsolutePosition().getValue() - rotationOffset;
-        // Constrain angle to be between -180 and 180
-        return rawRotation;
+
+        return math.mod(rawRotation, -180, 180);
     }
 
     public SwerveModuleState getState() {

@@ -19,38 +19,6 @@ public final class Constants {
         public static final int CLIMBER_RIGHT = 16;
     }
 
-    public static class LEDInfo {
-        public static int LEDStatus = 0;
-        // 0 = Blue and orange stirps, disabled status
-        // 1 = Green, has object
-        // 2 = Purple, need Cube
-        // 3 = Yellow, need Cone
-        // 4 = Red, does not have object
-        public static final int BlueR = 3;
-        public static final int BlueG = 23;
-        public static final int BlueB = 252;
-
-        public static final int OrangeR = 252;
-        public static final int OrangeG = 61;
-        public static final int OrangeB = 3;
-
-        public static final int PurpleR = 252;
-        public static final int PurpleG = 6;
-        public static final int PurpleB = 244;
-
-        public static final int YellowR = 255;
-        public static final int YellowG = 255;
-        public static final int YellowB = 0;
-
-        public static final int GreenR = 19;
-        public static final int GreenG = 252;
-        public static final int GreenB = 3;
-
-        public static final int RedR = 252;
-        public static final int RedG = 3;
-        public static final int RedB = 3;
-    }
-
     public static final class RobotInfo {
         public static final double robotBaseLength = 0.44;
         public static final double centerToWheel = 0.245;
@@ -64,14 +32,11 @@ public final class Constants {
         public static final double CLIMBER_LEFT_SPEED = 0.5;
         public static final double CLIMBER_RIGHT_SPEED = 0.5;
 
-        //https://github.com/SeanSun6814/FRC0ToAutonomous/blob/master/%236%20Swerve%20Drive%20Auto/src/main/java/frc/robot/Constants.java#L57
-
-
         public static class DriveConstants {
             public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
             public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-            public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+            public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
                     new Translation2d(centerToWheel, centerToWheel),
                     new Translation2d(centerToWheel, -centerToWheel),
                     new Translation2d(-centerToWheel, centerToWheel),
@@ -118,36 +83,5 @@ public final class Constants {
             int encoderID,
             double rotationOffset
     ) {
-    }
-
-    public enum Axes {
-        LEFT_STICK_X(0), LEFT_STICK_Y(1),
-        LEFT_TRIGGER(2), RIGHT_TRIGGER(3),
-        RIGHT_STICK_X(4), RIGHT_STICK_Y(5);
-
-        private final int value;
-
-        Axes(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
-
-    public enum Buttons {
-        A_BUTTON(1), B_BUTTON(2), X_BUTTON(3), Y_BUTTON(4), LEFT_BUMPER(5), RIGHT_BUMPER(6), BACK_BUTTON(
-                7), START_BUTTON(8), LEFT_STICK(9), RIGHT_STICK(10);
-
-        private final int value;
-
-        private Buttons(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
     }
 }
