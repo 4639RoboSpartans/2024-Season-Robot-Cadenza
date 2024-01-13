@@ -14,23 +14,18 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
     
     private RobotContainer robotContainer;
-    
-    
+
     @Override
-    public void robotInit() {}
-    
-    
+    public void robotInit() {
+        robotContainer = new RobotContainer();
+    }
+
     @Override
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
     }
-    
-    
-    @Override
-    public void disabledInit() {}
-    
-    
+
     @Override
     public void disabledPeriodic() {}
     
