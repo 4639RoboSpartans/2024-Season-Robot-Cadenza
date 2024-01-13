@@ -6,23 +6,17 @@ import frc.robot.Constants;
 
 public class ClimberSubsystem implements IClimberSubsystem{
     private final TalonFX leftMotor, rightMotor;
-    private final int leftUp, rightUp;
+    private final boolean leftInvert, rightInvert;
 
     public ClimberSubsystem(){
         leftMotor = new TalonFX(Constants.LEFT_CLIMBER_MOTOR);
         rightMotor = new TalonFX(Constants.RIGHT_CLIMBER_MOTOR);
-        if (Constants.LEFT_UP){
-            leftUp = 1;
-        }
-        else{
-            leftUp = -1;
-        }
-        if (Constants.RIGHT_UP){
-            rightUp = 1;
-        }
-        else{
-            rightUp = -1;
-        }
+
+        leftInvert = Constants.LEFT_CLIMBER_DIRECTION == Constants.ClimberDirection.Normal;
+        rightInvert = Constants.RIGHT_CLIMBER_DIRECTION == Constants.ClimberDirection.Normal;
+
+        leftMotor.setInverted(leftInvert);
+        rightMotor.setInverted(rightInvert);
     }
 
     public void stop(){
@@ -31,23 +25,19 @@ public class ClimberSubsystem implements IClimberSubsystem{
     }
 
     public void moveLeftUp(double speed){
-        double motorSpeed = leftUp * speed;
-        leftMotor.set(motorSpeed);
+        leftMotor.set(speed);
     }
 
     public void moveRightUp(double speed){
-        double motorSpeed = rightUp * speed;
-        rightMotor.set(motorSpeed);
+        rightMotor.set(speed);
     }
 
     public void moveLeftDown(double speed){
-        double motorSpeed = -leftUp * speed;
-        leftMotor.set(motorSpeed);
+        leftMotor.set(-speed);
     }
 
     public void moveRightDown(double speed){
-        double motorSpeed = -rightUp * speed;
-        rightMotor.set(motorSpeed);
+        rightMotor.set(-speed);
     }
 
     public void moveUp(double speed){

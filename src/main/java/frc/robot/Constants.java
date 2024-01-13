@@ -15,8 +15,11 @@ package frc.robot;
 public final class Constants {
   public static final int LEFT_CLIMBER_MOTOR = 0;
   public static final int RIGHT_CLIMBER_MOTOR = 1;
-  public static final boolean LEFT_UP = true;
-  public static final boolean RIGHT_UP = true;
+
+  public enum ClimberDirection { Normal, Reversed };
+
+  public static final ClimberDirection LEFT_CLIMBER_DIRECTION = ClimberDirection.Normal;
+  public static final ClimberDirection RIGHT_CLIMBER_DIRECTION = ClimberDirection.Normal;
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
