@@ -16,6 +16,8 @@ public final class Constants {
   public static final int LEFT_CLIMBER_MOTOR = 0;
   public static final int RIGHT_CLIMBER_MOTOR = 1;
 
+  public static final double CLIMBER_SPEED = 0.5;
+
   public enum ClimberDirection { Normal, Reversed };
 
   public static final ClimberDirection LEFT_CLIMBER_DIRECTION = ClimberDirection.Normal;
