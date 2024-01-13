@@ -32,7 +32,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void setMovement(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.DriveConstants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModulesStates(
             swerveModuleStates[0],
             swerveModuleStates[1],

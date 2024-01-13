@@ -29,7 +29,7 @@ public class SwerveModule {
         DriveConversionFactor = (1. /2048)*(1/6.55)*(0.1016)*Math.PI;
 
         driver = new TalonFX(swerveModuleData.driveMotorID());
-        rotator = new TalonFX(swerveModuleData.rotaterMotorID());
+        rotator = new TalonFX(swerveModuleData.rotatorMotorID());
 
         driver.setNeutralMode(NeutralModeValue.Coast);
         rotator.setNeutralMode(NeutralModeValue.Coast);
@@ -51,12 +51,6 @@ public class SwerveModule {
     public void periodic() {
         rotator.setVoltage(rotationPID.calculate(getRotationInDegrees()));
         driver.set(speed * Constants.RobotInfo.MOVEMENT_SPEED);
-
-        // SmartDashboard.putNumber("Module Speed " + driver.getDeviceID(), speed);
-        // SmartDashboard.putNumber("Module Rotation Encoder " + driver.getDeviceID(), getRotationInDegrees());
-        // SmartDashboard.putNumber("Module Rotation Setpoint " + driver.getDeviceID(), rotationPID.getSetpoint());
-        // SmartDashboard.putNumber("Module Rotation Voltage"+rotator.getDeviceID(),    -rotationPID.calculate(getRotationInDegrees()));
-        // SmartDashboard.putNumber("Module Rotation Value " + driver.getDeviceID(), rotate);
     }
 
     public double getRotationInDegrees(){
