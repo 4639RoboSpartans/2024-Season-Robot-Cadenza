@@ -19,7 +19,7 @@ public class TwoWheelShooter extends SubsystemBase implements IShooterSubsystem 
 
     public void shoot(double speed) {
         motor1.set(speed);
-        motor2.set(-speed);
+        motor2.set(speed);
     }
     public void stop() {
         motor1.stopMotor();
