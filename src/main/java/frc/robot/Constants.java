@@ -22,6 +22,7 @@ public final class Constants {
         public static final int LEFT_ROTATOR_MOTOR = 18;
         public static final int RIGHT_ROTATOR_MOTOR = 19;
         public static final int HOOK_MOTOR = 20;
+        public static final int ROLLER_MOTOR = 21;
     }
 
     public static final class RobotInfo {
