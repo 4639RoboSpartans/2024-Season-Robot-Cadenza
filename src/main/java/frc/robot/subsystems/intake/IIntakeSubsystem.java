@@ -7,4 +7,6 @@ public interface IIntakeSubsystem extends Subsystem {
     // At the very least,
 
     void setIntakeDegree(double degrees);
+
+    void stop();
 }
