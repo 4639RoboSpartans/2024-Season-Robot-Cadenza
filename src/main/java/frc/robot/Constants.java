@@ -48,6 +48,7 @@ public final class Constants {
         public static final double TRAMP_EXTEND_TIME = 15;
         public static final double TRAMP_RELEASE_TIME = 20;
         public static final double TRAMP_FINAL_TIME = 25;
+        public static final double INTAKE_SPEED = 0.5;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
                 0.05,
