@@ -32,4 +32,9 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem{
     public void intake(){
         intakeMotor.set(Constants.RobotInfo.INTAKE_SPEED);
     }
+
+    public void stop(){
+        intakeMotor.stopMotor();
+        pivotMotor.stopMotor();
+    }
 }
