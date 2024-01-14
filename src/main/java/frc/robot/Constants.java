@@ -40,6 +40,14 @@ public final class Constants {
         public static final double TRAMP_ROTATOR_SPEED = 0.5;
         public static final double TRAMP_HOOK_RELEASE_SPEED = 0.5;
         public static final double TRAMP_ROLLER_RELEASE_SPEED = 0.5;
+        public static final double TRAMP_BACK_ROTATOR_DEGREES = -30;
+        public static final double TRAMP_FRONT_ROTATOR_DEGREES = 90;
+        public static final double TRAMP_HOOK_RETRACT_DEGREES = 0;
+        public static final double TRAMP_HOOK_RELEASE_DEGREES = 90;
+        public static final double TRAMP_RETRACT_TIME = 5;
+        public static final double TRAMP_EXTEND_TIME = 15;
+        public static final double TRAMP_RELEASE_TIME = 20;
+        public static final double TRAMP_FINAL_TIME = 25;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
                 0.05,
@@ -48,6 +56,14 @@ public final class Constants {
 
         // TODO: find actual values
         public static final PID SHOOTER_AIM_PID = new PID(
+            0, 0, 0
+        );
+
+        public static final PID TRAMP_ROTATOR_PID = new PID(
+            0, 0, 0
+        );
+
+        public static final PID HOOK_ROTATOR_PID = new PID(
             0, 0, 0
         );
     }
