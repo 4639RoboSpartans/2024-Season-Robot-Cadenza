@@ -3,10 +3,12 @@ package frc.robot.subsystems.tramp;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 
 public class RollerTrampSubsystem implements ITrampSubsystem{
     private final TalonFX leftRotator, rightRotator, rollerMotor;
+    private final PIDController rotatorPID;
 
     public RollerTrampSubsystem(){
         leftRotator = new TalonFX(Constants.IDs.LEFT_ROTATOR_MOTOR);
@@ -18,9 +20,10 @@ public class RollerTrampSubsystem implements ITrampSubsystem{
         rollerMotor.setNeutralMode(NeutralModeValue.Brake);
         
         leftRotator.setInverted(true);
+        rotatorPID = Constants.RobotInfo.TRAMP_ROTATOR_PID.create();
     }
 
-    public void rotateArm(){
+    public void rotateArm(double degrees){
         leftRotator.set(Constants.RobotInfo.TRAMP_ROTATOR_SPEED);
         rightRotator.set(Constants.RobotInfo.TRAMP_ROTATOR_SPEED);
     }
@@ -28,5 +31,26 @@ public class RollerTrampSubsystem implements ITrampSubsystem{
     public void release(){
         rollerMotor.set(Constants.RobotInfo.TRAMP_ROLLER_RELEASE_SPEED);
     }
+
+    public void setAngleDegrees(double degrees) {
+        rotatorPID.setSetpoint(degrees);
+    }
+
+    @Override
+    public void periodic() {
+        double currentLeftMotorDegrees = leftRotator.getPosition().getValue();
+        leftRotator.set(rotatorPID.calculate(currentLeftMotorDegrees));
+        double currentRightMotorDegrees = leftRotator.getPosition().getValue();
+        leftRotator.set(rotatorPID.calculate(currentRightMotorDegrees));
+    }
     
+    public void stop(){
+        leftRotator.stopMotor();
+        rightRotator.stopMotor();
+        rollerMotor.stopMotor();
+    }
+
+    public void setHookAngleDegrees(double degrees){
+
+    }
 }
