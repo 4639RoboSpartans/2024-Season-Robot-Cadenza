@@ -9,7 +9,7 @@ public class ManualSwerveDriveCommand extends Command {
     private final SwerveDriveSubsystem swerveDriveSubsystem;
     private final OI oi;
 
-    public ManualSwerveDriveCommand(SwerveDriveSubsystem swerveDriveSubsystem, OI oi){
+    public ManualSwerveDriveCommand(SwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.oi = oi;
         addRequirements(swerveDriveSubsystem);

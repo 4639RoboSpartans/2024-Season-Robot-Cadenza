@@ -2,15 +2,15 @@ package frc.robot.subsystems.tramp;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 
-public class RollerTrampSubsystem implements ITrampSubsystem{
+@SuppressWarnings("unused")
+public class RollerTrampSubsystem implements ITrampSubsystem {
     private final TalonFX leftRotator, rightRotator, rollerMotor;
     private final PIDController rotatorPID;
 
-    public RollerTrampSubsystem(){
+    public RollerTrampSubsystem() {
         leftRotator = new TalonFX(Constants.IDs.LEFT_ROTATOR_MOTOR);
         rightRotator = new TalonFX(Constants.IDs.RIGHT_ROTATOR_MOTOR);
         rollerMotor = new TalonFX(Constants.IDs.ROLLER_MOTOR);
@@ -18,17 +18,17 @@ public class RollerTrampSubsystem implements ITrampSubsystem{
         leftRotator.setNeutralMode(NeutralModeValue.Brake);
         rightRotator.setNeutralMode(NeutralModeValue.Brake);
         rollerMotor.setNeutralMode(NeutralModeValue.Brake);
-        
+
         leftRotator.setInverted(true);
         rotatorPID = Constants.RobotInfo.TRAMP_ROTATOR_PID.create();
     }
 
-    public void rotateArm(double degrees){
+    public void rotateArm(double degrees) {
         leftRotator.set(Constants.RobotInfo.TRAMP_ROTATOR_SPEED);
         rightRotator.set(Constants.RobotInfo.TRAMP_ROTATOR_SPEED);
     }
 
-    public void release(){
+    public void release() {
         rollerMotor.set(Constants.RobotInfo.TRAMP_ROLLER_RELEASE_SPEED);
     }
 
@@ -43,14 +43,14 @@ public class RollerTrampSubsystem implements ITrampSubsystem{
         double currentRightMotorDegrees = leftRotator.getPosition().getValue();
         leftRotator.set(rotatorPID.calculate(currentRightMotorDegrees));
     }
-    
-    public void stop(){
+
+    public void stop() {
         leftRotator.stopMotor();
         rightRotator.stopMotor();
         rollerMotor.stopMotor();
     }
 
-    public void setHookAngleDegrees(double degrees){
+    public void setHookAngleDegrees(double degrees) {
 
     }
 }

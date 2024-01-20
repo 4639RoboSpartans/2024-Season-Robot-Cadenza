@@ -28,7 +28,9 @@ public class OI {
         private final int id;
         private final boolean shouldInvert;
 
-        Axes(int id) { this(id, false); }
+        Axes(int id) {
+            this(id, false);
+        }
 
         Axes(int id, boolean shouldInvert) {
             this.id = id;

@@ -2,14 +2,14 @@ package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+@SuppressWarnings("unused")
 public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem {
     private final TalonFX leftMotor, rightMotor;
 
-    public ClimberSubsystem(int leftMotorID, int rightMotorID){
+    public ClimberSubsystem(int leftMotorID, int rightMotorID) {
         leftMotor = new TalonFX(leftMotorID);
         rightMotor = new TalonFX(rightMotorID);
 
@@ -20,9 +20,11 @@ public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem
     public void setLeftSpeed(double speed) {
         leftMotor.set(Constants.RobotInfo.CLIMBER_LEFT_SPEED * speed);
     }
+
     public void setRightSpeed(double speed) {
         rightMotor.set(Constants.RobotInfo.CLIMBER_RIGHT_SPEED * speed);
     }
+
     public void setSpeed(double speed) {
         setLeftSpeed(speed);
         setRightSpeed(speed);

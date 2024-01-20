@@ -2,15 +2,15 @@ package frc.robot.subsystems.tramp;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 
-public class HookTrampSubsystem implements ITrampSubsystem{
+@SuppressWarnings("unused")
+public class HookTrampSubsystem implements ITrampSubsystem {
     private final TalonFX leftRotator, rightRotator, hookMotor;
     private final PIDController rotatorPID, hookPID;
 
-    public HookTrampSubsystem(){
+    public HookTrampSubsystem() {
         leftRotator = new TalonFX(Constants.IDs.LEFT_ROTATOR_MOTOR);
         rightRotator = new TalonFX(Constants.IDs.RIGHT_ROTATOR_MOTOR);
         hookMotor = new TalonFX(Constants.IDs.HOOK_MOTOR);
@@ -18,18 +18,18 @@ public class HookTrampSubsystem implements ITrampSubsystem{
         leftRotator.setNeutralMode(NeutralModeValue.Brake);
         rightRotator.setNeutralMode(NeutralModeValue.Brake);
         hookMotor.setNeutralMode(NeutralModeValue.Brake);
-        
+
         leftRotator.setInverted(true);
         rotatorPID = Constants.RobotInfo.TRAMP_ROTATOR_PID.create();
         hookPID = Constants.RobotInfo.HOOK_ROTATOR_PID.create();
     }
 
-    public void rotateArm(double degrees){
+    public void rotateArm(double degrees) {
         leftRotator.set(Constants.RobotInfo.TRAMP_ROTATOR_SPEED);
         rightRotator.set(Constants.RobotInfo.TRAMP_ROTATOR_SPEED);
     }
 
-    public void release(){
+    public void release() {
         hookMotor.set(Constants.RobotInfo.TRAMP_HOOK_RELEASE_SPEED);
     }
 
@@ -37,7 +37,7 @@ public class HookTrampSubsystem implements ITrampSubsystem{
         rotatorPID.setSetpoint(degrees);
     }
 
-    public void setHookAngleDegrees(double degrees){
+    public void setHookAngleDegrees(double degrees) {
         hookPID.setSetpoint(degrees);
     }
 
@@ -51,10 +51,10 @@ public class HookTrampSubsystem implements ITrampSubsystem{
         leftRotator.set(rotatorPID.calculate(currentHookMotorDegrees));
     }
 
-    public void stop(){
+    public void stop() {
         leftRotator.stopMotor();
         rightRotator.stopMotor();
         hookMotor.stopMotor();
     }
-    
+
 }

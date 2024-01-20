@@ -2,9 +2,9 @@ package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+@SuppressWarnings("unused")
 public class TwoWheelShooterFalcons extends SubsystemBase implements IShooterSubsystem {
     private final TalonFX motor1, motor2;
 
@@ -21,6 +21,7 @@ public class TwoWheelShooterFalcons extends SubsystemBase implements IShooterSub
         motor1.set(speed);
         motor2.set(speed);
     }
+
     public void stop() {
         motor1.stopMotor();
         motor2.stopMotor();

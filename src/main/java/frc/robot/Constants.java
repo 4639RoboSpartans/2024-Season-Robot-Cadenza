@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public final class Constants {
+    public static final double DEADZONE_VALUE = 0.05;
+
     public static final class IDs {
         // Swerve uses up motor ids 1-12
         public static final SwerveModuleConfig MODULE_FRONT_LEFT = new SwerveModuleConfig(
@@ -64,19 +66,17 @@ public final class Constants {
 
         // TODO: find actual values
         public static final PID SHOOTER_AIM_PID = new PID(
-            0, 0, 0
+                0, 0, 0
         );
 
         public static final PID TRAMP_ROTATOR_PID = new PID(
-            0, 0, 0
+                0, 0, 0
         );
 
         public static final PID HOOK_ROTATOR_PID = new PID(
-            0, 0, 0
+                0, 0, 0
         );
     }
-
-    public static final double DEADZONE_VALUE = 0.05;
 
     public record SwerveModuleConfig(
             int driveMotorID,
@@ -85,21 +85,26 @@ public final class Constants {
             double rotationOffset,
             double rotatorPIDkPMultiplier
     ) {
-        public SwerveModuleConfig(int driveMotorID, int rotatorMotorID, int encoderID, double rotationOffset){
+        public SwerveModuleConfig(int driveMotorID, int rotatorMotorID, int encoderID, double rotationOffset) {
             this(driveMotorID, rotatorMotorID, encoderID, rotationOffset, 1);
         }
     }
 
     public record PID(double kp, double ki, double kd) {
-        public PID(double kp) { this(kp, 0); }
-        public PID(double kp, double ki) { this(kp, ki, 0); }
+        public PID(double kp) {
+            this(kp, 0);
+        }
+
+        public PID(double kp, double ki) {
+            this(kp, ki, 0);
+        }
 
         public PIDController create() {
             return create(1);
         }
 
-        public PIDController create(double kPMultipler) {
-            return new PIDController(kp * kPMultipler, ki, kd);
+        public PIDController create(double kPMultiplier) {
+            return new PIDController(kp * kPMultiplier, ki, kd);
         }
     }
 }

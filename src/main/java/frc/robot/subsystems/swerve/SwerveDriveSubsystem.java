@@ -2,8 +2,6 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,18 +35,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         ChassisSpeeds robotCentricSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, navx.getRotation2d());
         SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(robotCentricSpeeds);
         setModulesStates(
-            swerveModuleStates[0],
-            swerveModuleStates[1],
-            swerveModuleStates[2],
-            swerveModuleStates[3]
+                swerveModuleStates[0],
+                swerveModuleStates[1],
+                swerveModuleStates[2],
+                swerveModuleStates[3]
         );
     }
 
     private void setModulesStates(
-        SwerveModuleState stateFrontLeft,
-        SwerveModuleState stateFrontRight,
-        SwerveModuleState stateBackLeft,
-        SwerveModuleState stateBackRight
+            SwerveModuleState stateFrontLeft,
+            SwerveModuleState stateFrontRight,
+            SwerveModuleState stateBackLeft,
+            SwerveModuleState stateBackRight
     ) {
         moduleFrontLeft.setState(stateFrontLeft);
         moduleFrontRight.setState(stateFrontRight);

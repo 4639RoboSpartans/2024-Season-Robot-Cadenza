@@ -10,7 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveModuleConfig;
-import math.math;
+import math.MathUtil;
 
 public class SwerveModule {
     private final TalonFX driver, rotator;
@@ -18,15 +18,11 @@ public class SwerveModule {
     private final PIDController rotationPID;
 
     private final double rotationOffsetDegrees;
-
+    private final double driveConversionFactor;
     private double speed = 0;
 
-    private final double driveConversionFactor;
-
-    private CurrentLimitsConfigs motorCurrentLimiter;
-
-    public SwerveModule(SwerveModuleConfig swerveModuleData){
-        driveConversionFactor = (1./2048)*(1/6.55)*(0.1016)*Math.PI;
+    public SwerveModule(SwerveModuleConfig swerveModuleData) {
+        driveConversionFactor = (1. / 2048) * (1 / 6.55) * (0.1016) * Math.PI;
 
         driver = new TalonFX(swerveModuleData.driveMotorID());
         rotator = new TalonFX(swerveModuleData.rotatorMotorID());
@@ -43,12 +39,16 @@ public class SwerveModule {
         rotationPID.setTolerance(0.1);
         rotationPID.enableContinuousInput(-180, 180);
 
-        motorCurrentLimiter = new CurrentLimitsConfigs()
-            .withStatorCurrentLimit(26)
-            .withStatorCurrentLimitEnable(true);
+        CurrentLimitsConfigs motorCurrentLimiter = new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(26)
+                .withStatorCurrentLimitEnable(true);
 
         driver.getConfigurator().apply(motorCurrentLimiter);
         rotator.getConfigurator().apply(motorCurrentLimiter);
+    }
+
+    private static boolean isNegligible(SwerveModuleState state) {
+        return state.speedMetersPerSecond < 0.001;
     }
 
     public void reset() {
@@ -57,43 +57,45 @@ public class SwerveModule {
 
     public void periodic() {
         double rotation = getRotationInDegrees();
-        double rotationSpeed = rotationPID.calculate(rotation);
+        double rotatorPIDOutput = rotationPID.calculate(rotation);
 
         int moduleID = rotator.getDeviceID() / 2;
-        SmartDashboard.putString(moduleID + " rotation", "%.2f".formatted(rotation));
-        SmartDashboard.putString(moduleID + " rotator PID output", "%.2f".formatted(rotationSpeed));
+        SmartDashboard.putString("Module %d rotation".formatted(moduleID), "%.2f degrees".formatted(rotation));
+        SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "%.2f".formatted(rotatorPIDOutput));
 
-        rotator.set(rotationSpeed);
+        rotator.set(rotatorPIDOutput);
         driver.set(speed * Constants.RobotInfo.MOVEMENT_SPEED);
     }
 
-    public double getRotationInDegrees(){
+    public double getRotationInDegrees() {
         double rawRotationInDegrees = rotationEncoder.getAbsolutePosition().getValue() * 360 - rotationOffsetDegrees;
-        return math.mod(rawRotationInDegrees, -180, 180);
+        return MathUtil.mod(rawRotationInDegrees, -180, 180);
     }
 
-    private void setSpeed(double speed){
+    private void setSpeed(double speed) {
         this.speed = speed;
     }
 
-    private void setRotation(double degrees){
+    private void setRotation(double degrees) {
         rotationPID.setSetpoint(degrees);
     }
 
-    public double getDriveVelocity(){
+    public double getDriveVelocity() {
         return driver.getVelocity().getValue() * driveConversionFactor;
     }
-    public double getDriveDistance(){
+
+    public double getDriveDistance() {
         return driver.getPosition().getValue() * driveConversionFactor;
     }
 
-    public double getTurningVelocity(){
+    public double getTurningVelocity() {
         return rotationEncoder.getVelocity().getValue();
     }
-    public double getTurningPosition(){
+
+    public double getTurningPosition() {
         double rawRotation = rotationEncoder.getAbsolutePosition().getValue() - rotationOffsetDegrees;
 
-        return math.mod(rawRotation, -180, 180);
+        return MathUtil.mod(rawRotation, -180, 180);
     }
 
     public SwerveModuleState getState() {
@@ -103,29 +105,25 @@ public class SwerveModule {
         return new SwerveModuleState(moduleSpeed, rotation);
     }
 
-    public void setState(SwerveModuleState state){
-        if(isNegligible(state)) stop();
-        else{
+    public void setState(SwerveModuleState state) {
+        if (isNegligible(state)) stop();
+        else {
             SwerveModuleState optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getRotationInDegrees()));
             setSpeed(optimizedState.speedMetersPerSecond);
             setRotation(optimizedState.angle.getDegrees());
         }
     }
 
-    public void resetAngleAndPosition(){
+    public void resetAngleAndPosition() {
         setSpeed(0);
         setRotation(0);
     }
 
-    public void stop(){
+    public void stop() {
         setSpeed(0);
         setRotation(getRotationInDegrees());
 
         driver.stopMotor();
         rotator.stopMotor();
-    }
-    
-    private static boolean isNegligible(SwerveModuleState state){
-        return state.speedMetersPerSecond < 0.001;
     }
 }

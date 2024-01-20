@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+@SuppressWarnings("unused")
 public class TwoWheelShooterNeos extends SubsystemBase implements IShooterSubsystem {
     private final CANSparkMax motor1, motor2;
 
@@ -18,6 +19,7 @@ public class TwoWheelShooterNeos extends SubsystemBase implements IShooterSubsys
         motor1.set(speed);
         motor2.set(-speed);
     }
+
     public void stop() {
         motor1.stopMotor();
         motor2.stopMotor();

@@ -8,32 +8,32 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.ManualSwerveDriveCommand;
-import frc.robot.commands.ShootCommand;
 import frc.robot.oi.OI;
+import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.NavX;
-import frc.robot.subsystems.shooter.TwoWheelShooterNeos;
-import frc.robot.subsystems.shooterPivot.FalconShooterPivotSubsystem;
+import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.tramp.DummyTrampSubsystem;
 import frc.robot.subsystems.tramp.ITrampSubsystem;
 
-
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     private final OI oi;
     private final NavX navX;
+
     private final SwerveDriveSubsystem swerveDriveSubsystem;
-//
-//    private final IShooterSubsystem shooter;
-//    private final IShooterPivotSubsystem shooterPivot;
-//    private final IIntakeSubsystem intake;
-//    private final IClimberSubsystem climber;
-//    private final ITrampSubsystem tramp;
+
+    private final IShooterSubsystem shooter;
+    private final IShooterPivotSubsystem shooterPivot;
+    private final IIntakeSubsystem intake;
+    private final IClimberSubsystem climber;
+    private final ITrampSubsystem tramp;
 
 
     public RobotContainer() {
@@ -42,33 +42,23 @@ public class RobotContainer {
 //
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 //
-//        shooter = new TwoWheelShooterNeos(
-//                Constants.IDs.SHOOTER_MOTOR_LEFT,
-//                Constants.IDs.SHOOTER_MOTOR_RIGHT
-//        );
-//        shooterPivot = new FalconShooterPivotSubsystem(
-//                // TODO
-//                Constants.IDs.AIM_MOTOR
-//        );
-//        intake = new DummyIntakeSubsystem();
-//        climber = new DummyClimberSubsystem();
-//        tramp = new DummyTrampSubsystem();
+        shooter = new DummyShooterSubsystem();
+        shooterPivot = new DummyShooterPivotSubsystem();
+        intake = new DummyIntakeSubsystem();
+        climber = new DummyClimberSubsystem();
+        tramp = new DummyTrampSubsystem();
 
         configureBindings();
     }
-    
-    
+
+
     private void configureBindings() {
         swerveDriveSubsystem.setDefaultCommand(new ManualSwerveDriveCommand(
-            swerveDriveSubsystem, oi
+                swerveDriveSubsystem, oi
         ));
-
-//        oi.getOperatorController().getButton(OI.Buttons.X_BUTTON).onTrue(
-//            new ShootCommand(shooter)
-//        );
     }
-    
-    
+
+
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");
     }

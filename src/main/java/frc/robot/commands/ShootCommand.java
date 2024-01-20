@@ -6,7 +6,7 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 public class ShootCommand extends Command {
     private final IShooterSubsystem shooterSubsystem;
 
-    public ShootCommand(IShooterSubsystem shooterSubsystem){
+    public ShootCommand(IShooterSubsystem shooterSubsystem) {
         this.shooterSubsystem = shooterSubsystem;
     }
 

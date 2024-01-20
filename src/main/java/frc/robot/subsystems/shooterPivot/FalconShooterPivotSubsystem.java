@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+@SuppressWarnings("unused")
 public class FalconShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
     private final TalonFX aimMotor;
 
