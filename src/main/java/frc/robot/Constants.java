@@ -7,10 +7,18 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public final class Constants {
     public static final class IDs {
         // Swerve uses up motor ids 1-12
-        public static final SwerveModuleConfig MODULE_FRONT_LEFT = new SwerveModuleConfig(1, 2, 9, 126.1231);//124.77
-        public static final SwerveModuleConfig MODULE_FRONT_RIGHT = new SwerveModuleConfig(3, 4, 10, -124.1016);//233.877
-        public static final SwerveModuleConfig MODULE_BACK_LEFT = new SwerveModuleConfig(5, 6, 11, 10.6348);//9.668
-        public static final SwerveModuleConfig MODULE_BACK_RIGHT = new SwerveModuleConfig(7, 8, 12, 48.7793);//50.400
+        public static final SwerveModuleConfig MODULE_FRONT_LEFT = new SwerveModuleConfig(
+                1, 2, 9, 125.02
+        );//124.77
+        public static final SwerveModuleConfig MODULE_FRONT_RIGHT = new SwerveModuleConfig(
+                3, 4, 10, 57.6
+        );//233.877
+        public static final SwerveModuleConfig MODULE_BACK_LEFT = new SwerveModuleConfig(
+                5, 6, 11, -105.56
+        );//9.668
+        public static final SwerveModuleConfig MODULE_BACK_RIGHT = new SwerveModuleConfig(
+                7, 8, 12, -58.08
+        );//50.400
 
         public static final int SHOOTER_MOTOR_LEFT = 13;
         public static final int SHOOTER_MOTOR_RIGHT = 14;
@@ -51,8 +59,7 @@ public final class Constants {
         public static final double INTAKE_SPEED = 0.5;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
-                0.05,
-                0.07
+                0.0085
         );
 
         // TODO: find actual values
@@ -69,21 +76,30 @@ public final class Constants {
         );
     }
 
-    public static final double DEADZONE_VALUE = 0.01;
+    public static final double DEADZONE_VALUE = 0.05;
 
     public record SwerveModuleConfig(
             int driveMotorID,
             int rotatorMotorID,
             int encoderID,
-            double rotationOffset
-    ) {}
+            double rotationOffset,
+            double rotatorPIDkPMultiplier
+    ) {
+        public SwerveModuleConfig(int driveMotorID, int rotatorMotorID, int encoderID, double rotationOffset){
+            this(driveMotorID, rotatorMotorID, encoderID, rotationOffset, 1);
+        }
+    }
 
     public record PID(double kp, double ki, double kd) {
         public PID(double kp) { this(kp, 0); }
         public PID(double kp, double ki) { this(kp, ki, 0); }
 
         public PIDController create() {
-            return new PIDController(kp, ki, kd);
+            return create(1);
+        }
+
+        public PIDController create(double kPMultipler) {
+            return new PIDController(kp * kPMultipler, ki, kd);
         }
     }
 }

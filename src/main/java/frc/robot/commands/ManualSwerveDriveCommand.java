@@ -23,8 +23,8 @@ public class ManualSwerveDriveCommand extends Command {
     @Override
     public void execute() {
         double forwardsSpeed = oi.getDriverController().getAxis(OI.Axes.LEFT_STICK_Y);
-        double sidewaysSpeed = oi.getDriverController().getAxis(OI.Axes.LEFT_STICK_X);
-        double rotateSpeed = oi.getDriverController().getAxis(OI.Axes.RIGHT_STICK_X);
+        double sidewaysSpeed = -oi.getDriverController().getAxis(OI.Axes.LEFT_STICK_X);
+        double rotateSpeed = -oi.getDriverController().getAxis(OI.Axes.RIGHT_STICK_X);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);

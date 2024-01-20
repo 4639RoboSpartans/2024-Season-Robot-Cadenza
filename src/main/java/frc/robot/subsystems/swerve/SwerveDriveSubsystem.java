@@ -2,8 +2,9 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.NavX;
@@ -32,7 +33,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void setMovement(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+
+        ChassisSpeeds robotCentricSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, navx.getRotation2d());
+        SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(robotCentricSpeeds);
         setModulesStates(
             swerveModuleStates[0],
             swerveModuleStates[1],
@@ -51,11 +54,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         moduleFrontRight.setState(stateFrontRight);
         moduleBackLeft.setState(stateBackLeft);
         moduleBackRight.setState(stateBackRight);
-
-        SmartDashboard.putString("FL state", stateFrontLeft.toString());
-        SmartDashboard.putString("FR state", stateFrontRight.toString());
-        SmartDashboard.putString("BL state", stateBackLeft.toString());
-        SmartDashboard.putString("BR state", stateBackRight.toString());
     }
 
     public void stop() {
