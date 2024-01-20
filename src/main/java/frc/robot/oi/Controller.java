@@ -19,11 +19,11 @@ public class Controller {
 
         buttons = new Trigger[NUM_BUTTONS + NUM_POV_BUTTONS];
 
-        for (int i = 0; i < buttons.length; i++) {
+        for (int i = 0; i < NUM_BUTTONS; i++) {
             buttons[i] = new JoystickButton(stick, i);
         }
 
-        for (int i = 0; i < buttons.length; i++) {
+        for (int i = 0; i < NUM_POV_BUTTONS; i++) {
             buttons[i + NUM_BUTTONS] = new POVButton(stick, i * 90);
         }
     }

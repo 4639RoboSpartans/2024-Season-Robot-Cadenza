@@ -28,31 +28,31 @@ public class RobotContainer {
     private final OI oi;
     private final NavX navX;
     private final SwerveDriveSubsystem swerveDriveSubsystem;
-
-    private final IShooterSubsystem shooter;
-    private final IShooterPivotSubsystem shooterPivot;
-    private final IIntakeSubsystem intake;
-    private final IClimberSubsystem climber;
-    private final ITrampSubsystem tramp;
+//
+//    private final IShooterSubsystem shooter;
+//    private final IShooterPivotSubsystem shooterPivot;
+//    private final IIntakeSubsystem intake;
+//    private final IClimberSubsystem climber;
+//    private final ITrampSubsystem tramp;
 
 
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
-
+//
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
-
-        shooter = new TwoWheelShooterNeos(
-                Constants.IDs.SHOOTER_MOTOR_LEFT,
-                Constants.IDs.SHOOTER_MOTOR_RIGHT
-        );
-        shooterPivot = new FalconShooterPivotSubsystem(
-                // TODO
-                Constants.IDs.AIM_MOTOR
-        );
-        intake = new DummyIntakeSubsystem();
-        climber = new DummyClimberSubsystem();
-        tramp = new DummyTrampSubsystem();
+//
+//        shooter = new TwoWheelShooterNeos(
+//                Constants.IDs.SHOOTER_MOTOR_LEFT,
+//                Constants.IDs.SHOOTER_MOTOR_RIGHT
+//        );
+//        shooterPivot = new FalconShooterPivotSubsystem(
+//                // TODO
+//                Constants.IDs.AIM_MOTOR
+//        );
+//        intake = new DummyIntakeSubsystem();
+//        climber = new DummyClimberSubsystem();
+//        tramp = new DummyTrampSubsystem();
 
         configureBindings();
     }
@@ -63,9 +63,9 @@ public class RobotContainer {
             swerveDriveSubsystem, oi
         ));
 
-        oi.getOperatorController().getButton(OI.Buttons.X_BUTTON).onTrue(
-            new ShootCommand(shooter)
-        );
+//        oi.getOperatorController().getButton(OI.Buttons.X_BUTTON).onTrue(
+//            new ShootCommand(shooter)
+//        );
     }
     
     
