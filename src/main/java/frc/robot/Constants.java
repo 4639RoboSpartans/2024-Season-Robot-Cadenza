@@ -44,7 +44,7 @@ public final class Constants {
                 new Translation2d(-centerToWheel, -centerToWheel)
         );
 
-        public static final double MOVEMENT_SPEED = 0.75;
+        public static final double MOVEMENT_SPEED = 0.5;
         public static final double CLIMBER_LEFT_SPEED = 0.5;
         public static final double CLIMBER_RIGHT_SPEED = 0.5;
         public static final double TRAMP_ROTATOR_SPEED = 0.5;

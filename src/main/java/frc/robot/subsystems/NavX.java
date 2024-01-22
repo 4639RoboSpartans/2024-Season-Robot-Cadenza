@@ -14,7 +14,6 @@ public class NavX extends SubsystemBase {
 
     public NavX() {
         ahrs = new AHRS(SPI.Port.kMXP);
-        ahrs.reset();
     }
 
     public double getHeading() {
@@ -31,5 +30,9 @@ public class NavX extends SubsystemBase {
 
     public Rotation2d getRotation2d() {
         return ahrs.getRotation2d();
+    }
+
+    public void reset() {
+        ahrs.reset();
     }
 }
