@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.ManualSwerveDriveCommand;
+import frc.robot.commands.ShooterPivotCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
@@ -59,6 +60,7 @@ public class RobotContainer {
         ));
 
         oi.getDriverController().getButton(OI.Buttons.Y_BUTTON).whileTrue(new RunCommand(navX::reset, navX));
+        shooterPivot.setDefaultCommand(new ShooterPivotCommand(shooterPivot, oi));;
     }
 
 

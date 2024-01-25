@@ -26,4 +26,8 @@ public class FalconShooterPivotSubsystem extends SubsystemBase implements IShoot
         double currentAimMotorDegrees = aimMotor.getPosition().getValue();
         aimMotor.set(aimPID.calculate(currentAimMotorDegrees));
     }
+
+    public void stop(){
+        aimMotor.stopMotor();
+    }
 }
