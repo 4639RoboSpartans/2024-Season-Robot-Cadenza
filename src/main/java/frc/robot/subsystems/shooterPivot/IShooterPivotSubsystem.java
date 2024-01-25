@@ -6,4 +6,6 @@ public interface IShooterPivotSubsystem extends Subsystem {
     void setAngleDegrees(double degrees);
 
     void stop();
+
+    void manualSet(double degrees);
 }

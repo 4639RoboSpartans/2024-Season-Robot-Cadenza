@@ -10,4 +10,6 @@ public class DummyShooterPivotSubsystem extends SubsystemBase implements IShoote
     public void setAngleDegrees(double degrees) {}
 
     public void stop() {}
+
+    public void manualSet(double degrees) {}
 }

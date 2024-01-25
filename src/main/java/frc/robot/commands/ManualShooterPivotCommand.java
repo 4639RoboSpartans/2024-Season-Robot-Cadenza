@@ -1,14 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 
-public class ShooterPivotCommand extends Command{
+public class ManualShooterPivotCommand extends Command{
     private final IShooterPivotSubsystem iShooterPivotSubsystem;
     private final OI oi;
 
-    public ShooterPivotCommand(IShooterPivotSubsystem iShooterPivotSubsystem, OI oi){
+    public ManualShooterPivotCommand(IShooterPivotSubsystem iShooterPivotSubsystem, OI oi){
         this.iShooterPivotSubsystem = iShooterPivotSubsystem;
         this.oi = oi;
 
@@ -22,7 +23,9 @@ public class ShooterPivotCommand extends Command{
 
     @Override
     public void execute(){
-        iShooterPivotSubsystem.setAngleDegrees(oi.getOperatorController().getAxis(OI.Axes.LEFT_STICK_Y));
+        iShooterPivotSubsystem.manualSet(oi.getOperatorController().getAxis(
+                Constants.ControllerKeybindings.ShooterPivotAxis
+        ));
     }
 
     @Override

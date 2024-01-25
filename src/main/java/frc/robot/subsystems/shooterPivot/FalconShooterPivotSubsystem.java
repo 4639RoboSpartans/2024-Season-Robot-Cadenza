@@ -21,6 +21,10 @@ public class FalconShooterPivotSubsystem extends SubsystemBase implements IShoot
         aimPID.setSetpoint(degrees);
     }
 
+    public void manualSet(double degrees){
+        aimMotor.set(degrees);
+    }
+
     @Override
     public void periodic() {
         double currentAimMotorDegrees = aimMotor.getPosition().getValue();

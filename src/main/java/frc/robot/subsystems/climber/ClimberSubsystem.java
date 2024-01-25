@@ -15,14 +15,16 @@ public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem
 
         leftMotor.setNeutralMode(NeutralModeValue.Brake);
         rightMotor.setNeutralMode(NeutralModeValue.Brake);
+
+        leftMotor.setInverted(true);
     }
 
     public void setLeftSpeed(double speed) {
-        leftMotor.set(Constants.RobotInfo.CLIMBER_LEFT_SPEED * speed);
+        leftMotor.set(Constants.RobotInfo.CLIMBER_SPEED);
     }
 
     public void setRightSpeed(double speed) {
-        rightMotor.set(Constants.RobotInfo.CLIMBER_RIGHT_SPEED * speed);
+        rightMotor.set(Constants.RobotInfo.CLIMBER_SPEED);
     }
 
     public void setSpeed(double speed) {

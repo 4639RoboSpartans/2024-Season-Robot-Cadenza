@@ -3,6 +3,8 @@ package frc.robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.PS4Controller.Axis;
+import frc.robot.oi.OI;
 
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.05;
@@ -45,8 +47,6 @@ public final class Constants {
         );
 
         public static final double MOVEMENT_SPEED = 0.5;
-        public static final double CLIMBER_LEFT_SPEED = 0.5;
-        public static final double CLIMBER_RIGHT_SPEED = 0.5;
         public static final double TRAP_ROTATOR_SPEED = 0.5;
         public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
         public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
@@ -57,6 +57,7 @@ public final class Constants {
         public static final double TRAP_RELEASE_TIME = 20;
         public static final double TRAP_FINAL_TIME = 25;
         public static final double INTAKE_SPEED = 0.5;
+        public static final double CLIMBER_SPEED = 0.5;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
                 0.0085
@@ -104,5 +105,13 @@ public final class Constants {
         public PIDController create(double kPMultiplier) {
             return new PIDController(kp * kPMultiplier, ki, kd);
         }
+    }
+
+    public static final class ControllerKeybindings{
+        public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
+        public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
+        public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;
+        public static final OI.Buttons ClimberExtendButton = OI.Buttons.Y_BUTTON;
+        public static final OI.Buttons ClimberRetractButton = OI.Buttons.X_BUTTON;
     }
 }
