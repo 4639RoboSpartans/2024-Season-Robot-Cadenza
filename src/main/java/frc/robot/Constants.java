@@ -47,17 +47,15 @@ public final class Constants {
         public static final double MOVEMENT_SPEED = 0.5;
         public static final double CLIMBER_LEFT_SPEED = 0.5;
         public static final double CLIMBER_RIGHT_SPEED = 0.5;
-        public static final double TRAMP_ROTATOR_SPEED = 0.5;
-        public static final double TRAMP_HOOK_RELEASE_SPEED = 0.5;
-        public static final double TRAMP_ROLLER_RELEASE_SPEED = 0.5;
-        public static final double TRAMP_BACK_ROTATOR_DEGREES = -30;
-        public static final double TRAMP_FRONT_ROTATOR_DEGREES = 90;
-        public static final double TRAMP_HOOK_RETRACT_DEGREES = 0;
-        public static final double TRAMP_HOOK_RELEASE_DEGREES = 90;
-        public static final double TRAMP_RETRACT_TIME = 5;
-        public static final double TRAMP_EXTEND_TIME = 15;
-        public static final double TRAMP_RELEASE_TIME = 20;
-        public static final double TRAMP_FINAL_TIME = 25;
+        public static final double TRAP_ROTATOR_SPEED = 0.5;
+        public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
+        public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
+        public static final double TRAP_BACK_ROTATOR_DEGREES = -30;
+        public static final double TRAP_FRONT_ROTATOR_DEGREES = 90;
+        public static final double TRAP_RETRACT_TIME = 5;
+        public static final double TRAP_EXTEND_TIME = 15;
+        public static final double TRAP_RELEASE_TIME = 20;
+        public static final double TRAP_FINAL_TIME = 25;
         public static final double INTAKE_SPEED = 0.5;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
@@ -69,7 +67,7 @@ public final class Constants {
                 0, 0, 0
         );
 
-        public static final PID TRAMP_ROTATOR_PID = new PID(
+        public static final PID TRAP_ROTATOR_PID = new PID(
                 0, 0, 0
         );
 

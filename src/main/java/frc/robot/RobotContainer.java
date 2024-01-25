@@ -20,8 +20,8 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
-import frc.robot.subsystems.tramp.DummyTrampSubsystem;
-import frc.robot.subsystems.tramp.ITrampSubsystem;
+import frc.robot.subsystems.tramp.DummyTrapSubsystem;
+import frc.robot.subsystems.tramp.ITrapSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -34,7 +34,7 @@ public class RobotContainer {
     private final IShooterPivotSubsystem shooterPivot;
     private final IIntakeSubsystem intake;
     private final IClimberSubsystem climber;
-    private final ITrampSubsystem tramp;
+    private final ITrapSubsystem tramp;
 
 
     public RobotContainer() {
@@ -47,7 +47,7 @@ public class RobotContainer {
         shooterPivot = new DummyShooterPivotSubsystem();
         intake = new DummyIntakeSubsystem();
         climber = new DummyClimberSubsystem();
-        tramp = new DummyTrampSubsystem();
+        tramp = new DummyTrapSubsystem();
 
         configureBindings();
     }

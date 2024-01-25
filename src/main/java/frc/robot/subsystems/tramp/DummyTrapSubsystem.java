@@ -3,7 +3,7 @@ package frc.robot.subsystems.tramp;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 @SuppressWarnings("unused")
-public class DummyTrampSubsystem extends SubsystemBase implements ITrampSubsystem {
+public class DummyTrapSubsystem extends SubsystemBase implements ITrapSubsystem {
     public void rotateArm(double degrees) {
 
     }
@@ -22,5 +22,9 @@ public class DummyTrampSubsystem extends SubsystemBase implements ITrampSubsyste
 
     public void setHookAngleDegrees(double degrees) {
 
+    }
+
+    public void intake(){
+        
     }
 }
