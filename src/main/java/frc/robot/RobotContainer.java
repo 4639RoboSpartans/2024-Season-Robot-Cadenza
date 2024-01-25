@@ -60,7 +60,9 @@ public class RobotContainer {
         ));
 
         oi.getDriverController().getButton(OI.Buttons.Y_BUTTON).whileTrue(new RunCommand(navX::reset, navX));
-        shooterPivot.setDefaultCommand(new ShooterPivotCommand(shooterPivot, oi));;
+        shooterPivot.setDefaultCommand(new ShooterPivotCommand(
+                shooterPivot, oi
+        ));;
     }
 
 
