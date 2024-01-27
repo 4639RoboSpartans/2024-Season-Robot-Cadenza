@@ -3,6 +3,7 @@ package frc.robot.network;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.network.Network;
 
+@SuppressWarnings("unused")
 public class LimeLight {
     
     public static void getOffsetFromCenteredAprilTag(){
