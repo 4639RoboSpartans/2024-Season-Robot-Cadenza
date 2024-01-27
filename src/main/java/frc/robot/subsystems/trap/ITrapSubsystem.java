@@ -13,5 +13,3 @@ public interface ITrapSubsystem extends Subsystem {
 
     void intake();
 }
-
-//test
