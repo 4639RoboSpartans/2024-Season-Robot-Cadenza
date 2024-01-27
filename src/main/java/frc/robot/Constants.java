@@ -9,19 +9,32 @@ import frc.robot.oi.OI;
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.05;
 
+    private static final double[] oldOffsets = {
+        -54.98,
+        -122.4,
+        74.44,
+        121.92
+    }, newOffsets = {
+        -45.44,
+        -16.52,
+        84.2,
+        -99.45
+    };
+    private static final double[] offsets = oldOffsets;
+
     public static final class IDs {
         // Swerve uses up motor ids 1-12
         public static final SwerveModuleConfig MODULE_FRONT_LEFT = new SwerveModuleConfig(
-                1, 2, 9, 125.02
+                1, 2, 9, offsets[0]
         );//124.77
         public static final SwerveModuleConfig MODULE_FRONT_RIGHT = new SwerveModuleConfig(
-                3, 4, 10, 57.6
+                3, 4, 10, offsets[1]
         );//233.877
         public static final SwerveModuleConfig MODULE_BACK_LEFT = new SwerveModuleConfig(
-                5, 6, 11, -105.56
+                5, 6, 11, offsets[2]
         );//9.668
         public static final SwerveModuleConfig MODULE_BACK_RIGHT = new SwerveModuleConfig(
-                7, 8, 12, -58.08
+                7, 8, 12, offsets[3]
         );//50.400
 
         public static final int SHOOTER_MOTOR_LEFT = 13;
@@ -33,7 +46,6 @@ public final class Constants {
 
         public static final int LEFT_ROTATOR_MOTOR = 18;
         public static final int RIGHT_ROTATOR_MOTOR = 19;
-        public static final int HOOK_MOTOR = 20;
         public static final int ROLLER_MOTOR = 21;
     }
 
@@ -52,7 +64,6 @@ public final class Constants {
         public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
         public static final double TRAP_BACK_ROTATOR_DEGREES = -30;
         public static final double TRAP_FRONT_ROTATOR_DEGREES = 90;
-        public static final double TRAP_RETRACT_TIME = 5;
         public static final double TRAP_EXTEND_TIME = 15;
         public static final double TRAP_RELEASE_TIME = 20;
         public static final double TRAP_FINAL_TIME = 25;
@@ -60,7 +71,7 @@ public final class Constants {
         public static final double CLIMBER_SPEED = 0.5;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
-                0.0085
+            0.0085
         );
 
         // TODO: find actual values
@@ -72,9 +83,6 @@ public final class Constants {
                 0, 0, 0
         );
 
-        public static final PID HOOK_ROTATOR_PID = new PID(
-                0, 0, 0
-        );
     }
 
     public record SwerveModuleConfig(
@@ -107,11 +115,15 @@ public final class Constants {
         }
     }
 
-    public static final class ControllerKeybindings{
+    public static final class Controls {
         public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
         public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
         public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;
         public static final OI.Buttons ClimberExtendButton = OI.Buttons.Y_BUTTON;
         public static final OI.Buttons ClimberRetractButton = OI.Buttons.X_BUTTON;
+
+        public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
+        public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
+        public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
     }
 }

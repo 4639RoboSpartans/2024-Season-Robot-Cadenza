@@ -24,7 +24,7 @@ public class ManualShooterPivotCommand extends Command{
     @Override
     public void execute(){
         iShooterPivotSubsystem.manualSet(oi.getOperatorController().getAxis(
-                Constants.ControllerKeybindings.ShooterPivotAxis
+                Constants.Controls.ShooterPivotAxis
         ));
     }
 

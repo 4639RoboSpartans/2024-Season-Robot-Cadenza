@@ -69,19 +69,19 @@ public class RobotContainer {
                 shooterPivot, oi
         ));;
 
-        oi.getOperatorController().getButton(Constants.ControllerKeybindings.TrapReleaseButton).onTrue(
+        oi.getOperatorController().getButton(Constants.Controls.TrapReleaseButton).onTrue(
                 new ReleaseTrapCommand(trap)
         );
 
-        oi.getOperatorController().getButton(Constants.ControllerKeybindings.ShooterButton).onTrue(
+        oi.getOperatorController().getButton(Constants.Controls.ShooterButton).onTrue(
                 new ShootCommand(shooter)
         );
 
-        oi.getOperatorController().getButton(Constants.ControllerKeybindings.ClimberExtendButton).onTrue(
+        oi.getOperatorController().getButton(Constants.Controls.ClimberExtendButton).onTrue(
                 new ExtendClimberCommand(climber)
         );
 
-        oi.getOperatorController().getButton(Constants.ControllerKeybindings.ClimberRetractButton).onTrue(
+        oi.getOperatorController().getButton(Constants.Controls.ClimberRetractButton).onTrue(
                 new RetractClimberCommand(climber)
         );
     }

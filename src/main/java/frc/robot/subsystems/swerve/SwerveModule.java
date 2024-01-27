@@ -57,6 +57,7 @@ public class SwerveModule {
 
     public void periodic() {
         double rotation = getRotationInDegrees();
+
         double rotatorPIDOutput = rotationPID.calculate(rotation);
 
         int moduleID = rotator.getDeviceID() / 2;
