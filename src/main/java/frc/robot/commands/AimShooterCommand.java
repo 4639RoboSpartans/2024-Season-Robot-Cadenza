@@ -20,15 +20,26 @@ public class AimShooterCommand extends Command{
         addRequirements(iShooterPivotSubsystem);
     }
 
+    /*
+     * @returns {v0, aimPosition(degrees)}
+     */
+    public double[] calculateShooter(){    
+        double v0X, v0Y;
+        v0Y = Math.pow(
+            2 * Constants.FieldDistances.SpeakerOptimalHeight * 9.81,
+            0.5
+        );
+        v0X = LimeLight.getZDistance() * 9.81 / v0Y;
+        double aimDegrees = MathUtil.atan(v0Y/v0X);
+        return new double[]{Math.pow(v0X * v0X + v0Y * v0Y, 0.5), aimDegrees};
+    }
+
     @Override
     public void initialize(){
         iShooterPivotSubsystem.stop();
         swerveDriveSubsystem.stop();
     }
 
-
-    //todo: swap hardcoded IDs for code determining IDs
-    //4 is middle and 3 is right
     @Override
     public void execute(){
         double error = LimeLight.getZDistance() * MathUtil.sin(LimeLight.getXRotation())
