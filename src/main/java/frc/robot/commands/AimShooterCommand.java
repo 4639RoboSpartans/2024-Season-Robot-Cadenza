@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.network.LimeLight;
@@ -23,7 +24,7 @@ public class AimShooterCommand extends Command{
     /*
      * @returns {v0, aimPosition(degrees)}
      */
-    public double[] calculateShooter(){    
+    public void calculateShooter(){    
         double v0X, v0Y;
         v0Y = Math.pow(
             2 * Constants.FieldDistances.SpeakerOptimalHeight * 9.81,
@@ -31,7 +32,8 @@ public class AimShooterCommand extends Command{
         );
         v0X = LimeLight.getZDistance() * 9.81 / v0Y;
         double aimDegrees = MathUtil.atan(v0Y/v0X);
-        return new double[]{Math.pow(v0X * v0X + v0Y * v0Y, 0.5), aimDegrees};
+        SmartDashboard.putNumber("Shoot degrees", aimDegrees);
+        SmartDashboard.putNumber("Shoot Velocity", Math.pow(v0X * v0X + v0Y * v0Y, 0.5));
     }
 
     @Override
