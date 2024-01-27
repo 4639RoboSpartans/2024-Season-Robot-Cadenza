@@ -1,4 +1,4 @@
-package frc.robot.subsystems.tramp;
+package frc.robot.subsystems.trap;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;

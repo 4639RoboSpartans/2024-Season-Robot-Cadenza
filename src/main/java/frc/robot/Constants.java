@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.oi.OI;
 
-
+@SuppressWarnings("unused")
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.05;
 

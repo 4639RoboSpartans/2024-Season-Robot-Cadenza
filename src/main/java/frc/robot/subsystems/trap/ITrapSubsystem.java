@@ -1,4 +1,4 @@
-package frc.robot.subsystems.tramp;
+package frc.robot.subsystems.trap;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 

@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.tramp.ITrapSubsystem;
+import frc.robot.subsystems.trap.ITrapSubsystem;
 
 public class ReleaseTrapCommand extends Command {
     private final ITrapSubsystem iTrapSubsystem;

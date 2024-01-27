@@ -2,6 +2,7 @@ package frc.robot.network;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+@SuppressWarnings("unused")
 public class LimeLight {
     private LimeLight() {}
 
