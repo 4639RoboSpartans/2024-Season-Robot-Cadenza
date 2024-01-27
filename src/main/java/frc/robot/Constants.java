@@ -20,6 +20,7 @@ public final class Constants {
         84.2,
         -99.45
     };
+
     private static final double[] offsets = oldOffsets;
 
     public static final class IDs {
