@@ -25,8 +25,8 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
-import frc.robot.subsystems.tramp.DummyTrapSubsystem;
-import frc.robot.subsystems.tramp.ITrapSubsystem;
+import frc.robot.subsystems.trap.DummyTrapSubsystem;
+import frc.robot.subsystems.trap.ITrapSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
