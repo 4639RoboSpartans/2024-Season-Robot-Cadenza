@@ -69,6 +69,10 @@ public final class Constants {
         public static final double TRAP_FINAL_TIME = 25;
         public static final double INTAKE_SPEED = 0.5;
         public static final double CLIMBER_SPEED = 0.5;
+        public static final double AIM_ERROR_RADIANS = 0.1;
+        public static final double AIM_ERROR_CM = 25;
+        public static final double AIM_SPEED = 0.2;
+        public static final double ERROR_CORRECTION_FACTOR = 0.1;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
             0.0085
@@ -125,5 +129,13 @@ public final class Constants {
         public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
         public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
         public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
+    }
+
+    public static final class FieldDistances{
+        public static final double ShooterApriltagXDistance = 43.2; //this and below are in cm
+        public static final double LimeLight_MaxDistanceLeft = 419.1;
+        public static final double LimeLight_MaxDistanceMiddle = 518.16;
+        public static final double SpeakerOptimalHeight = 205;
+        public static final double SpeakerApriltagSeparation = 45;
     }
 }
