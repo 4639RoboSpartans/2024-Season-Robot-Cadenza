@@ -60,6 +60,7 @@ public final class Constants {
         );
 
         public static final double MOVEMENT_SPEED = 0.5;
+        public static final double MAX_ROBOT_SPEED = 2.3;
         public static final double TRAP_ROTATOR_SPEED = 0.5;
         public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
         public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;

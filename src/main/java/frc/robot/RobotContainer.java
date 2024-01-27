@@ -8,10 +8,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.ManualSwerveDriveCommand;
 import frc.robot.commands.ReleaseTrapCommand;
 import frc.robot.commands.RetractClimberCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.ExtendClimberCommand;
 import frc.robot.commands.ManualShooterPivotCommand;
 import frc.robot.network.LimeLight;
@@ -87,8 +90,19 @@ public class RobotContainer {
         );
     }
 
+    public SequentialCommandGroup aTest(){
+        return new SequentialCommandGroup(
+                new MoveCommand(swerveDriveSubsystem, .25, 0, 0, 3),
+                // new WaitCommand(1),
+                new MoveCommand(swerveDriveSubsystem, 0, .25, 0, 3),
+                // new WaitCommand(1),
+                new MoveCommand(swerveDriveSubsystem, -.25, 0, 0, 3),
+                // new WaitCommand(1),
+                new MoveCommand(swerveDriveSubsystem, 0, -.25, 0, 3)
+        );
+    }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return aTest();
     }
 }

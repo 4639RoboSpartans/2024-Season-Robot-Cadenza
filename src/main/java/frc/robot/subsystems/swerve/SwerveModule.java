@@ -127,4 +127,12 @@ public class SwerveModule {
         driver.stopMotor();
         rotator.stopMotor();
     }
+
+    public void setBrakeMode(){
+        driver.setNeutralMode(NeutralModeValue.Brake);
+    }
+
+    public void setCoastMode(){
+        driver.setNeutralMode(NeutralModeValue.Coast);
+    }
 }

@@ -68,4 +68,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         moduleBackLeft.periodic();
         moduleBackRight.periodic();
     }
+
+    public void setBrakeMode(){
+        moduleFrontLeft.setBrakeMode();
+        moduleFrontRight.setBrakeMode();
+        moduleBackLeft.setBrakeMode();
+        moduleBackRight.setBrakeMode();
+    }
+
+    public void setCoastMode(){
+        moduleFrontLeft.setCoastMode();
+        moduleFrontRight.setCoastMode();
+        moduleBackLeft.setCoastMode();
+        moduleBackRight.setCoastMode();
+    }
 }
