@@ -31,9 +31,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void setMovement(ChassisSpeeds chassisSpeeds) {
-
         ChassisSpeeds robotCentricSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, navx.getRotation2d());
-        SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(robotCentricSpeeds);
+        setRawMovement(robotCentricSpeeds);
+    }
+
+    public void setRawMovement(ChassisSpeeds chassisSpeeds) {
+        SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModulesStates(
                 swerveModuleStates[0],
                 swerveModuleStates[1],

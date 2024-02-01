@@ -5,11 +5,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.ManualSwerveDriveCommand;
 import frc.robot.commands.ReleaseTrapCommand;
 import frc.robot.commands.RetractClimberCommand;
@@ -17,6 +13,7 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.ExtendClimberCommand;
 import frc.robot.commands.ManualShooterPivotCommand;
+import frc.robot.commands.semiauto.CenterLimelight;
 import frc.robot.network.LimeLight;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
@@ -87,6 +84,11 @@ public class RobotContainer {
 
         oi.getOperatorController().getButton(Constants.Controls.ClimberRetractButton).onTrue(
                 new RetractClimberCommand(climber)
+        );
+
+        // TODO: use operator instead
+        oi.getDriverController().getButton(Constants.Controls.LimeLightCenterButton).whileTrue(
+            new CenterLimelight(swerveDriveSubsystem)
         );
     }
 
