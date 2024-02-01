@@ -90,19 +90,10 @@ public class RobotContainer {
         );
     }
 
-    public SequentialCommandGroup aTest(){
-        return new SequentialCommandGroup(
-                new MoveCommand(swerveDriveSubsystem, .25, 0, 0, 3),
-                // new WaitCommand(1),
-                new MoveCommand(swerveDriveSubsystem, 0, .25, 0, 3),
-                // new WaitCommand(1),
-                new MoveCommand(swerveDriveSubsystem, -.25, 0, 0, 3),
-                // new WaitCommand(1),
-                new MoveCommand(swerveDriveSubsystem, 0, -.25, 0, 3)
-        );
-    }
-
     public Command getAutonomousCommand() {
-        return aTest();
+        return new SequentialCommandGroup(
+                new MoveCommand(swerveDriveSubsystem, .6, .3, 0, 2),
+                new MoveCommand(swerveDriveSubsystem, -.5, 1, 0.5, 4)
+        );
     }
 }

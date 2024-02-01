@@ -37,12 +37,14 @@ public class MoveCommand extends Command{
         double currTime = getElapsedTime();
         double speedMultiplier = 1 - Math.abs(1 - 2 * currTime / duration);
 
-        double xSpeed = xLimiter.calculate(xSpeedRaw * speedMultiplier)*Constants.RobotInfo.MAX_ROBOT_SPEED;
-        double ySpeed = yLimiter.calculate(ySpeedRaw * speedMultiplier)*Constants.RobotInfo.MAX_ROBOT_SPEED;
-        double turningSpeed = turningSpeedRaw*Constants.RobotInfo.MAX_ROBOT_SPEED;
+//        double xSpeed = xLimiter.calculate(xSpeedRaw * speedMultiplier) * Constants.RobotInfo.MAX_ROBOT_SPEED;
+//        double ySpeed = yLimiter.calculate(ySpeedRaw * speedMultiplier) * Constants.RobotInfo.MAX_ROBOT_SPEED;
+        double xSpeed = xSpeedRaw * speedMultiplier * Constants.RobotInfo.MAX_ROBOT_SPEED;
+        double ySpeed = ySpeedRaw * speedMultiplier * Constants.RobotInfo.MAX_ROBOT_SPEED;
+        double turningSpeed = turningSpeedRaw * speedMultiplier * Constants.RobotInfo.MAX_ROBOT_SPEED;
 
         ChassisSpeeds chassisSpeeds;
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed, xSpeed, turningSpeed, swerve.getRotation2d());
+        chassisSpeeds = new ChassisSpeeds(-ySpeed, xSpeed, turningSpeed);
 
         swerve.setMovement(chassisSpeeds);
     }
