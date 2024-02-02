@@ -9,18 +9,21 @@ import frc.robot.Constants;
 @SuppressWarnings("unused")
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final TalonFX intakeMotor;
-    private final TalonFX pivotMotor;
+    private final TalonFX pivotMotorLeft, pivotMotorRight;
 
     private final PIDController pivotPID;
 
-    public IntakeSubsystem(int intakeMotorID, int pivotID) {
+    public IntakeSubsystem(int intakeMotorID, int pivotIDLeft, int pivotIDRight) {
         intakeMotor = new TalonFX(intakeMotorID);
-        pivotMotor = new TalonFX(pivotID);
+        pivotMotorLeft = new TalonFX(pivotIDLeft);
+        pivotMotorRight = new TalonFX(pivotIDRight);
 
         pivotPID = Constants.RobotInfo.SHOOTER_AIM_PID.create();
 
         intakeMotor.setNeutralMode(NeutralModeValue.Brake);
-        pivotMotor.setNeutralMode(NeutralModeValue.Coast);
+        pivotMotorLeft.setNeutralMode(NeutralModeValue.Coast);
+        pivotMotorRight.setNeutralMode(NeutralModeValue.Coast);
+        pivotMotorRight.setInverted(true);
     }
 
     //Pivots the intake to "retract" and "extend" intake
@@ -35,6 +38,14 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     public void stop() {
         intakeMotor.stopMotor();
-        pivotMotor.stopMotor();
+        pivotMotorLeft.stopMotor();
+    }
+
+    @Override
+    public void periodic() {
+        double currentPivotMotorLeftDegrees = pivotMotorLeft.getPosition().getValue();
+        double currentPivotMotorRightDegrees = pivotMotorRight.getPosition().getValue();
+        pivotMotorLeft.set(pivotPID.calculate(currentPivotMotorLeftDegrees));
+        pivotMotorRight.set(pivotPID.calculate(currentPivotMotorRightDegrees));
     }
 }
