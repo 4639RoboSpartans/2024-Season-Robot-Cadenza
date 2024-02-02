@@ -86,6 +86,12 @@ public final class Constants {
                 0, 0, 0
         );
 
+        // TODO: find actual values
+        public static final PID INTAKE_PIVOT_PID = new PID(
+                0, 0, 0
+        );
+
+        // TODO: find actual values
         public static final PID TRAP_ROTATOR_PID = new PID(
                 0, 0, 0
         );
@@ -139,7 +145,7 @@ public final class Constants {
     public static final class FieldDistances{
         public static final double ShooterApriltagXDistance = 43.2; //this and below are in cm
 
-        public static final double ShooterApriltagZDistance = -1;
+        public static final double ShooterApriltagZDistance = -3;
 
         public static final double LimeLight_MaxDistanceLeft = 419.1;
         public static final double LimeLight_MaxDistanceMiddle = 518.16;

@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
         encoder = new CANcoder(encoderID);
 
-        pivotPID = Constants.RobotInfo.SHOOTER_AIM_PID.create();
+        pivotPID = Constants.RobotInfo.INTAKE_PIVOT_PID.create();
 
         pivotMotorLeft.setNeutralMode(NeutralModeValue.Brake);
         pivotMotorRight.setNeutralMode(NeutralModeValue.Brake);

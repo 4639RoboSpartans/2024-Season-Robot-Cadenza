@@ -38,10 +38,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public void setRawMovement(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModulesStates(
-                swerveModuleStates[0],
-                swerveModuleStates[1],
-                swerveModuleStates[2],
-                swerveModuleStates[3]
+            swerveModuleStates[0],
+            swerveModuleStates[1],
+            swerveModuleStates[2],
+            swerveModuleStates[3]
         );
     }
 
