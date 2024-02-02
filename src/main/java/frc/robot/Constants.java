@@ -8,6 +8,7 @@ import frc.robot.oi.OI;
 @SuppressWarnings("unused")
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.05;
+    public static final int CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH = 25;
 
     private static final double[] oldOffsets = {
         -54.98,
@@ -131,10 +132,15 @@ public final class Constants {
         public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
         public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
         public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
+
+        public static final OI.Buttons LimeLightCenterButton = OI.Buttons.A_BUTTON;
     }
 
     public static final class FieldDistances{
         public static final double ShooterApriltagXDistance = 43.2; //this and below are in cm
+
+        public static final double ShooterApriltagZDistance = -1;
+
         public static final double LimeLight_MaxDistanceLeft = 419.1;
         public static final double LimeLight_MaxDistanceMiddle = 518.16;
         public static final double SpeakerOptimalHeight = 205;

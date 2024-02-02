@@ -5,11 +5,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.ManualSwerveDriveCommand;
 import frc.robot.commands.ReleaseTrapCommand;
 import frc.robot.commands.RetractClimberCommand;
@@ -17,6 +13,7 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.ExtendClimberCommand;
 import frc.robot.commands.ManualShooterPivotCommand;
+import frc.robot.commands.semiauto.CenterLimelight;
 import frc.robot.network.LimeLight;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
@@ -88,21 +85,17 @@ public class RobotContainer {
         oi.getOperatorController().getButton(Constants.Controls.ClimberRetractButton).onTrue(
                 new RetractClimberCommand(climber)
         );
-    }
 
-    public SequentialCommandGroup aTest(){
-        return new SequentialCommandGroup(
-                new MoveCommand(swerveDriveSubsystem, .25, 0, 0, 3),
-                // new WaitCommand(1),
-                new MoveCommand(swerveDriveSubsystem, 0, .25, 0, 3),
-                // new WaitCommand(1),
-                new MoveCommand(swerveDriveSubsystem, -.25, 0, 0, 3),
-                // new WaitCommand(1),
-                new MoveCommand(swerveDriveSubsystem, 0, -.25, 0, 3)
+        // TODO: use operator instead
+        oi.getDriverController().getButton(Constants.Controls.LimeLightCenterButton).whileTrue(
+            new CenterLimelight(swerveDriveSubsystem)
         );
     }
 
     public Command getAutonomousCommand() {
-        return aTest();
+        return new SequentialCommandGroup(
+                new MoveCommand(swerveDriveSubsystem, .6, .3, 0, 2),
+                new MoveCommand(swerveDriveSubsystem, -.5, 1, 0.5, 4)
+        );
     }
 }

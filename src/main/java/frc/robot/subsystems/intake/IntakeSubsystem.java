@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
@@ -8,26 +9,32 @@ import frc.robot.Constants;
 
 @SuppressWarnings("unused")
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
+    private final TalonFX pivotMotorLeft;
+    private final TalonFX pivotMotorRight;
     private final TalonFX intakeMotor;
-    private final TalonFX pivotMotorLeft, pivotMotorRight;
+
+    private final CANcoder encoder;
 
     private final PIDController pivotPID;
 
-    public IntakeSubsystem(int intakeMotorID, int pivotIDLeft, int pivotIDRight) {
+    public IntakeSubsystem(int pivotMotorLeftID, int pivotMotorRightID, int intakeMotorID, int encoderID) {
+        pivotMotorLeft = new TalonFX(pivotMotorLeftID);
+        pivotMotorRight = new TalonFX(pivotMotorRightID);
         intakeMotor = new TalonFX(intakeMotorID);
-        pivotMotorLeft = new TalonFX(pivotIDLeft);
-        pivotMotorRight = new TalonFX(pivotIDRight);
+
+        encoder = new CANcoder(encoderID);
 
         pivotPID = Constants.RobotInfo.SHOOTER_AIM_PID.create();
 
-        intakeMotor.setNeutralMode(NeutralModeValue.Brake);
-        pivotMotorLeft.setNeutralMode(NeutralModeValue.Coast);
-        pivotMotorRight.setNeutralMode(NeutralModeValue.Coast);
+        pivotMotorLeft.setNeutralMode(NeutralModeValue.Brake);
+        pivotMotorRight.setNeutralMode(NeutralModeValue.Brake);
+        intakeMotor.setNeutralMode(NeutralModeValue.Coast);
+
         pivotMotorRight.setInverted(true);
     }
 
     //Pivots the intake to "retract" and "extend" intake
-    public void setIntakeDegree(double degrees) {
+    public void setIntakeAngle(double degrees) {
         pivotPID.setSetpoint(degrees);
     }
 
@@ -36,16 +43,19 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         intakeMotor.set(Constants.RobotInfo.INTAKE_SPEED);
     }
 
-    public void stop() {
-        intakeMotor.stopMotor();
-        pivotMotorLeft.stopMotor();
-    }
-
     @Override
     public void periodic() {
-        double currentPivotMotorLeftDegrees = pivotMotorLeft.getPosition().getValue();
-        double currentPivotMotorRightDegrees = pivotMotorRight.getPosition().getValue();
-        pivotMotorLeft.set(pivotPID.calculate(currentPivotMotorLeftDegrees));
-        pivotMotorRight.set(pivotPID.calculate(currentPivotMotorRightDegrees));
+        double pidOutput = pivotPID.calculate(encoder.getPosition().getValue());
+
+        pivotMotorLeft.set(pidOutput);
+        pivotMotorRight.set(pidOutput);
+    }
+
+    public void stop() {
+        pivotPID.setSetpoint(encoder.getPosition().getValue());
+
+        pivotMotorLeft.stopMotor();
+        pivotMotorRight.stopMotor();
+        intakeMotor.stopMotor();
     }
 }

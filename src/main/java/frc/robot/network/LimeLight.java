@@ -22,22 +22,22 @@ public class LimeLight {
         return arr.length > idx ? arr[idx] : Double.NaN;
     }
 
-    public static double getZDistance() {
+    public static double getXDistance() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 0);
     }
-    public static double getXDistance() {
+    public static double getYDistance() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 1);
     }
-    public static double getYDistance() {
+    public static double getZDistance() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 2);
     }
-    public static double getZRotation() {
+    public static double getXRotation() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 3);
     }
-    public static double getXRotation() {
+    public static double getYRotation() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 4);
     }
-    public static double getYRotation() {
+    public static double getZRotation() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 5);
     }
 }
