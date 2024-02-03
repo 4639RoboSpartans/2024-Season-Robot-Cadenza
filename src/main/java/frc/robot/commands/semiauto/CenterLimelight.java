@@ -40,7 +40,7 @@ public class CenterLimelight extends Command {
 
         double yRotation = prevPoses.stream().mapToDouble(RobotPose::yRotation).sum() / prevPoses.size();
 
-        double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.6)) * Constants.RobotInfo.MAX_ROBOT_SPEED;
+        double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * Constants.RobotInfo.MAX_ROBOT_SPEED;
 
         swerveDrive.setRawMovement(new ChassisSpeeds(0, 0, yRtSpd));
     }
