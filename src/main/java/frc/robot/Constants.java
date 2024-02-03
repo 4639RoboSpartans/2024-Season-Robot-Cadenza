@@ -8,7 +8,7 @@ import frc.robot.oi.OI;
 @SuppressWarnings("unused")
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.05;
-    public static final int CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH = 25;
+    public static final int CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH = 5;
 
     private static final double[] oldOffsets = {
         -54.98,
@@ -145,7 +145,7 @@ public final class Constants {
     public static final class FieldDistances{
         public static final double ShooterApriltagXDistance = 43.2; //this and below are in cm
 
-        public static final double ShooterApriltagZDistance = -3;
+        public static final double ShooterApriltagZDistance = -2.5;
 
         public static final double LimeLight_MaxDistanceLeft = 419.1;
         public static final double LimeLight_MaxDistanceMiddle = 518.16;

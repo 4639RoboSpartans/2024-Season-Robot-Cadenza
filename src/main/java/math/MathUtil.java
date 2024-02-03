@@ -82,4 +82,8 @@ public class MathUtil {
         for (double i : arr) if (i > max) max = i;
         return max;
     }
+
+    public static double signedPow(double a, double p) {
+        return Math.signum(a) * Math.pow(Math.abs(a), p);
+    }
 }

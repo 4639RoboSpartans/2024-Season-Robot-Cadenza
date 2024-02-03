@@ -22,6 +22,14 @@ public class LimeLight {
         return arr.length > idx ? arr[idx] : Double.NaN;
     }
 
+    public static double getTx() {
+        return Network.getTable("limelight").getDouble("tx");
+    }
+
+    public static double getTy() {
+        return Network.getTable("limelight").getDouble("ty");
+    }
+
     public static double getXDistance() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 0);
     }

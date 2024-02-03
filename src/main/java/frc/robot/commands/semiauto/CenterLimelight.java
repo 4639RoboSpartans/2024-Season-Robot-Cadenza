@@ -1,10 +1,12 @@
 package frc.robot.commands.semiauto;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import math.MathUtil;
 
 import java.util.ArrayDeque;
 
@@ -13,7 +15,9 @@ record RobotPose(double xOffset, double zOffset, double yRotation) {}
 public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
     private final ArrayDeque<RobotPose> prevPoses = new ArrayDeque<>();
-    
+    // TODO: move pid into Constants.java
+    private final PIDController rotationPID = new PIDController(0.2, 0.001, 0);
+
     public CenterLimelight(SwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDrive = swerveDriveSubsystem;
 
@@ -24,6 +28,8 @@ public class CenterLimelight extends Command {
     public void initialize() {
         swerveDrive.stop();
         prevPoses.clear();
+        rotationPID.reset();
+        rotationPID.setSetpoint(0);
     }
 
     @Override
@@ -32,28 +38,26 @@ public class CenterLimelight extends Command {
 
         if(prevPoses.isEmpty()) return;
 
-        double xOffset = prevPoses.stream().mapToDouble(RobotPose::xOffset).sum() / prevPoses.size();
-        double zOffset = prevPoses.stream().mapToDouble(RobotPose::zOffset).sum() / prevPoses.size();
         double yRotation = prevPoses.stream().mapToDouble(RobotPose::yRotation).sum() / prevPoses.size();
 
-        double xSpeed = -xOffset * Constants.RobotInfo.MAX_ROBOT_SPEED;
-        double zSpeed = -zOffset * Constants.RobotInfo.MAX_ROBOT_SPEED * 0.3;
-        double yRotationSpeed = -yRotation * Constants.RobotInfo.MAX_ROBOT_SPEED * 0.02;
+        double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.6)) * Constants.RobotInfo.MAX_ROBOT_SPEED;
 
-        swerveDrive.setRawMovement(new ChassisSpeeds(xSpeed, zSpeed, yRotationSpeed));
+        swerveDrive.setRawMovement(new ChassisSpeeds(0, 0, yRtSpd));
     }
 
     private void acceptInput() {
         double xOffset = LimeLight.getXDistance();
         double zOffset = LimeLight.getZDistance() - Constants.FieldDistances.ShooterApriltagZDistance;
-        double yRotation = LimeLight.getYRotation();
+//        double yRotation = LimeLight.getYRotation();
+
+        double angle = -Math.toRadians(LimeLight.getTx());
 
         if(xOffset == 0) return;
 
         if(prevPoses.size() >= Constants.CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH) {
             prevPoses.removeFirst();
         }
-        prevPoses.addLast(new RobotPose(xOffset, zOffset, yRotation));
+        prevPoses.addLast(new RobotPose(xOffset, zOffset, angle));
     }
 
     @Override
