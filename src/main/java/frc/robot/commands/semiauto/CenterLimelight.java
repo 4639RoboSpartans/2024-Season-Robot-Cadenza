@@ -15,6 +15,7 @@ record RobotPose(double xOffset, double zOffset, double yRotation) {}
 public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
     private final ArrayDeque<RobotPose> prevPoses = new ArrayDeque<>();
+
     // TODO: move pid into Constants.java
     private final PIDController rotationPID = new PIDController(0.375, 0.0002, 0.03);
 
@@ -40,7 +41,7 @@ public class CenterLimelight extends Command {
 
         double yRotation = prevPoses.stream().mapToDouble(RobotPose::yRotation).sum() / prevPoses.size();
 
-        double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * Constants.RobotInfo.MAX_ROBOT_SPEED;
+        double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * 2.3;
 
         swerveDrive.setRawMovement(new ChassisSpeeds(0, 0, yRtSpd));
     }
