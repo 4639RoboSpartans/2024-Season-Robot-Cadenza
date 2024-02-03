@@ -10,11 +10,9 @@ import math.MathUtil;
 
 import java.util.ArrayDeque;
 
-record RobotPose(double xOffset, double zOffset, double yRotation) {}
-
 public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
-    private final ArrayDeque<RobotPose> prevPoses = new ArrayDeque<>();
+    private final ArrayDeque<Double> prevPoses = new ArrayDeque<Double>();
 
     // TODO: move pid into Constants.java
     private final PIDController rotationPID = new PIDController(0.375, 0.0002, 0.03);
@@ -39,7 +37,7 @@ public class CenterLimelight extends Command {
 
         if(prevPoses.isEmpty()) return;
 
-        double yRotation = prevPoses.stream().mapToDouble(RobotPose::yRotation).sum() / prevPoses.size();
+        double yRotation = prevPoses.stream().mapToDouble(Double::doubleValue).sum() / prevPoses.size();
 
         double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * 2.3;
 
@@ -47,18 +45,14 @@ public class CenterLimelight extends Command {
     }
 
     private void acceptInput() {
-        double xOffset = LimeLight.getXDistance();
-        double zOffset = LimeLight.getZDistance() - Constants.FieldDistances.ShooterApriltagZDistance;
-//        double yRotation = LimeLight.getYRotation();
-
         double angle = -Math.toRadians(LimeLight.getTx());
 
-        if(xOffset == 0) return;
+        if(angle == 0) return;
 
         if(prevPoses.size() >= Constants.CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH) {
             prevPoses.removeFirst();
         }
-        prevPoses.addLast(new RobotPose(xOffset, zOffset, angle));
+        prevPoses.addLast(angle);
     }
 
     @Override
