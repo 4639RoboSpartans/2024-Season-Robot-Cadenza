@@ -96,6 +96,10 @@ public final class Constants {
                 0, 0, 0
         );
 
+        public static final PID ROTATION_PID = new PID(
+                0.5, 0.0002, 0.03
+        );
+
     }
 
     public record SwerveModuleConfig(

@@ -16,8 +16,8 @@ record RobotPose(double xOffset, double zOffset, double yRotation) {}
 public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
     private final ArrayDeque<RobotPose> prevPoses = new ArrayDeque<>();
-    // TODO: move pid into Constants.java
-    private PIDController rotationPID = new PIDController(0.5, 0.0002, 0.03);
+    
+    private PIDController rotationPID = Constants.RobotInfo.ROTATION_PID.create();
 
     public CenterLimelight(SwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDrive = swerveDriveSubsystem;
@@ -46,7 +46,7 @@ public class CenterLimelight extends Command {
 
         swerveDrive.setRawMovement(new ChassisSpeeds(0, 0, yRtSpd));
 
-        double kD = 1/Math.pow(Math.abs(SmartDashboard.getNumber("AprilTag: y rotation", 1))/5, 2);
+        double kD = 1/Math.pow(Math.abs(SmartDashboard.getNumber("AprilTag: y rotation", 1)), 2) * 7;
         if (kD > 10) kD = 0.01;
 
         rotationPID.setD(kD);
