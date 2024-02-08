@@ -11,7 +11,7 @@ import math.MathUtil;
 
 import java.util.ArrayDeque;
 
-record RobotPose(double xOffset, double zOffset, double yRotation) {}
+record RobotPose(double yRotation) {}
 
 public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
@@ -54,18 +54,12 @@ public class CenterLimelight extends Command {
     }
 
     private void acceptInput() {
-        double xOffset = LimeLight.getXDistance();
-        double zOffset = LimeLight.getZDistance() - Constants.FieldDistances.ShooterApriltagZDistance;
-//        double yRotation = LimeLight.getYRotation();
-
         double angle = -Math.toRadians(LimeLight.getTx());
-
-        if(xOffset == 0) return;
 
         if(prevPoses.size() >= Constants.CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH) {
             prevPoses.removeFirst();
         }
-        prevPoses.addLast(new RobotPose(xOffset, zOffset, angle));
+        prevPoses.addLast(new RobotPose(angle));
     }
 
     @Override

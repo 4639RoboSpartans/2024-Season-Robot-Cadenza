@@ -19,9 +19,10 @@ import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
+import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
-
-import static frc.robot.Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT;
+import frc.robot.subsystems.trap.DummyTrapSubsystem;
+import frc.robot.subsystems.trap.ITrapSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -39,8 +40,9 @@ public class RobotContainer {
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
+        aimSubsystem = new AimSubsystem(oi);
 
-        swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
+        swerveDriveSubsystem = new SwerveDriveSubsystem(navX, aimSubsystem);
 
         shooter = new DummyShooterSubsystem();
         shooterPivot = new DummyShooterPivotSubsystem();
@@ -84,7 +86,11 @@ public class RobotContainer {
 
         // TODO: use operator instead
         oi.getDriverController().getButton(Constants.Controls.LimeLightCenterButton).whileTrue(
-            new CenterLimelight(swerveDriveSubsystem)
+                new CenterLimelight(swerveDriveSubsystem)
+        );
+
+        oi.getDriverController().getButton(OI.Buttons.A_BUTTON).onTrue(
+                new ResetPIDCommand(swerveDriveSubsystem.getAimSubsystem())
         );
     }
 

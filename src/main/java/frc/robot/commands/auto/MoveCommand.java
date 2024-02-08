@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
+@SuppressWarnings("unused")
 public class MoveCommand extends Command{
     private final SwerveDriveSubsystem swerve;
     private SlewRateLimiter xLimiter, yLimiter;
