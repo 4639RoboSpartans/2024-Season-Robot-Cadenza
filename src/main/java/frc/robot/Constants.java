@@ -22,7 +22,7 @@ public final class Constants {
         -99.45
     };
 
-    private static final double[] offsets = oldOffsets;
+    private static final double[] offsets = newOffsets;
 
     public static final class IDs {
         // Swerve uses up motor ids 1-12
@@ -46,9 +46,12 @@ public final class Constants {
         public static final int CLIMBER_RIGHT = 16;
         public static final int AIM_MOTOR = 17;
 
-        public static final int LEFT_ROTATOR_MOTOR = 18;
-        public static final int RIGHT_ROTATOR_MOTOR = 19;
-        public static final int ROLLER_MOTOR = 21;
+        public static final int HOPPER_MOTOR = 18;
+
+        public static final int INTAKE_PIVOT_MOTOR_LEFT = 22;
+        public static final int INTAKE_PIVOT_MOTOR_RIGHT = 23;
+        public static final int INTAKE_MOTOR = 24;
+        public static final int INTAKE_ENCODER = 25;
     }
 
     public static final class RobotInfo {
@@ -70,7 +73,7 @@ public final class Constants {
         public static final double TRAP_EXTEND_TIME = 15;
         public static final double TRAP_RELEASE_TIME = 20;
         public static final double TRAP_FINAL_TIME = 25;
-        public static final double INTAKE_SPEED = 0.5;
+        public static final double INTAKE_SPEED = -0.4;
         public static final double CLIMBER_SPEED = 0.5;
         public static final double AIM_ERROR_RADIANS = 0.1;
         public static final double AIM_ERROR_CM = 25;
@@ -133,17 +136,25 @@ public final class Constants {
     }
 
     public static final class Controls {
+        public static final class Driver {
+
+            public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
+            public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
+            public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
+        }
+
+        public static final class Operator {
+
+        }
         public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
         public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
         public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;
         public static final OI.Buttons ClimberExtendButton = OI.Buttons.Y_BUTTON;
         public static final OI.Buttons ClimberRetractButton = OI.Buttons.X_BUTTON;
 
-        public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
-        public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
-        public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
-
         public static final OI.Buttons LimeLightCenterButton = OI.Buttons.A_BUTTON;
+        public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
+        public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
     }
 
     public static final class FieldDistances{

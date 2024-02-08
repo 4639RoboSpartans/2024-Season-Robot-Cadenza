@@ -26,11 +26,11 @@ public class RotationPIDSubsystem extends SubsystemBase{
     
         if (oi.getDriverController().getButton(OI.Buttons.A_BUTTON).getAsBoolean() == false){
             aIsPressed = false;
-            return -oi.getDriverController().getAxis(Constants.Controls.SwerveRotationAxis);
+            return -oi.getDriverController().getAxis(Constants.Controls.Driver.SwerveRotationAxis);
         }
         
         if (prevPoses.isEmpty()) 
-            return -oi.getDriverController().getAxis(Constants.Controls.SwerveRotationAxis);
+            return -oi.getDriverController().getAxis(Constants.Controls.Driver.SwerveRotationAxis);
         
         if (oi.getDriverController().getButton(OI.Buttons.A_BUTTON).getAsBoolean()){
             if (aIsPressed == false){

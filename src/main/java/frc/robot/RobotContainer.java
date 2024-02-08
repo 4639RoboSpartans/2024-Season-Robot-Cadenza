@@ -6,28 +6,22 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.commands.ManualSwerveDriveCommand;
-import frc.robot.commands.ReleaseTrapCommand;
-import frc.robot.commands.RetractClimberCommand;
-import frc.robot.commands.ShootCommand;
+import frc.robot.commands.*;
 import frc.robot.commands.auto.MoveCommand;
-import frc.robot.commands.ExtendClimberCommand;
-import frc.robot.commands.ManualShooterPivotCommand;
 import frc.robot.commands.semiauto.CenterLimelight;
-import frc.robot.network.LimeLight;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
-import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
-import frc.robot.subsystems.trap.DummyTrapSubsystem;
-import frc.robot.subsystems.trap.ITrapSubsystem;
+
+import static frc.robot.Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -40,7 +34,6 @@ public class RobotContainer {
     private final IShooterPivotSubsystem shooterPivot;
     private final IIntakeSubsystem intake;
     private final IClimberSubsystem climber;
-    private final ITrapSubsystem trap;
 
 
     public RobotContainer() {
@@ -51,9 +44,8 @@ public class RobotContainer {
 
         shooter = new DummyShooterSubsystem();
         shooterPivot = new DummyShooterPivotSubsystem();
-        intake = new DummyIntakeSubsystem();
+        intake = new IntakeSubsystem(Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT, INTAKE_PIVOT_MOTOR_RIGHT, 0, Constants.IDs.INTAKE_ENCODER);
         climber = new DummyClimberSubsystem();
-        trap = new DummyTrapSubsystem();
 
         configureBindings();
     }
@@ -67,23 +59,27 @@ public class RobotContainer {
         oi.getDriverController().getButton(OI.Buttons.Y_BUTTON).whileTrue(new RunCommand(navX::reset, navX));
         
         shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
-                shooterPivot, oi
-        ));;
-
-        oi.getOperatorController().getButton(Constants.Controls.TrapReleaseButton).onTrue(
-                new ReleaseTrapCommand(trap)
-        );
+            shooterPivot, oi
+        ));
 
         oi.getOperatorController().getButton(Constants.Controls.ShooterButton).onTrue(
-                new ShootCommand(shooter)
+            new ShootCommand(shooter)
         );
 
         oi.getOperatorController().getButton(Constants.Controls.ClimberExtendButton).onTrue(
-                new ExtendClimberCommand(climber)
+            new ExtendClimberCommand(climber)
         );
 
         oi.getOperatorController().getButton(Constants.Controls.ClimberRetractButton).onTrue(
-                new RetractClimberCommand(climber)
+            new RetractClimberCommand(climber)
+        );
+
+        oi.getOperatorController().getButton(Constants.Controls.IntakeButton).whileTrue(
+            new IntakeCommand(intake)
+        );
+
+        oi.getOperatorController().getButton(Constants.Controls.OuttakeButton).whileTrue(
+            new OuttakeCommand(intake)
         );
 
         // TODO: use operator instead

@@ -14,4 +14,12 @@ public class DummyIntakeSubsystem extends SubsystemBase implements IIntakeSubsys
     public void intake() {
         
     }
+
+    public void outtake() {
+
+    }
+
+    public void stopIntake() {
+
+    }
 }
