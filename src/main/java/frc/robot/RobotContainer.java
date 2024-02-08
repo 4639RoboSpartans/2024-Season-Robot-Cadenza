@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.ManualSwerveDriveCommand;
 import frc.robot.commands.ReleaseTrapCommand;
+import frc.robot.commands.ResetPIDCommand;
 import frc.robot.commands.RetractClimberCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
+import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.trap.DummyTrapSubsystem;
 import frc.robot.subsystems.trap.ITrapSubsystem;
@@ -41,13 +43,15 @@ public class RobotContainer {
     private final IIntakeSubsystem intake;
     private final IClimberSubsystem climber;
     private final ITrapSubsystem trap;
+    private final AimSubsystem aimSubsystem;
 
 
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
+        aimSubsystem = new AimSubsystem(oi);
 
-        swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
+        swerveDriveSubsystem = new SwerveDriveSubsystem(navX, aimSubsystem);
 
         shooter = new DummyShooterSubsystem();
         shooterPivot = new DummyShooterPivotSubsystem();
@@ -88,7 +92,11 @@ public class RobotContainer {
 
         // TODO: use operator instead
         oi.getDriverController().getButton(Constants.Controls.LimeLightCenterButton).whileTrue(
-            new CenterLimelight(swerveDriveSubsystem)
+                new CenterLimelight(swerveDriveSubsystem)
+        );
+
+        oi.getDriverController().getButton(OI.Buttons.A_BUTTON).onTrue(
+                new ResetPIDCommand(swerveDriveSubsystem.getAimSubsystem())
         );
     }
 
