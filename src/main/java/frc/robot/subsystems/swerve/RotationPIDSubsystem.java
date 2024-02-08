@@ -9,7 +9,7 @@ import frc.robot.network.LimeLight;
 import frc.robot.oi.OI;
 import math.MathUtil;
 
-record RobotPose(double xOffset, double zOffset, double yRotation) {}
+record RobotPose(double yRotation) {}
 
 public class RotationPIDSubsystem extends SubsystemBase{
     private boolean aIsPressed = false;
@@ -45,16 +45,12 @@ public class RotationPIDSubsystem extends SubsystemBase{
     }
 
     private void acceptInput() {
-        double xOffset = LimeLight.getXDistance();
-        double zOffset = LimeLight.getZDistance() - Constants.FieldDistances.ShooterApriltagZDistance;
 
         double angle = -Math.toRadians(LimeLight.getTx());
-
-        if(xOffset == 0) return;
 
         if(prevPoses.size() >= Constants.CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH) {
             prevPoses.removeFirst();
         }
-        prevPoses.addLast(new RobotPose(xOffset, zOffset, angle));
+        prevPoses.addLast(new RobotPose(angle));
     }
 }
