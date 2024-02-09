@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -24,7 +24,7 @@ public class ManualShooterPivotCommand extends Command{
     @Override
     public void execute(){
         iShooterPivotSubsystem.manualSet(oi.getOperatorController().getAxis(
-                Constants.Controls.ShooterPivotAxis
+                Constants.Controls.Operator.ShooterPivotAxis
         ));
     }
 

@@ -1,13 +1,13 @@
-package frc.robot.commands;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 
-public class RetractClimberCommand extends Command {
+public class ExtendClimberCommand extends Command {
     private final IClimberSubsystem climberSubsystem;
 
-    public RetractClimberCommand(IClimberSubsystem climberSubsystem) {
+    public ExtendClimberCommand(IClimberSubsystem climberSubsystem) {
         this.climberSubsystem = climberSubsystem;
 
         addRequirements(climberSubsystem);
@@ -18,7 +18,7 @@ public class RetractClimberCommand extends Command {
     }
 
     public void execute() {
-        climberSubsystem.setSpeed(-Constants.RobotInfo.CLIMBER_SPEED);
+        climberSubsystem.setSpeed(1);
     }
 
     public void end(boolean interrupted) {

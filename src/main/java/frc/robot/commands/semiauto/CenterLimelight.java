@@ -17,7 +17,7 @@ public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
     private final ArrayDeque<RobotPose> prevPoses = new ArrayDeque<>();
     
-    private PIDController rotationPID = Constants.RobotInfo.ROTATION_PID.create();
+    private PIDController rotationPID = Constants.RobotInfo.LIMELIGHT_AIM_PID.create();
 
     public CenterLimelight(SwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDrive = swerveDriveSubsystem;

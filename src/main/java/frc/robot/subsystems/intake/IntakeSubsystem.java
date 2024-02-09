@@ -1,36 +1,34 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.*;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 @SuppressWarnings("unused")
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
-//    private final TalonFX pivotMotorLeft;
-//    private final TalonFX pivotMotorRight;
+    private final CANSparkMax pivotMotorLeft;
+    private final CANSparkMax pivotMotorRight;
     private final CANSparkMax intakeMotor;
 
-//    private final CANcoder encoder;
-
     private final PIDController pivotPID;
+    private final RelativeEncoder encoder;
 
     public IntakeSubsystem(int pivotMotorLeftID, int pivotMotorRightID, int intakeMotorID, int encoderID) {
-//        pivotMotorLeft = new TalonFX(pivotMotorLeftID);
-//        pivotMotorRight = new TalonFX(pivotMotorRightID);
+        pivotMotorLeft = new CANSparkMax(pivotMotorLeftID, CANSparkMax.MotorType.kBrushless);
+        pivotMotorRight = new CANSparkMax(pivotMotorRightID, CANSparkMax.MotorType.kBrushless);
         intakeMotor = new CANSparkMax(intakeMotorID, CANSparkMax.MotorType.kBrushless);
-
-//        encoder = new CANcoder(encoderID);
 
         pivotPID = Constants.RobotInfo.INTAKE_PIVOT_PID.create();
 
-//        pivotMotorLeft.setNeutralMode(NeutralModeValue.Brake);
-//        pivotMotorRight.setNeutralMode(NeutralModeValue.Brake);
+        pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-//        pivotMotorRight.setInverted(true);
+        pivotMotorRight.setInverted(true);
+        pivotMotorRight.follow(pivotMotorLeft);
+
+        encoder = pivotMotorLeft.getEncoder();
     }
 
     //Pivots the intake to "retract" and "extend" intake
@@ -53,17 +51,19 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     @Override
     public void periodic() {
-//        double pidOutput = pivotPID.calculate(encoder.getPosition().getValue());
+        double pidOutput = pivotPID.calculate(encoder.getPosition());
+
+        SmartDashboard.putNumber("pivot pos", encoder.getPosition());
 
 //        pivotMotorLeft.set(pidOutput);
 //        pivotMotorRight.set(pidOutput);
     }
 
     public void stop() {
-//        pivotPID.setSetpoint(encoder.getPosition().getValue());
+        pivotPID.setSetpoint(encoder.getPosition());
 
-//        pivotMotorLeft.stopMotor();
-//        pivotMotorRight.stopMotor();
+        pivotMotorLeft.stopMotor();
+        pivotMotorRight.stopMotor();
         intakeMotor.stopMotor();
     }
 }

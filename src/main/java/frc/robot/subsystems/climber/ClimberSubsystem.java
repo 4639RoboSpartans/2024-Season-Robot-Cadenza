@@ -1,35 +1,30 @@
 package frc.robot.subsystems.climber;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 @SuppressWarnings("unused")
 public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem {
-    private final TalonFX leftMotor, rightMotor;
+    private final CANSparkMax leftMotor, rightMotor;
 
     public ClimberSubsystem(int leftMotorID, int rightMotorID) {
-        leftMotor = new TalonFX(leftMotorID);
-        rightMotor = new TalonFX(rightMotorID);
+        leftMotor = new CANSparkMax(leftMotorID, CANSparkMax.MotorType.kBrushless);
+        rightMotor = new CANSparkMax(rightMotorID, CANSparkMax.MotorType.kBrushless);
 
-        leftMotor.setNeutralMode(NeutralModeValue.Brake);
-        rightMotor.setNeutralMode(NeutralModeValue.Brake);
+        leftMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        rightMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-        leftMotor.setInverted(true);
+        rightMotor.setInverted(true);
     }
 
     public void setLeftSpeed(double speed) {
-        leftMotor.set(Constants.RobotInfo.CLIMBER_SPEED);
+        leftMotor.set(speed * Constants.RobotInfo.CLIMBER_SPEED);
     }
 
     public void setRightSpeed(double speed) {
-        rightMotor.set(Constants.RobotInfo.CLIMBER_SPEED);
-    }
-
-    public void setSpeed(double speed) {
-        setLeftSpeed(speed);
-        setRightSpeed(speed);
+        rightMotor.set(speed * Constants.RobotInfo.CLIMBER_SPEED);
     }
 
     @Override

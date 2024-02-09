@@ -73,12 +73,15 @@ public final class Constants {
         public static final double TRAP_EXTEND_TIME = 15;
         public static final double TRAP_RELEASE_TIME = 20;
         public static final double TRAP_FINAL_TIME = 25;
-        public static final double INTAKE_SPEED = -0.4;
+        public static final double INTAKE_SPEED = -0.6;
+        public static final double HOPPER_SPEED = 0.6;
         public static final double CLIMBER_SPEED = 0.5;
         public static final double AIM_ERROR_RADIANS = 0.1;
         public static final double AIM_ERROR_CM = 25;
         public static final double AIM_SPEED = 0.2;
         public static final double ERROR_CORRECTION_FACTOR = 0.1;
+
+        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 18;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
             0.0085
@@ -99,10 +102,9 @@ public final class Constants {
                 0, 0, 0
         );
 
-        public static final PID ROTATION_PID = new PID(
+        public static final PID LIMELIGHT_AIM_PID = new PID(
                 0.5, 0.0002, 0.03
         );
-
     }
 
     public record SwerveModuleConfig(
@@ -136,25 +138,26 @@ public final class Constants {
     }
 
     public static final class Controls {
-        public static final class Driver {
 
+        public static final class Driver {
             public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
             public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
             public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
+            public static final OI.Buttons AimButton = OI.Buttons.A_BUTTON;
+            public static final OI.Buttons ClimberExtendButton = OI.Buttons.LEFT_BUMPER;
+            public static final OI.Buttons ClimberRetractButton = OI.Buttons.RIGHT_BUMPER;
+            public static final OI.Buttons ClimberSwap1Button = OI.Buttons.POW_LEFT;
+            public static final OI.Buttons ClimberSwap2Button = OI.Buttons.POW_RIGHT;
         }
 
         public static final class Operator {
+            public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
+            public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
+            public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;
 
+            public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
+            public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
         }
-        public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
-        public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
-        public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;
-        public static final OI.Buttons ClimberExtendButton = OI.Buttons.Y_BUTTON;
-        public static final OI.Buttons ClimberRetractButton = OI.Buttons.X_BUTTON;
-
-        public static final OI.Buttons LimeLightCenterButton = OI.Buttons.A_BUTTON;
-        public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
-        public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
     }
 
     public static final class FieldDistances{
