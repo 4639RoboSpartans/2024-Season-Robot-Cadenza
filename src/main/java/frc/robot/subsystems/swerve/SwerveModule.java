@@ -19,7 +19,7 @@ public class SwerveModule {
 
     private final double rotationOffsetDegrees;
     private final double driveConversionFactor;
-    private double speed = 0;
+    private double targetSpeed = 0;
 
     public SwerveModule(SwerveModuleConfig swerveModuleData) {
         driveConversionFactor = (1. / 2048) * (1 / 6.55) * (0.1016) * Math.PI;
@@ -48,7 +48,7 @@ public class SwerveModule {
     }
 
     private static boolean isNegligible(SwerveModuleState state) {
-        return state.speedMetersPerSecond < 0.05;
+        return state.speedMetersPerSecond < 0.0001;
     }
 
     public void reset() {
@@ -56,20 +56,31 @@ public class SwerveModule {
     }
 
     public void periodic() {
-        if(isNegligible(new SwerveModuleState(speed, new Rotation2d()))) {
-            return;
-        }
-
-        double rotation = getRotationInDegrees();
-
-        double rotatorPIDOutput = rotationPID.calculate(rotation);
-
         int moduleID = rotator.getDeviceID() / 2;
-        SmartDashboard.putString("Module %d rotation".formatted(moduleID), "%.2f degrees".formatted(rotation));
+        double currModuleRotation = getRotationInDegrees();
+
+        SmartDashboard.putString("Module %d current rotation".formatted(moduleID), "%.2f degrees".formatted(currModuleRotation));
+
+//        rotationPID.setSetpoint(0);
+//        if(isNegligible(new SwerveModuleState(targetSpeed, new Rotation2d()))) {
+//            SmartDashboard.putString("Module %d target speed".formatted(moduleID), "negligible");
+//            SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "negligible");
+//            SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "negligible");
+//
+//            driver.stopMotor();
+//            rotator.stopMotor();
+//
+//            return;
+//        }
+
+        double rotatorPIDOutput = rotationPID.calculate(currModuleRotation);
+
+        SmartDashboard.putString("Module %d target speed".formatted(moduleID), "%.2f".formatted(targetSpeed));
+        SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "%.2f degrees".formatted(rotationPID.getSetpoint()));
         SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "%.2f".formatted(rotatorPIDOutput));
 
         rotator.set(rotatorPIDOutput);
-        driver.set(speed * Constants.RobotInfo.MOVEMENT_SPEED);
+        driver.set(targetSpeed * Constants.RobotInfo.MOVEMENT_SPEED);
     }
 
     public double getRotationInDegrees() {
@@ -77,8 +88,8 @@ public class SwerveModule {
         return MathUtil.mod(rawRotationInDegrees, -180, 180);
     }
 
-    private void setSpeed(double speed) {
-        this.speed = speed;
+    private void setTargetSpeed(double targetSpeed) {
+        this.targetSpeed = targetSpeed;
     }
 
     private void setRotation(double degrees) {
@@ -111,21 +122,13 @@ public class SwerveModule {
     }
 
     public void setState(SwerveModuleState state) {
-        if (isNegligible(state)) stop();
-        else {
-            SwerveModuleState optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getRotationInDegrees()));
-            setSpeed(optimizedState.speedMetersPerSecond);
-            setRotation(optimizedState.angle.getDegrees());
-        }
-    }
-
-    public void resetAngleAndPosition() {
-        setSpeed(0);
-        setRotation(0);
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getRotationInDegrees()));
+        setTargetSpeed(optimizedState.speedMetersPerSecond);
+        setRotation(optimizedState.angle.getDegrees());
     }
 
     public void stop() {
-        setSpeed(0);
+        setTargetSpeed(0);
         setRotation(getRotationInDegrees());
 
         driver.stopMotor();

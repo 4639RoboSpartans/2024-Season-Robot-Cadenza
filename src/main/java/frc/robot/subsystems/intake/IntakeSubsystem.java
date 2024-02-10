@@ -25,15 +25,19 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
         pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-        pivotMotorRight.setInverted(true);
-        pivotMotorRight.follow(pivotMotorLeft);
+        pivotMotorLeft.setInverted(false);
+        pivotMotorRight.follow(pivotMotorLeft, true);
 
         encoder = pivotMotorLeft.getEncoder();
     }
 
-    //Pivots the intake to "retract" and "extend" intake
-    public void setIntakeAngle(double degrees) {
-        pivotPID.setSetpoint(degrees);
+    public void setExtended(boolean extended) {
+        if(extended) {
+            pivotPID.setSetpoint(Constants.RobotInfo.INTAKE_PIVOT_EXTENDED_SETPOINT);
+        }
+        else {
+            pivotPID.setSetpoint(0);
+        }
     }
 
     //Spins intake motor to intake notes
@@ -53,10 +57,13 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     public void periodic() {
         double pidOutput = pivotPID.calculate(encoder.getPosition());
 
-        SmartDashboard.putNumber("pivot pos", encoder.getPosition());
+        if(pidOutput < 0) pidOutput *= Constants.INTAKE_PIVOT_UP_MULTIPLIER;
 
-//        pivotMotorLeft.set(pidOutput);
-//        pivotMotorRight.set(pidOutput);
+        SmartDashboard.putNumber("target pivot pos", pivotPID.getSetpoint());
+        SmartDashboard.putNumber("current pivot pos", encoder.getPosition());
+        SmartDashboard.putNumber("pivot pid output", pidOutput);
+
+        pivotMotorLeft.set(pidOutput);
     }
 
     public void stop() {

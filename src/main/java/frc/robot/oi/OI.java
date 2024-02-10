@@ -53,14 +53,12 @@ public class OI {
         Y_BUTTON(4),
         LEFT_BUMPER(5),
         RIGHT_BUMPER(6),
-        BACK_BUTTON(7),
-        START_BUTTON(8),
-        LEFT_STICK(9),
-        RIGHT_STICK(10),
-        POW_UP(11),
-        POW_RIGHT(12),
-        POW_DOWN(13),
-        POW_LEFT(14);
+        LEFT_STICK(8),
+        RIGHT_STICK(9),
+        POV_UP(10),
+        POV_RIGHT(11),
+        POV_DOWN(12),
+        POV_LEFT(13);
 
         private final int id;
 

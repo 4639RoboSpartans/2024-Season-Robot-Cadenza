@@ -10,9 +10,15 @@ import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 @SuppressWarnings("unused")
 public class MoveCommand extends Command{
     private final SwerveDriveSubsystem swerve;
-    private SlewRateLimiter xLimiter, yLimiter;
-    private double xLimit, yLimit = 0.65;
-    private double xSpeedRaw, ySpeedRaw, turningSpeedRaw, startTime, duration;
+    private final SlewRateLimiter xLimiter;
+    private final SlewRateLimiter yLimiter;
+    private double xLimit;
+    private final double yLimit = 0.65;
+    private final double xSpeedRaw;
+    private final double ySpeedRaw;
+    private final double turningSpeedRaw;
+    private double startTime;
+    private final double duration;
     public MoveCommand(SwerveDriveSubsystem swerve, double xSpeedRaw, double ySpeedRaw, double turningSpeedRaw, double duration){
         this.swerve = swerve;
         this.xSpeedRaw = xSpeedRaw;

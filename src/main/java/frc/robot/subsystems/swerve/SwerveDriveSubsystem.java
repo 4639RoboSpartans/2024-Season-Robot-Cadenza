@@ -17,21 +17,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     private final NavX navx;
 
-    private final AimSubsystem aimSubsystem;
-
-    public SwerveDriveSubsystem(NavX navx, AimSubsystem aimSubsystem) {
+    public SwerveDriveSubsystem(NavX navx) {
         moduleFrontLeft = new SwerveModule(Constants.IDs.MODULE_FRONT_LEFT);
         moduleFrontRight = new SwerveModule(Constants.IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(Constants.IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(Constants.IDs.MODULE_BACK_RIGHT);
 
-        this.aimSubsystem = aimSubsystem;
-
         this.navx = navx;
-    }
-
-    public AimSubsystem getAimSubsystem(){
-        return aimSubsystem;
     }
 
     public Rotation2d getRotation2d() {

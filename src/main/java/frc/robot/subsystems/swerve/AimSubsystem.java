@@ -10,13 +10,12 @@ import frc.robot.oi.OI;
 import math.MathUtil;
 
 public class AimSubsystem extends SubsystemBase{
-    private final OI oi;
 
     private final PIDController rotationPID = Constants.RobotInfo.LIMELIGHT_AIM_PID.create();
 
     private final ArrayDeque<Double> prevPoses = new ArrayDeque<>();
-    public AimSubsystem(OI oi){
-        this.oi = oi;
+    public AimSubsystem(){
+//        this.oi = oi;
     }
 
     public double getRotation(){
