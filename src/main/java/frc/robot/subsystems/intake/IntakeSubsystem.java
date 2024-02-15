@@ -57,7 +57,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     public void periodic() {
         double pidOutput = pivotPID.calculate(encoder.getPosition());
 
-        if(pidOutput < 0) pidOutput *= Constants.INTAKE_PIVOT_UP_MULTIPLIER;
+        if(pidOutput > 0) pidOutput *= Constants.INTAKE_PIVOT_UP_MULTIPLIER;
 
         SmartDashboard.putNumber("target pivot pos", pivotPID.getSetpoint());
         SmartDashboard.putNumber("current pivot pos", encoder.getPosition());

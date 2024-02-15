@@ -40,12 +40,11 @@ public final class Constants {
                 7, 8, 12, offsets[3]
         );//50.400
 
-        public static final int SHOOTER_MOTOR_LEFT = 13;
-        public static final int SHOOTER_MOTOR_RIGHT = 14;
+        public static final int SHOOTER_SHOOTER_MOTOR = 13;
+        public static final int SHOOTER_PIVOT_MOTOR = 14;
 
         public static final int CLIMBER_LEFT = 15;
         public static final int CLIMBER_RIGHT = 16;
-        public static final int AIM_MOTOR = 17;
 
         public static final int HOPPER_MOTOR = 18;
 
@@ -82,9 +81,13 @@ public final class Constants {
         public static final double AIM_ERROR_RADIANS = 0.1;
         public static final double AIM_ERROR_CM = 25;
         public static final double AIM_SPEED = 0.2;
+
         public static final double ERROR_CORRECTION_FACTOR = 0.1;
 
-        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 18;
+        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -20;
+
+        public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
+        public static final double TARGET_SHOOTER_SPEED = 30;
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
             0.0085

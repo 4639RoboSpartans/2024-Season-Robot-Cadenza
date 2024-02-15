@@ -12,16 +12,16 @@ public class ShootCommand extends Command {
 
     @Override
     public void initialize() {
-        shooterSubsystem.stop();
+        shooterSubsystem.stopShooter();
     }
 
     @Override
     public void execute() {
-        shooterSubsystem.shoot(1.0);
+        shooterSubsystem.runShooter();
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooterSubsystem.stop();
+        shooterSubsystem.stopShooter();
     }
 }

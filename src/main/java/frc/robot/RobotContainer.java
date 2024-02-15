@@ -13,8 +13,10 @@ import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
+import frc.robot.commands.drive.ManualShooterPivotCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
+import frc.robot.commands.semiauto.AutoShootCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.climber.ClimberSubsystem;
@@ -23,10 +25,10 @@ import frc.robot.subsystems.hopper.HopperSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
+import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
+import frc.robot.subsystems.shooterPivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
@@ -51,8 +53,8 @@ public class RobotContainer {
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 
-        shooter = new DummyShooterSubsystem();
-        shooterPivot = new DummyShooterPivotSubsystem();
+        shooter = new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR);
+        shooterPivot = new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR);
         intake = new IntakeSubsystem(Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT, Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT, Constants.IDs.INTAKE_MOTOR, Constants.IDs.INTAKE_ENCODER);
         hopper = new HopperSubsystem(Constants.IDs.HOPPER_MOTOR);
         climber = new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
@@ -66,9 +68,9 @@ public class RobotContainer {
                 swerveDriveSubsystem, oi
         ));
 
-//        shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
-//            shooterPivot, oi
-//        ));
+        shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
+            shooterPivot, oi
+        ));
 
         oi.getDriverController().getButton(Constants.Controls.Driver.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
         oi.getDriverController().getButton(Constants.Controls.Driver.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
@@ -105,11 +107,15 @@ public class RobotContainer {
                 }
         );
 
+        oi.getOperatorController().getButton(Constants.Controls.Operator.ShooterButton).whileTrue(new AutoShootCommand(
+            shooter, shooterPivot, hopper
+        ));
     }
 
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-                new MoveCommand(swerveDriveSubsystem, 0, -.6, 0, 2)
+                new MoveCommand(swerveDriveSubsystem, 0, -.6, 0, 2),
+                new AutoShootCommand(shooter, shooterPivot, hopper)
         );
     }
 }
