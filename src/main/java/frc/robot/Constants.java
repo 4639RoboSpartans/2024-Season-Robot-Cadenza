@@ -11,6 +11,12 @@ public final class Constants {
     public static final int CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH = 5;
     public static final double INTAKE_PIVOT_UP_MULTIPLIER = 2;
 
+    public enum CurrentRobot {
+        ZEUS, SIREN
+    }
+
+    public static final CurrentRobot currentRobot = CurrentRobot.ZEUS;
+
     private static final double[] oldOffsets = {
         -54.98,
         -122.4,
@@ -23,7 +29,10 @@ public final class Constants {
         -88.23
     };
 
-    private static final double[] offsets = newOffsets;
+    private static final double[] offsets = switch (currentRobot) {
+        case ZEUS -> oldOffsets;
+        case SIREN -> newOffsets;
+    };
 
     public static final class IDs {
         // Swerve uses up motor ids 1-12
@@ -145,7 +154,7 @@ public final class Constants {
 
     public static final class Controls {
 
-        public static final class Driver {
+        public static final class DriverControls {
             public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
             public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
             public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
@@ -156,7 +165,7 @@ public final class Constants {
             public static final OI.Buttons ClimberSwap2Button = OI.Buttons.POV_RIGHT;
         }
 
-        public static final class Operator {
+        public static final class OperatorControls {
             public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
             public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
             public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;

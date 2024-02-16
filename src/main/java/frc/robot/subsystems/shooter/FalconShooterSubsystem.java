@@ -27,7 +27,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         shooterMotor.setInverted(true);
 
         shooterMotor.getConfigurator().apply(
-            new CurrentLimitsConfigs().withStatorCurrentLimit(30)
+            new CurrentLimitsConfigs().withStatorCurrentLimit(3)
         );
 
         bangBangController = new BangBangController();
@@ -44,7 +44,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
             double speed = bangBangController.calculate(currentSpeed, targetSpeed);
 
-            shooterMotor.set(speed * .7);
+            shooterMotor.set(speed * .5);
         }
     }
 

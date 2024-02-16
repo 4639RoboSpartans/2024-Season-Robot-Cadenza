@@ -6,11 +6,11 @@ import frc.robot.subsystems.intake.IIntakeSubsystem;
 
 public class OuttakeCommand extends Command {
     private final IIntakeSubsystem intake;
-    private final IHopperSubsystem hopperSubsystem;
+    private final IHopperSubsystem hopper;
 
     public OuttakeCommand(IIntakeSubsystem intake, IHopperSubsystem hopper) {
         this.intake = intake;
-        this.hopperSubsystem = hopper;
+        this.hopper = hopper;
 
         addRequirements(intake, hopper);
     }
@@ -18,12 +18,12 @@ public class OuttakeCommand extends Command {
     @Override
     public void execute() {
         intake.outtake();
-        hopperSubsystem.runBackwards();
+        hopper.runBackwards();
     }
 
     @Override
     public void end(boolean interrupted) {
         intake.stopIntake();
-        hopperSubsystem.stop();
+        hopper.stop();
     }
 }

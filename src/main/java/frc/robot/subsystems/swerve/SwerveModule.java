@@ -24,14 +24,23 @@ public class SwerveModule {
     public SwerveModule(SwerveModuleConfig swerveModuleData) {
         driveConversionFactor = (1. / 2048) * (1 / 6.55) * (0.1016) * Math.PI;
 
-        driver = new TalonFX(swerveModuleData.driveMotorID(), "Canivore1");
-        rotator = new TalonFX(swerveModuleData.rotatorMotorID(), "Canivore1");
+        driver = switch (Constants.currentRobot) {
+            case ZEUS -> new TalonFX(swerveModuleData.driveMotorID());
+            case SIREN -> new TalonFX(swerveModuleData.driveMotorID(), "Canivore1");
+        };
+        rotator = switch (Constants.currentRobot) {
+            case ZEUS -> new TalonFX(swerveModuleData.rotatorMotorID());
+            case SIREN -> new TalonFX(swerveModuleData.rotatorMotorID(), "Canivore1");
+        };
         rotator.setInverted(true);
 
         driver.setNeutralMode(NeutralModeValue.Coast);
         rotator.setNeutralMode(NeutralModeValue.Coast);
 
-        rotationEncoder = new CANcoder(swerveModuleData.encoderID(), "Canivore1");
+        rotationEncoder = switch(Constants.currentRobot) {
+            case ZEUS -> new CANcoder(swerveModuleData.encoderID());
+            case SIREN -> new CANcoder(swerveModuleData.encoderID(), "Canivore1");
+        };
 
         rotationOffsetDegrees = swerveModuleData.rotationOffset();
 

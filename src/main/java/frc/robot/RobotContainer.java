@@ -16,6 +16,7 @@ import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.drive.ManualShooterPivotCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
+import frc.robot.commands.intake.SetIntakeExtendedCommand;
 import frc.robot.commands.semiauto.AutoShootCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
@@ -31,6 +32,8 @@ import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+
+import static frc.robot.Constants.Controls.*;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -68,48 +71,23 @@ public class RobotContainer {
                 swerveDriveSubsystem, oi
         ));
 
-        shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
-            shooterPivot, oi
-        ));
+//        shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
+//            shooterPivot, oi
+//        ));
 
-        oi.getDriverController().getButton(Constants.Controls.Driver.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
-        oi.getDriverController().getButton(Constants.Controls.Driver.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
-        oi.getDriverController().getButton(Constants.Controls.Driver.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
-        oi.getDriverController().getButton(Constants.Controls.Driver.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
+        oi.driverController().getButton(DriverControls.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
+        oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
+        oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
+        oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        oi.getOperatorController().getButton(Constants.Controls.Operator.ShooterButton).whileTrue(new ShootCommand(shooter));
-        oi.getOperatorController().getButton(Constants.Controls.Operator.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
-        oi.getOperatorController().getButton(Constants.Controls.Operator.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
+        oi.operatorController().getButton(OperatorControls.ShooterButton).whileTrue(new ShootCommand(shooter));
+        oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
+        oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
-        oi.getOperatorController().getButton(Constants.Controls.Operator.IntakeExtendButton).onTrue(
-                new Command() {
-                    {
-                        addRequirements(intake);
-                    }
+        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).onTrue(new SetIntakeExtendedCommand(intake, true));
+        oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
 
-                    @Override
-                    public void initialize() {
-                        intake.setExtended(true);
-                    }
-                }
-        );
-        oi.getOperatorController().getButton(Constants.Controls.Operator.IntakeRetractButton).onTrue(
-                new Command() {
-                    {
-                        addRequirements(intake);
-                    }
-
-                    @Override
-                    public void initialize() {
-                        intake.setExtended(false);
-                    }
-
-                }
-        );
-
-        oi.getOperatorController().getButton(Constants.Controls.Operator.ShooterButton).whileTrue(new AutoShootCommand(
-            shooter, shooterPivot, hopper
-        ));
+        oi.operatorController().getButton(OperatorControls.ShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
     }
 
     public Command getAutonomousCommand() {

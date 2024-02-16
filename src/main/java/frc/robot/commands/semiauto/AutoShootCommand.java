@@ -41,5 +41,6 @@ public class AutoShootCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         shooter.stopShooter();
+        hopper.stop();
     }
 }

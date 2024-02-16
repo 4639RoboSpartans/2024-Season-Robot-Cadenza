@@ -1,5 +1,6 @@
 package frc.robot.subsystems.hopper;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -9,6 +10,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
 
     public HopperSubsystem(int motorID) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushless);
+        motor.setIdleMode(CANSparkBase.IdleMode.kCoast);
     }
 
     @Override

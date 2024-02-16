@@ -9,11 +9,11 @@ public class OI {
         operatorController = new Controller(1);
     }
 
-    public Controller getOperatorController() {
+    public Controller operatorController() {
         return operatorController;
     }
 
-    public Controller getDriverController() {
+    public Controller driverController() {
         return driverController;
     }
 
