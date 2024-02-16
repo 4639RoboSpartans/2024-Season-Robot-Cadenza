@@ -20,13 +20,18 @@ import frc.robot.commands.semiauto.AutoShootCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
+import frc.robot.subsystems.hopper.DummyHopperSubsystem;
 import frc.robot.subsystems.hopper.HopperSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
+import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
+import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
@@ -55,11 +60,26 @@ public class RobotContainer {
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 
-        shooter = new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR);
-        shooterPivot = new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR);
-        intake = new IntakeSubsystem(Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT, Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT, Constants.IDs.INTAKE_MOTOR, Constants.IDs.INTAKE_ENCODER);
-        hopper = new HopperSubsystem(Constants.IDs.HOPPER_MOTOR);
-        climber = new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
+        shooter = switch(Constants.currentRobot) {
+            case ZEUS -> new DummyShooterSubsystem();
+            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR);
+        };
+        shooterPivot = switch(Constants.currentRobot){
+            case ZEUS -> new DummyShooterPivotSubsystem();
+            case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR);
+        };
+        intake = switch(Constants.currentRobot){
+            case ZEUS -> new DummyIntakeSubsystem();
+            case SIREN -> new IntakeSubsystem(Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT, Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT, Constants.IDs.INTAKE_MOTOR, Constants.IDs.INTAKE_ENCODER);
+        };
+        hopper = switch(Constants.currentRobot){
+            case ZEUS -> new DummyHopperSubsystem();
+            case SIREN -> new HopperSubsystem(Constants.IDs.HOPPER_MOTOR);
+        };
+        climber = switch(Constants.currentRobot){
+            case ZEUS -> new DummyClimberSubsystem();
+            case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
+        };
 
         configureBindings();
     }
