@@ -15,7 +15,7 @@ public final class Constants {
         ZEUS, SIREN
     }
 
-    public static final CurrentRobot currentRobot = CurrentRobot.ZEUS;
+    public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
 
     private static final double[] oldOffsets = {
         -54.98,

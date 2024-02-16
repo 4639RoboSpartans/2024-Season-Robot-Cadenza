@@ -7,13 +7,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.ManualSwerveDriveCommand;
+import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
-import frc.robot.commands.drive.ManualShooterPivotCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
 import frc.robot.commands.intake.SetIntakeExtendedCommand;

@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,7 +25,7 @@ public class ManualSwerveDriveCommand extends Command {
     public void execute() {
         double forwardsSpeed = oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveForwardAxis);
         double sidewaysSpeed = -oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveStrafeAxis);
-        double rotateSpeed = oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveRotationAxis);
+        double rotateSpeed = -oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveRotationAxis);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
