@@ -5,13 +5,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.network.LimeLight;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
-import math.MathUtil;
-
-import java.util.ArrayDeque;
 
 
 public class CenterLimelight extends Command {
@@ -38,7 +34,11 @@ public class CenterLimelight extends Command {
 
     @Override
     public void execute() {
-        swerveDrive.setRawMovement(new ChassisSpeeds(0, 0, aimSubsystem.getRotation()));
+        swerveDrive.setRawMovement(new ChassisSpeeds(
+            oi.driverController().getAxis(OI.Axes.LEFT_STICK_X), 
+            oi.driverController().getAxis(OI.Axes.LEFT_STICK_Y), 
+            aimSubsystem.getRotation()
+        ));
         aimSubsystem.updateKD();
         SmartDashboard.putNumber("rotatorPID kD", rotationPID.getD());
     }
