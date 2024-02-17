@@ -15,7 +15,7 @@ public final class Constants {
         ZEUS, SIREN
     }
 
-    public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
+    public static final CurrentRobot currentRobot = CurrentRobot.ZEUS;
 
     private static final double[] oldOffsets = {
         -54.98,
@@ -75,7 +75,7 @@ public final class Constants {
 
         // Change MOVEMENT_SPEED to 1.0 for max speed
         public static final double MOVEMENT_SPEED = 0.8;
-        public static final double MAX_ROBOT_SPEED = 2.3;
+        public static final double MAX_ROBOT_SPEED = 20;
         public static final double TRAP_ROTATOR_SPEED = 0.5;
         public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
         public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
@@ -100,6 +100,10 @@ public final class Constants {
 
         public static final PID SWERVE_ROTATOR_PID = new PID(
             0.0085
+        );
+
+        public static final PID SWERVE_DRIVER_PID = new PID(
+            0.65
         );
 
         // TODO: find actual values
