@@ -16,6 +16,7 @@ public class SwerveModule {
     private final TalonFX driver, rotator;
     private final CANcoder rotationEncoder;
     private final PIDController rotationPID;
+    private final PIDController driverPID;
 
     private final double rotationOffsetDegrees;
     private final double driveConversionFactor;
@@ -47,6 +48,9 @@ public class SwerveModule {
         rotationPID = Constants.RobotInfo.SWERVE_ROTATOR_PID.create(swerveModuleData.rotatorPIDkPMultiplier());
         rotationPID.setTolerance(0.1);
         rotationPID.enableContinuousInput(-180, 180);
+
+        driverPID = Constants.RobotInfo.SWERVE_DRIVER_PID.create(1); //drive change
+        driverPID.setTolerance(0.1); //drive change
 
         CurrentLimitsConfigs motorCurrentLimiter = new CurrentLimitsConfigs()
                 .withStatorCurrentLimit(26)
@@ -83,13 +87,15 @@ public class SwerveModule {
 //        }
 
         double rotatorPIDOutput = rotationPID.calculate(currModuleRotation);
+        double driverPIDOutput = - driverPID.calculate(targetSpeed); //drive change
 
         SmartDashboard.putString("Module %d target speed".formatted(moduleID), "%.2f".formatted(targetSpeed));
         SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "%.2f degrees".formatted(rotationPID.getSetpoint()));
         SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "%.2f".formatted(rotatorPIDOutput));
+        SmartDashboard.putNumber("Error", driverPID.getVelocityError());
 
         rotator.set(rotatorPIDOutput);
-        driver.set(targetSpeed * Constants.RobotInfo.MOVEMENT_SPEED);
+        driver.set(driverPIDOutput * Constants.RobotInfo.MOVEMENT_SPEED); //drive change-to do: change targetSpeed to driverPIDOutput
     }
 
     public double getRotationInDegrees() {

@@ -24,6 +24,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         moduleBackRight = new SwerveModule(Constants.IDs.MODULE_BACK_RIGHT);
 
         this.navx = navx;
+
+        setBrakeMode();
     }
 
     public Rotation2d getRotation2d() {
