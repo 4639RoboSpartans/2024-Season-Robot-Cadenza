@@ -56,7 +56,7 @@ public class RobotContainer {
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
-        aimSubsystem = new AimSubsystem();
+        aimSubsystem = new AimSubsystem(oi);
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 
