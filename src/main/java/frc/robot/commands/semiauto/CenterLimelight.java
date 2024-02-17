@@ -6,29 +6,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.network.LimeLight;
+import frc.robot.oi.OI;
+import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import math.MathUtil;
 
 import java.util.ArrayDeque;
 
-record RobotPose(double yRotation) {}
 
 public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
-    private final ArrayDeque<RobotPose> prevPoses = new ArrayDeque<>();
+    private final AimSubsystem aimSubsystem;
+    private final OI oi;
     
     private PIDController rotationPID = Constants.RobotInfo.LIMELIGHT_AIM_PID.create();
 
-    public CenterLimelight(SwerveDriveSubsystem swerveDriveSubsystem) {
+    public CenterLimelight(SwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
+        this.oi = oi;
         this.swerveDrive = swerveDriveSubsystem;
-
+        aimSubsystem = new AimSubsystem(oi);
         addRequirements(swerveDriveSubsystem);
     }
 
     @Override
     public void initialize() {
         swerveDrive.stop();
-        prevPoses.clear();
         rotationPID.reset();
         rotationPID.setSetpoint(0);
         SmartDashboard.putNumber("rotatorPID kD", 0);
@@ -36,30 +38,9 @@ public class CenterLimelight extends Command {
 
     @Override
     public void execute() {
-        acceptInput();
-
-        if(prevPoses.isEmpty()) return;
-
-        double yRotation = prevPoses.stream().mapToDouble(RobotPose::yRotation).sum() / prevPoses.size();
-
-        double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * Constants.RobotInfo.MAX_ROBOT_SPEED;
-
-        swerveDrive.setRawMovement(new ChassisSpeeds(0, 0, yRtSpd));
-
-        double kD = 1/Math.pow(Math.abs(SmartDashboard.getNumber("AprilTag: y rotation", 1)), 2) * 7;
-        if (kD > 10) kD = 0.01;
-
-        rotationPID.setD(kD);
+        swerveDrive.setRawMovement(new ChassisSpeeds(0, 0, aimSubsystem.getRotation()));
+        aimSubsystem.updateKD();
         SmartDashboard.putNumber("rotatorPID kD", rotationPID.getD());
-    }
-
-    private void acceptInput() {
-        double angle = -Math.toRadians(LimeLight.getTx());
-
-        if(prevPoses.size() >= Constants.CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH) {
-            prevPoses.removeFirst();
-        }
-        prevPoses.addLast(new RobotPose(angle));
     }
 
     @Override
