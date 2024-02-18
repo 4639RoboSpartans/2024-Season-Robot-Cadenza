@@ -1,0 +1,18 @@
+Driver:
+Left Stick(Y) - Move Robot Forward/Backward
+Left Stick(X) - Move Robot Right/Left
+Right Stick(X) - Turn Robot
+A Button - Aim
+Left Bumper - Climber Extend
+Right Bumper - Climber Retract
+POV Left - Climber Swap 1
+POV Right - Climber Swap 2
+
+Operator:
+Left Stick(Y) - Shooter Pivot
+Right Bumper - Trap Release
+Left Bumper - Shooter
+X Button - Intake
+Y Button - Outtake
+POV DOWN - Intake Extend
+POV UP - Intake Retract
