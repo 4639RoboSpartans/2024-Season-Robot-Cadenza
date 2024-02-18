@@ -9,7 +9,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
 
     public HopperSubsystem(int motorID) {
-        motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushless);
+        motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
         motor.setIdleMode(CANSparkBase.IdleMode.kCoast);
     }
 

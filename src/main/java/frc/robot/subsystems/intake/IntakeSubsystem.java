@@ -36,7 +36,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
             pivotPID.setSetpoint(Constants.RobotInfo.INTAKE_PIVOT_EXTENDED_SETPOINT);
         }
         else {
-            pivotPID.setSetpoint(0);
+            pivotPID.setSetpoint(Constants.RobotInfo.INTAKE_PIVOT_DEFAULT_SETPOINT);
         }
     }
 

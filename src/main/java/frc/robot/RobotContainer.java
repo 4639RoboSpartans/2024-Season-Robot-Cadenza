@@ -7,6 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.drive.ManualShooterPivotCommand;
 import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
@@ -56,7 +57,7 @@ public class RobotContainer {
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
-        aimSubsystem = new AimSubsystem();
+        aimSubsystem = new AimSubsystem(oi);
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 
@@ -90,16 +91,16 @@ public class RobotContainer {
                 swerveDriveSubsystem, oi
         ));
 
-//        shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
-//            shooterPivot, oi
-//        ));
+       shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
+           shooterPivot, oi
+       ));
 
         oi.driverController().getButton(DriverControls.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        oi.operatorController().getButton(OperatorControls.ShooterButton).whileTrue(new ShootCommand(shooter));
+        //oi.operatorController().getButton(OperatorControls.ShooterButton).whileTrue(new ShootCommand(shooter));
         oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 

@@ -23,7 +23,7 @@ public class ManualShooterPivotCommand extends Command{
 
     @Override
     public void execute(){
-        shooterPivotSubsystem.manualSet(oi.operatorController().getAxis(
+        shooterPivotSubsystem.manualSet(-oi.operatorController().getAxis(
                 Constants.Controls.OperatorControls.ShooterPivotAxis
         ));
     }

@@ -15,7 +15,7 @@ public final class Constants {
         ZEUS, SIREN
     }
 
-    public static final CurrentRobot currentRobot = CurrentRobot.ZEUS;
+    public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
 
     private static final double[] oldOffsets = {
         -54.98,
@@ -74,8 +74,8 @@ public final class Constants {
 
 
         // Change MOVEMENT_SPEED to 1.0 for max speed
-        public static final double MOVEMENT_SPEED = 0.8;
-        public static final double MAX_ROBOT_SPEED = 20;
+        public static final double MOVEMENT_SPEED = 1;
+        public static final double MAX_ROBOT_SPEED = 10;
         public static final double TRAP_ROTATOR_SPEED = 0.5;
         public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
         public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
@@ -93,7 +93,8 @@ public final class Constants {
 
         public static final double ERROR_CORRECTION_FACTOR = 0.1;
 
-        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -20;
+        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = -2.57143;
+        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -23.5;
 
         public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
         public static final double TARGET_SHOOTER_SPEED = 30;
@@ -173,6 +174,7 @@ public final class Constants {
             public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
             public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
             public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;
+            public static final OI.Buttons ResetShooter = OI.Buttons.A_BUTTON;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
