@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.NavX;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 public class SwerveDriveSubsystem extends SubsystemBase {
 
     private final SwerveModule
@@ -38,7 +40,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void setRawMovement(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] swerveModuleStates = Constants.RobotInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] swerveModuleStates = SwerveInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModulesStates(
             swerveModuleStates[0],
             swerveModuleStates[1],

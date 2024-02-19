@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
 
@@ -15,12 +17,12 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
 
     @Override
     public void run() {
-        motor.set(Constants.RobotInfo.HOPPER_SPEED);
+        motor.set(HopperInfo.HOPPER_SPEED);
     }
 
     @Override
     public void runBackwards() {
-        motor.set(-Constants.RobotInfo.HOPPER_SPEED);
+        motor.set(-HopperInfo.HOPPER_SPEED);
     }
 
     @Override

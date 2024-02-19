@@ -1,13 +1,13 @@
 package frc.robot.subsystems.shooterPivot;
 
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
+import static frc.robot.Constants.RobotInfo.*;
 
 @SuppressWarnings("unused")
 public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
@@ -20,7 +20,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
         aimMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
         encoder = new DutyCycleEncoder(0);
-        aimPID = Constants.RobotInfo.SHOOTER_AIM_PID.create();
+        aimPID = ShooterInfo.SHOOTER_AIM_PID.create();
     }
 
     public void setAngleDegrees(double degrees) {

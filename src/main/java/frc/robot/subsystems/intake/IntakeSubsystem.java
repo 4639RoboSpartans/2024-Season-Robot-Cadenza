@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 @SuppressWarnings("unused")
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
@@ -20,7 +22,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotMotorRight = new CANSparkMax(pivotMotorRightID, CANSparkMax.MotorType.kBrushless);
         intakeMotor = new CANSparkMax(intakeMotorID, CANSparkMax.MotorType.kBrushless);
 
-        pivotPID = Constants.RobotInfo.INTAKE_PIVOT_PID.create();
+        pivotPID = IntakeInfo.INTAKE_PIVOT_PID.create();
 
         pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
         pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
@@ -33,20 +35,20 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     public void setExtended(boolean extended) {
         if(extended) {
-            pivotPID.setSetpoint(Constants.RobotInfo.INTAKE_PIVOT_EXTENDED_SETPOINT);
+            pivotPID.setSetpoint(IntakeInfo.INTAKE_PIVOT_EXTENDED_SETPOINT);
         }
         else {
-            pivotPID.setSetpoint(Constants.RobotInfo.INTAKE_PIVOT_DEFAULT_SETPOINT);
+            pivotPID.setSetpoint(IntakeInfo.INTAKE_PIVOT_DEFAULT_SETPOINT);
         }
     }
 
     //Spins intake motor to intake notes
     public void intake() {
-        intakeMotor.set(Constants.RobotInfo.INTAKE_SPEED);
+        intakeMotor.set(IntakeInfo.INTAKE_SPEED);
     }
 
     public void outtake() {
-        intakeMotor.set(-Constants.RobotInfo.INTAKE_SPEED);
+        intakeMotor.set(-IntakeInfo.INTAKE_SPEED);
     }
 
     public void stopIntake() {

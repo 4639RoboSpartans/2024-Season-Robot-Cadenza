@@ -64,70 +64,86 @@ public final class Constants {
     }
 
     public static final class RobotInfo {
-        public static final double centerToWheel = 0.245;
-        public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
-                new Translation2d(centerToWheel, centerToWheel),
-                new Translation2d(centerToWheel, -centerToWheel),
-                new Translation2d(-centerToWheel, centerToWheel),
-                new Translation2d(-centerToWheel, -centerToWheel)
-        );
+        public static final class SwerveInfo {
+            public static final double centerToWheel = 0.245;
+            public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
+                    new Translation2d(centerToWheel, centerToWheel),
+                    new Translation2d(centerToWheel, -centerToWheel),
+                    new Translation2d(-centerToWheel, centerToWheel),
+                    new Translation2d(-centerToWheel, -centerToWheel)
+            );
 
+            // Change MOVEMENT_SPEED to 1.0 for max speed
+            public static final double MOVEMENT_SPEED = 1;
+            public static final double MAX_ROBOT_SPEED = 10;
+            public static final PID SWERVE_ROTATOR_PID = new PID(
+                0.0085
+            );
+            public static final PID SWERVE_DRIVER_PID = new PID(
+                0.65
+            );
+        }
 
-        // Change MOVEMENT_SPEED to 1.0 for max speed
-        public static final double MOVEMENT_SPEED = 1;
-        public static final double MAX_ROBOT_SPEED = 10;
-        public static final double TRAP_ROTATOR_SPEED = 0.5;
-        public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
-        public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
-        public static final double TRAP_BACK_ROTATOR_DEGREES = -30;
-        public static final double TRAP_FRONT_ROTATOR_DEGREES = 90;
-        public static final double TRAP_EXTEND_TIME = 15;
-        public static final double TRAP_RELEASE_TIME = 20;
-        public static final double TRAP_FINAL_TIME = 25;
-        public static final double INTAKE_SPEED = -0.6;
-        public static final double HOPPER_SPEED = 0.6;
-        public static final double CLIMBER_SPEED = 0.9;
-        public static final double AIM_ERROR_RADIANS = 0.1;
-        public static final double AIM_ERROR_CM = 25;
-        public static final double AIM_SPEED = 0.2;
+        public static final class TrapInfo {
 
-        public static final double ERROR_CORRECTION_FACTOR = 0.1;
+            public static final double TRAP_ROTATOR_SPEED = 0.5;
+            public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
+            public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
+            public static final double TRAP_BACK_ROTATOR_DEGREES = -30;
+            public static final double TRAP_FRONT_ROTATOR_DEGREES = 90;
+            public static final double TRAP_EXTEND_TIME = 15;
+            public static final double TRAP_RELEASE_TIME = 20;
+            public static final double TRAP_FINAL_TIME = 25;
+            // TODO: find actual values
+            public static final PID TRAP_ROTATOR_PID = new PID(
+                    0, 0, 0
+            );
+        }
 
-        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = -2.57143;
-        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -23.5;
+        public static final class IntakeInfo {
 
-        public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
-        public static final double TARGET_SHOOTER_SPEED = 30;
+            public static final double INTAKE_SPEED = -0.6;
+            public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = -2.57143;
+            public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -23.5;
+            // TODO: find actual values
+            public static final PID INTAKE_PIVOT_PID = new PID(
+                    0.01, 0, 0
+            );
+        }
 
-        public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .74;
-        public static final double SHOOTER_PIVOT_TOP_SETPOINT = .62;
+        public static final class HopperInfo {
 
-        public static final PID SWERVE_ROTATOR_PID = new PID(
-            0.0085
-        );
+            public static final double HOPPER_SPEED = 0.6;
+        }
 
-        public static final PID SWERVE_DRIVER_PID = new PID(
-            0.65
-        );
+        public static final class ClimberInfo {
 
-        // TODO: find actual values
-        public static final PID SHOOTER_AIM_PID = new PID(
-                0, 0, 0
-        );
+            public static final double CLIMBER_SPEED = 0.9;
+        }
 
-        // TODO: find actual values
-        public static final PID INTAKE_PIVOT_PID = new PID(
-                0.01, 0, 0
-        );
+        public static final class AimInfo {
 
-        // TODO: find actual values
-        public static final PID TRAP_ROTATOR_PID = new PID(
-                0, 0, 0
-        );
+            public static final double AIM_ERROR_RADIANS = 0.1;
+            public static final double AIM_ERROR_CM = 25;
+            public static final double AIM_SPEED = 0.2;
+            public static final double AIM_SHOOTER_ERROR_CORRECTION_FACTOR = 0.1;
+            public static final PID LIMELIGHT_AIM_PID = new PID(
+                    0.5, 0.0002, 0.03
+            );
+        }
 
-        public static final PID LIMELIGHT_AIM_PID = new PID(
-                0.5, 0.0002, 0.03
-        );
+        public static class ShooterInfo {
+
+            public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
+            public static final double TARGET_SHOOTER_SPEED = 30;
+            public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .74;
+            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .62;
+            // TODO: find actual values
+            public static final PID SHOOTER_AIM_PID = new PID(
+                    0, 0, 0
+            );
+        }
+
     }
 
     public record SwerveModuleConfig(

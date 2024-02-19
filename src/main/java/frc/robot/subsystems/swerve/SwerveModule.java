@@ -12,6 +12,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.SwerveModuleConfig;
 import math.MathUtil;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 public class SwerveModule {
     private final TalonFX driver, rotator;
     private final CANcoder rotationEncoder;
@@ -45,11 +47,11 @@ public class SwerveModule {
 
         rotationOffsetDegrees = swerveModuleData.rotationOffset();
 
-        rotationPID = Constants.RobotInfo.SWERVE_ROTATOR_PID.create(swerveModuleData.rotatorPIDkPMultiplier());
+        rotationPID = SwerveInfo.SWERVE_ROTATOR_PID.create(swerveModuleData.rotatorPIDkPMultiplier());
         rotationPID.setTolerance(0.1);
         rotationPID.enableContinuousInput(-180, 180);
 
-        driverPID = Constants.RobotInfo.SWERVE_DRIVER_PID.create(1); //drive change
+        driverPID = SwerveInfo.SWERVE_DRIVER_PID.create(1); //drive change
         driverPID.setTolerance(0.1); //drive change
 
         CurrentLimitsConfigs motorCurrentLimiter = new CurrentLimitsConfigs()
@@ -95,7 +97,7 @@ public class SwerveModule {
         SmartDashboard.putNumber("Error", driverPID.getVelocityError());
 
         rotator.set(rotatorPIDOutput);
-        driver.set(driverPIDOutput * Constants.RobotInfo.MOVEMENT_SPEED); //drive change-to do: change targetSpeed to driverPIDOutput
+        driver.set(driverPIDOutput * SwerveInfo.MOVEMENT_SPEED); //drive change-to do: change targetSpeed to driverPIDOutput
     }
 
     public double getRotationInDegrees() {

@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 @SuppressWarnings("unused")
 public class MoveCommand extends Command{
     private final SwerveDriveSubsystem swerve;
@@ -46,9 +48,9 @@ public class MoveCommand extends Command{
 
 //        double xSpeed = xLimiter.calculate(xSpeedRaw * speedMultiplier) * Constants.RobotInfo.MAX_ROBOT_SPEED;
 //        double ySpeed = yLimiter.calculate(ySpeedRaw * speedMultiplier) * Constants.RobotInfo.MAX_ROBOT_SPEED;
-        double xSpeed = xSpeedRaw * speedMultiplier * Constants.RobotInfo.MAX_ROBOT_SPEED;
-        double ySpeed = ySpeedRaw * speedMultiplier * Constants.RobotInfo.MAX_ROBOT_SPEED;
-        double turningSpeed = turningSpeedRaw * speedMultiplier * Constants.RobotInfo.MAX_ROBOT_SPEED;
+        double xSpeed = xSpeedRaw * speedMultiplier * SwerveInfo.MAX_ROBOT_SPEED;
+        double ySpeed = ySpeedRaw * speedMultiplier * SwerveInfo.MAX_ROBOT_SPEED;
+        double turningSpeed = turningSpeedRaw * speedMultiplier * SwerveInfo.MAX_ROBOT_SPEED;
 
         ChassisSpeeds chassisSpeeds;
         chassisSpeeds = new ChassisSpeeds(-ySpeed, xSpeed, turningSpeed);

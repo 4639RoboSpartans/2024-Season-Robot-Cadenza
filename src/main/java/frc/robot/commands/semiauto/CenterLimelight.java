@@ -9,13 +9,15 @@ import frc.robot.oi.OI;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 
 public class CenterLimelight extends Command {
     private final SwerveDriveSubsystem swerveDrive;
     private final AimSubsystem aimSubsystem;
     private final OI oi;
     
-    private PIDController rotationPID = Constants.RobotInfo.LIMELIGHT_AIM_PID.create();
+    private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID.create();
 
     public CenterLimelight(SwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
         this.oi = oi;

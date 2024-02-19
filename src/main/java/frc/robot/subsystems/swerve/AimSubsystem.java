@@ -10,10 +10,12 @@ import frc.robot.network.LimeLight;
 import frc.robot.oi.OI;
 import math.MathUtil;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 
 public class AimSubsystem extends SubsystemBase{
 
-    private final PIDController rotationPID = Constants.RobotInfo.LIMELIGHT_AIM_PID.create();
+    private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID.create();
     private final OI oi;
 
     private final ArrayDeque<Double> prevPoses = new ArrayDeque<>();
@@ -26,7 +28,7 @@ public class AimSubsystem extends SubsystemBase{
            return -oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveRotationAxis);
 
        double yRotation = prevPoses.stream().mapToDouble(x -> (double) x).sum() / prevPoses.size();
-       double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * Constants.RobotInfo.MAX_ROBOT_SPEED;
+       double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * SwerveInfo.MAX_ROBOT_SPEED;
        return yRtSpd;
     }
 

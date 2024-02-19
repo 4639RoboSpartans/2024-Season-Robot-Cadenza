@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import static frc.robot.Constants.RobotInfo.*;
+
 @SuppressWarnings("unused")
 public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem {
     private final CANSparkMax leftMotor, rightMotor;
@@ -20,11 +22,11 @@ public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem
     }
 
     public void setLeftSpeed(double speed) {
-        leftMotor.set(speed * Constants.RobotInfo.CLIMBER_SPEED);
+        leftMotor.set(speed * ClimberInfo.CLIMBER_SPEED);
     }
 
     public void setRightSpeed(double speed) {
-        rightMotor.set(speed * Constants.RobotInfo.CLIMBER_SPEED);
+        rightMotor.set(speed * ClimberInfo.CLIMBER_SPEED);
     }
 
     @Override

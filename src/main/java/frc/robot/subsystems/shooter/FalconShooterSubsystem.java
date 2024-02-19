@@ -3,14 +3,11 @@ package frc.robot.subsystems.shooter;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
+import static frc.robot.Constants.RobotInfo.*;
 
 @SuppressWarnings("unused")
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
@@ -40,7 +37,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         }
         else {
             double currentSpeed = getCurrentSpeed();
-            double targetSpeed = Constants.RobotInfo.TARGET_SHOOTER_SPEED;
+            double targetSpeed = ShooterInfo.TARGET_SHOOTER_SPEED;
 
             double speed = bangBangController.calculate(currentSpeed, targetSpeed);
 
@@ -54,7 +51,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     @Override
     public boolean isUpToSpeed() {
-        return Math.abs(getCurrentSpeed()) >= Math.abs(Constants.RobotInfo.TARGET_SHOOTER_SPEED) * 0.95;
+        return Math.abs(getCurrentSpeed()) >= Math.abs(ShooterInfo.TARGET_SHOOTER_SPEED) * 0.95;
     }
 
     public void runShooter() {
