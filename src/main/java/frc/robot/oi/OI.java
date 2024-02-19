@@ -58,7 +58,9 @@ public class OI {
         POV_UP(10),
         POV_RIGHT(11),
         POV_DOWN(12),
-        POV_LEFT(13);
+        POV_LEFT(13),
+        LEFT_TRIGGER(14),
+        RIGHT_TRIGGER(15);
 
         private final int id;
 
