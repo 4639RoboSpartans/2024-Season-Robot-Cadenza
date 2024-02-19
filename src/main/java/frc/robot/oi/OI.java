@@ -1,5 +1,9 @@
 package frc.robot.oi;
 
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import java.util.function.BooleanSupplier;
+
 public class OI {
     private final Controller driverController;
     private final Controller operatorController;
@@ -7,6 +11,10 @@ public class OI {
     public OI() {
         driverController = new Controller(0);
         operatorController = new Controller(1);
+    }
+
+    public Trigger on(BooleanSupplier condition) {
+        return new Trigger(condition);
     }
 
     public Controller operatorController() {
