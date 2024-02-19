@@ -99,6 +99,9 @@ public final class Constants {
         public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
         public static final double TARGET_SHOOTER_SPEED = 30;
 
+        public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .74;
+        public static final double SHOOTER_PIVOT_TOP_SETPOINT = .62;
+
         public static final PID SWERVE_ROTATOR_PID = new PID(
             0.0085
         );
