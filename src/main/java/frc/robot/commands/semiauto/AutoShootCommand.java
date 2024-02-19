@@ -34,7 +34,7 @@ public class AutoShootCommand extends Command {
         }
 
         if(isShooting) {
-            hopper.run();
+            //hopper.run();
         }
     }
 
