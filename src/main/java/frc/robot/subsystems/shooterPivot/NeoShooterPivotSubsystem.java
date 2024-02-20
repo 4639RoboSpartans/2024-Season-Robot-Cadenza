@@ -18,9 +18,10 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
 
     public NeoShooterPivotSubsystem(int aimMotorID) {
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
-        aimMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
+        aimMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
         encoder = new DutyCycleEncoder(0);
         aimPID = ShooterInfo.SHOOTER_AIM_PID.create();
+        aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
     }
 
     public void setAngleDegrees(double degrees) {
@@ -38,9 +39,11 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         if(!isUsingPID) return;
 
         double currentAimMotorDegrees = encoder.getAbsolutePosition();
-        aimMotor.set(aimPID.calculate(currentAimMotorDegrees));
+        double pidOutput = aimPID.calculate(currentAimMotorDegrees);
+        aimMotor.set(pidOutput);
 
         SmartDashboard.putNumber("CurrentShooterAngle", currentAimMotorDegrees);
+        SmartDashboard.putNumber("AimPIDOutput", pidOutput);
     }
 
     public void stop(){

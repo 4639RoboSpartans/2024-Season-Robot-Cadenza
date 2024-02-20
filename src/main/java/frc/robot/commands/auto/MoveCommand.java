@@ -5,13 +5,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.Constants.RobotInfo.*;
 
 @SuppressWarnings("unused")
 public class MoveCommand extends Command{
-    private final SwerveDriveSubsystem swerve;
+    private final ISwerveDriveSubsystem swerve;
     private final SlewRateLimiter xLimiter;
     private final SlewRateLimiter yLimiter;
     private double xLimit;
@@ -21,7 +21,7 @@ public class MoveCommand extends Command{
     private final double turningSpeedRaw;
     private double startTime;
     private final double duration;
-    public MoveCommand(SwerveDriveSubsystem swerve, double xSpeedRaw, double ySpeedRaw, double turningSpeedRaw, double duration){
+    public MoveCommand(ISwerveDriveSubsystem swerve, double xSpeedRaw, double ySpeedRaw, double turningSpeedRaw, double duration){
         this.swerve = swerve;
         this.xSpeedRaw = xSpeedRaw;
         this.ySpeedRaw = ySpeedRaw;

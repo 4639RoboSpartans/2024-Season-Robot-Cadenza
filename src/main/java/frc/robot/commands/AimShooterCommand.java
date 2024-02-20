@@ -6,20 +6,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import math.MathUtil;
 
 import static frc.robot.Constants.RobotInfo.*;
 
 public class AimShooterCommand extends Command {
-    private final SwerveDriveSubsystem swerveDriveSubsystem;
+    private final ISwerveDriveSubsystem ISwerveDriveSubsystem;
     private final IShooterPivotSubsystem iShooterPivotSubsystem;
 
-    public AimShooterCommand(LimeLight limeLight, SwerveDriveSubsystem swerveDriveSubsystem, IShooterPivotSubsystem iShooterPivotSubsystem) {
-        this.swerveDriveSubsystem = swerveDriveSubsystem;
+    public AimShooterCommand(LimeLight limeLight, ISwerveDriveSubsystem ISwerveDriveSubsystem, IShooterPivotSubsystem iShooterPivotSubsystem) {
+        this.ISwerveDriveSubsystem = ISwerveDriveSubsystem;
         this.iShooterPivotSubsystem = iShooterPivotSubsystem;
 
-        addRequirements(swerveDriveSubsystem);
+        addRequirements(ISwerveDriveSubsystem);
         addRequirements(iShooterPivotSubsystem);
     }
 
@@ -41,7 +41,7 @@ public class AimShooterCommand extends Command {
     @Override
     public void initialize() {
         iShooterPivotSubsystem.stop();
-        swerveDriveSubsystem.stop();
+        ISwerveDriveSubsystem.stop();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AimShooterCommand extends Command {
         }
         if (Math.abs(error - Constants.FieldDistances.SpeakerApriltagSeparation) < AimInfo.AIM_ERROR_CM) {
             if (error < 0) {
-                swerveDriveSubsystem.setMovement(
+                ISwerveDriveSubsystem.setMovement(
                         new ChassisSpeeds(
                                 AimInfo.AIM_SPEED
                                         * Math.pow(LimeLight.getZDistance()
@@ -70,7 +70,7 @@ public class AimShooterCommand extends Command {
                         )
                 );
             } else if (error > 0) {
-                swerveDriveSubsystem.setMovement(
+                ISwerveDriveSubsystem.setMovement(
                         new ChassisSpeeds(
                                 -AimInfo.AIM_SPEED
                                         * Math.pow(LimeLight.getZDistance()
@@ -86,7 +86,7 @@ public class AimShooterCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         iShooterPivotSubsystem.stop();
-        swerveDriveSubsystem.stop();
+        ISwerveDriveSubsystem.stop();
     }
 
     @Override

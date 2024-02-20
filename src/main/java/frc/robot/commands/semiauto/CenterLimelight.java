@@ -7,23 +7,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.swerve.AimSubsystem;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.Constants.RobotInfo.*;
 
 
 public class CenterLimelight extends Command {
-    private final SwerveDriveSubsystem swerveDrive;
+    private final ISwerveDriveSubsystem swerveDrive;
     private final AimSubsystem aimSubsystem;
     private final OI oi;
     
     private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID.create();
 
-    public CenterLimelight(SwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
+    public CenterLimelight(ISwerveDriveSubsystem ISwerveDriveSubsystem, OI oi) {
         this.oi = oi;
-        this.swerveDrive = swerveDriveSubsystem;
+        this.swerveDrive = ISwerveDriveSubsystem;
         aimSubsystem = new AimSubsystem(oi);
-        addRequirements(swerveDriveSubsystem);
+        addRequirements(ISwerveDriveSubsystem);
     }
 
     @Override

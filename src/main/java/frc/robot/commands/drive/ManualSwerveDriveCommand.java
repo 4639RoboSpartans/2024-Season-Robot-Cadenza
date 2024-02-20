@@ -4,13 +4,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.oi.OI;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 public class ManualSwerveDriveCommand extends Command {
-    private final SwerveDriveSubsystem swerveDriveSubsystem;
+    private final ISwerveDriveSubsystem swerveDriveSubsystem;
     private final OI oi;
 
-    public ManualSwerveDriveCommand(SwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
+    public ManualSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.oi = oi;
         addRequirements(swerveDriveSubsystem);

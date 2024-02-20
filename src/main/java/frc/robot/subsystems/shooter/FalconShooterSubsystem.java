@@ -41,7 +41,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
             double speed = bangBangController.calculate(currentSpeed, targetSpeed);
 
-            shooterMotor.set(speed * .75);
+            shooterMotor.set(speed * ShooterInfo.MAX_SHOOTER_SPEED);
         }
     }
 

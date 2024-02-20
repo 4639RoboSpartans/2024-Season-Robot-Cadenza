@@ -113,7 +113,7 @@ public final class Constants {
 
         public static final class HopperInfo {
 
-            public static final double HOPPER_SPEED = 0.6;
+            public static final double HOPPER_SPEED = 0.7;
         }
 
         public static final class ClimberInfo {
@@ -135,12 +135,14 @@ public final class Constants {
         public static class ShooterInfo {
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
-            public static final double TARGET_SHOOTER_SPEED = 30;
-            public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .74;
-            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .62;
-            // TODO: find actual values
+            public static final double TARGET_SHOOTER_SPEED = 50; // 11.7; // 30 for speaker // 50
+            public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
+            public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
+            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .83;
+            public static final double MAX_SHOOTER_SPEED = 0.75;
+
             public static final PID SHOOTER_AIM_PID = new PID(
-                    0, 0, 0
+                    1.5, 0, 0
             );
         }
 
@@ -182,7 +184,7 @@ public final class Constants {
             public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
             public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
             public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
-            public static final OI.Buttons AimButton = OI.Buttons.A_BUTTON;
+
             public static final OI.Buttons ClimberExtendButton = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ClimberRetractButton = OI.Buttons.RIGHT_BUMPER;
             public static final OI.Buttons ClimberSwap1Button = OI.Buttons.POV_LEFT;
@@ -190,15 +192,16 @@ public final class Constants {
         }
 
         public static final class OperatorControls {
-            public static final OI.Axes ShooterPivotAxis = OI.Axes.LEFT_STICK_Y;
-            public static final OI.Buttons TrapReleaseButton = OI.Buttons.RIGHT_BUMPER;
-            public static final OI.Buttons ShooterButton = OI.Buttons.LEFT_BUMPER;
-            public static final OI.Buttons ResetShooter = OI.Buttons.A_BUTTON;
+            public static final OI.Buttons RunShooterButton = OI.Buttons.LEFT_TRIGGER;
+            public static final OI.Buttons AimButton = OI.Buttons.RIGHT_TRIGGER;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
             public static final OI.Buttons IntakeExtendButton = OI.Buttons.POV_DOWN;
             public static final OI.Buttons IntakeRetractButton = OI.Buttons.POV_UP;
+
+            public static final OI.Buttons ShooterPivotTop = OI.Buttons.A_BUTTON;
+            public static final OI.Buttons ShooterPivotBot = OI.Buttons.B_BUTTON;
         }
     }
 

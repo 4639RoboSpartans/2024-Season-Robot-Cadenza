@@ -3,16 +3,16 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 public class AutonSwerveCommand extends Command{
-    public final SwerveDriveSubsystem swerveDriveSubsystem;
+    public final ISwerveDriveSubsystem ISwerveDriveSubsystem;
     public final double distanceX, distanceY, maxSpeed;
     public final double startTime;
     public final double vMaxX, vMaxY;
 
-    public AutonSwerveCommand(SwerveDriveSubsystem swerveDriveSubsystem, double distanceX, double distanceY, double maxSpeed){
-        this.swerveDriveSubsystem = swerveDriveSubsystem;
+    public AutonSwerveCommand(ISwerveDriveSubsystem ISwerveDriveSubsystem, double distanceX, double distanceY, double maxSpeed){
+        this.ISwerveDriveSubsystem = ISwerveDriveSubsystem;
         this.distanceX = distanceX;
         this.distanceY = distanceY;
         this.maxSpeed = maxSpeed;
@@ -20,7 +20,7 @@ public class AutonSwerveCommand extends Command{
         vMaxY = maxSpeed / Math.pow(Math.pow(distanceY / distanceX, 2) + 1, 0.5);
         startTime = Timer.getFPGATimestamp();
 
-        addRequirements(swerveDriveSubsystem);
+        addRequirements(ISwerveDriveSubsystem);
     }
 
     public double getSpeed(double time, double distance, double maxSpeed){
@@ -31,7 +31,7 @@ public class AutonSwerveCommand extends Command{
 
     @Override
     public void initialize(){
-        swerveDriveSubsystem.stop();
+        ISwerveDriveSubsystem.stop();
     }
 
     @Override
@@ -39,14 +39,14 @@ public class AutonSwerveCommand extends Command{
         double timeElapsed = Timer.getFPGATimestamp() - startTime;
         double xVelocity = getSpeed(timeElapsed, distanceX, vMaxX);
         double yVelocity = getSpeed(timeElapsed, distanceY, vMaxY);
-        swerveDriveSubsystem.setMovement(
+        ISwerveDriveSubsystem.setMovement(
             new ChassisSpeeds(xVelocity, yVelocity, 0)
         );
     }
 
     @Override
     public void end(boolean interrupted){
-        swerveDriveSubsystem.stop();
+        ISwerveDriveSubsystem.stop();
     }
 
     @Override

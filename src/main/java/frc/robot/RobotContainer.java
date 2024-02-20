@@ -6,11 +6,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.drive.ManualShooterPivotCommand;
 import frc.robot.commands.drive.ManualSwerveDriveCommand;
-import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -37,16 +35,19 @@ import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
+import frc.robot.subsystems.swerve.DummySwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 import static frc.robot.Constants.Controls.*;
+import static frc.robot.Constants.RobotInfo.*;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     private final OI oi;
     private final NavX navX;
 
-    private final SwerveDriveSubsystem swerveDriveSubsystem;
+    private final ISwerveDriveSubsystem swerveDriveSubsystem;
 
     private final IShooterSubsystem shooter;
     private final IShooterPivotSubsystem shooterPivot;
@@ -61,6 +62,7 @@ public class RobotContainer {
         aimSubsystem = new AimSubsystem(oi);
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
+//        swerveDriveSubsystem = new DummySwerveDriveSubsystem();
 
         shooter = switch(Constants.currentRobot) {
             case ZEUS -> new DummyShooterSubsystem();
@@ -92,10 +94,6 @@ public class RobotContainer {
                 swerveDriveSubsystem, oi
         ));
 
-       shooterPivot.setDefaultCommand(new ManualShooterPivotCommand(
-           shooterPivot, oi
-       ));
-
         oi.driverController().getButton(DriverControls.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
@@ -108,7 +106,14 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.IntakeExtendButton).onTrue(new SetIntakeExtendedCommand(intake, true));
         oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
 
-        oi.operatorController().getButton(OperatorControls.ShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.RunShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
+
+        oi.operatorController().getButton(OperatorControls.ShooterPivotTop).whileTrue(new RunCommand(() -> {
+            shooterPivot.setAngleDegrees(ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT);
+        }, shooterPivot));
+        oi.operatorController().getButton(OperatorControls.ShooterPivotBot).whileTrue(new RunCommand(() -> {
+            shooterPivot.setAngleDegrees(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
+        }, shooterPivot));
     }
 
     public Command getAutonomousCommand() {

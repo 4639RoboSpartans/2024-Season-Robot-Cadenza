@@ -9,7 +9,7 @@ import frc.robot.subsystems.NavX;
 
 import static frc.robot.Constants.RobotInfo.*;
 
-public class SwerveDriveSubsystem extends SubsystemBase {
+public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
     private final SwerveModule
             moduleFrontLeft,
