@@ -61,6 +61,8 @@ public final class Constants {
         public static final int INTAKE_PIVOT_MOTOR_RIGHT = 23;
         public static final int INTAKE_MOTOR = 24;
         public static final int INTAKE_ENCODER = 25;
+
+        public static final int IR_SENSOR = 1;//Infrared sensor
     }
 
     public static final class RobotInfo {
@@ -102,7 +104,7 @@ public final class Constants {
 
         public static final class IntakeInfo {
 
-            public static final double INTAKE_SPEED = -0.6;
+            public static final double INTAKE_SPEED = -0.6 * 1.3;
             public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = -2.57143;
             public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -23.5;
             // TODO: find actual values
@@ -192,15 +194,15 @@ public final class Constants {
         }
 
         public static final class OperatorControls {
-            public static final OI.Buttons RunShooterButton = OI.Buttons.LEFT_TRIGGER;
-            public static final OI.Buttons AimButton = OI.Buttons.RIGHT_TRIGGER;
+            public static final OI.Buttons RunShooterButton = OI.Buttons.A_BUTTON;
+            public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
             public static final OI.Buttons IntakeExtendButton = OI.Buttons.POV_DOWN;
             public static final OI.Buttons IntakeRetractButton = OI.Buttons.POV_UP;
 
-            public static final OI.Buttons ShooterPivotTop = OI.Buttons.A_BUTTON;
+            public static final OI.Buttons ShooterPivotTop = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ShooterPivotBot = OI.Buttons.B_BUTTON;
         }
     }
