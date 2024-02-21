@@ -4,12 +4,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
 
 import static frc.robot.Constants.RobotInfo.*;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 @SuppressWarnings("unused")
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
@@ -24,6 +30,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     private final OdometrySubsystem odometrySubsystem;
 
+    private ChassisSpeeds chassisSpeeds;
+
     public SwerveDriveSubsystem(NavX navx) {
         odometrySubsystem = new OdometrySubsystem(this, navx);
         moduleFrontLeft = new SwerveModule(Constants.IDs.MODULE_FRONT_LEFT);
@@ -32,8 +40,39 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleBackRight = new SwerveModule(Constants.IDs.MODULE_BACK_RIGHT);
 
         this.navx = navx;
+        this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
         setBrakeMode();
+
+        AutoBuilder.configureHolonomic(
+            this::getPose,
+            this::resetPose,
+            this::getRobotRelativeSpeeds,
+            this::setRawMovement,
+            new HolonomicPathFollowerConfig(
+                    new PIDConstants(0.25, 0.0, 0.0), //TODO: find constants for 2024 robot
+                    new PIDConstants(0.15, 0, 0.0), //TODO: find constants for 2024 robot
+                    4,
+                    0.4,
+                    new ReplanningConfig()
+            ),
+            () -> {
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Blue;
+              }
+              return false;
+            },
+            this
+        );
+    }
+
+    public Pose2d getPose(){
+        return odometrySubsystem.getOdometry().getPoseMeters();
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds(){
+        return chassisSpeeds;
     }
 
     public Rotation2d getRotation2d() {
@@ -43,6 +82,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     public void setMovement(ChassisSpeeds chassisSpeeds) {
         ChassisSpeeds robotCentricSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, navx.getRotation2d());
         setRawMovement(robotCentricSpeeds);
+        chassisSpeeds = robotCentricSpeeds;
     }
 
     public void setRawMovement(ChassisSpeeds chassisSpeeds) {
@@ -53,6 +93,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             swerveModuleStates[2],
             swerveModuleStates[3]
         );
+        this.chassisSpeeds = chassisSpeeds;
     }
 
     private void setModulesStates(

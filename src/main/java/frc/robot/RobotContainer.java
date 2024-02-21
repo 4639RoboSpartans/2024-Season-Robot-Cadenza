@@ -5,10 +5,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.ManualSwerveDriveCommand;
+import frc.robot.Constants.Controls.DriverControls;
+import frc.robot.Constants.Controls.OperatorControls;
+import frc.robot.Constants.RobotInfo.ShooterInfo;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -42,6 +48,8 @@ import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import static frc.robot.Constants.Controls.*;
 import static frc.robot.Constants.RobotInfo.*;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     private final OI oi;
@@ -55,14 +63,22 @@ public class RobotContainer {
     private final IClimberSubsystem climber;
     private final AimSubsystem aimSubsystem;
     private final IHopperSubsystem hopper;
+        
+    private SendableChooser<Command> autos;
 
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
         aimSubsystem = new AimSubsystem(oi);
 
+        autos = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Autons", autos);
+
+
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 //        swerveDriveSubsystem = new DummySwerveDriveSubsystem();
+
+        swerveDriveSubsystem.resetOdometry(new Pose2d());
 
         shooter = switch(Constants.currentRobot) {
             case ZEUS -> new DummyShooterSubsystem();
@@ -117,9 +133,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new SequentialCommandGroup(
-                new MoveCommand(swerveDriveSubsystem, 0, -.6, 0, 2),
-                new AutoShootCommand(shooter, shooterPivot, hopper)
-        );
+        return autos.getSelected();
     }
 }
