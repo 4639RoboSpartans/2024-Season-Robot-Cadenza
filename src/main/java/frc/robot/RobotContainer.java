@@ -15,6 +15,7 @@ import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.Constants.RobotInfo.ShooterInfo;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -49,6 +50,7 @@ import static frc.robot.Constants.Controls.*;
 import static frc.robot.Constants.RobotInfo.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -100,6 +102,24 @@ public class RobotContainer {
             case ZEUS -> new DummyClimberSubsystem();
             case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
         };
+
+        //auto commands
+        NamedCommands.registerCommand("MoveCommand", new MoveCommand(swerveDriveSubsystem, 0, 0, 0, 0));   
+        NamedCommands.registerCommand("ShootCommand", new ShootCommand(shooter));   
+        //climber commands
+        NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));   
+        NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));   
+        NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));  
+        //drive commands
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, oi));   
+        //intake commands
+        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));   
+        NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));   
+        NamedCommands.registerCommand("SetIntakeExtendedCommand", new SetIntakeExtendedCommand(intake, false));   
+        //semiauto commands
+        NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, shooterPivot, hopper));   
+        
+
 
         configureBindings();
     }
