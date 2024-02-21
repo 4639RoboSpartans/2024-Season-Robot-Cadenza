@@ -1,14 +1,17 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
 
 import static frc.robot.Constants.RobotInfo.*;
 
+@SuppressWarnings("unused")
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
     private final SwerveModule
@@ -19,7 +22,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     private final NavX navx;
 
+    private final OdometrySubsystem odometrySubsystem;
+
     public SwerveDriveSubsystem(NavX navx) {
+        odometrySubsystem = new OdometrySubsystem(this, navx);
         moduleFrontLeft = new SwerveModule(Constants.IDs.MODULE_FRONT_LEFT);
         moduleFrontRight = new SwerveModule(Constants.IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(Constants.IDs.MODULE_BACK_LEFT);
@@ -88,5 +94,28 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleFrontRight.setCoastMode();
         moduleBackLeft.setCoastMode();
         moduleBackRight.setCoastMode();
+    }
+
+    public void resetOdometry(Pose2d pose){
+        resetPose(pose);
+    }
+
+    public void resetPose(Pose2d pose){
+        odometrySubsystem.resetOdometry(pose);
+    }
+
+    public SwerveModule getSwerveModule(String module){
+        switch (module){
+            case "FL":
+                return moduleFrontLeft;
+            case "BL":
+                return moduleBackLeft;
+            case "FR":
+                return moduleFrontRight;
+            case "BR":
+                return moduleBackRight;
+            default:
+                return null;
+        }
     }
 }
