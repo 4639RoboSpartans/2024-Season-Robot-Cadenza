@@ -16,25 +16,20 @@ import static frc.robot.Constants.RobotInfo.*;
 public class AimSubsystem extends SubsystemBase{
 
     private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID.create();
-    private final OI oi;
 
     private final ArrayDeque<Double> prevPoses = new ArrayDeque<>();
-    public AimSubsystem(OI oi){
-        this.oi = oi;
-    }
+    public AimSubsystem(){}
 
-    public double getRotation(){
-       if (prevPoses.isEmpty())
-           return -oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveRotationAxis);
+    public double getRotationSpeed(){
+        if (prevPoses.isEmpty()) return 0;
 
-       double yRotation = prevPoses.stream().mapToDouble(x -> (double) x).sum() / prevPoses.size();
-       double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * SwerveInfo.MAX_ROBOT_SPEED;
-       return yRtSpd;
+        double yRotation = prevPoses.stream().mapToDouble(Double::doubleValue).sum() / prevPoses.size();
+
+        return rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * SwerveInfo.MAX_ROBOT_SPEED;
     }
 
     @Override
     public void periodic() {
-
         double angle = -Math.toRadians(LimeLight.getTx());
 
         if(prevPoses.size() >= Constants.CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH) {
@@ -45,10 +40,5 @@ public class AimSubsystem extends SubsystemBase{
 
     public void resetPID(){
         rotationPID.reset();
-    }
-
-    public void updateKD(){
-        double kD = 1/Math.pow(Math.abs(SmartDashboard.getNumber("AprilTag: y rotation", 1)), 2) * 7;
-        rotationPID.setD(kD);
     }
 }

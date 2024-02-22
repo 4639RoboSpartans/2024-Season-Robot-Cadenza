@@ -59,7 +59,7 @@ public class RobotContainer {
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
-        aimSubsystem = new AimSubsystem(oi);
+        aimSubsystem = new AimSubsystem();
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 //        swerveDriveSubsystem = new DummySwerveDriveSubsystem();
@@ -91,7 +91,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         swerveDriveSubsystem.setDefaultCommand(new ManualSwerveDriveCommand(
-                swerveDriveSubsystem, oi
+                swerveDriveSubsystem, aimSubsystem, oi
         ));
 
         oi.driverController().getButton(DriverControls.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
@@ -99,7 +99,6 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        //oi.operatorController().getButton(OperatorControls.ShooterButton).whileTrue(new ShootCommand(shooter));
         oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 

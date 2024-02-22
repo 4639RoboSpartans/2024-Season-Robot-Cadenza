@@ -4,16 +4,21 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.oi.OI;
+import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+
+import static frc.robot.Constants.Controls.*;
 
 public class ManualSwerveDriveCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
+    private final AimSubsystem aimSubsystem;
     private final OI oi;
 
-    public ManualSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
+    public ManualSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
+        this.aimSubsystem = aimSubsystem;
         this.oi = oi;
-        addRequirements(swerveDriveSubsystem);
+        addRequirements(swerveDriveSubsystem, aimSubsystem);
     }
 
     @Override
@@ -23,9 +28,16 @@ public class ManualSwerveDriveCommand extends Command {
 
     @Override
     public void execute() {
-        double forwardsSpeed = oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveForwardAxis);
-        double sidewaysSpeed = -oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveStrafeAxis);
-        double rotateSpeed = -oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveRotationAxis);
+        double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis);
+        double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis);
+
+        double rotateSpeed;
+        if(oi.operatorController().getButton(OperatorControls.AimButton).getAsBoolean()) {
+            rotateSpeed = aimSubsystem.getRotationSpeed();
+        }
+        else {
+            rotateSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
+        }
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
