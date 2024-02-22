@@ -33,7 +33,7 @@ public class ManualSwerveDriveCommand extends Command {
 
         double rotateSpeed;
         if(oi.operatorController().getButton(OperatorControls.AimButton).getAsBoolean()) {
-            rotateSpeed = aimSubsystem.getRotationSpeed();
+            rotateSpeed = -aimSubsystem.getRotationSpeed();
         }
         else {
             rotateSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);

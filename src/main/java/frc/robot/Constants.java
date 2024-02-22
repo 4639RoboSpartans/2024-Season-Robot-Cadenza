@@ -130,7 +130,7 @@ public final class Constants {
             public static final double AIM_SPEED = 0.2;
             public static final double AIM_SHOOTER_ERROR_CORRECTION_FACTOR = 0.1;
             public static final PID LIMELIGHT_AIM_PID = new PID(
-                    0.5, 0.0002, 0.03
+                    0.4, 0.0002, 0.03
             );
         }
 
