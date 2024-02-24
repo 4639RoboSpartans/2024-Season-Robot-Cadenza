@@ -26,7 +26,7 @@ public class AutoShootCommand extends Command {
         isShooting = false;
 
         shooterPivot.setAngleDegrees(
-            Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_TOP_SETPOINT
+            Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT
         );
     }
 

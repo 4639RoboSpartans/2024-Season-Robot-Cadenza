@@ -86,4 +86,12 @@ public class MathUtil {
     public static double signedPow(double a, double p) {
         return Math.signum(a) * Math.pow(Math.abs(a), p);
     }
+
+    public static double lerp(double a, double b, double t) {
+        return a + (b - a) * t;
+    }
+
+    public static double clamp(double t, double a, double b) {
+        return t < a ? a : t > b ? b : t;
+    }
 }
