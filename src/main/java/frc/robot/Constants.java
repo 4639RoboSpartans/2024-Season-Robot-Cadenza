@@ -137,16 +137,25 @@ public final class Constants {
         }
 
         public static class ShooterInfo {
+            public record ShooterSetpoint(double speed, double angle){}
+            public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
+
+            public static final ShooterSetpointMeasurement[] measurements = {
+                new ShooterSetpointMeasurement(0, new ShooterSetpoint(30, .825)),
+                new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .87)),
+            };
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
-            public static final double TARGET_SHOOTER_SPEED = 50; // 11.7; // 30 for speaker // 50
+//            public static final double TARGET_SHOOTER_SPEED = 30;
+            public static final double TARGET_SHOOTER_SPEED = 40;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
             public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
-            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .83;
+//            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .825;
+            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .87;
             public static final double MAX_SHOOTER_SPEED = 0.75;
 
             public static final PID SHOOTER_AIM_PID = new PID(
-                    1.5, 0, 0
+                    2.5, 0, 0
             );
         }
 

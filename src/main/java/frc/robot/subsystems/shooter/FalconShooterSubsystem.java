@@ -5,7 +5,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.network.LimeLight;
+import math.Averager;
 
 import static frc.robot.Constants.RobotInfo.*;
 
@@ -13,6 +14,8 @@ import static frc.robot.Constants.RobotInfo.*;
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
     private final TalonFX shooterMotor;
 
+    // TODO: extract 10 to a constant
+    private final Averager shooterOutput = new Averager(2);
     private final BangBangController bangBangController;
 
     private boolean isShooterRunning = false;
@@ -36,12 +39,19 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             shooterMotor.stopMotor();
         }
         else {
+            ShooterInfo.ShooterSetpoint setpoint = ShooterMeasurementLERPer.get(
+                LimeLight.getXDistance(),
+                LimeLight.getZDistance()
+            );
+
             double currentSpeed = getCurrentSpeed();
-            double targetSpeed = ShooterInfo.TARGET_SHOOTER_SPEED;
+            double targetSpeed = setpoint.speed();
 
-            double speed = bangBangController.calculate(currentSpeed, targetSpeed);
+            double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
 
-            shooterMotor.set(speed * ShooterInfo.MAX_SHOOTER_SPEED);
+            shooterOutput.addMeasurement(controllerOutput);
+
+            shooterMotor.set(shooterOutput.getValue() * ShooterInfo.MAX_SHOOTER_SPEED);
         }
     }
 

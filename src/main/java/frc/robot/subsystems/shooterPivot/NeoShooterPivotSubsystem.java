@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.network.LimeLight;
+import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 
 import static frc.robot.Constants.RobotInfo.*;
 
@@ -37,6 +39,14 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     @Override
     public void periodic() {
         if(!isUsingPID) return;
+
+
+        ShooterInfo.ShooterSetpoint setpoint = ShooterMeasurementLERPer.get(
+                LimeLight.getXDistance(),
+                LimeLight.getZDistance()
+        );
+        double targetAngle = setpoint.angle();
+        aimPID.setSetpoint(targetAngle);
 
         double currentAimMotorDegrees = encoder.getAbsolutePosition();
         double pidOutput = aimPID.calculate(currentAimMotorDegrees);

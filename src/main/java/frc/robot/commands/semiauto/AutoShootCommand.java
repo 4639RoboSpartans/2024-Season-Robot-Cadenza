@@ -25,7 +25,9 @@ public class AutoShootCommand extends Command {
     public void initialize() {
         isShooting = false;
 
-        shooterPivot.setAngleDegrees(Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_TOP_SETPOINT);
+        shooterPivot.setAngleDegrees(
+            Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_TOP_SETPOINT
+        );
     }
 
     @Override
