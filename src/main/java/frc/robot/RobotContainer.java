@@ -116,8 +116,8 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-                new MoveCommand(swerveDriveSubsystem, 0, -.6, 0, 2),
-                new AutoShootCommand(shooter, shooterPivot, hopper)
+            new MoveCommand(swerveDriveSubsystem, 0, -.6, 0, 2),
+            new AutoShootCommand(shooter, shooterPivot, hopper)
         );
     }
 }

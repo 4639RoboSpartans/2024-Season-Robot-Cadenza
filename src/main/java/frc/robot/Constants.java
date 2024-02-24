@@ -199,11 +199,12 @@ public final class Constants {
             public static final OI.Buttons ClimberRetractButton = OI.Buttons.RIGHT_BUMPER;
             public static final OI.Buttons ClimberSwap1Button = OI.Buttons.POV_LEFT;
             public static final OI.Buttons ClimberSwap2Button = OI.Buttons.POV_RIGHT;
+
+            public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
         }
 
         public static final class OperatorControls {
-            public static final OI.Buttons RunShooterButton = OI.Buttons.A_BUTTON;
-            public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
+            public static final OI.Buttons RunShooterButton = OI.Buttons.RIGHT_TRIGGER;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;

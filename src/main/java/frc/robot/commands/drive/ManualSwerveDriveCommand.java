@@ -2,7 +2,6 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
@@ -32,7 +31,7 @@ public class ManualSwerveDriveCommand extends Command {
         double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis);
 
         double rotateSpeed;
-        if(oi.operatorController().getButton(OperatorControls.AimButton).getAsBoolean()) {
+        if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
             rotateSpeed = -aimSubsystem.getRotationSpeed();
         }
         else {

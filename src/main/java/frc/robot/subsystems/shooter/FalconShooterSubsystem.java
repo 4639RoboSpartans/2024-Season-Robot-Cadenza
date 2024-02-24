@@ -48,7 +48,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             double currentSpeed = getCurrentSpeed();
             double targetSpeed = setpoint.speed();
 
-            double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
+            double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed) * 0.8 + .2;
 
             shooterOutput.addMeasurement(controllerOutput);
 
