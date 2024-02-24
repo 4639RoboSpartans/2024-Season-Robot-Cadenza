@@ -3,9 +3,10 @@ package frc.robot.subsystems.shooter;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.network.LimeLight;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import math.Averager;
 
@@ -51,7 +52,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
             shooterOutput.addMeasurement(controllerOutput);
 
-            shooterMotor.set(shooterOutput.getValue() * ShooterInfo.MAX_SHOOTER_SPEED);
+            shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
         }
     }
 

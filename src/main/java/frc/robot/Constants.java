@@ -142,21 +142,20 @@ public final class Constants {
 
             public static final ShooterSetpointMeasurement[] measurements = {
                 new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)),
-                new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .87)),
-                new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .888)),
+                new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)),
+                new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .89)),
             };
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
             public static final double TARGET_SHOOTER_SPEED = 40;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
             public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
-            public static final double MAX_SHOOTER_SPEED = 0.75;
+            public static final double SHOOTER_VOLTAGE = 6;
 
             public static final PID SHOOTER_AIM_PID = new PID(
                     3.5, 0, 0
             );
         }
-
     }
 
     public record SwerveModuleConfig(
