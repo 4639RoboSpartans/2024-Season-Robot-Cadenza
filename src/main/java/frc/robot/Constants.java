@@ -60,9 +60,11 @@ public final class Constants {
         public static final int INTAKE_PIVOT_MOTOR_LEFT = 22;
         public static final int INTAKE_PIVOT_MOTOR_RIGHT = 23;
         public static final int INTAKE_MOTOR = 24;
-        public static final int INTAKE_ENCODER = 25;
 
-        public static final int IR_SENSOR = 1;//Infrared sensor
+
+        public static final int SHOOTER_PIVOT_ENCODER_CHANNEL = 0;
+        public static final int INTAKE_ENCODER_CHANNEL = 1;
+        public static final int IR_SENSOR = 2;
     }
 
     public static final class RobotInfo {
@@ -105,11 +107,11 @@ public final class Constants {
         public static final class IntakeInfo {
 
             public static final double INTAKE_SPEED = -0.6 * 1.3;
-            public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = -2.57143;
-            public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -23.5;
+            public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.45;
+            public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
             // TODO: find actual values
             public static final PID INTAKE_PIVOT_PID = new PID(
-                    0.01, 0, 0
+                    .5, 0, 0
             );
         }
 

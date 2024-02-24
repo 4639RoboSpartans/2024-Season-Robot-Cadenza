@@ -19,7 +19,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     public NeoShooterPivotSubsystem(int aimMotorID) {
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
         aimMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-        encoder = new DutyCycleEncoder(0);
+        encoder = new DutyCycleEncoder(Constants.IDs.SHOOTER_PIVOT_ENCODER_CHANNEL);
         aimPID = ShooterInfo.SHOOTER_AIM_PID.create();
         aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
     }
