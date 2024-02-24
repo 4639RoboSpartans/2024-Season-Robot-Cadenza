@@ -6,4 +6,5 @@ public interface IHopperSubsystem extends Subsystem {
     void run();
     void runBackwards();
     void stop();
+    boolean getIRSensor();
 }

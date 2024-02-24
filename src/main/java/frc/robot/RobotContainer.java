@@ -104,7 +104,11 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.IntakeButton).onTrue(new IntakeCommand(intake, hopper, ir));
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
-        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).onTrue(new SetIntakeExtendedCommand(intake, true));
+        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
+            oi.operatorController().getButton(OperatorControls.IntakeExtendButton).onTrue(new SetIntakeExtendedCommand(intake, true));
+        else
+            oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new SetIntakeExtendedCommand(intake, true));
+
         oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
 
         oi.operatorController().getButton(OperatorControls.RunShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));

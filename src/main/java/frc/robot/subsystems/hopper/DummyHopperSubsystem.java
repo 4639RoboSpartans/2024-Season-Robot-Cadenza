@@ -6,4 +6,5 @@ public class DummyHopperSubsystem extends SubsystemBase implements IHopperSubsys
     public void run() {}
     public void runBackwards() {}
     public void stop() {}
+    public boolean getIRSensor() { return false; }
 }
