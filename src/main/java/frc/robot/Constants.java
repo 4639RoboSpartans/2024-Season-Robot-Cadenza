@@ -7,7 +7,7 @@ import frc.robot.oi.OI;
 
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.05;
-    public static final int CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH = 5;
+    public static final int POSE_WINDOW_LENGTH = 5;
     public static final double INTAKE_PIVOT_UP_MULTIPLIER = 2;
 
     public enum CurrentRobot {
@@ -59,9 +59,11 @@ public final class Constants {
         public static final int INTAKE_PIVOT_MOTOR_LEFT = 22;
         public static final int INTAKE_PIVOT_MOTOR_RIGHT = 23;
         public static final int INTAKE_MOTOR = 24;
-        public static final int INTAKE_ENCODER = 25;
 
-        public static final int IR_SENSOR = 1;//Infrared sensor
+
+        public static final int SHOOTER_PIVOT_ENCODER_CHANNEL = 0;
+        public static final int INTAKE_ENCODER_CHANNEL = 1;
+        public static final int IR_SENSOR = 2;
     }
 
     public static final class RobotInfo {
@@ -104,11 +106,11 @@ public final class Constants {
         public static final class IntakeInfo {
 
             public static final double INTAKE_SPEED = -0.6 * 1.3;
-            public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = -2.57143;
-            public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = -23.5;
+            public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.45;
+            public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
             // TODO: find actual values
             public static final PID INTAKE_PIVOT_PID = new PID(
-                    0.01, 0, 0
+                    .5, 0, 0
             );
         }
 
@@ -129,21 +131,28 @@ public final class Constants {
             public static final double AIM_SPEED = 0.2;
             public static final double AIM_SHOOTER_ERROR_CORRECTION_FACTOR = 0.1;
             public static final PID LIMELIGHT_AIM_PID = new PID(
-                    0.5, 0.0002, 0.03
+                    0.1, 0.001, 0.015
             );
         }
 
         public static class ShooterInfo {
+            public record ShooterSetpoint(double speed, double angle){}
+            public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
+
+            public static final ShooterSetpointMeasurement[] measurements = {
+                new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)),
+                new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .87)),
+                new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .888)),
+            };
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
-            public static final double TARGET_SHOOTER_SPEED = 50; // 11.7; // 30 for speaker // 50
+            public static final double TARGET_SHOOTER_SPEED = 40;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
             public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
-            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .83;
             public static final double MAX_SHOOTER_SPEED = 0.75;
 
             public static final PID SHOOTER_AIM_PID = new PID(
-                    1.5, 0, 0
+                    3.5, 0, 0
             );
         }
 

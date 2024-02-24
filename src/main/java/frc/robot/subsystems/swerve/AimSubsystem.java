@@ -1,54 +1,57 @@
 package frc.robot.subsystems.swerve;
 
-import java.util.ArrayDeque;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.network.LimeLight;
-import frc.robot.oi.OI;
+import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
+import math.Averager;
 import math.MathUtil;
 
 import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.ShooterInfo.*;
 
-
+@SuppressWarnings("unused")
 public class AimSubsystem extends SubsystemBase{
 
     private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID.create();
-    private final OI oi;
 
-    private final ArrayDeque<Double> prevPoses = new ArrayDeque<>();
-    public AimSubsystem(OI oi){
-        this.oi = oi;
+    private final Averager angle = new Averager(Constants.POSE_WINDOW_LENGTH);
+    private final Averager x = new Averager(Constants.POSE_WINDOW_LENGTH);
+    private final Averager z = new Averager(Constants.POSE_WINDOW_LENGTH);
+    public AimSubsystem(){}
+
+    public double getRotationSpeed(){
+        if (!angle.hasMeasurements()) return 0;
+
+        double yRotation = angle.getValue();
+
+        return rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * SwerveInfo.MAX_ROBOT_SPEED;
     }
 
-    public double getRotation(){
-       if (prevPoses.isEmpty())
-           return -oi.driverController().getAxis(Constants.Controls.DriverControls.SwerveRotationAxis);
+    public ShooterSetpoint getShooterSetpoint() {
+        ShooterSetpoint result = ShooterMeasurementLERPer.get(x.getValue(), z.getValue());
 
-       double yRotation = prevPoses.stream().mapToDouble(x -> (double) x).sum() / prevPoses.size();
-       double yRtSpd = rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * SwerveInfo.MAX_ROBOT_SPEED;
-       return yRtSpd;
+        SmartDashboard.putNumber("Shooter Angle: ", result.angle());
+        SmartDashboard.putNumber("Shooter Speed: ", result.speed());
+        
+        return result;
     }
 
     @Override
     public void periodic() {
-
         double angle = -Math.toRadians(LimeLight.getTx());
+        double x = LimeLight.getXDistance();
+        double z = LimeLight.getZDistance();
 
-        if(prevPoses.size() >= Constants.CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH) {
-            prevPoses.removeFirst();
-        }
-        prevPoses.addLast(angle);
+        this.angle.addMeasurement(angle);
+
+        this.x.addMeasurement(x);
+        this.z.addMeasurement(z);
     }
 
     public void resetPID(){
         rotationPID.reset();
-    }
-
-    public void updateKD(){
-        double kD = 1/Math.pow(Math.abs(SmartDashboard.getNumber("AprilTag: y rotation", 1)), 2) * 7;
-        rotationPID.setD(kD);
     }
 }

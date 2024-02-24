@@ -15,7 +15,7 @@ import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.Constants.RobotInfo.ShooterInfo;
-import frc.robot.commands.ShootCommand;
+import frc.robot.commands.auto.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -42,7 +42,6 @@ import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
-import frc.robot.subsystems.swerve.DummySwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
@@ -71,7 +70,7 @@ public class RobotContainer {
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
-        aimSubsystem = new AimSubsystem(oi);
+        aimSubsystem = new AimSubsystem();
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
@@ -84,15 +83,15 @@ public class RobotContainer {
 
         shooter = switch(Constants.currentRobot) {
             case ZEUS -> new DummyShooterSubsystem();
-            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR);
+            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR, aimSubsystem);
         };
         shooterPivot = switch(Constants.currentRobot){
             case ZEUS -> new DummyShooterPivotSubsystem();
-            case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR);
+            case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR, aimSubsystem);
         };
         intake = switch(Constants.currentRobot){
             case ZEUS -> new DummyIntakeSubsystem();
-            case SIREN -> new IntakeSubsystem(Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT, Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT, Constants.IDs.INTAKE_MOTOR, Constants.IDs.INTAKE_ENCODER);
+            case SIREN -> new IntakeSubsystem(Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT, Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT, Constants.IDs.INTAKE_MOTOR, Constants.IDs.INTAKE_ENCODER_CHANNEL);
         };
         hopper = switch(Constants.currentRobot){
             case ZEUS -> new DummyHopperSubsystem();
@@ -111,7 +110,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));   
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));  
         //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, oi));   
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));   
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));   
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));   
@@ -127,7 +126,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         swerveDriveSubsystem.setDefaultCommand(new ManualSwerveDriveCommand(
-                swerveDriveSubsystem, oi
+                swerveDriveSubsystem, aimSubsystem, oi
         ));
 
         oi.driverController().getButton(DriverControls.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
@@ -135,7 +134,6 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        //oi.operatorController().getButton(OperatorControls.ShooterButton).whileTrue(new ShootCommand(shooter));
         oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
