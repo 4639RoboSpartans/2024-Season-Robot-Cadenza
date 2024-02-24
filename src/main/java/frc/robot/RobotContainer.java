@@ -28,6 +28,7 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.sensors.IRTest;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
@@ -54,6 +55,7 @@ public class RobotContainer {
     private final IClimberSubsystem climber;
     private final AimSubsystem aimSubsystem;
     private final IHopperSubsystem hopper;
+    private final IRTest ir;
 
     public RobotContainer() {
         oi = new OI();
@@ -83,6 +85,7 @@ public class RobotContainer {
             case ZEUS -> new DummyClimberSubsystem();
             case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
         };
+        ir = new IRTest();
 
         configureBindings();
     }
@@ -98,7 +101,7 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
+        oi.operatorController().getButton(OperatorControls.IntakeButton).onTrue(new IntakeCommand(intake, hopper, ir));
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
         oi.operatorController().getButton(OperatorControls.IntakeExtendButton).onTrue(new SetIntakeExtendedCommand(intake, true));
