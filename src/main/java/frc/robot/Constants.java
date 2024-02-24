@@ -7,7 +7,7 @@ import frc.robot.oi.OI;
 
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.05;
-    public static final int CENTER_LIMELIGHT_AVERAGING_WINDOW_LENGTH = 5;
+    public static final int POSE_WINDOW_LENGTH = 5;
     public static final double INTAKE_PIVOT_UP_MULTIPLIER = 2;
 
     public enum CurrentRobot {
@@ -140,21 +140,19 @@ public final class Constants {
             public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
 
             public static final ShooterSetpointMeasurement[] measurements = {
-                new ShooterSetpointMeasurement(0, new ShooterSetpoint(30, .825)),
+                new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)),
                 new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .87)),
+                new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .888)),
             };
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
-//            public static final double TARGET_SHOOTER_SPEED = 30;
             public static final double TARGET_SHOOTER_SPEED = 40;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
             public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
-//            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .825;
-            public static final double SHOOTER_PIVOT_TOP_SETPOINT = .87;
             public static final double MAX_SHOOTER_SPEED = 0.75;
 
             public static final PID SHOOTER_AIM_PID = new PID(
-                    2.5, 0, 0
+                    3.5, 0, 0
             );
         }
 

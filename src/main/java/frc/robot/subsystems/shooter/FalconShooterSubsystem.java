@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.network.LimeLight;
+import frc.robot.subsystems.swerve.AimSubsystem;
 import math.Averager;
 
 import static frc.robot.Constants.RobotInfo.*;
@@ -19,9 +20,11 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     private final BangBangController bangBangController;
 
     private boolean isShooterRunning = false;
+    private final AimSubsystem aimSubsystem;
 
-    public FalconShooterSubsystem(int shooterMotorID) {
+    public FalconShooterSubsystem(int shooterMotorID, AimSubsystem aimSubsystem) {
         shooterMotor = new TalonFX(shooterMotorID);
+        this.aimSubsystem = aimSubsystem;
 
         shooterMotor.setNeutralMode(NeutralModeValue.Coast);
         shooterMotor.setInverted(true);
@@ -39,10 +42,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             shooterMotor.stopMotor();
         }
         else {
-            ShooterInfo.ShooterSetpoint setpoint = ShooterMeasurementLERPer.get(
-                LimeLight.getXDistance(),
-                LimeLight.getZDistance()
-            );
+            ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
 
             double currentSpeed = getCurrentSpeed();
             double targetSpeed = setpoint.speed();

@@ -83,11 +83,11 @@ public class RobotContainer {
 
         shooter = switch(Constants.currentRobot) {
             case ZEUS -> new DummyShooterSubsystem();
-            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR);
+            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR, aimSubsystem);
         };
         shooterPivot = switch(Constants.currentRobot){
             case ZEUS -> new DummyShooterPivotSubsystem();
-            case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR);
+            case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR, aimSubsystem);
         };
         intake = switch(Constants.currentRobot){
             case ZEUS -> new DummyIntakeSubsystem();
