@@ -5,10 +5,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.ManualSwerveDriveCommand;
+import frc.robot.Constants.Controls.DriverControls;
+import frc.robot.Constants.Controls.OperatorControls;
+import frc.robot.Constants.RobotInfo.ShooterInfo;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -41,6 +48,9 @@ import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import static frc.robot.Constants.Controls.*;
 import static frc.robot.Constants.RobotInfo.*;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     private final OI oi;
@@ -54,14 +64,22 @@ public class RobotContainer {
     private final IClimberSubsystem climber;
     private final AimSubsystem aimSubsystem;
     private final IHopperSubsystem hopper;
+        
+    private SendableChooser<Command> autos;
 
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
         aimSubsystem = new AimSubsystem();
 
+        autos = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Autons", autos);
+
+
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 //        swerveDriveSubsystem = new DummySwerveDriveSubsystem();
+
+        swerveDriveSubsystem.resetOdometry(new Pose2d());
 
         shooter = switch(Constants.currentRobot) {
             case ZEUS -> new DummyShooterSubsystem();
@@ -83,6 +101,24 @@ public class RobotContainer {
             case ZEUS -> new DummyClimberSubsystem();
             case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
         };
+
+        //auto commands
+        NamedCommands.registerCommand("MoveCommand", new MoveCommand(swerveDriveSubsystem, 0, 0, 0, 0));   
+        NamedCommands.registerCommand("ShootCommand", new ShootCommand(shooter));   
+        //climber commands
+        NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));   
+        NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));   
+        NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));  
+        //drive commands
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, oi));   
+        //intake commands
+        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));   
+        NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));   
+        NamedCommands.registerCommand("SetIntakeExtendedCommand", new SetIntakeExtendedCommand(intake, false));   
+        //semiauto commands
+        NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, shooterPivot, hopper));   
+        
+
 
         configureBindings();
     }
@@ -115,9 +151,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new SequentialCommandGroup(
-                new MoveCommand(swerveDriveSubsystem, 0, -.6, 0, 2),
-                new AutoShootCommand(shooter, shooterPivot, hopper)
-        );
+        return autos.getSelected();
     }
 }

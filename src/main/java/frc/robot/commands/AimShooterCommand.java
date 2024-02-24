@@ -15,12 +15,12 @@ public class AimShooterCommand extends Command {
     private final ISwerveDriveSubsystem ISwerveDriveSubsystem;
     private final IShooterPivotSubsystem iShooterPivotSubsystem;
 
-    public AimShooterCommand(LimeLight limeLight, ISwerveDriveSubsystem ISwerveDriveSubsystem, IShooterPivotSubsystem iShooterPivotSubsystem) {
+    public AimShooterCommand(LimeLight limeLight, ISwerveDriveSubsystem ISwerveDriveSubsystem, IShooterPivotSubsystem IShooterPivotSubsystem) {
         this.ISwerveDriveSubsystem = ISwerveDriveSubsystem;
-        this.iShooterPivotSubsystem = iShooterPivotSubsystem;
+        this.iShooterPivotSubsystem = IShooterPivotSubsystem;
 
         addRequirements(ISwerveDriveSubsystem);
-        addRequirements(iShooterPivotSubsystem);
+        addRequirements(IShooterPivotSubsystem);
     }
 
     /*

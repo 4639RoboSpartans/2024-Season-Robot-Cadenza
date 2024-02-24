@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
@@ -37,5 +38,20 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     @Override
     public void setCoastMode() {
 
+    }
+
+    @Override
+    public void resetOdometry(Pose2d pose) {
+
+    }
+
+    @Override
+    public void resetPose(Pose2d pose) {
+
+    }
+
+    @Override
+    public SwerveModule getSwerveModule(String module){
+        return null;
     }
 }
