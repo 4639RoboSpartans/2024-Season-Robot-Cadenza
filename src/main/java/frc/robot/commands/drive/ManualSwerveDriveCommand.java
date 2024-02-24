@@ -3,13 +3,14 @@ package frc.robot.commands.drive;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.Controls.DriverControls;
+import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.Constants.Controls.*;
 
-@SuppressWarnings("unused")
 public class ManualSwerveDriveCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
     private final AimSubsystem aimSubsystem;
