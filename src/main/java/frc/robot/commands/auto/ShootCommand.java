@@ -7,7 +7,7 @@ public class ShootCommand extends Command {
 
     private final IShooterSubsystem shooter;
 
-    ShootCommand(IShooterSubsystem shooter) {
+    public ShootCommand(IShooterSubsystem shooter) {
 
         this.shooter = shooter;
         addRequirements(shooter);

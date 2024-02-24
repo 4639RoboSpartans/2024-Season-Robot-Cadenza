@@ -15,7 +15,7 @@ import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.Constants.RobotInfo.ShooterInfo;
-import frc.robot.commands.ShootCommand;
+import frc.robot.commands.auto.ShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -110,7 +110,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));   
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));  
         //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, oi));   
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));   
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));   
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));   
