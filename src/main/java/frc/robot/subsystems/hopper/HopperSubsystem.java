@@ -12,13 +12,10 @@ import static frc.robot.Constants.RobotInfo.*;
 
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
-    private final DigitalInput ir_sensor;
 
     public HopperSubsystem(int motorID) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
         motor.setIdleMode(CANSparkBase.IdleMode.kCoast);
-
-        ir_sensor = new DigitalInput(Constants.IDs.IR_SENSOR);
     }
 
     @Override
@@ -34,14 +31,5 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     @Override
     public void stop() {
         motor.stopMotor();
-    }
-
-    public boolean getIRSensor(){
-        return ir_sensor.get();
-    }
-
-    @Override
-    public void periodic(){
-        SmartDashboard.putBoolean("IR Sensor", getIRSensor());
     }
 }
