@@ -9,6 +9,7 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.Constants.Controls.*;
 
+@SuppressWarnings("unused")
 public class ManualSwerveDriveCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
     private final AimSubsystem aimSubsystem;
