@@ -12,9 +12,34 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "path 1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "path 1.1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCommand"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootCommand"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "path 2"
+                }
+              }
+            ]
           }
         }
       ]
