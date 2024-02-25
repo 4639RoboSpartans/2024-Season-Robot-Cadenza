@@ -32,7 +32,7 @@ public class ManualSwerveDriveCommand extends Command {
         double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis);
 
         double rotateSpeed;
-        if(oi.operatorController().getButton(OperatorControls.AimButton).getAsBoolean()) {
+        if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
             rotateSpeed = -aimSubsystem.getRotationSpeed();
         }
         else {

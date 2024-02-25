@@ -200,6 +200,7 @@ public final class Constants {
             public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
             public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
             public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
+            public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
 
             public static final OI.Buttons ClimberExtendButton = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ClimberRetractButton = OI.Buttons.RIGHT_BUMPER;
@@ -208,10 +209,9 @@ public final class Constants {
         }
 
         public static final class OperatorControls {
-            public static final OI.Buttons RunSpeakerShooterButton = OI.Buttons.A_BUTTON;
+            public static final OI.Buttons RunSpeakerShooterButton = OI.Buttons.RIGHT_TRIGGER;
             public static final OI.Buttons RunAmpShooterButton = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ManualShooterButton = OI.Buttons.LEFT_TRIGGER;
-            public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
