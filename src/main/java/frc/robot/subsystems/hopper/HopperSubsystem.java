@@ -10,6 +10,7 @@ import frc.robot.Constants;
 
 import static frc.robot.Constants.RobotInfo.*;
 
+@SuppressWarnings("unused")
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
 

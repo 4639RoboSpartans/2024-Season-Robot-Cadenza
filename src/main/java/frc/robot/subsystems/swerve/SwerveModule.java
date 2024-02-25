@@ -14,6 +14,7 @@ import math.MathUtil;
 
 import static frc.robot.Constants.RobotInfo.*;
 
+@SuppressWarnings("unused")
 public class SwerveModule {
     private final TalonFX driver, rotator;
     private final CANcoder rotationEncoder;
