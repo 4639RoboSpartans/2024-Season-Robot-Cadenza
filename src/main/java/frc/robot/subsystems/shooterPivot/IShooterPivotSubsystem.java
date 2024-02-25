@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooterPivot;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
 import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
 
 public interface IShooterPivotSubsystem extends Subsystem {
@@ -14,5 +15,5 @@ public interface IShooterPivotSubsystem extends Subsystem {
 
     void setShooting(SHOOTING_MODE shooting);
 
-    void setManual(boolean manual);
+    void setManual(LIMELIGHT_STATUS manual);
 }

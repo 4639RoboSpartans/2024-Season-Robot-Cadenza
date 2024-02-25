@@ -138,6 +138,10 @@ public final class Constants {
             public static final PID LIMELIGHT_AIM_PID = new PID(
                     0.1, 0.001, 0.015
             );
+
+            public enum LIMELIGHT_STATUS{
+                LIMELIGHT, MANUAL
+            }
         }
 
         public static class ShooterInfo {

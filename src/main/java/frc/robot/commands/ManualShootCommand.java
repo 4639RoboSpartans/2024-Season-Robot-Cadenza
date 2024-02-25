@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
 import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
@@ -24,7 +25,7 @@ public class ManualShootCommand extends Command{
     @Override
     public void initialize(){
         shooterPivotSubsystem.setShooting(SHOOTING_MODE.SPEAKER);
-        shooterPivotSubsystem.setManual(true);
+        shooterPivotSubsystem.setManual(LIMELIGHT_STATUS.MANUAL);
         shooterPivotSubsystem.setAngleDegrees(Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
     }
 
