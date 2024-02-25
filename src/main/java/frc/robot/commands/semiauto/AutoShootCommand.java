@@ -2,6 +2,7 @@ package frc.robot.commands.semiauto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
@@ -25,9 +26,9 @@ public class AutoShootCommand extends Command {
     public void initialize() {
         isShooting = false;
 
-        shooterPivot.setShooting(true);
+        shooterPivot.setShooting(SHOOTING_MODE.SPEAKER);
         shooterPivot.setManual(false);
-        shooter.setShooting(true);
+        shooter.setShooting(SHOOTING_MODE.SPEAKER);
         shooterPivot.setAngleDegrees(
             Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT
         );

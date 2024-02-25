@@ -2,6 +2,7 @@ package frc.robot.commands.semiauto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
@@ -24,8 +25,9 @@ public class AutoAmpCommand extends Command {
     @Override
     public void initialize() {
         isShooting = false;
-        shooterPivot.setShooting(false);
-        shooter.setShooting(false);
+        shooterPivot.setShooting(SHOOTING_MODE.AMP);
+        shooterPivot.setManual(false);
+        shooter.setShooting(SHOOTING_MODE.AMP);
 
         shooterPivot.setAngleDegrees(
             Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT
