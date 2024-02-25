@@ -121,7 +121,7 @@ public final class Constants {
         public static final class HopperInfo {
 
             public static final double HOPPER_SPEED = 0.7;
-            public static final boolean usingIRSensor = false;
+            public static final boolean usingIRSensor = true;
         }
 
         public static final class ClimberInfo {
