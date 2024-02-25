@@ -155,7 +155,7 @@ public final class Constants {
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
             public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
             public static final double SHOOTER_VOLTAGE = 6;
-            public static final double TARGET_AMP_SHOOTER_SPEED = 25;
+            public static final double TARGET_AMP_SHOOTER_SPEED = 11;
             public static final double SHOOTER_PIVOT_SPEAKER_SETPOINT = .835;
 
             public static final PID SHOOTER_AIM_PID = new PID(

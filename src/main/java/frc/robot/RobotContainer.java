@@ -102,14 +102,14 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
-
-        oi.operatorController().getButton(OperatorControls.IntakeButton).onTrue(new IntakeCommand(intake, hopper, ir));
+        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
+            oi.operatorController().getButton(OperatorControls.IntakeButton).onTrue(new IntakeCommand(intake, hopper, ir));
+        else
+            oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper, ir));
+ 
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
-        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
-            oi.operatorController().getButton(OperatorControls.IntakeExtendButton).onTrue(new SetIntakeExtendedCommand(intake, true));
-        else
-            oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new SetIntakeExtendedCommand(intake, true));
+        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new SetIntakeExtendedCommand(intake, true));
 
         oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
 

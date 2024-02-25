@@ -1,5 +1,6 @@
 package frc.robot.commands.semiauto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
@@ -30,13 +31,15 @@ public class AutoAmpCommand extends Command {
         shooterPivot.setAngleDegrees(
             Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT
         );
+
+        SmartDashboard.putBoolean("amp command", true);
     }
 
     @Override
     public void execute() {
         shooter.runShooter();
 
-        if(shooter.isUpToSpeed() && shooterPivot.isAtSetPoint()) {
+        if(shooter.isUpToSpeed()) {
             isShooting = true;
         }
 

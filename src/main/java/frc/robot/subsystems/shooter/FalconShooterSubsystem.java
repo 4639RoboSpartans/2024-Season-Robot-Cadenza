@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.AimSubsystem;
@@ -40,29 +41,45 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         bangBangController = new BangBangController();
     }
 
+    public void setSpeaker(){
+        double currentSpeed, targetSpeed;
+        currentSpeed = getCurrentSpeed();
+        ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
+        targetSpeed = setpoint.speed();
+        
+        SmartDashboard.putBoolean("speaker shooting", speakerShooting);
+        SmartDashboard.putNumber("current speed", currentSpeed);
+
+        double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
+
+        shooterOutput.addMeasurement(controllerOutput);
+
+        shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
+    }
+
+    public void setAmp(){
+        double currentSpeed, targetSpeed;
+        currentSpeed = getCurrentSpeed();
+        targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_AMP_SHOOTER_SPEED;
+        double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
+        
+        SmartDashboard.putBoolean("speaker shooting", speakerShooting);
+        SmartDashboard.putNumber("current speed", currentSpeed);
+
+        shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
+    }
+
     @Override
     public void periodic() {
         if(!isShooterRunning) {
             shooterMotor.stopMotor();
+            return;
         }
-        else {
 
-            double currentSpeed, targetSpeed;
-            currentSpeed = getCurrentSpeed();
-            if (speakerShooting){
-                ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
-                targetSpeed = setpoint.speed();
-            }
-            else{
-                targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_AMP_SHOOTER_SPEED;
-            }
-
-            double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
-
-            shooterOutput.addMeasurement(controllerOutput);
-
-            shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
-        }
+        if (speakerShooting)
+            setSpeaker();
+        else
+            setAmp();
     }
 
     public void setShooting(boolean shooting){
