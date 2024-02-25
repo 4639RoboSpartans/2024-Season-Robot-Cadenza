@@ -16,6 +16,7 @@ import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
 import frc.robot.commands.intake.SetIntakeExtendedCommand;
+import frc.robot.commands.semiauto.AutoAmpCommand;
 import frc.robot.commands.semiauto.AutoShootCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
@@ -111,7 +112,8 @@ public class RobotContainer {
 
         oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
 
-        oi.operatorController().getButton(OperatorControls.RunShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, shooterPivot, hopper));
 
         oi.operatorController().getButton(OperatorControls.ShooterPivotTop).whileTrue(new RunCommand(() -> {
             shooterPivot.setAngleDegrees(ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT);
