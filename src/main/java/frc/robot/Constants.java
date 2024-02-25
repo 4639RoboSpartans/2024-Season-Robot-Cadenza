@@ -210,6 +210,7 @@ public final class Constants {
         public static final class OperatorControls {
             public static final OI.Buttons RunSpeakerShooterButton = OI.Buttons.A_BUTTON;
             public static final OI.Buttons RunAmpShooterButton = OI.Buttons.LEFT_BUMPER;
+            public static final OI.Buttons ManualShooterButton = OI.Buttons.LEFT_TRIGGER;
             public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;

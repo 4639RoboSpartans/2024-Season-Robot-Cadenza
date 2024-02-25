@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.ManualSwerveDriveCommand;
+import frc.robot.commands.ManualShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -114,6 +115,7 @@ public class RobotContainer {
 
         oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
         oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, shooterPivot, hopper));
 
         oi.operatorController().getButton(OperatorControls.ShooterPivotTop).whileTrue(new RunCommand(() -> {
             shooterPivot.setAngleDegrees(ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT);
