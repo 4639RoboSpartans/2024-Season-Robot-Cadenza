@@ -28,8 +28,8 @@ public class ManualSwerveDriveCommand extends Command {
 
     @Override
     public void execute() {
-        double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis);
-        double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis);
+        double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * Constants.RobotInfo.SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * Constants.RobotInfo.SwerveInfo.CURRENT_MAX_ROBOT_MPS;
 
         double rotateSpeed;
         if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {

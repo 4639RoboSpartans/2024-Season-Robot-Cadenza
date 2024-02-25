@@ -78,8 +78,8 @@ public final class Constants {
             );
 
             // Change MOVEMENT_SPEED to 1.0 for max speed
-            public static double CURRENT_MAX_ROBOT_MPS = 1.5;
-            public static final double MAX_ROBOT_MPS = 1.5;
+            public static double CURRENT_MAX_ROBOT_MPS = 2;
+            public static final double MAX_ROBOT_MPS = 2;
             public static final double MAX_ROBOT_MPS_SHOOTING = .5;
             public static final double MOVEMENT_SPEED = 1;
             public static final double MAX_ROBOT_SPEED = 10;

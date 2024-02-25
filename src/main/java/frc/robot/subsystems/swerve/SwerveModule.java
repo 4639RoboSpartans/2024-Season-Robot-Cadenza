@@ -51,7 +51,7 @@ public class SwerveModule {
         rotationPID.setTolerance(0.1);
         rotationPID.enableContinuousInput(-180, 180);
 
-        driverPID = SwerveInfo.SWERVE_DRIVER_PID.create(1); //drive change
+        driverPID = SwerveInfo.SWERVE_DRIVER_PID.create(4); //drive change
         driverPID.setTolerance(0.1); //drive change
 
         CurrentLimitsConfigs motorCurrentLimiter = new CurrentLimitsConfigs()
