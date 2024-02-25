@@ -16,4 +16,9 @@ public class DummyShooterSubsystem extends SubsystemBase implements IShooterSubs
     @Override
     public void stopShooter() {
     }
+
+    @Override
+    public void setShooting(boolean shooting) {
+        
+    }
 }

@@ -8,4 +8,6 @@ public interface IShooterSubsystem extends Subsystem {
     void runShooter();
 
     void stopShooter();
+
+    void setShooting(boolean shooting);
 }

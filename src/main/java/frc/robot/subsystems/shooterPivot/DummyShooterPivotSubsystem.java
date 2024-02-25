@@ -12,4 +12,8 @@ public class DummyShooterPivotSubsystem extends SubsystemBase implements IShoote
     public void stop() {}
 
     public void manualSet(double degrees) {}
+
+    public boolean isAtSetPoint() { return false; }
+
+    public void setShooting(boolean shooting) {}
 }

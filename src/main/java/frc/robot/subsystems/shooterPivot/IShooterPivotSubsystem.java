@@ -8,4 +8,8 @@ public interface IShooterPivotSubsystem extends Subsystem {
     void stop();
 
     void manualSet(double degrees);
+
+    boolean isAtSetPoint();
+
+    void setShooting(boolean shooting);
 }

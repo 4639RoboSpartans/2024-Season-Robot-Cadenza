@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import math.Averager;
 
@@ -22,6 +23,8 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     private boolean isShooterRunning = false;
     private final AimSubsystem aimSubsystem;
+
+    private boolean speakerShooting = true;
 
     public FalconShooterSubsystem(int shooterMotorID, AimSubsystem aimSubsystem) {
         shooterMotor = new TalonFX(shooterMotorID);
@@ -43,10 +46,16 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             shooterMotor.stopMotor();
         }
         else {
-            ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
 
-            double currentSpeed = getCurrentSpeed();
-            double targetSpeed = setpoint.speed();
+            double currentSpeed, targetSpeed;
+            currentSpeed = getCurrentSpeed();
+            if (speakerShooting){
+                ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
+                targetSpeed = setpoint.speed();
+            }
+            else{
+                targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_AMP_SHOOTER_SPEED;
+            }
 
             double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
 
@@ -56,13 +65,17 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         }
     }
 
+    public void setShooting(boolean shooting){
+        speakerShooting = shooting;
+    }
+
     private double getCurrentSpeed() {
         return shooterMotor.getVelocity().getValue();
     }
 
     @Override
     public boolean isUpToSpeed() {
-        return Math.abs(getCurrentSpeed()) >= Math.abs(ShooterInfo.TARGET_SHOOTER_SPEED) * 0.95;
+        return Math.abs(getCurrentSpeed()) >= Math.abs(ShooterInfo.TARGET_SPEAKER_SHOOTER_SPEED) * 0.95;
     }
 
     public void runShooter() {

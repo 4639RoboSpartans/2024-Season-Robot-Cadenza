@@ -19,6 +19,8 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     private final PIDController aimPID;
     private final AimSubsystem aimSubsystem;
     private boolean isUsingPID = true;
+    private boolean atSetPoint = false;
+    private boolean speakerShooting = true;
 
     public NeoShooterPivotSubsystem(int aimMotorID, AimSubsystem aimSubsystem) {
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
@@ -39,14 +41,32 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         isUsingPID = false;
     }
 
+    public boolean isAtSetPoint(){
+        return atSetPoint;
+    }
+
+    public void setShooting(boolean shooting){
+        speakerShooting = shooting;
+    }
+
     @Override
     public void periodic() {
         if(!isUsingPID) return;
 
-
-        ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
-        double targetAngle = setpoint.angle();
+        double targetAngle;
+        if(speakerShooting){
+            ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
+            targetAngle = setpoint.angle();
+        }
+        else {
+            targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT;
+        }
         aimPID.setSetpoint(targetAngle);
+
+        double error = Math.abs(targetAngle - encoder.getAbsolutePosition());
+        if (error < 0.01){
+            atSetPoint = true;
+        }
 
         double currentAimMotorDegrees = encoder.getAbsolutePosition();
         double pidOutput = aimPID.calculate(currentAimMotorDegrees);
