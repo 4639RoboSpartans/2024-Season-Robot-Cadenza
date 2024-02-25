@@ -16,4 +16,5 @@ public interface ISwerveDriveSubsystem extends Subsystem {
     void periodic();
     void setBrakeMode();
     void setCoastMode();
+    SwerveModule getSwerveModule(String module);
 }

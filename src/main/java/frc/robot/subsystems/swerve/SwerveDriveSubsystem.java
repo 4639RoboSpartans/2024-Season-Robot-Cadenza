@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
 
 import static frc.robot.Constants.RobotInfo.*;
@@ -88,5 +89,20 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleFrontRight.setCoastMode();
         moduleBackLeft.setCoastMode();
         moduleBackRight.setCoastMode();
+    }
+
+    public SwerveModule getSwerveModule(String module){
+        switch (module){
+            case "FL":
+                return moduleFrontLeft;
+            case "BL":
+                return moduleBackLeft;
+            case "FR":
+                return moduleFrontRight;
+            case "BR":
+                return moduleBackRight;
+            default:
+                return null;
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -159,5 +160,9 @@ public class SwerveModule {
 
     public void setCoastMode(){
         driver.setNeutralMode(NeutralModeValue.Coast);
+    }
+
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(getDriveDistance(), new Rotation2d(getTurningPosition()));
     }
 }
