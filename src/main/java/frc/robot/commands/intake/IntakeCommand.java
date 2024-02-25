@@ -33,8 +33,13 @@ public class IntakeCommand extends Command {
 
     @Override
     public boolean isFinished(){
-        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
-            return ir.getIRSensor();
+        if (Constants.RobotInfo.HopperInfo.usingIRSensor){
+            if(ir.getIRSensor()){
+                intake.setExtended(false);
+                return true;
+            }
+            return false;
+        }
         else
             return false;
     }
