@@ -16,4 +16,6 @@ public class DummyShooterPivotSubsystem extends SubsystemBase implements IShoote
     public boolean isAtSetPoint() { return false; }
 
     public void setShooting(boolean shooting) {}
+
+    public void setManual(boolean manual) {}
 }

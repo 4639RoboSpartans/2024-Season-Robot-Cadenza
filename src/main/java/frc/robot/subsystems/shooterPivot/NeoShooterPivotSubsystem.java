@@ -21,6 +21,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     private boolean isUsingPID = true;
     private boolean atSetPoint = false;
     private boolean speakerShooting = true;
+    private boolean isUsingLimeLight = true;
 
     public NeoShooterPivotSubsystem(int aimMotorID, AimSubsystem aimSubsystem) {
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
@@ -49,14 +50,22 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         speakerShooting = shooting;
     }
 
+    public void setManual(boolean manual){
+        isUsingLimeLight = manual;
+    }
+
     @Override
     public void periodic() {
         if(!isUsingPID) return;
+
 
         double targetAngle;
         if(speakerShooting){
             ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
             targetAngle = setpoint.angle();
+        }        
+        else if(!isUsingLimeLight){
+            targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_SPEAKER_SETPOINT;
         }
         else {
             targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT;

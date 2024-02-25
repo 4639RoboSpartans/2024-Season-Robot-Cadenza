@@ -12,4 +12,6 @@ public interface IShooterPivotSubsystem extends Subsystem {
     boolean isAtSetPoint();
 
     void setShooting(boolean shooting);
+
+    void setManual(boolean manual);
 }

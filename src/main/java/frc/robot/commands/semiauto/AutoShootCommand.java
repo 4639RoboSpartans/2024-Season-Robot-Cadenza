@@ -26,6 +26,7 @@ public class AutoShootCommand extends Command {
         isShooting = false;
 
         shooterPivot.setShooting(true);
+        shooterPivot.setManual(false);
         shooter.setShooting(true);
         shooterPivot.setAngleDegrees(
             Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT
@@ -47,8 +48,6 @@ public class AutoShootCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        shooterPivot.setShooting(false);
-        shooter.setShooting(false);
         shooter.stopShooter();
         hopper.stop();
     }

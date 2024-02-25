@@ -49,7 +49,5 @@ public class AutoAmpCommand extends Command {
     public void end(boolean interrupted) {
         shooter.stopShooter();
         hopper.stop();
-        shooterPivot.setShooting(true);
-        shooter.setShooting(true);
     }
 }
