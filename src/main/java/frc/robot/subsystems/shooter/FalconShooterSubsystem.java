@@ -13,6 +13,7 @@ import frc.robot.subsystems.swerve.AimSubsystem;
 import math.Averager;
 
 import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.ShooterInfo.*;
 
 @SuppressWarnings("unused")
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
@@ -22,10 +23,10 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     private final Averager shooterOutput = new Averager(2);
     private final BangBangController bangBangController;
 
-    private boolean isShooterRunning = false;
+    private boolean isShooting = false;
     private final AimSubsystem aimSubsystem;
 
-    private boolean speakerShooting = true;
+    private SHOOTING_MODE shootingMode = SHOOTING_MODE.SPEAKER;
 
     public FalconShooterSubsystem(int shooterMotorID, AimSubsystem aimSubsystem) {
         shooterMotor = new TalonFX(shooterMotorID);
@@ -41,14 +42,22 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         bangBangController = new BangBangController();
     }
 
-    public void setSpeaker(){
+    private void setSpeakerSpeed(){
         double currentSpeed, targetSpeed;
         currentSpeed = getCurrentSpeed();
         ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
         targetSpeed = setpoint.speed();
-        
-        SmartDashboard.putBoolean("speaker shooting", speakerShooting);
-        SmartDashboard.putNumber("current speed", currentSpeed);
+        double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
+
+        shooterOutput.addMeasurement(controllerOutput);
+
+        shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
+    }
+
+    private void setAmpSpeed(){
+        double currentSpeed, targetSpeed;
+        currentSpeed = getCurrentSpeed();
+        targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_AMP_SHOOTER_SPEED;
 
         double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
 
@@ -57,33 +66,36 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
     }
 
-    public void setAmp(){
+    private void setIdleSpeed(){
         double currentSpeed, targetSpeed;
         currentSpeed = getCurrentSpeed();
-        targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_AMP_SHOOTER_SPEED;
+        targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_IDLE_SHOOTER_SPEED;
+
         double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
-        
-        SmartDashboard.putBoolean("speaker shooting", speakerShooting);
-        SmartDashboard.putNumber("current speed", currentSpeed);
+
+        shooterOutput.addMeasurement(controllerOutput);
 
         shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
     }
 
     @Override
     public void periodic() {
-        if(!isShooterRunning) {
-            shooterMotor.stopMotor();
-            return;
+        SmartDashboard.putBoolean("shooter running", isShooting);
+        if(!isShooting) {
+            setIdleSpeed();
         }
-
-        if (speakerShooting)
-            setSpeaker();
-        else
-            setAmp();
+        else {
+            if (shootingMode == SHOOTING_MODE.SPEAKER){
+                setSpeakerSpeed();
+            }
+            else{
+                setAmpSpeed();
+            }
+        }
     }
 
-    public void setShooting(boolean shooting){
-        speakerShooting = shooting;
+    public void setShooting(SHOOTING_MODE shooting){
+        shootingMode = shooting;
     }
 
     private double getCurrentSpeed() {
@@ -96,10 +108,10 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     }
 
     public void runShooter() {
-        isShooterRunning = true;
+        isShooting = true;
     }
 
     public void stopShooter() {
-        isShooterRunning = false;
+        isShooting = false;
     }
 }

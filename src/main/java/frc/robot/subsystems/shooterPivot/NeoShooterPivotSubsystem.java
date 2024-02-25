@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
+import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 import frc.robot.subsystems.swerve.AimSubsystem;
@@ -20,8 +22,8 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     private final AimSubsystem aimSubsystem;
     private boolean isUsingPID = true;
     private boolean atSetPoint = false;
-    private boolean speakerShooting = true;
-    private boolean isUsingLimeLight = true;
+    private SHOOTING_MODE speakerShooting = SHOOTING_MODE.SPEAKER;
+    private LIMELIGHT_STATUS isUsingLimeLight = LIMELIGHT_STATUS.LIMELIGHT;
 
     public NeoShooterPivotSubsystem(int aimMotorID, AimSubsystem aimSubsystem) {
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
@@ -46,11 +48,11 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         return atSetPoint;
     }
 
-    public void setShooting(boolean shooting){
+    public void setShooting(SHOOTING_MODE shooting){
         speakerShooting = shooting;
     }
 
-    public void setManual(boolean manual){
+    public void setManual(LIMELIGHT_STATUS manual){
         isUsingLimeLight = manual;
     }
 
@@ -60,13 +62,13 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
 
 
         double targetAngle;
-        if(speakerShooting){
+        if(!(isUsingLimeLight == LIMELIGHT_STATUS.LIMELIGHT)){
+            targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_SPEAKER_SETPOINT;
+        }
+        else if(speakerShooting == SHOOTING_MODE.SPEAKER){
             ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
             targetAngle = setpoint.angle();
         }        
-        else if(!isUsingLimeLight){
-            targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_SPEAKER_SETPOINT;
-        }
         else {
             targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT;
         }

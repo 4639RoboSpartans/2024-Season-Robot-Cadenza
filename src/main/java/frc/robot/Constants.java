@@ -138,11 +138,19 @@ public final class Constants {
             public static final PID LIMELIGHT_AIM_PID = new PID(
                     0.1, 0.001, 0.015
             );
+
+            public enum LIMELIGHT_STATUS{
+                LIMELIGHT, MANUAL
+            }
         }
 
         public static class ShooterInfo {
             public record ShooterSetpoint(double speed, double angle){}
             public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
+
+            public enum SHOOTING_MODE{
+                SPEAKER, AMP
+            }
 
             public static final ShooterSetpointMeasurement[] measurements = {
                 new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)),
@@ -152,6 +160,8 @@ public final class Constants {
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
             public static final double TARGET_SPEAKER_SHOOTER_SPEED = 40;
+            public static final double TARGET_AMP_SHOOTER_SPEED = 25;
+            public static final double TARGET_IDLE_SHOOTER_SPEED = 10;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
             public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
             public static final double SHOOTER_VOLTAGE = 6;
