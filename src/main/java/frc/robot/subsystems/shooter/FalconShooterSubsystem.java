@@ -80,7 +80,8 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("shooter running", isShooting);
+        SmartDashboard.putBoolean("shooting", isShooting);
+        SmartDashboard.putNumber("current speed", getCurrentSpeed());
         if(!isShooting) {
             setIdleSpeed();
         }
