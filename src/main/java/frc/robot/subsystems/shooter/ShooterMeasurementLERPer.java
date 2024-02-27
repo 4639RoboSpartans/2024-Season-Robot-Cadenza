@@ -25,11 +25,11 @@ public class ShooterMeasurementLERPer {
         double t = (distance - a.distance()) / (b.distance() - a.distance());
         t = MathUtil.clamp(t, 0, 1);
 
-//        return new ShooterSetpoint(
-//            MathUtil.lerp(a.setpoint().speed(), b.setpoint().speed(), t),
-//            MathUtil.lerp(a.setpoint().angle(), b.setpoint().angle(), t)
-//        );
+        return new ShooterSetpoint(
+            MathUtil.lerp(a.setpoint().speed(), b.setpoint().speed(), t),
+            MathUtil.lerp(a.setpoint().angle(), b.setpoint().angle(), t)
+        );
 
-        return ShooterInfo.measurements[2].setpoint();
+//        return ShooterInfo.measurements[2].setpoint();
     }
 }

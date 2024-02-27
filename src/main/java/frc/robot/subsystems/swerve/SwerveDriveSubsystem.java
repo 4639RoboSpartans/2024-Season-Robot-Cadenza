@@ -136,27 +136,4 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleBackLeft.setCoastMode();
         moduleBackRight.setCoastMode();
     }
-
-    public void resetOdometry(Pose2d pose){
-        resetPose(pose);
-    }
-
-    public void resetPose(Pose2d pose){
-        odometrySubsystem.resetOdometry(pose);
-    }
-
-    public SwerveModule getSwerveModule(String module){
-        switch (module){
-            case "FL":
-                return moduleFrontLeft;
-            case "BL":
-                return moduleBackLeft;
-            case "FR":
-                return moduleFrontRight;
-            case "BR":
-                return moduleBackRight;
-            default:
-                return null;
-        }
-    }
 }

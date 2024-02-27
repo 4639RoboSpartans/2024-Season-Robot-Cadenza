@@ -16,6 +16,7 @@ import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.Constants.RobotInfo.ShooterInfo;
 import frc.robot.commands.auto.ShootCommand;
+import frc.robot.commands.ManualShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -23,6 +24,7 @@ import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
 import frc.robot.commands.intake.SetIntakeExtendedCommand;
+import frc.robot.commands.semiauto.AutoAmpCommand;
 import frc.robot.commands.semiauto.AutoShootCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
@@ -35,6 +37,7 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.sensors.IRTest;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
@@ -66,6 +69,7 @@ public class RobotContainer {
     private final IHopperSubsystem hopper;
         
     private SendableChooser<Command> autos;
+    private final IRTest ir;
 
     public RobotContainer() {
         oi = new OI();
@@ -98,6 +102,7 @@ public class RobotContainer {
             case ZEUS -> new DummyClimberSubsystem();
             case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
         };
+        ir = new IRTest();
 
         //auto commands
         NamedCommands.registerCommand("MoveCommand", new MoveCommand(swerveDriveSubsystem, 0, 0, 0, 0));   
@@ -130,14 +135,20 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
-
-        oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
+        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
+            oi.operatorController().getButton(OperatorControls.IntakeButton).onTrue(new IntakeCommand(intake, hopper, ir));
+        else
+            oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper, ir));
+ 
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
-        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).onTrue(new SetIntakeExtendedCommand(intake, true));
+        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new SetIntakeExtendedCommand(intake, true));
+
         oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
 
-        oi.operatorController().getButton(OperatorControls.RunShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, shooterPivot, hopper));
 
         oi.operatorController().getButton(OperatorControls.ShooterPivotTop).whileTrue(new RunCommand(() -> {
             shooterPivot.setAngleDegrees(ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT);

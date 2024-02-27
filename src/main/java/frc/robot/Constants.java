@@ -63,7 +63,7 @@ public final class Constants {
 
         public static final int SHOOTER_PIVOT_ENCODER_CHANNEL = 0;
         public static final int INTAKE_ENCODER_CHANNEL = 1;
-        public static final int IR_SENSOR = 2;
+        public static final int IR_SENSOR = 3;
     }
 
     public static final class RobotInfo {
@@ -77,8 +77,11 @@ public final class Constants {
             );
 
             // Change MOVEMENT_SPEED to 1.0 for max speed
+            public static final double CURRENT_MAX_ROBOT_MPS = 2;
+            public static final double MAX_ROBOT_MPS = 2;
+            public static final double MAX_ROBOT_MPS_SHOOTING = .5;
             public static final double MOVEMENT_SPEED = 1;
-            public static final double MAX_ROBOT_SPEED = 10;
+            public static final double MAX_ROBOT_SPEED = 2.5;
             public static final PID SWERVE_ROTATOR_PID = new PID(
                 0.0085
             );
@@ -117,6 +120,7 @@ public final class Constants {
         public static final class HopperInfo {
 
             public static final double HOPPER_SPEED = 0.7;
+            public static final boolean usingIRSensor = true;
         }
 
         public static final class ClimberInfo {
@@ -133,29 +137,39 @@ public final class Constants {
             public static final PID LIMELIGHT_AIM_PID = new PID(
                     0.1, 0.001, 0.015
             );
+
+            public enum LIMELIGHT_STATUS{
+                LIMELIGHT, MANUAL
+            }
         }
 
         public static class ShooterInfo {
             public record ShooterSetpoint(double speed, double angle){}
             public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
 
+            public enum SHOOTING_MODE{
+                SPEAKER, AMP
+            }
+
             public static final ShooterSetpointMeasurement[] measurements = {
                 new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)),
-                new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .87)),
-                new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .888)),
+                new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)),
+                new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .89)),
             };
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
-            public static final double TARGET_SHOOTER_SPEED = 40;
+            public static final double TARGET_SPEAKER_SHOOTER_SPEED = 40;
+            public static final double TARGET_IDLE_SHOOTER_SPEED = 0.2;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
             public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
-            public static final double MAX_SHOOTER_SPEED = 0.75;
+            public static final double SHOOTER_VOLTAGE = 6;
+            public static final double TARGET_AMP_SHOOTER_SPEED = 11;
+            public static final double SHOOTER_PIVOT_SPEAKER_SETPOINT = .835;
 
             public static final PID SHOOTER_AIM_PID = new PID(
                     3.5, 0, 0
             );
         }
-
     }
 
     public record SwerveModuleConfig(
@@ -194,6 +208,7 @@ public final class Constants {
             public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
             public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
             public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
+            public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
 
             public static final OI.Buttons ClimberExtendButton = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ClimberRetractButton = OI.Buttons.RIGHT_BUMPER;
@@ -202,8 +217,9 @@ public final class Constants {
         }
 
         public static final class OperatorControls {
-            public static final OI.Buttons RunShooterButton = OI.Buttons.A_BUTTON;
-            public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
+            public static final OI.Buttons RunSpeakerShooterButton = OI.Buttons.RIGHT_TRIGGER;
+            public static final OI.Buttons RunAmpShooterButton = OI.Buttons.LEFT_BUMPER;
+            public static final OI.Buttons ManualShooterButton = OI.Buttons.LEFT_TRIGGER;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
@@ -212,6 +228,7 @@ public final class Constants {
 
             public static final OI.Buttons ShooterPivotTop = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ShooterPivotBot = OI.Buttons.B_BUTTON;
+
         }
     }
 
