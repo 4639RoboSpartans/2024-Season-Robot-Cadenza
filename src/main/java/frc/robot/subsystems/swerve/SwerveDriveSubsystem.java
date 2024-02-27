@@ -8,7 +8,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
 
-import static frc.robot.Constants.RobotInfo.*;
 
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
