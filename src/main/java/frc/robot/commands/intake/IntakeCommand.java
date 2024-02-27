@@ -38,9 +38,7 @@ public class IntakeCommand extends Command {
                 intake.setExtended(false);
                 return true;
             }
-            return false;
         }
-        else
-            return false;
+        return false;
     }
 }
