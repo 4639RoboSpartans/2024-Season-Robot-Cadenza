@@ -82,7 +82,7 @@ public final class Constants {
             public static final double MAX_ROBOT_MPS = 2;
             public static final double MAX_ROBOT_MPS_SHOOTING = .5;
             public static final double MOVEMENT_SPEED = 1;
-            public static final double MAX_ROBOT_SPEED = 10;
+            public static final double MAX_ROBOT_SPEED = 2.5;
             public static final PID SWERVE_ROTATOR_PID = new PID(
                 0.0085
             );
