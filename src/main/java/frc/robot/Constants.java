@@ -121,7 +121,7 @@ public final class Constants {
         public static final class HopperInfo {
 
             public static final double HOPPER_SPEED = 0.7;
-            public static final boolean usingIRSensor = true;
+            public static boolean usingIRSensor = true;
         }
 
         public static final class ClimberInfo {
@@ -229,6 +229,8 @@ public final class Constants {
 
             public static final OI.Buttons ShooterPivotTop = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ShooterPivotBot = OI.Buttons.B_BUTTON;
+
+            public static final OI.Buttons ToggleIR = OI.Buttons.A_BUTTON;
 
         }
     }

@@ -63,6 +63,7 @@ public class RobotContainer {
         oi = new OI();
         navX = new NavX();
         aimSubsystem = new AimSubsystem();
+        ir = new IRTest();
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 //        swerveDriveSubsystem = new DummySwerveDriveSubsystem();
@@ -81,13 +82,12 @@ public class RobotContainer {
         };
         hopper = switch(Constants.currentRobot){
             case ZEUS -> new DummyHopperSubsystem();
-            case SIREN -> new HopperSubsystem(Constants.IDs.HOPPER_MOTOR);
+            case SIREN -> new HopperSubsystem(Constants.IDs.HOPPER_MOTOR, ir);
         };
         climber = switch(Constants.currentRobot){
             case ZEUS -> new DummyClimberSubsystem();
             case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
         };
-        ir = new IRTest();
 
         configureBindings();
     }
@@ -102,10 +102,7 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
-        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
-            oi.operatorController().getButton(OperatorControls.IntakeButton).onTrue(new IntakeCommand(intake, hopper, ir));
-        else
-            oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper, ir));
+        oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
  
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
