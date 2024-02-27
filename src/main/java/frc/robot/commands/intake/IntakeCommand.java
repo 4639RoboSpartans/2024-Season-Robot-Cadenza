@@ -34,7 +34,7 @@ public class IntakeCommand extends Command {
     @Override
     public boolean isFinished(){
         if (Constants.RobotInfo.HopperInfo.usingIRSensor){
-            if(ir.getIRSensor()){
+            if(!ir.getIRSensor()){
                 intake.setExtended(false);
                 return true;
             }

@@ -68,14 +68,8 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     private void setIdleSpeed(){
         double currentSpeed, targetSpeed;
-        currentSpeed = getCurrentSpeed();
         targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_IDLE_SHOOTER_SPEED;
-
-        double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
-
-        shooterOutput.addMeasurement(controllerOutput);
-
-        shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
+        shooterMotor.set(targetSpeed);
     }
 
     @Override
