@@ -4,17 +4,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.sensors.IRTest;
 
 public class IntakeCommand extends Command {
     private final IIntakeSubsystem intake;
     private final IHopperSubsystem hopper;
-    private final IRTest ir;
 
-    public IntakeCommand(IIntakeSubsystem intake, IHopperSubsystem hopper, IRTest ir) {
+    public IntakeCommand(IIntakeSubsystem intake, IHopperSubsystem hopper) {
         this.intake = intake;
         this.hopper = hopper;
-        this.ir = ir;
 
         addRequirements(intake, hopper);
     }
@@ -34,7 +31,7 @@ public class IntakeCommand extends Command {
     @Override
     public boolean isFinished(){
         if (Constants.RobotInfo.HopperInfo.usingIRSensor){
-            if(!ir.getIRSensor()){
+            if(!hopper.getIR().getIRSensor()){
                 intake.setExtended(false);
                 return true;
             }
