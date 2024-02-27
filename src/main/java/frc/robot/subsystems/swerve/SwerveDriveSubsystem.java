@@ -33,11 +33,11 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     private ChassisSpeeds chassisSpeeds;
 
     public SwerveDriveSubsystem(NavX navx) {
-        odometrySubsystem = new OdometrySubsystem(this, navx);
         moduleFrontLeft = new SwerveModule(Constants.IDs.MODULE_FRONT_LEFT);
         moduleFrontRight = new SwerveModule(Constants.IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(Constants.IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(Constants.IDs.MODULE_BACK_RIGHT);
+        odometrySubsystem = new OdometrySubsystem(this, navx);
 
         this.navx = navx;
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);

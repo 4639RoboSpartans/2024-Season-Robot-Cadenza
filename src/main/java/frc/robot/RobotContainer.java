@@ -56,7 +56,7 @@ public class RobotContainer {
     private final OI oi;
     private final NavX navX;
 
-    private final ISwerveDriveSubsystem swerveDriveSubsystem;
+    private final SwerveDriveSubsystem swerveDriveSubsystem;
 
     private final IShooterSubsystem shooter;
     private final IShooterPivotSubsystem shooterPivot;
@@ -71,15 +71,12 @@ public class RobotContainer {
         oi = new OI();
         navX = new NavX();
         aimSubsystem = new AimSubsystem();
+        swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
+
+        swerveDriveSubsystem.resetOdometry(new Pose2d());
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
-
-
-        swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
-//        swerveDriveSubsystem = new DummySwerveDriveSubsystem();
-
-        swerveDriveSubsystem.resetOdometry(new Pose2d());
 
         shooter = switch(Constants.currentRobot) {
             case ZEUS -> new DummyShooterSubsystem();
