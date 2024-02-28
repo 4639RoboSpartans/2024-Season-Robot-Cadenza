@@ -16,7 +16,11 @@ public final class Constants {
 
     public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
 
-    private static final double[] oldOffsets = {-54.98, -122.4, 74.44, 121.92}, newOffsets = {135.36, 152.23, -94.98, -88.23};
+    private static final double[] oldOffsets = {
+        -54.98, -122.4, 74.44, 121.92
+    }, newOffsets = {
+        135.36, 155.23, -94.98, -88.23
+    };
 
     private static final double[] offsets = switch (currentRobot) {
         case ZEUS -> oldOffsets;

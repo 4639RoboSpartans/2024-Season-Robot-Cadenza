@@ -13,7 +13,7 @@ public class IRSensor extends SubsystemBase {
         sensor = new DigitalInput(Constants.IDs.IR_SENSOR);
     }
 
-    public boolean isClear(){
+    public boolean isClear() {
         return sensor.get();
     }
 
@@ -31,6 +31,9 @@ public class IRSensor extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putBoolean("IR sensor detects note", hasNote());
+        SmartDashboard.putBoolean("IR sensor detects note", !isClear());
+        SmartDashboard.putBoolean("IR sensor active", isActive());
+        SmartDashboard.putBoolean("IR sensor has note", hasNote());
+
     }
 }

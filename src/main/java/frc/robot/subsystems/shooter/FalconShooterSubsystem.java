@@ -40,7 +40,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
         bangBangController = new BangBangController();
 
-        shootingMode = ShootingMode.SPEAKER;
+        shootingMode = ShootingMode.IDLE;
     }
 
     private double getCurrentSpeed() {

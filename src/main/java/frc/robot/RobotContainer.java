@@ -52,9 +52,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         oi = new OI();
-        navX = new NavX();
-        aimSubsystem = new AimSubsystem();
-        ir = new IRSensor();
+        navX = SubsystemCreator.getNavX();
+        aimSubsystem = SubsystemCreator.getAimSubsystem();
+        ir = SubsystemCreator.getIRSensor();
 
         swerveDriveSubsystem = SubsystemCreator.getSwerveDrive();
 
@@ -101,7 +101,7 @@ public class RobotContainer {
 
         oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new SetIntakeExtendedCommand(intake, true));
 
-        oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
+        oi.operatorController().getButton(OperatorControls.IntakeRetractButton).whileTrue(new SetIntakeExtendedCommand(intake, false));
 
         oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, hopper));
         oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, hopper));

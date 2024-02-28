@@ -25,7 +25,10 @@ public class IntakeCommand extends Command {
     public void end(boolean interrupted) {
         intake.stopIntake();
         hopper.stop();
-        intake.setExtended(false);
+
+        if(!interrupted) {
+            intake.setExtended(false);
+        }
     }
 
     @Override

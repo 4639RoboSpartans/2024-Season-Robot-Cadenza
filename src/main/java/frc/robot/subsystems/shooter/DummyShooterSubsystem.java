@@ -6,7 +6,7 @@ import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
 public class DummyShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
     @Override
     public boolean isReady() {
-        return false;
+        return true;
     }
 
     @Override
