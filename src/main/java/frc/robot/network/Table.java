@@ -1,11 +1,11 @@
 package frc.robot.network;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class Table {
     public final String name;

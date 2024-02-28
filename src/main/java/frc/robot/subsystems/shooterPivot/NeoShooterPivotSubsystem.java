@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooterPivot;
 
-import com.revrobotics.*;
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -8,11 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
 import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
-import frc.robot.network.LimeLight;
-import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 import frc.robot.subsystems.swerve.AimSubsystem;
 
-import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.ShooterInfo;
 
 @SuppressWarnings("unused")
 public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {

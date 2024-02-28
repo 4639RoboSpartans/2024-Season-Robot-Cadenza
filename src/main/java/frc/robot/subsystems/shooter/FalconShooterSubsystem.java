@@ -3,17 +3,15 @@ package frc.robot.subsystems.shooter;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import math.Averager;
 
-import static frc.robot.Constants.RobotInfo.*;
-import static frc.robot.Constants.RobotInfo.ShooterInfo.*;
+import static frc.robot.Constants.RobotInfo.ShooterInfo;
+import static frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
 
 @SuppressWarnings("unused")
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {

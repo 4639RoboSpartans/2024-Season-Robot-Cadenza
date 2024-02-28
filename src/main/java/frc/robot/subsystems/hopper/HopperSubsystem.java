@@ -2,21 +2,17 @@ package frc.robot.subsystems.hopper;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.sensors.IRTest;
+import frc.robot.subsystems.sensors.IRSensor;
 
-import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.HopperInfo;
 
 @SuppressWarnings("unused")
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
-    private final IRTest ir;
+    private final IRSensor ir;
 
-    public HopperSubsystem(int motorID, IRTest ir) {
+    public HopperSubsystem(int motorID, IRSensor ir) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
         motor.setIdleMode(CANSparkBase.IdleMode.kCoast);
         this.ir = ir;
@@ -24,13 +20,11 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
 
     @Override
     public void run() {
-        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
-            if (ir.getIRSensor())
-                motor.set(HopperInfo.HOPPER_SPEED);
-            else
-                motor.set(0);
-        else
+        if (ir.hasNote()) {
+            motor.set(0);
+        } else {
             motor.set(HopperInfo.HOPPER_SPEED);
+        }
     }
 
     @Override
@@ -43,7 +37,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
         motor.stopMotor();
     }
 
-    public IRTest getIR(){
+    public IRSensor getIR(){
         return ir;
     }
 }

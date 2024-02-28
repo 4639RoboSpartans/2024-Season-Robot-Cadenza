@@ -16,17 +16,7 @@ public final class Constants {
 
     public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
 
-    private static final double[] oldOffsets = {
-        -54.98,
-        -122.4,
-        74.44,
-        121.92
-    }, newOffsets = {
-        135.36,
-        152.23,
-        -94.98,
-        -88.23
-    };
+    private static final double[] oldOffsets = {-54.98, -122.4, 74.44, 121.92}, newOffsets = {135.36, 152.23, -94.98, -88.23};
 
     private static final double[] offsets = switch (currentRobot) {
         case ZEUS -> oldOffsets;
@@ -35,18 +25,10 @@ public final class Constants {
 
     public static final class IDs {
         // Swerve uses up motor ids 1-12
-        public static final SwerveModuleConfig MODULE_FRONT_LEFT = new SwerveModuleConfig(
-                1, 2, 9, offsets[0]
-        );//124.77
-        public static final SwerveModuleConfig MODULE_FRONT_RIGHT = new SwerveModuleConfig(
-                3, 4, 10, offsets[1]
-        );//233.877
-        public static final SwerveModuleConfig MODULE_BACK_LEFT = new SwerveModuleConfig(
-                5, 6, 11, offsets[2]
-        );//9.668
-        public static final SwerveModuleConfig MODULE_BACK_RIGHT = new SwerveModuleConfig(
-                7, 8, 12, offsets[3]
-        );//50.400
+        public static final SwerveModuleConfig MODULE_FRONT_LEFT = new SwerveModuleConfig(1, 2, 9, offsets[0]);//124.77
+        public static final SwerveModuleConfig MODULE_FRONT_RIGHT = new SwerveModuleConfig(3, 4, 10, offsets[1]);//233.877
+        public static final SwerveModuleConfig MODULE_BACK_LEFT = new SwerveModuleConfig(5, 6, 11, offsets[2]);//9.668
+        public static final SwerveModuleConfig MODULE_BACK_RIGHT = new SwerveModuleConfig(7, 8, 12, offsets[3]);//50.400
 
         public static final int SHOOTER_SHOOTER_MOTOR = 13;
         public static final int SHOOTER_PIVOT_MOTOR = 14;
@@ -69,12 +51,7 @@ public final class Constants {
     public static final class RobotInfo {
         public static final class SwerveInfo {
             public static final double centerToWheel = 0.245;
-            public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
-                    new Translation2d(centerToWheel, centerToWheel),
-                    new Translation2d(centerToWheel, -centerToWheel),
-                    new Translation2d(-centerToWheel, centerToWheel),
-                    new Translation2d(-centerToWheel, -centerToWheel)
-            );
+            public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(new Translation2d(centerToWheel, centerToWheel), new Translation2d(centerToWheel, -centerToWheel), new Translation2d(-centerToWheel, centerToWheel), new Translation2d(-centerToWheel, -centerToWheel));
 
             // Change MOVEMENT_SPEED to 1.0 for max speed
             public static final double CURRENT_MAX_ROBOT_MPS = 2;
@@ -82,28 +59,12 @@ public final class Constants {
             public static final double MAX_ROBOT_MPS_SHOOTING = .5;
             public static final double MOVEMENT_SPEED = 1;
             public static final double MAX_ROBOT_SPEED = 2.5;
-            public static final PID SWERVE_ROTATOR_PID = new PID(
-                0.0085
-            );
-            public static final PID SWERVE_DRIVER_PID = new PID(
-                0.65
-            );
+            public static final PID SWERVE_ROTATOR_PID = new PID(0.0085);
+            public static final PID SWERVE_DRIVER_PID = new PID(0.65);
         }
 
         public static final class TrapInfo {
-
-            public static final double TRAP_ROTATOR_SPEED = 0.5;
-            public static final double TRAP_ROLLER_RELEASE_SPEED = 0.5;
-            public static final double TRAP_ROLLER_INTAKE_SPEED = 0.5;
-            public static final double TRAP_BACK_ROTATOR_DEGREES = -30;
-            public static final double TRAP_FRONT_ROTATOR_DEGREES = 90;
-            public static final double TRAP_EXTEND_TIME = 15;
-            public static final double TRAP_RELEASE_TIME = 20;
-            public static final double TRAP_FINAL_TIME = 25;
-            // TODO: find actual values
-            public static final PID TRAP_ROTATOR_PID = new PID(
-                    0, 0, 0
-            );
+            // TODO: make trap subsystem and put constants here
         }
 
         public static final class IntakeInfo {
@@ -111,10 +72,7 @@ public final class Constants {
             public static final double INTAKE_SPEED = -0.6 * 1.3;
             public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.45;
             public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
-            // TODO: find actual values
-            public static final PID INTAKE_PIVOT_PID = new PID(
-                    .5, 0, 0
-            );
+            public static final PID INTAKE_PIVOT_PID = new PID(.5, 0, 0);
         }
 
         public static final class HopperInfo {
@@ -134,28 +92,25 @@ public final class Constants {
             public static final double AIM_ERROR_CM = 25;
             public static final double AIM_SPEED = 0.2;
             public static final double AIM_SHOOTER_ERROR_CORRECTION_FACTOR = 0.1;
-            public static final PID LIMELIGHT_AIM_PID = new PID(
-                    0.1, 0.001, 0.015
-            );
+            public static final PID LIMELIGHT_AIM_PID = new PID(0.1, 0.001, 0.015);
 
-            public enum LIMELIGHT_STATUS{
+            public enum LIMELIGHT_STATUS {
                 LIMELIGHT, MANUAL
             }
         }
 
         public static class ShooterInfo {
-            public record ShooterSetpoint(double speed, double angle){}
-            public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
+            public record ShooterSetpoint(double speed, double angle) {
+            }
 
-            public enum SHOOTING_MODE{
+            public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {
+            }
+
+            public enum SHOOTING_MODE {
                 SPEAKER, AMP
             }
 
-            public static final ShooterSetpointMeasurement[] measurements = {
-                new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)),
-                new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)),
-                new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .89)),
-            };
+            public static final ShooterSetpointMeasurement[] measurements = {new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)), new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)), new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .89)),};
 
             public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
             public static final double TARGET_SPEAKER_SHOOTER_SPEED = 40;
@@ -166,19 +121,12 @@ public final class Constants {
             public static final double TARGET_AMP_SHOOTER_SPEED = 11;
             public static final double SHOOTER_PIVOT_SPEAKER_SETPOINT = .835;
 
-            public static final PID SHOOTER_AIM_PID = new PID(
-                    3.5, 0, 0
-            );
+            public static final PID SHOOTER_AIM_PID = new PID(3.5, 0, 0);
         }
     }
 
-    public record SwerveModuleConfig(
-            int driveMotorID,
-            int rotatorMotorID,
-            int encoderID,
-            double rotationOffset,
-            double rotatorPIDkPMultiplier
-    ) {
+    public record SwerveModuleConfig(int driveMotorID, int rotatorMotorID, int encoderID, double rotationOffset,
+                                     double rotatorPIDkPMultiplier) {
         public SwerveModuleConfig(int driveMotorID, int rotatorMotorID, int encoderID, double rotationOffset) {
             this(driveMotorID, rotatorMotorID, encoderID, rotationOffset, 1);
         }
@@ -234,7 +182,7 @@ public final class Constants {
         }
     }
 
-    public static final class FieldDistances{
+    public static final class FieldDistances {
         public static final double ShooterApriltagXDistance = 43.2; //this and below are in cm
 
         public static final double ShooterApriltagZDistance = -2.5;

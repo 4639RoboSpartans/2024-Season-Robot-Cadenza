@@ -5,22 +5,23 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.Constants.RobotInfo.ShooterInfo;
-import frc.robot.commands.auto.ShootCommand;
 import frc.robot.commands.ManualShootCommand;
 import frc.robot.commands.auto.MoveCommand;
+import frc.robot.commands.auto.ShootCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
+import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
 import frc.robot.commands.intake.SetIntakeExtendedCommand;
@@ -37,10 +38,10 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.sensors.IRTest;
-import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
+import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.NeoShooterPivotSubsystem;
@@ -48,18 +49,12 @@ import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
-import static frc.robot.Constants.Controls.*;
-import static frc.robot.Constants.RobotInfo.*;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     private final OI oi;
     private final NavX navX;
 
-    private final SwerveDriveSubsystem swerveDriveSubsystem;
+    private final ISwerveDriveSubsystem swerveDriveSubsystem;
 
     private final IShooterSubsystem shooter;
     private final IShooterPivotSubsystem shooterPivot;
@@ -67,15 +62,15 @@ public class RobotContainer {
     private final IClimberSubsystem climber;
     private final AimSubsystem aimSubsystem;
     private final IHopperSubsystem hopper;
-        
+
+    private final IRSensor ir;
     private SendableChooser<Command> autos;
-    private final IRTest ir;
 
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
         aimSubsystem = new AimSubsystem();
-        ir = new IRTest();
+        ir = new IRSensor();
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 
@@ -106,21 +101,21 @@ public class RobotContainer {
         };
 
         //auto commands
-        NamedCommands.registerCommand("MoveCommand", new MoveCommand(swerveDriveSubsystem, 0, 0, 0, 0));   
-        NamedCommands.registerCommand("ShootCommand", new ShootCommand(shooter));   
+        NamedCommands.registerCommand("MoveCommand", new MoveCommand(swerveDriveSubsystem, 0, 0, 0, 0));
+        NamedCommands.registerCommand("ShootCommand", new ShootCommand(shooter));
         //climber commands
-        NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));   
-        NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));   
-        NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));  
+        NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
+        NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
+        NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
         //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));   
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
         //intake commands
-        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));   
-        NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));   
-        NamedCommands.registerCommand("SetIntakeExtendedCommand", new SetIntakeExtendedCommand(intake, false));   
+        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));
+        NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
+        NamedCommands.registerCommand("SetIntakeExtendedCommand", new SetIntakeExtendedCommand(intake, false));
         //semiauto commands
-        NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, shooterPivot, hopper));   
-        
+        NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, shooterPivot, hopper));
+
 
 
         configureBindings();
@@ -136,6 +131,7 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
+
         oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
  
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));

@@ -4,10 +4,9 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
-import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.SwerveInfo;
 
 @SuppressWarnings("unused")
 public class MoveCommand extends Command{

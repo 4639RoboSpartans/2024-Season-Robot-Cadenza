@@ -9,8 +9,9 @@ import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 import math.Averager;
 import math.MathUtil;
 
-import static frc.robot.Constants.RobotInfo.*;
-import static frc.robot.Constants.RobotInfo.ShooterInfo.*;
+import static frc.robot.Constants.RobotInfo.AimInfo;
+import static frc.robot.Constants.RobotInfo.ShooterInfo.ShooterSetpoint;
+import static frc.robot.Constants.RobotInfo.SwerveInfo;
 
 @SuppressWarnings("unused")
 public class AimSubsystem extends SubsystemBase{

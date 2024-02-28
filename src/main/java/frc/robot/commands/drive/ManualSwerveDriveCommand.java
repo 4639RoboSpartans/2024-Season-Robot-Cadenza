@@ -2,14 +2,12 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Constants.Controls.DriverControls;
-import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
-import static frc.robot.Constants.Controls.*;
+import static frc.robot.Constants.RobotInfo.SwerveInfo;
 
 public class ManualSwerveDriveCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
@@ -30,8 +28,8 @@ public class ManualSwerveDriveCommand extends Command {
 
     @Override
     public void execute() {
-        double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * Constants.RobotInfo.SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-        double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * Constants.RobotInfo.SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
 
         double rotateSpeed;
         if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
