@@ -9,7 +9,7 @@ import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import math.MathUtil;
 
-import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.AimInfo;
 
 public class AimShooterCommand extends Command {
     private final ISwerveDriveSubsystem ISwerveDriveSubsystem;

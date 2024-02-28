@@ -8,12 +8,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.commands.ManualShootCommand;
 import frc.robot.commands.auto.MoveCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
+import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
 import frc.robot.commands.intake.SetIntakeExtendedCommand;
@@ -30,10 +30,10 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.sensors.IRTest;
-import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
+import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooterPivot.NeoShooterPivotSubsystem;
@@ -41,8 +41,9 @@ import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
-import static frc.robot.Constants.Controls.*;
-import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.Controls.DriverControls;
+import static frc.robot.Constants.Controls.OperatorControls;
+import static frc.robot.Constants.RobotInfo.ShooterInfo;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -57,13 +58,13 @@ public class RobotContainer {
     private final IClimberSubsystem climber;
     private final AimSubsystem aimSubsystem;
     private final IHopperSubsystem hopper;
-    private final IRTest ir;
+    private final IRSensor ir;
 
     public RobotContainer() {
         oi = new OI();
         navX = new NavX();
         aimSubsystem = new AimSubsystem();
-        ir = new IRTest();
+        ir = new IRSensor();
 
         swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
 //        swerveDriveSubsystem = new DummySwerveDriveSubsystem();
@@ -102,6 +103,7 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
+
         oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
  
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));

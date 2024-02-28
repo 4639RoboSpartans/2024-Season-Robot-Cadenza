@@ -1,10 +1,10 @@
 package frc.robot.network;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Network {
     // Implement the singleton pattern

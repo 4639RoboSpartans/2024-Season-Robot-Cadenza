@@ -13,7 +13,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.SwerveModuleConfig;
 import math.MathUtil;
 
-import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.SwerveInfo;
 
 @SuppressWarnings("unused")
 public class SwerveModule {

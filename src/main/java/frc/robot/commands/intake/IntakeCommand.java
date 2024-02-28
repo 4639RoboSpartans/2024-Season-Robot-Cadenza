@@ -1,7 +1,6 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 
@@ -26,16 +25,11 @@ public class IntakeCommand extends Command {
     public void end(boolean interrupted) {
         intake.stopIntake();
         hopper.stop();
+        intake.setExtended(false);
     }
 
     @Override
     public boolean isFinished(){
-        if (Constants.RobotInfo.HopperInfo.usingIRSensor){
-            if(!hopper.getIR().getIRSensor()){
-                intake.setExtended(false);
-                return true;
-            }
-        }
-        return false;
+        return hopper.getIR().hasNote();
     }
 }

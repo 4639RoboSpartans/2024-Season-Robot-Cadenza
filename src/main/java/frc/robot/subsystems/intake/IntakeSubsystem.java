@@ -1,13 +1,14 @@
 package frc.robot.subsystems.intake;
 
-import com.revrobotics.*;
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import static frc.robot.Constants.RobotInfo.*;
+import static frc.robot.Constants.RobotInfo.IntakeInfo;
 
 @SuppressWarnings("unused")
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
