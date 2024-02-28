@@ -7,23 +7,30 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.sensors.IRTest;
 
 import static frc.robot.Constants.RobotInfo.*;
 
+@SuppressWarnings("unused")
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
-    private final DigitalInput ir_sensor;
+    private final IRTest ir;
 
-    public HopperSubsystem(int motorID) {
+    public HopperSubsystem(int motorID, IRTest ir) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
         motor.setIdleMode(CANSparkBase.IdleMode.kCoast);
-
-        ir_sensor = new DigitalInput(Constants.IDs.IR_SENSOR);
+        this.ir = ir;
     }
 
     @Override
     public void run() {
-        motor.set(HopperInfo.HOPPER_SPEED);
+        if (Constants.RobotInfo.HopperInfo.usingIRSensor)
+            if (ir.getIRSensor())
+                motor.set(HopperInfo.HOPPER_SPEED);
+            else
+                motor.set(0);
+        else
+            motor.set(HopperInfo.HOPPER_SPEED);
     }
 
     @Override
@@ -36,12 +43,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
         motor.stopMotor();
     }
 
-    public boolean getIRSensor(){
-        return ir_sensor.get();
-    }
-
-    @Override
-    public void periodic(){
-        SmartDashboard.putBoolean("IR Sensor", getIRSensor());
+    public IRTest getIR(){
+        return ir;
     }
 }

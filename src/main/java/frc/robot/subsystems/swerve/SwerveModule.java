@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -14,6 +15,7 @@ import math.MathUtil;
 
 import static frc.robot.Constants.RobotInfo.*;
 
+@SuppressWarnings("unused")
 public class SwerveModule {
     private final TalonFX driver, rotator;
     private final CANcoder rotationEncoder;
@@ -51,7 +53,7 @@ public class SwerveModule {
         rotationPID.setTolerance(0.1);
         rotationPID.enableContinuousInput(-180, 180);
 
-        driverPID = SwerveInfo.SWERVE_DRIVER_PID.create(1); //drive change
+        driverPID = SwerveInfo.SWERVE_DRIVER_PID.create(4); //drive change
         driverPID.setTolerance(0.1); //drive change
 
         CurrentLimitsConfigs motorCurrentLimiter = new CurrentLimitsConfigs()
@@ -158,5 +160,9 @@ public class SwerveModule {
 
     public void setCoastMode(){
         driver.setNeutralMode(NeutralModeValue.Coast);
+    }
+
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(getDriveDistance(), new Rotation2d(getTurningPosition()));
     }
 }

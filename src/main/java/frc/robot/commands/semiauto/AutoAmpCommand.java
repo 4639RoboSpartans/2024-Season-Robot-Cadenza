@@ -1,5 +1,6 @@
 package frc.robot.commands.semiauto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
@@ -8,14 +9,14 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
 
-public class AutoShootCommand extends Command {
+public class AutoAmpCommand extends Command {
     private final IShooterSubsystem shooter;
     private final IShooterPivotSubsystem shooterPivot;
     private final IHopperSubsystem hopper;
 
     private boolean isShooting;
 
-    public AutoShootCommand(IShooterSubsystem shooter, IShooterPivotSubsystem shooterPivot, IHopperSubsystem hopper) {
+    public AutoAmpCommand(IShooterSubsystem shooter, IShooterPivotSubsystem shooterPivot, IHopperSubsystem hopper) {
         this.shooter = shooter;
         this.shooterPivot = shooterPivot;
         this.hopper = hopper;
@@ -26,20 +27,22 @@ public class AutoShootCommand extends Command {
     @Override
     public void initialize() {
         isShooting = false;
-
-        shooterPivot.setShooting(SHOOTING_MODE.SPEAKER);
+        shooterPivot.setShooting(SHOOTING_MODE.AMP);
         shooterPivot.setManual(LIMELIGHT_STATUS.LIMELIGHT);
-        shooter.setShooting(SHOOTING_MODE.SPEAKER);
+        shooter.setShooting(SHOOTING_MODE.AMP);
+
         shooterPivot.setAngleDegrees(
             Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT
         );
+
+        SmartDashboard.putBoolean("amp command", true);
     }
 
     @Override
     public void execute() {
         shooter.runShooter();
 
-        if(shooter.isUpToSpeed() && shooterPivot.isAtSetPoint()) {
+        if(shooter.isUpToSpeed()) {
             isShooting = true;
         }
 

@@ -38,4 +38,8 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     public void setCoastMode() {
 
     }
+
+    public SwerveModule getSwerveModule(String module){
+        return null;
+    }
 }
