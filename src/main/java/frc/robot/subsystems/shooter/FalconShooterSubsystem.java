@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import math.Averager;
 
@@ -25,10 +26,12 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     private final AimSubsystem aimSubsystem;
 
     private SHOOTING_MODE shootingMode = SHOOTING_MODE.SPEAKER;
+    private final IShooterPivotSubsystem shooterPivot;
 
-    public FalconShooterSubsystem(int shooterMotorID, AimSubsystem aimSubsystem) {
+    public FalconShooterSubsystem(int shooterMotorID, AimSubsystem aimSubsystem, IShooterPivotSubsystem shooterPivot) {
         shooterMotor = new TalonFX(shooterMotorID);
         this.aimSubsystem = aimSubsystem;
+        this.shooterPivot = shooterPivot;
 
         shooterMotor.setNeutralMode(NeutralModeValue.Coast);
         shooterMotor.setInverted(true);
@@ -89,6 +92,11 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     public void setShooting(SHOOTING_MODE shooting){
         shootingMode = shooting;
+    }
+
+    @Override
+    public IShooterPivotSubsystem getPivot() {
+        return shooterPivot;
     }
 
     private double getCurrentSpeed() {

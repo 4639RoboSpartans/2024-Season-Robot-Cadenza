@@ -79,13 +79,13 @@ public class RobotContainer {
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
 
-        shooter = switch(Constants.currentRobot) {
-            case ZEUS -> new DummyShooterSubsystem();
-            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR, aimSubsystem);
-        };
         shooterPivot = switch(Constants.currentRobot){
             case ZEUS -> new DummyShooterPivotSubsystem();
             case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR, aimSubsystem);
+        };
+        shooter = switch(Constants.currentRobot) {
+            case ZEUS -> new DummyShooterSubsystem();
+            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR, aimSubsystem, shooterPivot);
         };
         intake = switch(Constants.currentRobot){
             case ZEUS -> new DummyIntakeSubsystem();
