@@ -57,7 +57,7 @@ public class SubsystemManager {
             ledStrip = switch (Constants.currentRobot) {
                 case ZEUS -> new DummyLEDStrip();
                 case SIREN -> new PhysicalLEDStrip(0, 64);
-            }
+            };
         }
         return ledStrip;
     }
