@@ -115,6 +115,8 @@ public final class Constants {
             public static final double SHOOTER_IDLE_SPEED = 0.2;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
 
+            public static final double SHOOTER_PIVOT_ERROR = 0.01;
+
             public static final ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterSetpoint(
                     11,
                     .85

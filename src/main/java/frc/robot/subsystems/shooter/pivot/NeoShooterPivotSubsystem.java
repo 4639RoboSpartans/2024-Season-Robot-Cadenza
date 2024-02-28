@@ -41,7 +41,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
 
     public boolean isAtSetPoint(){
         double error = Math.abs(aimPID.getSetpoint() - encoder.getAbsolutePosition());
-        return error < 0.01;
+        return error < ShooterInfo.SHOOTER_PIVOT_ERROR;
     }
 
     @Override
