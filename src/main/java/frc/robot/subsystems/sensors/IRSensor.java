@@ -2,8 +2,11 @@ package frc.robot.subsystems.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.led.SolidLEDPattern;
+import frc.robot.subsystems.SubsystemManager;
 
 public class IRSensor extends SubsystemBase {
     private final DigitalInput sensor;
@@ -35,5 +38,11 @@ public class IRSensor extends SubsystemBase {
         SmartDashboard.putBoolean("IR sensor active", isActive());
         SmartDashboard.putBoolean("IR sensor has note", hasNote());
 
+        if(hasNote()) {
+            SubsystemManager.getLedStrip().usePattern(new SolidLEDPattern(new Color8Bit(255, 200, 0)));
+        }
+        else {
+            SubsystemManager.getLedStrip().usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
+        }
     }
 }

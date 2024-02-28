@@ -25,13 +25,13 @@ import frc.robot.commands.shooter.AutoAmpCommand;
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
-import frc.robot.subsystems.SubsystemCreator;
+import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.swerve.AimSubsystem;
+import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
@@ -52,16 +52,16 @@ public class RobotContainer {
 
     public RobotContainer() {
         oi = new OI();
-        navX = SubsystemCreator.getNavX();
-        aimSubsystem = SubsystemCreator.getAimSubsystem();
-        ir = SubsystemCreator.getIRSensor();
+        navX = SubsystemManager.getNavX();
+        aimSubsystem = SubsystemManager.getAimSubsystem();
+        ir = SubsystemManager.getIRSensor();
 
-        swerveDriveSubsystem = SubsystemCreator.getSwerveDrive();
+        swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
 
-        shooter = SubsystemCreator.getShooter();
-        intake = SubsystemCreator.getIntake();
-        hopper = SubsystemCreator.getHopper();
-        climber = SubsystemCreator.getClimber();
+        shooter = SubsystemManager.getShooter();
+        intake = SubsystemManager.getIntake();
+        hopper = SubsystemManager.getHopper();
+        climber = SubsystemManager.getClimber();
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);

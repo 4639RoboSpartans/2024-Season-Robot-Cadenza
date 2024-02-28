@@ -4,7 +4,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.oi.OI;
-import frc.robot.subsystems.swerve.AimSubsystem;
+import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.Constants.RobotInfo.SwerveInfo;

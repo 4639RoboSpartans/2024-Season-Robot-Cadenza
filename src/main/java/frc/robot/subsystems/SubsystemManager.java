@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.led.PhysicalLEDStrip;
+import frc.robot.led.LEDStrip;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
@@ -12,20 +14,19 @@ import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
-import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
-import frc.robot.subsystems.swerve.AimSubsystem;
+import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
-import static frc.robot.Constants.currentRobot;
-
-public class SubsystemCreator {
+public class SubsystemManager {
     private static NavX navX;
     private static IRSensor irSensor;
+
+    private static LEDStrip ledStrip;
 
     private static ISwerveDriveSubsystem swerveDrive;
 
@@ -48,6 +49,13 @@ public class SubsystemCreator {
             irSensor = new IRSensor();
         }
         return irSensor;
+    }
+
+    public static LEDStrip getLedStrip() {
+        if(ledStrip != null) {
+            ledStrip = new PhysicalLEDStrip(0, 64);
+        }
+        return ledStrip;
     }
 
     public static ISwerveDriveSubsystem getSwerveDrive() {

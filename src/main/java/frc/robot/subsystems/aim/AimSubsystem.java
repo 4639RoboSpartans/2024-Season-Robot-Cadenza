@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swerve;
+package frc.robot.subsystems.aim;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +27,7 @@ public class AimSubsystem extends SubsystemBase{
 
         double yRotation = angle.getValue();
 
-        return rotationPID.calculate(MathUtil.signedPow(yRotation, 0.7)) * SwerveInfo.MAX_ROBOT_SPEED;
+        return rotationPID.calculate(MathUtil.signedPow(yRotation, AimInfo.AIM_ROT_POW)) * SwerveInfo.MAX_ROBOT_SPEED;
     }
 
     public ShooterSetpoint getShooterSetpoint() {

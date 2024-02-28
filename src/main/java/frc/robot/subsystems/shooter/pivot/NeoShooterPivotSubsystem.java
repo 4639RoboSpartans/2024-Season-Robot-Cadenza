@@ -7,11 +7,9 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
-import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
-import frc.robot.subsystems.SubsystemCreator;
+import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.swerve.AimSubsystem;
+import frc.robot.subsystems.aim.AimSubsystem;
 
 import static frc.robot.Constants.RobotInfo.ShooterInfo;
 
@@ -33,7 +31,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         encoder = new DutyCycleEncoder(Constants.IDs.SHOOTER_PIVOT_ENCODER_CHANNEL);
         
         this.shooter = shooter;
-        aimSubsystem = SubsystemCreator.getAimSubsystem();
+        aimSubsystem = SubsystemManager.getAimSubsystem();
         
         aimPID = ShooterInfo.SHOOTER_AIM_PID.create();
         aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);

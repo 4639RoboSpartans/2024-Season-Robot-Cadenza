@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
-import frc.robot.subsystems.SubsystemCreator;
+import frc.robot.subsystems.SubsystemManager;
 
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
@@ -30,7 +30,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     private ChassisSpeeds chassisSpeeds;
 
     public SwerveDriveSubsystem() {
-        navx = SubsystemCreator.getNavX();
+        navx = SubsystemManager.getNavX();
 
         moduleFrontLeft = new SwerveModule(Constants.IDs.MODULE_FRONT_LEFT);
         moduleFrontRight = new SwerveModule(Constants.IDs.MODULE_FRONT_RIGHT);
@@ -42,35 +42,29 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         setBrakeMode();
 
         AutoBuilder.configureHolonomic(
-            this::getPose,
-            this::resetPose,
-            this::getRobotRelativeSpeeds,
-            this::setRawMovement,
-            new HolonomicPathFollowerConfig(
-                    new PIDConstants(0, 0.0, 0.0), //TODO: find constants for 2024 robot
-                    new PIDConstants(3, 0, 0.0), //TODO: find constants for 2024 robot
-                    4,
-                    0.4,
-                    new ReplanningConfig()
-            ),
-            () -> {
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Blue;
-              }
-              return false;
-            },
-            this
+                this::getPose,
+                this::resetPose,
+                this::getRobotRelativeSpeeds,
+                this::setRawMovement,
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(0, 0.0, 0.0), //TODO: find constants for 2024 robot
+                        new PIDConstants(3, 0, 0.0), //TODO: find constants for 2024 robot
+                        4,
+                        0.4,
+                        new ReplanningConfig()
+                ),
+                () -> DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Blue).isPresent(),
+                this
         );
 
         resetOdometry(new Pose2d());
     }
 
-    public Pose2d getPose(){
+    public Pose2d getPose() {
         return odometrySubsystem.getOdometry().getPoseMeters();
     }
 
-    public ChassisSpeeds getRobotRelativeSpeeds(){
+    public ChassisSpeeds getRobotRelativeSpeeds() {
         return chassisSpeeds;
     }
 
@@ -87,10 +81,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     public void setRawMovement(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] swerveModuleStates = SwerveInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModulesStates(
-            swerveModuleStates[0],
-            swerveModuleStates[1],
-            swerveModuleStates[2],
-            swerveModuleStates[3]
+                swerveModuleStates[0],
+                swerveModuleStates[1],
+                swerveModuleStates[2],
+                swerveModuleStates[3]
         );
         this.chassisSpeeds = chassisSpeeds;
     }
@@ -122,40 +116,35 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleBackRight.periodic();
     }
 
-    public void setBrakeMode(){
+    public void setBrakeMode() {
         moduleFrontLeft.setBrakeMode();
         moduleFrontRight.setBrakeMode();
         moduleBackLeft.setBrakeMode();
         moduleBackRight.setBrakeMode();
     }
 
-    public void setCoastMode(){
+    public void setCoastMode() {
         moduleFrontLeft.setCoastMode();
         moduleFrontRight.setCoastMode();
         moduleBackLeft.setCoastMode();
         moduleBackRight.setCoastMode();
     }
 
-    public void resetOdometry(Pose2d pose){
+    public void resetOdometry(Pose2d pose) {
         resetPose(pose);
     }
 
-    public void resetPose(Pose2d pose){
+    public void resetPose(Pose2d pose) {
         odometrySubsystem.resetOdometry(pose);
     }
 
-    public SwerveModule getSwerveModule(String module){
-        switch (module){
-            case "FL":
-                return moduleFrontLeft;
-            case "BL":
-                return moduleBackLeft;
-            case "FR":
-                return moduleFrontRight;
-            case "BR":
-                return moduleBackRight;
-            default:
-                return null;
-        }
+    public SwerveModule getSwerveModule(String module) {
+        return switch (module) {
+            case "FL" -> moduleFrontLeft;
+            case "BL" -> moduleBackLeft;
+            case "FR" -> moduleFrontRight;
+            case "BR" -> moduleBackRight;
+            default -> null;
+        };
     }
 }

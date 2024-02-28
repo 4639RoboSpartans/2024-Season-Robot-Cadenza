@@ -6,9 +6,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.SubsystemCreator;
+import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
-import frc.robot.subsystems.swerve.AimSubsystem;
+import frc.robot.subsystems.aim.AimSubsystem;
 import math.Averager;
 
 import static frc.robot.Constants.RobotInfo.ShooterInfo;
@@ -26,8 +26,8 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     private ShootingMode shootingMode;
 
     public FalconShooterSubsystem(int shooterMotorID) {
-        this.aimSubsystem = SubsystemCreator.getAimSubsystem();
-        this.shooterPivot = SubsystemCreator.getShooterPivot(this);
+        this.aimSubsystem = SubsystemManager.getAimSubsystem();
+        this.shooterPivot = SubsystemManager.getShooterPivot(this);
 
         shooterMotor = new TalonFX(shooterMotorID);
         shooterMotor.setNeutralMode(NeutralModeValue.Coast);
