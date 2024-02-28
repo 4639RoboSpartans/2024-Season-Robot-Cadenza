@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
+import frc.robot.subsystems.SubsystemCreator;
 
-@SuppressWarnings("unused")
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
     private final SwerveModule
@@ -29,14 +29,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     private ChassisSpeeds chassisSpeeds;
 
-    public SwerveDriveSubsystem(NavX navx) {
+    public SwerveDriveSubsystem() {
+        navx = SubsystemCreator.getNavX();
+
         moduleFrontLeft = new SwerveModule(Constants.IDs.MODULE_FRONT_LEFT);
         moduleFrontRight = new SwerveModule(Constants.IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(Constants.IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(Constants.IDs.MODULE_BACK_RIGHT);
         odometrySubsystem = new OdometrySubsystem(this, navx);
-
-        this.navx = navx;
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
         setBrakeMode();
@@ -62,6 +62,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             },
             this
         );
+
+        resetOdometry(new Pose2d());
     }
 
     public Pose2d getPose(){

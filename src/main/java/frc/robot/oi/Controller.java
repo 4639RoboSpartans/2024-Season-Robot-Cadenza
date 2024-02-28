@@ -9,7 +9,6 @@ import java.util.function.BooleanSupplier;
 
 import static frc.robot.Constants.DEADZONE_VALUE;
 
-@SuppressWarnings("unused")
 public class Controller {
     private static final int NUM_BUTTONS = 10;
     private static final int NUM_POV_BUTTONS = 4;

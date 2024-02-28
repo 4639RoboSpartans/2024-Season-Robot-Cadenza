@@ -1,6 +1,5 @@
 package math;
 
-@SuppressWarnings("unused")
 public class MathUtil {
     private MathUtil() {}
 

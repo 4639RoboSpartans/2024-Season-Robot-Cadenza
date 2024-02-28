@@ -3,19 +3,19 @@ package frc.robot.subsystems.hopper;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.SubsystemCreator;
 import frc.robot.subsystems.sensors.IRSensor;
 
 import static frc.robot.Constants.RobotInfo.HopperInfo;
 
-@SuppressWarnings("unused")
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
     private final IRSensor ir;
 
-    public HopperSubsystem(int motorID, IRSensor ir) {
+    public HopperSubsystem(int motorID) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
         motor.setIdleMode(CANSparkBase.IdleMode.kCoast);
-        this.ir = ir;
+        this.ir = SubsystemCreator.getIRSensor();
     }
 
     @Override

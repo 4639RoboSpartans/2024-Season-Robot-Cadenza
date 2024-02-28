@@ -8,82 +8,67 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
-import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
+import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
+import frc.robot.subsystems.SubsystemCreator;
+import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
 
 import static frc.robot.Constants.RobotInfo.ShooterInfo;
 
-@SuppressWarnings("unused")
 public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
+    // Components
     private final CANSparkMax aimMotor;
     private final DutyCycleEncoder encoder;
-    private final PIDController aimPID;
+    // References to other subsystems
+    private final IShooterSubsystem shooter;
     private final AimSubsystem aimSubsystem;
+    // Control
+    private final PIDController aimPID;
     private boolean isUsingPID = true;
     private boolean atSetPoint = false;
-    private SHOOTING_MODE speakerShooting = SHOOTING_MODE.SPEAKER;
-    private LIMELIGHT_STATUS isUsingLimeLight = LIMELIGHT_STATUS.LIMELIGHT;
 
-    public NeoShooterPivotSubsystem(int aimMotorID, AimSubsystem aimSubsystem) {
+    public NeoShooterPivotSubsystem(int aimMotorID, IShooterSubsystem shooter) {
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
         aimMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
         encoder = new DutyCycleEncoder(Constants.IDs.SHOOTER_PIVOT_ENCODER_CHANNEL);
+        
+        this.shooter = shooter;
+        aimSubsystem = SubsystemCreator.getAimSubsystem();
+        
         aimPID = ShooterInfo.SHOOTER_AIM_PID.create();
         aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
-        this.aimSubsystem = aimSubsystem;
-    }
-
-    public void setAngleDegrees(double degrees) {
-        aimPID.setSetpoint(degrees);
-        isUsingPID = true;
-    }
-
-    public void manualSet(double speed){
-        aimMotor.set(speed);
-        isUsingPID = false;
     }
 
     public boolean isAtSetPoint(){
-        return atSetPoint;
-    }
-
-    public void setShooting(SHOOTING_MODE shooting){
-        speakerShooting = shooting;
-    }
-
-    public void setManual(LIMELIGHT_STATUS manual){
-        isUsingLimeLight = manual;
+        double error = Math.abs(aimPID.getSetpoint() - encoder.getAbsolutePosition());
+        return error < 0.01;
     }
 
     @Override
     public void periodic() {
         if(!isUsingPID) return;
 
+        double targetAngle = switch (shooter.getShootingMode()) {
+            case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().angle();
+            case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
+            case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
+            case IDLE -> ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT;
+        };
 
-        double targetAngle;
-        if(!(isUsingLimeLight == LIMELIGHT_STATUS.LIMELIGHT)){
-            targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_SPEAKER_SETPOINT;
-        }
-        else if(speakerShooting == SHOOTING_MODE.SPEAKER){
-            ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
-            targetAngle = setpoint.angle();
-        }        
-        else {
-            targetAngle = Constants.RobotInfo.ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT;
-        }
         aimPID.setSetpoint(targetAngle);
 
-        double error = Math.abs(targetAngle - encoder.getAbsolutePosition());
-        if (error < 0.01){
-            atSetPoint = true;
-        }
+        double currentAngle = getCurrentAngle();
+        double pidOutput = aimPID.calculate(currentAngle);
 
-        double currentAimMotorDegrees = encoder.getAbsolutePosition();
-        double pidOutput = aimPID.calculate(currentAimMotorDegrees);
         aimMotor.set(pidOutput);
 
-        SmartDashboard.putNumber("CurrentShooterAngle", currentAimMotorDegrees);
+        SmartDashboard.putNumber("CurrentShooterAngle", currentAngle);
+        SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
         SmartDashboard.putNumber("AimPIDOutput", pidOutput);
+    }
+
+    private double getCurrentAngle() {
+        return encoder.getAbsolutePosition();
     }
 
     public void stop(){

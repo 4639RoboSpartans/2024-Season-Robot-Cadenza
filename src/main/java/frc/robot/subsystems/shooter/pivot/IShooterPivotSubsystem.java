@@ -2,18 +2,10 @@ package frc.robot.subsystems.shooter.pivot;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
-import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
+import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
 
 public interface IShooterPivotSubsystem extends Subsystem {
-    void setAngleDegrees(double degrees);
-
     void stop();
 
-    void manualSet(double degrees);
-
     boolean isAtSetPoint();
-
-    void setShooting(SHOOTING_MODE shooting);
-
-    void setManual(LIMELIGHT_STATUS manual);
 }

@@ -6,113 +6,95 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.subsystems.SubsystemCreator;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import math.Averager;
 
 import static frc.robot.Constants.RobotInfo.ShooterInfo;
-import static frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
+import static frc.robot.Constants.RobotInfo.ShooterInfo.*;
 
-@SuppressWarnings("unused")
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
+    // Components
     private final TalonFX shooterMotor;
-
-    // TODO: extract 10 to a constant
-    private final Averager shooterOutput = new Averager(2);
-    private final BangBangController bangBangController;
-
-    private boolean isShooting = false;
-    private final AimSubsystem aimSubsystem;
-
-    private SHOOTING_MODE shootingMode = SHOOTING_MODE.SPEAKER;
     private final IShooterPivotSubsystem shooterPivot;
+    private final AimSubsystem aimSubsystem;
+    // Controllers
+    private final Averager shooterOutputAverager;
+    private final BangBangController bangBangController;
+    // State
+    private ShootingMode shootingMode;
 
-    public FalconShooterSubsystem(int shooterMotorID, AimSubsystem aimSubsystem, IShooterPivotSubsystem shooterPivot) {
+    public FalconShooterSubsystem(int shooterMotorID) {
+        this.aimSubsystem = SubsystemCreator.getAimSubsystem();
+        this.shooterPivot = SubsystemCreator.getShooterPivot(this);
+
         shooterMotor = new TalonFX(shooterMotorID);
-        this.aimSubsystem = aimSubsystem;
-        this.shooterPivot = shooterPivot;
-
         shooterMotor.setNeutralMode(NeutralModeValue.Coast);
         shooterMotor.setInverted(true);
-
         shooterMotor.getConfigurator().apply(
             new CurrentLimitsConfigs().withStatorCurrentLimit(3)
         );
 
+        shooterOutputAverager = new Averager(/* TODO: extract to constant */ 2);
+
         bangBangController = new BangBangController();
-    }
 
-    private void setSpeakerSpeed(){
-        double currentSpeed, targetSpeed;
-        currentSpeed = getCurrentSpeed();
-        ShooterInfo.ShooterSetpoint setpoint = aimSubsystem.getShooterSetpoint();
-        targetSpeed = setpoint.speed();
-        double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
-
-        shooterOutput.addMeasurement(controllerOutput);
-
-        shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
-    }
-
-    private void setAmpSpeed(){
-        double currentSpeed, targetSpeed;
-        currentSpeed = getCurrentSpeed();
-        targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_AMP_SHOOTER_SPEED;
-
-        double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
-
-        shooterOutput.addMeasurement(controllerOutput);
-
-        shooterMotor.setVoltage(shooterOutput.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
-    }
-
-    private void setIdleSpeed(){
-        double currentSpeed, targetSpeed;
-        targetSpeed = Constants.RobotInfo.ShooterInfo.TARGET_IDLE_SHOOTER_SPEED;
-        shooterMotor.set(targetSpeed);
-    }
-
-    @Override
-    public void periodic() {
-        SmartDashboard.putBoolean("shooting", isShooting);
-        SmartDashboard.putNumber("current speed", getCurrentSpeed());
-        if(!isShooting) {
-            setIdleSpeed();
-        }
-        else {
-            if (shootingMode == SHOOTING_MODE.SPEAKER){
-                setSpeakerSpeed();
-            }
-            else{
-                setAmpSpeed();
-            }
-        }
-    }
-
-    public void setShooting(SHOOTING_MODE shooting){
-        shootingMode = shooting;
-    }
-
-    @Override
-    public IShooterPivotSubsystem getPivot() {
-        return shooterPivot;
+        shootingMode = ShootingMode.SPEAKER;
     }
 
     private double getCurrentSpeed() {
         return shooterMotor.getVelocity().getValue();
     }
 
+    private double getTargetSpeed() {
+        return switch (shootingMode) {
+            case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().speed();
+            case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
+            case AMP -> SHOOTER_AMP_SETPOINT.speed();
+            case IDLE -> 0;
+        };
+    }
+
+    private void applyBangBangControl(double targetSpeed) {
+        double currentSpeed = getCurrentSpeed();
+        double controllerOutput = bangBangController.calculate(currentSpeed, targetSpeed);
+
+        shooterOutputAverager.addMeasurement(controllerOutput);
+
+        shooterMotor.setVoltage(shooterOutputAverager.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
+    }
+
+    private void applyIdleSpeed(){
+        shooterMotor.set(ShooterInfo.SHOOTER_IDLE_SPEED);
+    }
+
     @Override
-    public boolean isUpToSpeed() {
-        return Math.abs(getCurrentSpeed()) >= Math.abs(ShooterInfo.TARGET_SPEAKER_SHOOTER_SPEED) * 0.95;
+    public void periodic() {
+        SmartDashboard.putString("shooting mode", shootingMode.toString());
+        SmartDashboard.putNumber("shooter speed", getCurrentSpeed());
+
+        switch (shootingMode) {
+            case AUTO_SPEAKER, SPEAKER, AMP -> applyBangBangControl(getTargetSpeed());
+            case IDLE -> applyIdleSpeed();
+        }
     }
 
-    public void runShooter() {
-        isShooting = true;
+    public void setShootingMode(ShootingMode shooting){
+        shootingMode = shooting;
     }
 
-    public void stopShooter() {
-        isShooting = false;
+    @Override
+    public ShootingMode getShootingMode() {
+        return shootingMode;
+    }
+
+    @Override
+    public boolean isReady() {
+        return isUpToSpeed() && shooterPivot.isAtSetPoint();
+    }
+
+    private boolean isUpToSpeed() {
+        return Math.abs(getCurrentSpeed()) >= Math.abs(getTargetSpeed());
     }
 }

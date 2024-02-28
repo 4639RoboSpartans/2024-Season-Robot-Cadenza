@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.RobotInfo.ClimberInfo;
 
-@SuppressWarnings("unused")
 public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem {
     private final CANSparkMax leftMotor, rightMotor;
 

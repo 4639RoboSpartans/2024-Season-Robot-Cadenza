@@ -10,7 +10,6 @@ import frc.robot.Constants;
 
 import static frc.robot.Constants.RobotInfo.IntakeInfo;
 
-@SuppressWarnings("unused")
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
     private final CANSparkMax pivotMotorRight;

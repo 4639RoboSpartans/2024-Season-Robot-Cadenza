@@ -106,20 +106,25 @@ public final class Constants {
             public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {
             }
 
-            public enum SHOOTING_MODE {
-                SPEAKER, AMP
+            public enum ShootingMode {
+                AUTO_SPEAKER, SPEAKER, AMP, IDLE
             }
 
             public static final ShooterSetpointMeasurement[] measurements = {new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)), new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)), new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .89)),};
 
-            public static final double MAX_SHOOTER_PIVOT_SPEED = 0.1;
-            public static final double TARGET_SPEAKER_SHOOTER_SPEED = 40;
-            public static final double TARGET_IDLE_SHOOTER_SPEED = 0.2;
+            public static final double SHOOTER_IDLE_SPEED = 0.2;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
-            public static final double SHOOTER_PIVOT_AMP_SETPOINT = .85;
+
+            public static final ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterSetpoint(
+                    11,
+                    .85
+            );
+            public static final ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = new ShooterSetpoint(
+                    40,
+                    .835
+            );
+
             public static final double SHOOTER_VOLTAGE = 6;
-            public static final double TARGET_AMP_SHOOTER_SPEED = 11;
-            public static final double SHOOTER_PIVOT_SPEAKER_SETPOINT = .835;
 
             public static final PID SHOOTER_AIM_PID = new PID(3.5, 0, 0);
         }
@@ -173,9 +178,6 @@ public final class Constants {
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
             public static final OI.Buttons IntakeExtendButton = OI.Buttons.POV_DOWN;
             public static final OI.Buttons IntakeRetractButton = OI.Buttons.POV_UP;
-
-            public static final OI.Buttons ShooterPivotTop = OI.Buttons.LEFT_BUMPER;
-            public static final OI.Buttons ShooterPivotBot = OI.Buttons.B_BUTTON;
 
             public static final OI.Buttons ToggleIR = OI.Buttons.A_BUTTON;
 

@@ -14,7 +14,6 @@ import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.Constants.SwerveModuleConfig;
 import math.MathUtil;
 
-@SuppressWarnings("unused")
 public class SwerveModule {
     private final TalonFX driver, rotator;
     private final CANcoder rotationEncoder;
@@ -76,18 +75,6 @@ public class SwerveModule {
         double currModuleRotation = getRotationInDegrees();
 
         SmartDashboard.putString("Module %d current rotation".formatted(moduleID), "%.2f degrees".formatted(currModuleRotation));
-
-//        rotationPID.setSetpoint(0);
-//        if(isNegligible(new SwerveModuleState(targetSpeed, new Rotation2d()))) {
-//            SmartDashboard.putString("Module %d target speed".formatted(moduleID), "negligible");
-//            SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "negligible");
-//            SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "negligible");
-//
-//            driver.stopMotor();
-//            rotator.stopMotor();
-//
-//            return;
-//        }
 
         double rotatorPIDOutput = rotationPID.calculate(currModuleRotation);
         double driverPIDOutput = - driverPID.calculate(targetSpeed); //drive change

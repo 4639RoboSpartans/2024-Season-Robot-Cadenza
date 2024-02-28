@@ -13,7 +13,6 @@ import static frc.robot.Constants.RobotInfo.AimInfo;
 import static frc.robot.Constants.RobotInfo.ShooterInfo.ShooterSetpoint;
 import static frc.robot.Constants.RobotInfo.SwerveInfo;
 
-@SuppressWarnings("unused")
 public class AimSubsystem extends SubsystemBase{
 
     private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID.create();

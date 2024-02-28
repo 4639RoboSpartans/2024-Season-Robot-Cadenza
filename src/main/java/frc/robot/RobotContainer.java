@@ -7,17 +7,12 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
-import frc.robot.Constants.RobotInfo.ShooterInfo;
-import frc.robot.commands.ManualShootCommand;
-import frc.robot.commands.auto.MoveCommand;
-import frc.robot.commands.auto.ShootCommand;
+import frc.robot.commands.shooter.ManualShootCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
@@ -25,29 +20,19 @@ import frc.robot.commands.drive.ManualSwerveDriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.OuttakeCommand;
 import frc.robot.commands.intake.SetIntakeExtendedCommand;
-import frc.robot.commands.semiauto.AutoAmpCommand;
-import frc.robot.commands.semiauto.AutoShootCommand;
+import frc.robot.commands.intake.ToggleIRCommand;
+import frc.robot.commands.shooter.AutoAmpCommand;
+import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
-import frc.robot.subsystems.climber.ClimberSubsystem;
-import frc.robot.subsystems.climber.DummyClimberSubsystem;
+import frc.robot.subsystems.SubsystemCreator;
 import frc.robot.subsystems.climber.IClimberSubsystem;
-import frc.robot.subsystems.hopper.DummyHopperSubsystem;
-import frc.robot.subsystems.hopper.HopperSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
-import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
-import frc.robot.subsystems.shooter.DummyShooterSubsystem;
-import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
-import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
-import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -57,7 +42,6 @@ public class RobotContainer {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
 
     private final IShooterSubsystem shooter;
-    private final IShooterPivotSubsystem shooterPivot;
     private final IIntakeSubsystem intake;
     private final IClimberSubsystem climber;
     private final AimSubsystem aimSubsystem;
@@ -72,37 +56,16 @@ public class RobotContainer {
         aimSubsystem = new AimSubsystem();
         ir = new IRSensor();
 
-        swerveDriveSubsystem = new SwerveDriveSubsystem(navX);
+        swerveDriveSubsystem = SubsystemCreator.getSwerveDrive();
 
-        swerveDriveSubsystem.resetOdometry(new Pose2d());
+        shooter = SubsystemCreator.getShooter();
+        intake = SubsystemCreator.getIntake();
+        hopper = SubsystemCreator.getHopper();
+        climber = SubsystemCreator.getClimber();
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
 
-        shooterPivot = switch(Constants.currentRobot){
-            case ZEUS -> new DummyShooterPivotSubsystem();
-            case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR, aimSubsystem);
-        };
-        shooter = switch(Constants.currentRobot) {
-            case ZEUS -> new DummyShooterSubsystem();
-            case SIREN -> new FalconShooterSubsystem(Constants.IDs.SHOOTER_SHOOTER_MOTOR, aimSubsystem, shooterPivot);
-        };
-        intake = switch(Constants.currentRobot){
-            case ZEUS -> new DummyIntakeSubsystem();
-            case SIREN -> new IntakeSubsystem(Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT, Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT, Constants.IDs.INTAKE_MOTOR, Constants.IDs.INTAKE_ENCODER_CHANNEL);
-        };
-        hopper = switch(Constants.currentRobot){
-            case ZEUS -> new DummyHopperSubsystem();
-            case SIREN -> new HopperSubsystem(Constants.IDs.HOPPER_MOTOR, ir);
-        };
-        climber = switch(Constants.currentRobot){
-            case ZEUS -> new DummyClimberSubsystem();
-            case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
-        };
-
-        //auto commands
-        NamedCommands.registerCommand("MoveCommand", new MoveCommand(swerveDriveSubsystem, 0, 0, 0, 0));
-        NamedCommands.registerCommand("ShootCommand", new ShootCommand(shooter));
         //climber commands
         NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
@@ -114,7 +77,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
         NamedCommands.registerCommand("SetIntakeExtendedCommand", new SetIntakeExtendedCommand(intake, false));
         //semiauto commands
-        NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, shooterPivot, hopper));
+        NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, hopper));
 
 
 
@@ -140,16 +103,11 @@ public class RobotContainer {
 
         oi.operatorController().getButton(OperatorControls.IntakeRetractButton).onTrue(new SetIntakeExtendedCommand(intake, false));
 
-        oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, shooterPivot, hopper));
-        oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, shooterPivot, hopper));
-        oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, shooterPivot, hopper));
+        oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, hopper));
+        oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, hopper));
+        oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, hopper));
 
-        oi.operatorController().getButton(OperatorControls.ShooterPivotTop).whileTrue(new RunCommand(() -> {
-            shooterPivot.setAngleDegrees(ShooterInfo.SHOOTER_PIVOT_AMP_SETPOINT);
-        }, shooterPivot));
-        oi.operatorController().getButton(OperatorControls.ShooterPivotBot).whileTrue(new RunCommand(() -> {
-            shooterPivot.setAngleDegrees(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
-        }, shooterPivot));
+        oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
     }
 
     public Command getAutonomousCommand() {

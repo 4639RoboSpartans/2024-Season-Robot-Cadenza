@@ -1,17 +1,12 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
-import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
+import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
 
 public interface IShooterSubsystem extends Subsystem {
-    boolean isUpToSpeed();
+    boolean isReady();
 
-    void runShooter();
+    void setShootingMode(ShootingMode shooting);
 
-    void stopShooter();
-
-    void setShooting(SHOOTING_MODE shooting);
-
-    IShooterPivotSubsystem getPivot();
+    ShootingMode getShootingMode();
 }
