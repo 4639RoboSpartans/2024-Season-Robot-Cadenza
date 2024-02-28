@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shooterPivot;
+package frc.robot.subsystems.shooter.pivot;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;

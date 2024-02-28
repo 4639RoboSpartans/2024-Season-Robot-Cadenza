@@ -6,7 +6,7 @@ import frc.robot.Constants.RobotInfo.AimInfo.LIMELIGHT_STATUS;
 import frc.robot.Constants.RobotInfo.ShooterInfo.SHOOTING_MODE;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.shooterPivot.IShooterPivotSubsystem;
+import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 
 public class AutoShootCommand extends Command {
     private final IShooterSubsystem shooter;

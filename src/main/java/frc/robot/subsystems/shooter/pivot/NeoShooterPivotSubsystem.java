@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shooterPivot;
+package frc.robot.subsystems.shooter.pivot;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
