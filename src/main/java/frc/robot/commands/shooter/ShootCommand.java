@@ -1,0 +1,53 @@
+package frc.robot.commands.shooter;
+
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
+import frc.robot.led.LEDPattern;
+import frc.robot.led.LEDStrip;
+import frc.robot.led.PhasingLEDPattern;
+import frc.robot.led.SolidLEDPattern;
+import frc.robot.subsystems.hopper.IHopperSubsystem;
+import frc.robot.subsystems.shooter.IShooterSubsystem;
+
+public class ShootCommand extends Command {
+    private final IShooterSubsystem shooter;
+    private final IHopperSubsystem hopper;
+    private final ShootingMode mode;
+    private final LEDStrip ledStrip;
+
+    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode) {
+        this.shooter = shooter;
+        this.hopper = hopper;
+        this.mode = mode;
+        this.ledStrip = ledStrip;
+
+        addRequirements(shooter, hopper, ledStrip);
+    }
+
+    @Override
+    public void initialize() {
+        System.out.println("Starting AutoShoot!");
+    }
+
+    @Override
+    public void execute() {
+        shooter.setShootingMode(mode);
+
+        if(shooter.isReady()) {
+            ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(0, 255, 0), 1));
+            hopper.run(false);
+        }
+        else {
+            ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(255, 0, 0)));
+            hopper.stop();
+        }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        shooter.setShootingMode(ShootingMode.IDLE);
+        hopper.stop();
+        ledStrip.usePattern(LEDPattern.BLANK);
+    }
+}

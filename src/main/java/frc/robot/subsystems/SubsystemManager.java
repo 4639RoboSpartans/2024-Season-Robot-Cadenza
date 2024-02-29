@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
 import frc.robot.led.LEDStrip;
 import frc.robot.subsystems.climber.ClimberSubsystem;
@@ -56,7 +57,10 @@ public class SubsystemManager {
 
     public static LEDStrip getLedStrip() {
         if(ledStrip == null) {
-            ledStrip = new PhysicalLEDStrip(0, 64);
+            ledStrip = switch(currentRobot){
+                case ZEUS -> new DummyLEDStrip();
+                case SIREN -> new PhysicalLEDStrip(0, 64);
+            };
         }
         return ledStrip;
     }

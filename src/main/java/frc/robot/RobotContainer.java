@@ -9,7 +9,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
 import frc.robot.commands.shooter.ManualShootCommand;
@@ -23,6 +25,8 @@ import frc.robot.commands.intake.SetIntakeExtendedCommand;
 import frc.robot.commands.intake.ToggleIRCommand;
 import frc.robot.commands.shooter.AutoAmpCommand;
 import frc.robot.commands.shooter.AutoShootCommand;
+import frc.robot.led.LEDStrip;
+import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
@@ -48,13 +52,16 @@ public class RobotContainer {
     private final IHopperSubsystem hopper;
 
     private final IRSensor ir;
-    private SendableChooser<Command> autos;
+    private final LEDStrip leds;
+
+    private final SendableChooser<Command> autos;
 
     public RobotContainer() {
         oi = new OI();
         navX = SubsystemManager.getNavX();
         aimSubsystem = SubsystemManager.getAimSubsystem();
         ir = SubsystemManager.getIRSensor();
+        leds = SubsystemManager.getLedStrip();
 
         swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
 
@@ -88,6 +95,15 @@ public class RobotContainer {
         swerveDriveSubsystem.setDefaultCommand(new ManualSwerveDriveCommand(
                 swerveDriveSubsystem, aimSubsystem, oi
         ));
+
+        leds.setDefaultCommand(new RunCommand(() -> {
+            if(ir.hasNote()) {
+                leds.usePattern(new SolidLEDPattern(new Color8Bit(255, 50, 0)));
+            }
+            else {
+                leds.resetToBlank();
+            }
+        }, leds));
 
         oi.driverController().getButton(DriverControls.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
         oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));

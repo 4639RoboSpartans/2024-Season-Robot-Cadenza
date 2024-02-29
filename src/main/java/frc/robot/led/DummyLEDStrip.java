@@ -13,7 +13,7 @@ public class DummyLEDStrip implements LEDStrip {
     }
 
     @Override
-    public void stop() {
+    public void resetToBlank() {
 
     }
 }

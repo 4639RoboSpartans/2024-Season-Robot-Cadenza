@@ -34,10 +34,11 @@ public class PhysicalLEDStrip implements LEDStrip {
             Color8Bit color = currentPattern.get(i, Timer.getFPGATimestamp());
             buffer.setLED(i, color);
         }
+        led.setData(buffer);
     }
 
     @Override
-    public void stop() {
-        led.stop();
+    public void resetToBlank() {
+        currentPattern = LEDPattern.BLANK;
     }
 }
