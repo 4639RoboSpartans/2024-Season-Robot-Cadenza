@@ -21,7 +21,7 @@ public class AutoAmpCommand extends Command {
         shooter.setShootingMode(ShootingMode.AMP);
 
         if(shooter.isReady()) {
-            hopper.run();
+            hopper.run(false);
         }
         else {
             hopper.stop();

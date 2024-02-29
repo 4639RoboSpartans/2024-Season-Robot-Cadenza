@@ -21,7 +21,7 @@ public class AutoShootCommand extends Command {
         shooter.setShootingMode(ShootingMode.AUTO_SPEAKER);
 
         if(shooter.isReady()) {
-            hopper.run();
+            hopper.run(false);
         }
         else {
             hopper.stop();

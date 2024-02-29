@@ -14,6 +14,7 @@ import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
+import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
@@ -21,6 +22,8 @@ import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+
+import static frc.robot.Constants.currentRobot;
 
 public class SubsystemManager {
     private static NavX navX;
@@ -52,7 +55,7 @@ public class SubsystemManager {
     }
 
     public static LEDStrip getLedStrip() {
-        if(ledStrip != null) {
+        if(ledStrip == null) {
             ledStrip = new PhysicalLEDStrip(0, 64);
         }
         return ledStrip;
@@ -67,7 +70,7 @@ public class SubsystemManager {
 
     public static IShooterPivotSubsystem getShooterPivot(IShooterSubsystem shooter) {
         if(shooterPivot == null) {
-            shooterPivot = switch(Constants.currentRobot){
+            shooterPivot = switch(currentRobot){
                 case ZEUS -> new DummyShooterPivotSubsystem();
                 case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR, shooter);
             };
@@ -97,7 +100,7 @@ public class SubsystemManager {
 
     public static IIntakeSubsystem getIntake() {
         if(intake == null) {
-            intake = switch(Constants.currentRobot){
+            intake = switch(currentRobot){
                 case ZEUS -> new DummyIntakeSubsystem();
                 case SIREN -> new IntakeSubsystem(
                     Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT,
@@ -112,7 +115,7 @@ public class SubsystemManager {
 
     public static IHopperSubsystem getHopper() {
         if(hopper == null) {
-            hopper = switch(Constants.currentRobot){
+            hopper = switch(currentRobot){
                 case ZEUS -> new DummyHopperSubsystem();
                 case SIREN -> new HopperSubsystem(Constants.IDs.HOPPER_MOTOR);
             };
@@ -122,7 +125,7 @@ public class SubsystemManager {
 
     public static IClimberSubsystem getClimber() {
         if(climber == null) {
-            climber = switch(Constants.currentRobot){
+            climber = switch(currentRobot){
                 case ZEUS -> new DummyClimberSubsystem();
                 case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
             };

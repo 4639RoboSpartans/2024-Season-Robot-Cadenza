@@ -115,7 +115,10 @@ public final class Constants {
                 AUTO_SPEAKER, SPEAKER, AMP, IDLE
             }
 
-            public static final ShooterSetpointMeasurement[] measurements = {new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .84)), new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)), new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(50, .89)),};
+            public static final ShooterSetpointMeasurement[] measurements = {
+                    new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(25, .855)),
+                    new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)),
+                    new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(45, .89)),};
 
             public static final double SHOOTER_IDLE_SPEED = 0.2;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
@@ -131,7 +134,7 @@ public final class Constants {
                     .835
             );
 
-            public static final double SHOOTER_VOLTAGE = 6;
+            public static final double SHOOTER_VOLTAGE = 10;
 
             public static final PID SHOOTER_AIM_PID = new PID(3.5, 0, 0);
         }

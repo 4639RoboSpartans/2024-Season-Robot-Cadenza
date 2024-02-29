@@ -26,7 +26,7 @@ public class ManualShootCommand extends Command{
         }
 
         if (isShooting){
-            hopperSubsystem.run();
+            hopperSubsystem.run(false);
         }
     }
 

@@ -33,10 +33,10 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         shooterMotor.setNeutralMode(NeutralModeValue.Coast);
         shooterMotor.setInverted(true);
         shooterMotor.getConfigurator().apply(
-            new CurrentLimitsConfigs().withStatorCurrentLimit(3)
+            new CurrentLimitsConfigs().withStatorCurrentLimit(4)
         );
 
-        shooterOutputAverager = new Averager(/* TODO: extract to constant */ 2);
+        shooterOutputAverager = new Averager(/* TODO: extract to constant */ 1);
 
         bangBangController = new BangBangController();
 
@@ -73,6 +73,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     public void periodic() {
         SmartDashboard.putString("shooting mode", shootingMode.toString());
         SmartDashboard.putNumber("shooter speed", getCurrentSpeed());
+        SmartDashboard.putNumber("shooter target speed", getTargetSpeed());
 
         switch (shootingMode) {
             case AUTO_SPEAKER, SPEAKER, AMP -> applyBangBangControl(getTargetSpeed());
@@ -95,6 +96,6 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     }
 
     private boolean isUpToSpeed() {
-        return Math.abs(getCurrentSpeed()) >= Math.abs(getTargetSpeed());
+        return Math.abs(getCurrentSpeed()) >= Math.abs(getTargetSpeed()) * 0.95;
     }
 }

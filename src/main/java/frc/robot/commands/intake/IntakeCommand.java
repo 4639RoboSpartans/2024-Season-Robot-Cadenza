@@ -18,7 +18,7 @@ public class IntakeCommand extends Command {
     @Override
     public void execute() {
         intake.intake();
-        hopper.run();
+        hopper.run(true);
     }
 
     @Override
