@@ -23,7 +23,6 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     // Control
     private final PIDController aimPID;
     private boolean isUsingPID = true;
-    private boolean atSetPoint = false;
 
     public NeoShooterPivotSubsystem(int aimMotorID, IShooterSubsystem shooter) {
         aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
