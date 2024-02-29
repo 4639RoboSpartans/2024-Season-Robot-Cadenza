@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
@@ -36,7 +37,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             new CurrentLimitsConfigs().withStatorCurrentLimit(4)
         );
 
-        shooterOutputAverager = new Averager(/* TODO: extract to constant */ 1);
+        shooterOutputAverager = new Averager(Constants.POSE_WINDOW_LENGTH);
 
         bangBangController = new BangBangController();
 
