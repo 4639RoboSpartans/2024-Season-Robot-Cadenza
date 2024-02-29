@@ -61,8 +61,8 @@ public final class Constants {
             public static final double CURRENT_MAX_ROBOT_MPS = 2;
             public static final double MAX_ROBOT_MPS = 2;
             public static final double MAX_ROBOT_MPS_SHOOTING = .5;
-            public static final double MOVEMENT_SPEED = 1;
-            public static final double MAX_ROBOT_SPEED = 2.5;
+            public static final double MOVEMENT_SPEED = .5;
+            public static final double AIM_ROTATION_SPEED = 2.5;
             public static final PID SWERVE_ROTATOR_PID = new PID(0.0085);
             public static final PID SWERVE_DRIVER_PID = new PID(0.65);
         }
@@ -116,8 +116,10 @@ public final class Constants {
             }
 
             public static final ShooterSetpointMeasurement[] measurements = {
-                    new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(25, .855)),
-                    new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .865)),
+                    new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(28, .835)),
+                    new ShooterSetpointMeasurement(2.6, new ShooterSetpoint(32, .855)),
+                    new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .87)),
+                    new ShooterSetpointMeasurement(3.2, new ShooterSetpoint(40, .875)),
                     new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(45, .89)),};
 
             public static final double SHOOTER_IDLE_SPEED = 0.2;

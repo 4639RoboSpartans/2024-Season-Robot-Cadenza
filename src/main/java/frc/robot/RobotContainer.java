@@ -63,9 +63,6 @@ public class RobotContainer {
         hopper = SubsystemManager.getHopper();
         climber = SubsystemManager.getClimber();
 
-        autos = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Autons", autos);
-
         //climber commands
         NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
@@ -75,11 +72,13 @@ public class RobotContainer {
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
-        NamedCommands.registerCommand("SetIntakeExtendedCommand", new SetIntakeExtendedCommand(intake, false));
+        NamedCommands.registerCommand("ExtendIntake", new SetIntakeExtendedCommand(intake, true));
+        NamedCommands.registerCommand("RetractIntake", new SetIntakeExtendedCommand(intake, false));
         //semiauto commands
         NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, hopper));
 
-
+        autos = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Autons", autos);
 
         configureBindings();
     }

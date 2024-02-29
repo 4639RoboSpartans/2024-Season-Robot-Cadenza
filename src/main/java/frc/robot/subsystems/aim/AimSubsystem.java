@@ -27,7 +27,7 @@ public class AimSubsystem extends SubsystemBase{
 
         double yRotation = angle.getValue();
 
-        return rotationPID.calculate(MathUtil.signedPow(yRotation, AimInfo.AIM_ROT_POW)) * SwerveInfo.MAX_ROBOT_SPEED;
+        return rotationPID.calculate(MathUtil.signedPow(yRotation, AimInfo.AIM_ROT_POW)) * SwerveInfo.AIM_ROTATION_SPEED;
     }
 
     public ShooterSetpoint getShooterSetpoint() {

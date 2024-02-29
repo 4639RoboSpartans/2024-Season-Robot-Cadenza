@@ -37,8 +37,8 @@ public class SwerveModule {
         };
         rotator.setInverted(true);
 
-        driver.setNeutralMode(NeutralModeValue.Coast);
-        rotator.setNeutralMode(NeutralModeValue.Coast);
+        driver.setNeutralMode(NeutralModeValue.Brake);
+        rotator.setNeutralMode(NeutralModeValue.Brake);
 
         rotationEncoder = switch(Constants.currentRobot) {
             case ZEUS -> new CANcoder(swerveModuleData.encoderID());

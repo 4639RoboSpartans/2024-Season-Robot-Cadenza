@@ -17,6 +17,11 @@ public class AutoShootCommand extends Command {
     }
 
     @Override
+    public void initialize() {
+        System.out.println("Starting AutoShoot!");
+    }
+
+    @Override
     public void execute() {
         shooter.setShootingMode(ShootingMode.AUTO_SPEAKER);
 
@@ -32,5 +37,10 @@ public class AutoShootCommand extends Command {
     public void end(boolean interrupted) {
         shooter.setShootingMode(ShootingMode.IDLE);
         hopper.stop();
+    }
+
+    @Override
+    public boolean isFinished(){
+        return hopper.getIR().isClear();
     }
 }

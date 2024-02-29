@@ -10,7 +10,7 @@ import frc.robot.subsystems.SubsystemManager;
 
 public class IRSensor extends SubsystemBase {
     private final DigitalInput sensor;
-    private boolean active;
+    private boolean active = true;
 
     public IRSensor(){
         sensor = new DigitalInput(Constants.IDs.IR_SENSOR);

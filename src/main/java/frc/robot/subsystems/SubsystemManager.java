@@ -80,13 +80,13 @@ public class SubsystemManager {
 
     public static IShooterSubsystem getShooter() {
         if(shooter == null) {
-//            shooter = switch (currentRobot) {
-//                case ZEUS -> new DummyShooterSubsystem();
-//                case SIREN -> new FalconShooterSubsystem(
-//                    Constants.IDs.SHOOTER_SHOOTER_MOTOR
-//                );
-//            };
-            shooter = new DummyShooterSubsystem();
+            shooter = switch (currentRobot) {
+                case ZEUS -> new DummyShooterSubsystem();
+                case SIREN -> new FalconShooterSubsystem(
+                    Constants.IDs.SHOOTER_SHOOTER_MOTOR
+                );
+            };
+//            shooter = new DummyShooterSubsystem();
         }
         return shooter;
     }
