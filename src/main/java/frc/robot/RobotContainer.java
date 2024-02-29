@@ -89,7 +89,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
 
         // shooting commands
-        NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, hopper));
         NamedCommands.registerCommand("ShootSpeaker", new AutoShootCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
