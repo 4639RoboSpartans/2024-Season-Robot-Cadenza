@@ -1,0 +1,62 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6813831329345703,
+      "y": 7.2198309898376465
+    },
+    "rotation": 1.841417877667222e-30
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "preloaded"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtendIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "preloaded-1st note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake command"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSpeaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}

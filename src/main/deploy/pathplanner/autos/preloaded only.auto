@@ -5,7 +5,7 @@
       "x": 0.6813831329345703,
       "y": 7.2198309898376465
     },
-    "rotation": 6.178775109936476e-32
+    "rotation": 1.841417877667222e-30
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start-1st note"
+            "pathName": "preloaded"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "1st note-2nd note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2nd note-3rd note"
+            "name": "ShootSpeaker"
           }
         }
       ]

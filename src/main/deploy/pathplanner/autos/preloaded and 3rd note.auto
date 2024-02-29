@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6276836395263672,
-      "y": 7.112432479858398
+      "x": 0.6813831329345703,
+      "y": 7.2198309898376465
     },
-    "rotation": 0.0
+    "rotation": 1.841417877667222e-30
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start - shoot.1"
+            "pathName": "preloaded"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoShootCommand"
+            "name": "ShootSpeaker"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "shoot-intake"
+                  "pathName": "preloaded-3rd note"
                 }
               },
               {
@@ -46,6 +46,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSpeaker"
           }
         }
       ]

@@ -5,7 +5,7 @@
       "x": 0.6813831329345703,
       "y": 7.2198309898376465
     },
-    "rotation": 0.0
+    "rotation": 1.841417877667222e-30
   },
   "command": {
     "type": "sequential",
@@ -22,7 +22,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "start-1st note"
+                        "pathName": "preloaded"
                       }
                     },
                     {
@@ -37,7 +37,44 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoShootCommand"
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "preloaded-1st note.1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeCommand"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
                 }
               },
               {
@@ -62,7 +99,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoShootCommand"
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
                 }
               },
               {
@@ -87,7 +130,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoShootCommand"
+                  "name": "ShootSpeaker"
                 }
               }
             ]
