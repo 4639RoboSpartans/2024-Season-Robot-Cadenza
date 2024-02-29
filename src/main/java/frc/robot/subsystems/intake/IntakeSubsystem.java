@@ -32,16 +32,14 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotMotorRight.follow(pivotMotorLeft, true);
 
         encoder = new DutyCycleEncoder(Constants.IDs.INTAKE_ENCODER_CHANNEL);
-        setExtended(false);
+        setExtended(ExtensionState.RETRACTED);
     }
 
-    public void setExtended(boolean extended) {
-        if(extended) {
-            pivotPID.setSetpoint(IntakeInfo.INTAKE_PIVOT_EXTENDED_SETPOINT);
-        }
-        else {
-            pivotPID.setSetpoint(IntakeInfo.INTAKE_PIVOT_DEFAULT_SETPOINT);
-        }
+    public void setExtended(ExtensionState extended) {
+        pivotPID.setSetpoint(switch (extended){
+            case EXTENDED -> IntakeInfo.INTAKE_PIVOT_EXTENDED_SETPOINT;
+            case RETRACTED -> IntakeInfo.INTAKE_PIVOT_DEFAULT_SETPOINT;
+        });
     }
 
     //Spins intake motor to intake notes

@@ -14,15 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
+import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.ManualShootCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
-import frc.robot.commands.drive.ManualSwerveDriveCommand;
-import frc.robot.commands.intake.IntakeCommand;
-import frc.robot.commands.intake.OuttakeCommand;
-import frc.robot.commands.intake.SetIntakeExtendedCommand;
-import frc.robot.commands.intake.ToggleIRCommand;
+import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.shooter.AutoAmpCommand;
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.led.LEDStrip;
@@ -75,13 +72,13 @@ public class RobotContainer {
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
         //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new ManualSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
-        NamedCommands.registerCommand("ExtendIntake", new SetIntakeExtendedCommand(intake, true));
-        NamedCommands.registerCommand("RetractIntake", new SetIntakeExtendedCommand(intake, false));
-        //semiauto commands
+        NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
+        NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
+        // shooting commands
         NamedCommands.registerCommand("AutoShootCommand", new AutoShootCommand(shooter, hopper));
 
         autos = AutoBuilder.buildAutoChooser();
@@ -92,10 +89,11 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        swerveDriveSubsystem.setDefaultCommand(new ManualSwerveDriveCommand(
+        swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(
                 swerveDriveSubsystem, aimSubsystem, oi
         ));
 
+        // TODO: extract to named class
         leds.setDefaultCommand(new RunCommand(() -> {
             if(ir.hasNote()) {
                 leds.usePattern(new SolidLEDPattern(new Color8Bit(255, 50, 0)));
@@ -114,9 +112,9 @@ public class RobotContainer {
  
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
-        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new SetIntakeExtendedCommand(intake, true));
+        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new ExtendIntakeCommand(intake));
 
-        oi.operatorController().getButton(OperatorControls.IntakeRetractButton).whileTrue(new SetIntakeExtendedCommand(intake, false));
+        oi.operatorController().getButton(OperatorControls.IntakeRetractButton).whileTrue(new RetractIntakeCommand(intake));
 
         oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, hopper));
         oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, hopper));

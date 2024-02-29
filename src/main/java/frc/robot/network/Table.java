@@ -33,7 +33,7 @@ public class Table {
         return entry;
     }
 
-    interface foo<T> {
+    private interface foo<T> {
         T apply(NetworkTableEntry entry, T defaultValue);
     }
 

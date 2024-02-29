@@ -9,12 +9,12 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.Constants.RobotInfo.SwerveInfo;
 
-public class ManualSwerveDriveCommand extends Command {
+public class TeleopSwerveDriveCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
     private final AimSubsystem aimSubsystem;
     private final OI oi;
 
-    public ManualSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
+    public TeleopSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         this.aimSubsystem = aimSubsystem;
         this.oi = oi;
@@ -31,16 +31,19 @@ public class ManualSwerveDriveCommand extends Command {
         double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
 
-        double rotateSpeed;
-        if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
-            rotateSpeed = -aimSubsystem.getRotationSpeed();
-        }
-        else {
-            rotateSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
-        }
+        double rotateSpeed = getRotationSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
+    }
+
+    private double getRotationSpeed() {
+        if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
+            return -aimSubsystem.getRotationSpeed();
+        }
+        else {
+            return -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
+        }
     }
 
     @Override

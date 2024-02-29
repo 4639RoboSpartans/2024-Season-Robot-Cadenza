@@ -27,7 +27,7 @@ public class IntakeCommand extends Command {
         hopper.stop();
 
         if(!interrupted) {
-            intake.setExtended(false);
+            intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED);
         }
     }
 

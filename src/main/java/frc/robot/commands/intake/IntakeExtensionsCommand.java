@@ -2,12 +2,13 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.intake.IIntakeSubsystem.ExtensionState;
 
-public class SetIntakeExtendedCommand extends Command {
+public abstract class IntakeExtensionsCommand extends Command {
     private final IIntakeSubsystem intake;
-    private final boolean extended;
+    private final ExtensionState extended;
 
-    public SetIntakeExtendedCommand(IIntakeSubsystem intake, boolean extended) {
+    public IntakeExtensionsCommand(IIntakeSubsystem intake, ExtensionState extended) {
         this.intake = intake;
         this.extended = extended;
         addRequirements(intake);
