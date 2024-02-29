@@ -1,6 +1,8 @@
 package frc.robot.led;
 
-public class DummyLEDStrip implements LEDStrip {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class DummyLEDStrip extends SubsystemBase implements LEDStrip {
 
     @Override
     public void usePattern(LEDPattern pattern) {

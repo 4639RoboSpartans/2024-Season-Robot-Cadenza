@@ -4,8 +4,9 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PhysicalLEDStrip implements LEDStrip {
+public class PhysicalLEDStrip extends SubsystemBase implements LEDStrip {
     private final AddressableLED led;
     private final AddressableLEDBuffer buffer;
     private final int length;

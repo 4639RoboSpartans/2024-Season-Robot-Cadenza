@@ -7,6 +7,7 @@ import frc.robot.subsystems.intake.IIntakeSubsystem;
 public class IntakeCommand extends Command {
     private final IIntakeSubsystem intake;
     private final IHopperSubsystem hopper;
+    private boolean shouldEnd = false;
 
     public IntakeCommand(IIntakeSubsystem intake, IHopperSubsystem hopper) {
         this.intake = intake;
@@ -16,9 +17,15 @@ public class IntakeCommand extends Command {
     }
 
     @Override
+    public void initialize() {
+        shouldEnd = false;
+    }
+
+    @Override
     public void execute() {
         intake.intake();
         hopper.run(true);
+        if(hopper.getIR().hasNote()) shouldEnd = true;
     }
 
     @Override
@@ -26,13 +33,14 @@ public class IntakeCommand extends Command {
         intake.stopIntake();
         hopper.stop();
 
-        if(!interrupted) {
+        if(!interrupted && shouldEnd) {
             intake.setExtended(false);
         }
+        shouldEnd = false;
     }
 
     @Override
     public boolean isFinished(){
-        return hopper.getIR().hasNote();
+        return shouldEnd;
     }
 }
