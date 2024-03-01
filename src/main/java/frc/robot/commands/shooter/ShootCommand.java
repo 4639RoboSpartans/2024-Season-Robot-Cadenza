@@ -45,6 +45,11 @@ public class ShootCommand extends Command {
     }
 
     @Override
+    public boolean isFinished() {
+        return hopper.getIR().rawSensorIsClear();
+    }
+
+    @Override
     public void end(boolean interrupted) {
         shooter.setShootingMode(ShootingMode.IDLE);
         hopper.stop();

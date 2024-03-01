@@ -76,7 +76,7 @@ public final class Constants {
             public static final double INTAKE_SPEED = -0.6 * 1.3;
             public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.45;
             public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
-            public static final PID INTAKE_PIVOT_PID = new PID(.5, 0, 0);
+            public static final PID INTAKE_PIVOT_PID = new PID(.8, 0, 0);
         }
 
         public static final class HopperInfo {
@@ -116,11 +116,13 @@ public final class Constants {
             }
 
             public static final ShooterSetpointMeasurement[] measurements = {
-                    new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(28, .835)),
-                    new ShooterSetpointMeasurement(2.6, new ShooterSetpoint(32, .855)),
-                    new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .87)),
-                    new ShooterSetpointMeasurement(3.2, new ShooterSetpoint(40, .875)),
-                    new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(45, .89)),};
+                    new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .845)),
+                    new ShooterSetpointMeasurement(2.6, new ShooterSetpoint(35, .86)),
+                    new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .875)),
+                    new ShooterSetpointMeasurement(3.2, new ShooterSetpoint(40, .885)),
+                    new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(45, .89)),
+                    new ShooterSetpointMeasurement(3.8, new ShooterSetpoint(42, .9)),
+            };
 
             public static final double SHOOTER_IDLE_SPEED = 0.2;
             public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;

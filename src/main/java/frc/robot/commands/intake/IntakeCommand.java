@@ -17,6 +17,7 @@ public class IntakeCommand extends Command {
 
     @Override
     public void execute() {
+        intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED);
         intake.intake();
         hopper.run(true);
     }

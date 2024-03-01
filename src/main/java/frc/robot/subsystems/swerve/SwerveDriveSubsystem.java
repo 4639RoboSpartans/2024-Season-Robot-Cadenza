@@ -47,8 +47,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 this::getRobotRelativeSpeeds,
                 this::setRawMovement,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(0.6, 0.0, 0.0), //TODO: find constants for 2024 robot
-                        new PIDConstants(3, 0, 0.0), //TODO: find constants for 2024 robot
+                        new PIDConstants(2, 0.1, 0.0), //TODO: find constants for 2024 robot
+                        new PIDConstants(2, 0, 0.0), //TODO: find constants for 2024 robot
                         4,
                         0.4,
                         new ReplanningConfig()
