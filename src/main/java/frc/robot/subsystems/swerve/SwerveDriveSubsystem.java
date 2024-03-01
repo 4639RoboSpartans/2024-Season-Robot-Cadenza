@@ -9,8 +9,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
@@ -53,7 +55,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                         0.4,
                         new ReplanningConfig()
                 ),
-                () -> DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Blue).isPresent(),
+                () -> RobotContainer.alliance.getSelected(),
                 this
         );
 

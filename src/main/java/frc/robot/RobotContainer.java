@@ -7,6 +7,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -53,6 +56,7 @@ public class RobotContainer {
     private final LEDStrip ledStrip;
 
     private final SendableChooser<Command> autos;
+    public static SendableChooser<Boolean> alliance;
 
     public RobotContainer() {
         oi = new OI();
@@ -72,6 +76,11 @@ public class RobotContainer {
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
+
+        alliance = new SendableChooser<>();
+        alliance.addOption("Red", true);
+        alliance.setDefaultOption("Blue", false);
+        SmartDashboard.putData("Alliance", alliance);
 
         configureBindings();
     }

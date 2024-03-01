@@ -117,10 +117,10 @@ public final class Constants {
 
             public static final ShooterSetpointMeasurement[] measurements = {
                     new ShooterSetpointMeasurement(2.4, new ShooterSetpoint(30, .845)),
-                    new ShooterSetpointMeasurement(2.6, new ShooterSetpoint(35, .86)),
+                    new ShooterSetpointMeasurement(2.6, new ShooterSetpoint(35, .862)),
                     new ShooterSetpointMeasurement(2.84, new ShooterSetpoint(40, .875)),
                     new ShooterSetpointMeasurement(3.2, new ShooterSetpoint(40, .885)),
-                    new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(45, .89)),
+                    new ShooterSetpointMeasurement(3.6, new ShooterSetpoint(45, .892)),
                     new ShooterSetpointMeasurement(3.8, new ShooterSetpoint(42, .9)),
             };
 
