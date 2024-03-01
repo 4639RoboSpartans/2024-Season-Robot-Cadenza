@@ -130,7 +130,7 @@ public final class Constants {
             public static final double SHOOTER_PIVOT_ERROR = 0.01;
 
             public static final ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterSetpoint(
-                    11,
+                    13.55,
                     .85
             );
             public static final ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = new ShooterSetpoint(
@@ -181,6 +181,8 @@ public final class Constants {
             public static final OI.Buttons ClimberRetractButton = OI.Buttons.RIGHT_BUMPER;
             public static final OI.Buttons ClimberSwap1Button = OI.Buttons.POV_LEFT;
             public static final OI.Buttons ClimberSwap2Button = OI.Buttons.POV_RIGHT;
+
+            public static final OI.Buttons AmpAlignButton = OI.Buttons.X_BUTTON;
         }
 
         public static final class OperatorControls {
