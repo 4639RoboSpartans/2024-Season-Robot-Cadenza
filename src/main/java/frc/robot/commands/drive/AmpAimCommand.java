@@ -40,4 +40,10 @@ public class AmpAimCommand extends Command {
     public void end(boolean interrupted) {
         swerveDriveSubsystem.stop();
     }
+
+    // TODO: test before using in matches
+//    @Override
+//    public boolean isFinished() {
+//        return aimSubsystem.isAtSetpoint();
+//    }
 }

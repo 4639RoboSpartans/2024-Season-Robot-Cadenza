@@ -30,6 +30,10 @@ public class AimSubsystem extends SubsystemBase{
         return rotationPID.calculate(MathUtil.signedPow(yRotation, AimInfo.AIM_ROT_POW)) * SwerveInfo.AIM_ROTATION_SPEED;
     }
 
+    public boolean isAtSetpoint() {
+        return Math.abs(angle.getValue()) <= AimInfo.AIM_TOLERANCE;
+    }
+
     public ShooterSetpoint getShooterSetpoint() {
         ShooterSetpoint result = ShooterMeasurementLERPer.get(x.getValue(), z.getValue());
 

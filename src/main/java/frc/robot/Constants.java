@@ -92,24 +92,16 @@ public final class Constants {
 
         public static final class AimInfo {
 
-            public static final double AIM_ERROR_RADIANS = 0.1;
-            public static final double AIM_ERROR_CM = 25;
-            public static final double AIM_SPEED = 0.2;
-            public static final double AIM_SHOOTER_ERROR_CORRECTION_FACTOR = 0.1;
+            public static final double AIM_TOLERANCE = Math.toRadians(1);
             public static final PID LIMELIGHT_AIM_PID = new PID(0.1, 0.001, 0.015);
             public static final double AIM_ROT_POW = 0.7;
 
-            public enum LIMELIGHT_STATUS {
-                LIMELIGHT, MANUAL
-            }
         }
 
         public static class ShooterInfo {
-            public record ShooterSetpoint(double speed, double angle) {
-            }
+            public record ShooterSetpoint(double speed, double angle) {}
 
-            public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {
-            }
+            public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
 
             public enum ShootingMode {
                 AUTO_SPEAKER, SPEAKER, AMP, IDLE
@@ -198,16 +190,5 @@ public final class Constants {
             public static final OI.Buttons ToggleIR = OI.Buttons.A_BUTTON;
 
         }
-    }
-
-    public static final class FieldDistances {
-        public static final double ShooterApriltagXDistance = 43.2; //this and below are in cm
-
-        public static final double ShooterApriltagZDistance = -2.5;
-
-        public static final double LimeLight_MaxDistanceLeft = 419.1;
-        public static final double LimeLight_MaxDistanceMiddle = 518.16;
-        public static final double SpeakerOptimalHeight = 205;
-        public static final double SpeakerApriltagSeparation = 45;
     }
 }
