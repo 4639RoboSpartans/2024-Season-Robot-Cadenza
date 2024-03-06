@@ -104,7 +104,7 @@ public final class Constants {
             public record ShooterSetpointMeasurement(double distance, ShooterSetpoint setpoint) {}
 
             public enum ShootingMode {
-                AUTO_SPEAKER, SPEAKER, AMP, IDLE
+                AUTO_SPEAKER, SPEAKER, AMP, TRAP, IDLE
             }
 
             public static final ShooterSetpointMeasurement[] measurements = {
@@ -128,6 +128,10 @@ public final class Constants {
             public static final ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = new ShooterSetpoint(
                     40,
                     .835
+            );
+            public static final ShooterSetpoint SHOOTER_TRAP_SETPOINT = new ShooterSetpoint(
+                    20,
+                    .82
             );
 
             public static final double SHOOTER_VOLTAGE = 10;
@@ -181,6 +185,8 @@ public final class Constants {
             public static final OI.Buttons RunSpeakerShooterButton = OI.Buttons.RIGHT_TRIGGER;
             public static final OI.Buttons RunAmpShooterButton = OI.Buttons.LEFT_BUMPER;
             public static final OI.Buttons ManualShooterButton = OI.Buttons.LEFT_TRIGGER;
+
+            public static final OI.Buttons RunTrapShooterButton = OI.Buttons.RIGHT_BUMPER;
 
             public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
             public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
