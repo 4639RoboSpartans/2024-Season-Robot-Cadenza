@@ -49,6 +49,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
             case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().angle();
             case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
             case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
+            case TRAP -> ShooterInfo.SHOOTER_TRAP_SETPOINT.angle();
             case IDLE -> ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT;
         };
 

@@ -58,8 +58,8 @@ public final class Constants {
             public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(new Translation2d(centerToWheel, centerToWheel), new Translation2d(centerToWheel, -centerToWheel), new Translation2d(-centerToWheel, centerToWheel), new Translation2d(-centerToWheel, -centerToWheel));
 
             // Change MOVEMENT_SPEED to 1.0 for max speed
-            public static final double CURRENT_MAX_ROBOT_MPS = 2;
-            public static final double MAX_ROBOT_MPS = 2;
+            public static final double CURRENT_MAX_ROBOT_MPS = 3;
+            public static final double MAX_ROBOT_MPS = 3;
             public static final double MAX_ROBOT_MPS_SHOOTING = .5;
             public static final double MOVEMENT_SPEED = .5;
             public static final double AIM_ROTATION_SPEED = 2.5;
