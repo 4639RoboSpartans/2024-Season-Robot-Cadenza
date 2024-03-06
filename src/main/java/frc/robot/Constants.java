@@ -75,7 +75,7 @@ public final class Constants {
 
         public static final class IntakeInfo {
 
-            public static final double INTAKE_SPEED = -0.6 * 1.3;
+            public static final double INTAKE_SPEED = -0.6 * 1.6;
             public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.45;
             public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
             public static final PID INTAKE_PIVOT_PID = new PID(.8, 0, 0);
