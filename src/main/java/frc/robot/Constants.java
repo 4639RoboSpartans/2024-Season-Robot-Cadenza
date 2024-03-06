@@ -55,6 +55,8 @@ public final class Constants {
     public static final class RobotInfo {
         public static final class SwerveInfo {
             public static final double centerToWheel = 0.245;
+
+            public static final int K_P_MULTIPLIER = 5;
             public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(new Translation2d(centerToWheel, centerToWheel), new Translation2d(centerToWheel, -centerToWheel), new Translation2d(-centerToWheel, centerToWheel), new Translation2d(-centerToWheel, -centerToWheel));
 
             // Change MOVEMENT_SPEED to 1.0 for max speed
