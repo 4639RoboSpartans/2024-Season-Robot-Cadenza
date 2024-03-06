@@ -7,33 +7,34 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.Controls.OperatorControls;
-import frc.robot.commands.drive.AmpAimCommand;
-import frc.robot.commands.intake.*;
-import frc.robot.commands.shooter.*;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
+import frc.robot.commands.drive.AmpAimCommand;
 import frc.robot.commands.drive.TeleopSwerveDriveCommand;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.shooter.AutoAmpCommand;
+import frc.robot.commands.shooter.AutoShootCommand;
+import frc.robot.commands.shooter.AutoTrapCommand;
+import frc.robot.commands.shooter.ManualShootCommand;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
