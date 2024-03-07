@@ -22,7 +22,7 @@ class _AimCommand extends Command {
 
     @Override
     public void execute() {
-        double rotateSpeed = -aimSubsystem.getRotationSpeed();
+        double rotateSpeed = -aimSubsystem.getSwerveRotation();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
