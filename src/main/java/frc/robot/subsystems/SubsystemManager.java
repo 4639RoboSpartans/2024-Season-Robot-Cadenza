@@ -30,6 +30,8 @@ public class SubsystemManager {
     private static NavX navX;
     private static IRSensor irSensor;
 
+    private static IRSensor irSensor2;
+
     private static LEDStrip ledStrip;
 
     private static ISwerveDriveSubsystem swerveDrive;
@@ -53,6 +55,13 @@ public class SubsystemManager {
             irSensor = new IRSensor();
         }
         return irSensor;
+    }
+
+    public static IRSensor getIrSensor2() {
+        if(irSensor2 == null) {
+            irSensor2 = new IRSensor();
+        }
+        return irSensor2;
     }
 
     public static LEDStrip getLedStrip() {

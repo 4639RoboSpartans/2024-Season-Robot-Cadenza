@@ -51,6 +51,7 @@ public class RobotContainer {
     private final IHopperSubsystem hopper;
 
     private final IRSensor ir;
+    private final IRSensor ir2;
     private final LEDStrip ledStrip;
 
     private final SendableChooser<Command> autos;
@@ -61,6 +62,7 @@ public class RobotContainer {
         navX = SubsystemManager.getNavX();
         aimSubsystem = SubsystemManager.getAimSubsystem();
         ir = SubsystemManager.getIRSensor();
+        ir2 = SubsystemManager.getIrSensor2();
         ledStrip = SubsystemManager.getLedStrip();
 
         swerveDriveSubsystem = SubsystemManager.getSwerveDrive();

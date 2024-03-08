@@ -52,6 +52,7 @@ public final class Constants {
         public static final int SHOOTER_PIVOT_ENCODER_CHANNEL = 0;
         public static final int INTAKE_ENCODER_CHANNEL = 1;
         public static final int IR_SENSOR = 3;
+        public static final int IR_SENSOR2 = 6;
     }
 
     public static final class RobotInfo {
