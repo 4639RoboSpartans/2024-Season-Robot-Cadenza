@@ -11,40 +11,44 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LQR extends SubsystemBase {
-    private final LinearSystem<N1, N1, N1> swervePlant;
-    private final KalmanFilter<N1, N1, N1> observer;
-    private final LinearQuadraticRegulator<N1, N1, N1> controller;
     private final LinearSystemLoop<N1, N1, N1> loop;
-    private double setPoint;
     public LQR(double kV,
                double kA,
-               double MOI,
-               double gearing,
                double modelAccuracy,
                double encoderAccuracy,
                double kQ,
                double kR,
                double frameTime,
                double maxVoltage){
-        swervePlant = LinearSystemId.identifyVelocitySystem(kV, kA);
-        observer = new KalmanFilter<>(
+        LinearSystem<N1, N1, N1> swervePlant = LinearSystemId.identifyVelocitySystem(kV, kA);
+        KalmanFilter<N1, N1, N1> observer = new KalmanFilter<>(
                 Nat.N1(),
                 Nat.N1(),
                 swervePlant,
                 VecBuilder.fill(modelAccuracy),
                 VecBuilder.fill(encoderAccuracy),
                 frameTime);
-        controller = new LinearQuadraticRegulator<>(
-                        swervePlant,
-                        VecBuilder.fill(kQ),
-                        VecBuilder.fill(kR),
-                        frameTime);
+        LinearQuadraticRegulator<N1, N1, N1> controller = new LinearQuadraticRegulator<>(
+                swervePlant,
+                VecBuilder.fill(kQ),
+                VecBuilder.fill(kR),
+                frameTime);
         loop = new LinearSystemLoop<>(swervePlant, controller, observer, maxVoltage, frameTime);
 
     }
+    /*
+    requires
+     */
+    public void setSetPoint(double setPoint, double encoderMeasurement){
+        loop.setNextR(setPoint);
+        correct(encoderMeasurement);
+    }
 
-    @Override
-    public void periodic(){
+    public void correct(double encoderMeasurment){
+        loop.correct(VecBuilder.fill(encoderMeasurment));
+    }
 
+    public double getVoltage(){
+        return loop.getU(0);
     }
 }
