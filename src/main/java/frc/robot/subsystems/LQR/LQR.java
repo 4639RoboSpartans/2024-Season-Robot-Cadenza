@@ -51,4 +51,9 @@ public class LQR extends SubsystemBase {
     public double getVoltage(){
         return loop.getU(0);
     }
+
+    public void reset(){
+        loop.setNextR(0);
+        correct(0);
+    }
 }
