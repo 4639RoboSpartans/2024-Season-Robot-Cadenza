@@ -2,11 +2,8 @@ package frc.robot.subsystems.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.led.SolidLEDPattern;
-import frc.robot.subsystems.SubsystemManager;
+import frc.robot.constants.Constants;
 import math.Averager;
 
 public class IRSensor extends SubsystemBase {

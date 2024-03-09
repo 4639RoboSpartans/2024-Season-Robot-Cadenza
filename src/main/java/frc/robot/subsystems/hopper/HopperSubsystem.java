@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.sensors.IRSensor;
 
-import static frc.robot.Constants.RobotInfo.HopperInfo;
+import static frc.robot.constants.Constants.RobotInfo.HopperInfo;
 
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;

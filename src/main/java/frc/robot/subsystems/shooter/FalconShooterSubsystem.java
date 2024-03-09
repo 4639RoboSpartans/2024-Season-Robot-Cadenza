@@ -6,14 +6,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
 import math.Averager;
 
-import static frc.robot.Constants.RobotInfo.ShooterInfo;
-import static frc.robot.Constants.RobotInfo.ShooterInfo.*;
+import static frc.robot.constants.Constants.RobotInfo.ShooterInfo;
+import static frc.robot.constants.Constants.RobotInfo.ShooterInfo.*;
 
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
     // Components

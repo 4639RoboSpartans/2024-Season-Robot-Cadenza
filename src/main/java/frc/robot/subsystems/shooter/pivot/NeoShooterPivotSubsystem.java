@@ -6,12 +6,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
 
-import static frc.robot.Constants.RobotInfo.ShooterInfo;
+import static frc.robot.constants.Constants.RobotInfo.ShooterInfo;
 
 public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
     // Components
@@ -32,7 +32,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         this.shooter = shooter;
         aimSubsystem = SubsystemManager.getAimSubsystem();
         
-        aimPID = ShooterInfo.SHOOTER_AIM_PID.create();
+        aimPID = ShooterInfo.SHOOTER_AIM_PID_CONSTANTS.create();
         aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
     }
 

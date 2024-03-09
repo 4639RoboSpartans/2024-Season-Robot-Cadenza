@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
 import frc.robot.led.LEDStrip;
@@ -24,7 +24,7 @@ import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
-import static frc.robot.Constants.currentRobot;
+import static frc.robot.constants.Constants.currentRobot;
 
 public class SubsystemManager {
     private static NavX navX;

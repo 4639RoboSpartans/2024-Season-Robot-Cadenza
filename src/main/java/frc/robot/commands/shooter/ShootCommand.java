@@ -2,7 +2,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
+import frc.robot.constants.Constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.led.LEDPattern;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;

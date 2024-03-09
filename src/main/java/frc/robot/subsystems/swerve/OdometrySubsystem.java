@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.NavX;
 
 public class OdometrySubsystem extends SubsystemBase{

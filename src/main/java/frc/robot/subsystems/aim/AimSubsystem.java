@@ -3,19 +3,19 @@ package frc.robot.subsystems.aim;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 import math.Averager;
 import math.MathUtil;
 
-import static frc.robot.Constants.RobotInfo.AimInfo;
-import static frc.robot.Constants.RobotInfo.ShooterInfo.ShooterSetpoint;
-import static frc.robot.Constants.RobotInfo.SwerveInfo;
+import static frc.robot.constants.Constants.RobotInfo.AimInfo;
+import static frc.robot.constants.Constants.RobotInfo.ShooterInfo.ShooterSetpoint;
+import static frc.robot.constants.Constants.RobotInfo.SwerveInfo;
 
 public class AimSubsystem extends SubsystemBase implements AimInterface {
 
-    private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID.create();
+    private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID_CONSTANTS.create();
 
     private final Averager angle = new Averager(Constants.POSE_WINDOW_LENGTH);
     private final Averager x = new Averager(Constants.POSE_WINDOW_LENGTH);
