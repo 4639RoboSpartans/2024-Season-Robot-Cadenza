@@ -1,0 +1,19 @@
+Path Naming System:
+
+ST[inches from subwoolfer] = Amp Custom Setpoint In Inches Away From Subwoolfer Base(Top)
+SB[inches from subwoolfer] = Source Custom Setpoint In Inches Away From Subwoolfer Base(Bottom)
+S1 = Amp Side Startpoint Against Subwoolfer
+S2 = Middle Startpoint Against Subwoolfer
+S3 = Source Side Startpoint Against Subwoolfer
+A1 = First Game Piece Near To Alliance Speaker
+A2 = Second Game Piece Near To Alliance Speaker
+A3 = Third Game Piece Near To Alliance Speaker
+C1 = First Game Piece From Top On Centerline
+C2 = Second Game Piece From Top On Centerline
+C3 = Third Game Piece From Top On Centerline
+C4 = Fourth Game Piece From Top On Centerline
+C5 = Fifth Game Piece From Top On Centerline
+SS = To Shoot Into Speaker
+E = End At Random Location
+
+(game piece numbers are from the amp side; ie. first is closest to the amps).
