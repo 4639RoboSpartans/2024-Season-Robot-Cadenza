@@ -7,6 +7,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.Controls.DriverControls;
 import frc.robot.constants.Constants.RobotInfo.SwerveInfo;
 import frc.robot.oi.OI;
+import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
@@ -36,7 +37,7 @@ public class TeleopSwerveDriveCommand extends Command {
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
-        SmartDashboard.putNumber("navX heading", swerveDriveSubsystem.getHeading());
+        SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
     }
 
     private double getRotationSpeed() {
@@ -45,7 +46,7 @@ public class TeleopSwerveDriveCommand extends Command {
             return -aimSubsystem.getSwerveRotation();
         }
         else {
-            return -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * Constants.RobotInfo.SwerveInfo.TELOP_ROBOT_ROTATION_SPEED;
+            return -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
         }
     }
 
