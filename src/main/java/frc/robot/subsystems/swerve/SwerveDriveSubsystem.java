@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -148,5 +149,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             case "BR" -> moduleBackRight;
             default -> null;
         };
+    }
+
+    public double getHeading(){
+        return navx.getHeading();
     }
 }

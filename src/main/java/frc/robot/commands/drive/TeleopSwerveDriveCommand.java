@@ -1,8 +1,10 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Controls.DriverControls;
+import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
@@ -35,6 +37,7 @@ public class TeleopSwerveDriveCommand extends Command {
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
+        SmartDashboard.putNumber("navX heading", swerveDriveSubsystem.getHeading());
     }
 
     private double getRotationSpeed() {
