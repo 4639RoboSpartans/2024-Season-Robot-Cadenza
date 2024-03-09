@@ -1,6 +1,6 @@
 package frc.robot.commands.shooter;
 
-import frc.robot.Constants.RobotInfo.ShooterInfo.ShootingMode;
+import frc.robot.constants.Constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.led.LEDStrip;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;

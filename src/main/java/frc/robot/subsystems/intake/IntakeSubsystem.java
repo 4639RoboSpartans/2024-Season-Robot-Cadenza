@@ -6,9 +6,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 
-import static frc.robot.Constants.RobotInfo.IntakeInfo;
+import static frc.robot.constants.Constants.RobotInfo.IntakeInfo;
 
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
@@ -23,7 +23,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotMotorRight = new CANSparkMax(pivotMotorRightID, CANSparkMax.MotorType.kBrushless);
         intakeMotor = new CANSparkMax(intakeMotorID, CANSparkMax.MotorType.kBrushless);
 
-        pivotPID = IntakeInfo.INTAKE_PIVOT_PID.create();
+        pivotPID = IntakeInfo.INTAKE_PIVOT_PID_CONSTANTS.create();
 
         pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
         pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);

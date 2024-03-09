@@ -1,10 +1,8 @@
-package frc.robot;
+package frc.robot.constants;
 
-import edu.wpi.first.math.controller.LinearQuadraticRegulator;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import frc.robot.constants.PIDConstants;
 import frc.robot.oi.OI;
 
 public final class Constants {
@@ -68,8 +66,8 @@ public final class Constants {
             public static final double MAX_ROBOT_MPS_SHOOTING = .5;
             public static final double MOVEMENT_SPEED = .5;
             public static final double AIM_ROTATION_SPEED = 2.5;
-            public static final PID SWERVE_ROTATOR_PID = new PID(0.0085);
-            public static final PID SWERVE_DRIVER_PID = new PID(0.65);
+            public static final PIDConstants SWERVE_ROTATOR_PID_CONSTANTS = new PIDConstants(0.0085);
+            public static final PIDConstants SWERVE_DRIVER_PID_CONSTANTS = new PIDConstants(0.65);
             public static final double DERIVATIVE_MULTIPLIER = 0.1;
             public static final double TELOP_ROBOT_ROTATION_SPEED = 4;
         }
@@ -83,7 +81,7 @@ public final class Constants {
             public static final double INTAKE_SPEED = -0.6 * 1.6;
             public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.45;
             public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
-            public static final PID INTAKE_PIVOT_PID = new PID(.8, 0, 0);
+            public static final PIDConstants INTAKE_PIVOT_PID_CONSTANTS = new PIDConstants(.8, 0, 0);
         }
 
         public static final class HopperInfo {
@@ -100,7 +98,7 @@ public final class Constants {
         public static final class AimInfo {
 
             public static final double AIM_TOLERANCE = Math.toRadians(1);
-            public static final PID LIMELIGHT_AIM_PID = new PID(0.1, 0.001, 0.015);
+            public static final PIDConstants LIMELIGHT_AIM_PID_CONSTANTS = new PIDConstants(0.1, 0.001, 0.015);
             public static final double AIM_ROT_POW = 0.7;
 
         }
@@ -143,7 +141,7 @@ public final class Constants {
 
             public static final double SHOOTER_VOLTAGE = 10;
 
-            public static final PID SHOOTER_AIM_PID = new PID(3.5, 0, 0);
+            public static final PIDConstants SHOOTER_AIM_PID_CONSTANTS = new PIDConstants(3.5, 0, 0);
         }
     }
 
@@ -151,24 +149,6 @@ public final class Constants {
                                      double rotatorPIDkPMultiplier) {
         public SwerveModuleConfig(int driveMotorID, int rotatorMotorID, int encoderID, double rotationOffset) {
             this(driveMotorID, rotatorMotorID, encoderID, rotationOffset, 1);
-        }
-    }
-
-    public record PID(double kp, double ki, double kd) {
-        public PID(double kp) {
-            this(kp, 0);
-        }
-
-        public PID(double kp, double ki) {
-            this(kp, ki, 0);
-        }
-
-        public PIDController create() {
-            return create(1);
-        }
-
-        public PIDController create(double kPMultiplier) {
-            return new PIDController(kp * kPMultiplier, ki, kd);
         }
     }
 
