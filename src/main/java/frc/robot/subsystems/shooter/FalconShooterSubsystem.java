@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
@@ -12,13 +13,15 @@ import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
 import math.Averager;
 
-import static frc.robot.constants.Constants.RobotInfo.ShooterInfo;
-import static frc.robot.constants.Constants.RobotInfo.ShooterInfo.*;
+import static frc.robot.constants.RobotInfo.ShooterInfo;
+import static frc.robot.constants.RobotInfo.ShooterInfo.*;
 
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
     // Components
-    private final TalonFX shooterMotor;
+    private final TalonFX shooterMotorLeft;
+    private final TalonFX shooterMotorRight;
     private final IShooterPivotSubsystem shooterPivot;
+    // Other references
     private final AimSubsystem aimSubsystem;
     // Controllers
     private final Averager shooterOutputAverager;
@@ -26,16 +29,23 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     // State
     private ShootingMode shootingMode;
 
-    public FalconShooterSubsystem(int shooterMotorID) {
+    public FalconShooterSubsystem(int shooterMotorLeftID, int shooterMotorRightID) {
         this.aimSubsystem = SubsystemManager.getAimSubsystem();
         this.shooterPivot = SubsystemManager.getShooterPivot(this);
 
-        shooterMotor = new TalonFX(shooterMotorID);
-        shooterMotor.setNeutralMode(NeutralModeValue.Coast);
-        shooterMotor.setInverted(true);
-        shooterMotor.getConfigurator().apply(
+        shooterMotorLeft = new TalonFX(shooterMotorLeftID);
+        shooterMotorRight = new TalonFX(shooterMotorRightID);
+        shooterMotorLeft.setNeutralMode(NeutralModeValue.Coast);
+        shooterMotorRight.setNeutralMode(NeutralModeValue.Coast);
+
+        shooterMotorLeft.setInverted(true);
+        shooterMotorLeft.getConfigurator().apply(
             new CurrentLimitsConfigs().withStatorCurrentLimit(4)
         );
+        shooterMotorRight.getConfigurator().apply(
+                new CurrentLimitsConfigs().withStatorCurrentLimit(4)
+        );
+        shooterMotorRight.setControl(new Follower(shooterMotorLeftID, true));
 
         shooterOutputAverager = new Averager(Constants.POSE_WINDOW_LENGTH);
 
@@ -45,7 +55,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     }
 
     private double getCurrentSpeed() {
-        return shooterMotor.getVelocity().getValue();
+        return shooterMotorLeft.getVelocity().getValue();
     }
 
     private double getTargetSpeed() {
@@ -64,11 +74,11 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
         shooterOutputAverager.addMeasurement(controllerOutput);
 
-        shooterMotor.setVoltage(shooterOutputAverager.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
+        shooterMotorLeft.setVoltage(shooterOutputAverager.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
     }
 
     private void applyIdleSpeed(){
-        shooterMotor.set(ShooterInfo.SHOOTER_IDLE_SPEED);
+        shooterMotorLeft.set(ShooterInfo.SHOOTER_IDLE_SPEED);
     }
 
     @Override

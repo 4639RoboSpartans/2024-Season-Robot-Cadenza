@@ -2,7 +2,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.Constants.RobotInfo.ShooterInfo.ShootingMode;
+import frc.robot.constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.led.LEDPattern;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
@@ -35,7 +35,7 @@ public class ShootCommand extends Command {
         shooter.setShootingMode(mode);
 
         if(shooter.isReady()) {
-            ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(0, 255, 0), 1));
+            ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(0, 255, 0), 2));
             hopper.run(false);
         }
         else {

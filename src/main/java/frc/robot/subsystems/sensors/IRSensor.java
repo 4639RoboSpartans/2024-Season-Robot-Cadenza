@@ -3,21 +3,28 @@ package frc.robot.subsystems.sensors;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
+import frc.robot.constants.IDs;
 import math.Averager;
 
 public class IRSensor extends SubsystemBase {
-    private final DigitalInput sensor;
+    private final DigitalInput sensor1;
+    private final DigitalInput sensor2;
     private boolean active = true;
 
-    private final Averager detection = new Averager(3);
+    // 0 = clear, 1 = has note
+    private final Averager noteDetection = new Averager(3);
 
     public IRSensor(){
-        sensor = new DigitalInput(Constants.IDs.IR_SENSOR);
+        sensor1 = new DigitalInput(IDs.IR_SENSOR_1_DIO_PORT);
+        sensor2 = new DigitalInput(IDs.IR_SENSOR_2_DIO_PORT);
     }
 
     public boolean rawSensorIsClear() {
-        return sensor.get();
+        // Since the IR sensor returns true if it is clear and not misaligned or
+        // malfunctioning, to make use of the redundancy provided by having two
+        // sensors, we use OR so that a misaligned sensor (which always returns
+        // true) is equivalent to having no sensor.
+        return sensor1.get() ;//|| sensor2.get();
     }
 
     public void setActive(boolean active) {
@@ -29,7 +36,7 @@ public class IRSensor extends SubsystemBase {
     }
 
     public boolean hasNote() {
-        return active && detection.getValue() >= 0.5;
+        return active && noteDetection.getValue() >= 0.5;
     }
 
     @Override
@@ -38,6 +45,6 @@ public class IRSensor extends SubsystemBase {
         SmartDashboard.putBoolean("IR sensor active", isActive());
         SmartDashboard.putBoolean("IR sensor has note", hasNote());
 
-        detection.addMeasurement(rawSensorIsClear() ? 0 : 1);
+        noteDetection.addMeasurement(rawSensorIsClear() ? 0 : 1);
     }
 }

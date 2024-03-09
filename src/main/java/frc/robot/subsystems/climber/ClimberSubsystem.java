@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.constants.Constants.RobotInfo.ClimberInfo;
+import static frc.robot.constants.RobotInfo.ClimberInfo;
 
 public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem {
     private final CANSparkMax leftMotor, rightMotor;

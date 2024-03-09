@@ -9,9 +9,9 @@ import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 import math.Averager;
 import math.MathUtil;
 
-import static frc.robot.constants.Constants.RobotInfo.AimInfo;
-import static frc.robot.constants.Constants.RobotInfo.ShooterInfo.ShooterSetpoint;
-import static frc.robot.constants.Constants.RobotInfo.SwerveInfo;
+import static frc.robot.constants.RobotInfo.AimInfo;
+import static frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpoint;
+import static frc.robot.constants.RobotInfo.SwerveInfo;
 
 public class AimSubsystem extends SubsystemBase implements AimInterface {
 
@@ -62,6 +62,10 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
 
         this.x.addMeasurement(x);
         this.z.addMeasurement(z);
+
+        double distance = Math.hypot(this.x.getValue(), this.z.getValue());
+        SmartDashboard.putNumber("Limelight distance: ", distance);
+
     }
 
     @Override

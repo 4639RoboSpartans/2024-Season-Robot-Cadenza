@@ -7,8 +7,9 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.constants.IDs;
 
-import static frc.robot.constants.Constants.RobotInfo.IntakeInfo;
+import static frc.robot.constants.RobotInfo.IntakeInfo;
 
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
@@ -31,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotMotorLeft.setInverted(false);
         pivotMotorRight.follow(pivotMotorLeft, true);
 
-        encoder = new DutyCycleEncoder(Constants.IDs.INTAKE_ENCODER_CHANNEL);
+        encoder = new DutyCycleEncoder(IDs.INTAKE_ENCODER_DIO_PORT);
         setExtended(ExtensionState.RETRACTED);
     }
 

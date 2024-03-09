@@ -10,8 +10,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.RobotInfo.SwerveInfo;
-import frc.robot.constants.Constants.SwerveModuleConfig;
+import frc.robot.constants.RobotInfo.SwerveInfo;
+import frc.robot.constants.SwerveModuleConfiguration;
 import math.MathUtil;
 
 public class SwerveModule {
@@ -24,7 +24,7 @@ public class SwerveModule {
     private final double driveConversionFactor;
     private double targetSpeed = 0;
 
-    public SwerveModule(SwerveModuleConfig swerveModuleData) {
+    public SwerveModule(SwerveModuleConfiguration swerveModuleData) {
         driveConversionFactor = (1. / 2048) * (1 / 6.55) * (0.1016) * Math.PI;
 
         driver = switch (Constants.currentRobot) {
@@ -47,11 +47,11 @@ public class SwerveModule {
 
         rotationOffsetDegrees = swerveModuleData.rotationOffset();
 
-        rotationPID = SwerveInfo.SWERVE_ROTATOR_PID_CONSTANTS.create(swerveModuleData.rotatorPIDkPMultiplier());
+        rotationPID = SwerveInfo.SWERVE_ROTATOR_PID_CONSTANTS.adjustKp(swerveModuleData.rotatorPIDkPMultiplier()).create();
         rotationPID.setTolerance(0.1);
         rotationPID.enableContinuousInput(-180, 180);
 
-        driverPID = SwerveInfo.SWERVE_DRIVER_PID_CONSTANTS.create(SwerveInfo.K_P_MULTIPLIER); //drive change
+        driverPID = SwerveInfo.SWERVE_DRIVER_PID_CONSTANTS.create();
         driverPID.setTolerance(0.1); //drive change
 
         CurrentLimitsConfigs motorCurrentLimiter = new CurrentLimitsConfigs()

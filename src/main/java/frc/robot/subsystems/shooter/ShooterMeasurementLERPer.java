@@ -1,9 +1,9 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.constants.Constants.RobotInfo.ShooterInfo;
-import frc.robot.constants.Constants.RobotInfo.ShooterInfo.ShooterSetpoint;
-import frc.robot.constants.Constants.RobotInfo.ShooterInfo.ShooterSetpointMeasurement;
+import frc.robot.constants.RobotInfo.ShooterInfo;
+import frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpoint;
+import frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpointMeasurement;
 import math.MathUtil;
 
 public class ShooterMeasurementLERPer {

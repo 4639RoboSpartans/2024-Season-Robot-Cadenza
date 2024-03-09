@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
+import frc.robot.constants.RobotInfo;
 import frc.robot.subsystems.NavX;
 
 public class OdometrySubsystem extends SubsystemBase{
@@ -16,7 +16,7 @@ public class OdometrySubsystem extends SubsystemBase{
         this.driveSubsystem = driveSubsystem;
         this.navx = navx;
         this.odometry = new SwerveDriveOdometry(
-            Constants.RobotInfo.SwerveInfo.SWERVE_DRIVE_KINEMATICS,
+            RobotInfo.SwerveInfo.SWERVE_DRIVE_KINEMATICS,
             navx.getRotation2d(), 
             new SwerveModulePosition[] {
             driveSubsystem.getSwerveModule("FL").getPosition(),

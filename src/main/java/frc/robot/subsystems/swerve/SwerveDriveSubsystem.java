@@ -9,9 +9,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants.RobotInfo.SwerveInfo;
+import frc.robot.constants.IDs;
+import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 
@@ -32,10 +32,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     public SwerveDriveSubsystem() {
         navx = SubsystemManager.getNavX();
 
-        moduleFrontLeft = new SwerveModule(Constants.IDs.MODULE_FRONT_LEFT);
-        moduleFrontRight = new SwerveModule(Constants.IDs.MODULE_FRONT_RIGHT);
-        moduleBackLeft = new SwerveModule(Constants.IDs.MODULE_BACK_LEFT);
-        moduleBackRight = new SwerveModule(Constants.IDs.MODULE_BACK_RIGHT);
+        moduleFrontLeft = new SwerveModule(IDs.MODULE_FRONT_LEFT);
+        moduleFrontRight = new SwerveModule(IDs.MODULE_FRONT_RIGHT);
+        moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
+        moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
         odometrySubsystem = new OdometrySubsystem(this, navx);
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 

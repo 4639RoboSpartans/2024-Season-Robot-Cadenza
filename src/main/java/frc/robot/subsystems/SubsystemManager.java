@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.constants.Constants;
+import frc.robot.constants.IDs;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
 import frc.robot.led.LEDStrip;
@@ -57,13 +57,6 @@ public class SubsystemManager {
         return irSensor;
     }
 
-    public static IRSensor getIrSensor2() {
-        if(irSensor2 == null) {
-            irSensor2 = new IRSensor();
-        }
-        return irSensor2;
-    }
-
     public static LEDStrip getLedStrip() {
         if(ledStrip == null) {
             ledStrip = switch(currentRobot){
@@ -85,7 +78,7 @@ public class SubsystemManager {
         if(shooterPivot == null) {
             shooterPivot = switch(currentRobot){
                 case ZEUS -> new DummyShooterPivotSubsystem();
-                case SIREN -> new NeoShooterPivotSubsystem(Constants.IDs.SHOOTER_PIVOT_MOTOR, shooter);
+                case SIREN -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR, shooter);
             };
         }
         return shooterPivot;
@@ -96,10 +89,10 @@ public class SubsystemManager {
             shooter = switch (currentRobot) {
                 case ZEUS -> new DummyShooterSubsystem();
                 case SIREN -> new FalconShooterSubsystem(
-                    Constants.IDs.SHOOTER_SHOOTER_MOTOR
+                    IDs.SHOOTER_SHOOTER_LEFT_MOTOR,
+                    IDs.SHOOTER_SHOOTER_RIGHT_MOTOR
                 );
             };
-//            shooter = new DummyShooterSubsystem();
         }
         return shooter;
     }
@@ -116,10 +109,10 @@ public class SubsystemManager {
             intake = switch(currentRobot){
                 case ZEUS -> new DummyIntakeSubsystem();
                 case SIREN -> new IntakeSubsystem(
-                    Constants.IDs.INTAKE_PIVOT_MOTOR_LEFT,
-                    Constants.IDs.INTAKE_PIVOT_MOTOR_RIGHT,
-                    Constants.IDs.INTAKE_MOTOR,
-                    Constants.IDs.INTAKE_ENCODER_CHANNEL
+                    IDs.INTAKE_PIVOT_MOTOR_LEFT,
+                    IDs.INTAKE_PIVOT_MOTOR_RIGHT,
+                    IDs.INTAKE_MOTOR,
+                    IDs.INTAKE_ENCODER_DIO_PORT
                 );
             };
         }
@@ -130,7 +123,7 @@ public class SubsystemManager {
         if(hopper == null) {
             hopper = switch(currentRobot){
                 case ZEUS -> new DummyHopperSubsystem();
-                case SIREN -> new HopperSubsystem(Constants.IDs.HOPPER_MOTOR);
+                case SIREN -> new HopperSubsystem(IDs.HOPPER_MOTOR);
             };
         }
         return hopper;
@@ -140,7 +133,7 @@ public class SubsystemManager {
         if(climber == null) {
             climber = switch(currentRobot){
                 case ZEUS -> new DummyClimberSubsystem();
-                case SIREN -> new ClimberSubsystem(Constants.IDs.CLIMBER_LEFT, Constants.IDs.CLIMBER_RIGHT);
+                case SIREN -> new ClimberSubsystem(IDs.CLIMBER_LEFT, IDs.CLIMBER_RIGHT);
             };
         }
         return climber;

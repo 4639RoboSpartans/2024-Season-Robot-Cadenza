@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.constants.Constants.Controls.DriverControls;
-import frc.robot.constants.Constants.Controls.OperatorControls;
+import frc.robot.constants.Controls.DriverControls;
+import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
@@ -21,10 +21,11 @@ import frc.robot.commands.drive.AmpAimCommand;
 import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.AutoAmpCommand;
-import frc.robot.commands.shooter.AutoShootCommand;
+import frc.robot.commands.shooter.AutoSpeakerCommand;
 import frc.robot.commands.shooter.AutoTrapCommand;
 import frc.robot.commands.shooter.ManualShootCommand;
 import frc.robot.led.LEDStrip;
+import frc.robot.led.PhasingLEDPattern;
 import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.NavX;
@@ -51,7 +52,6 @@ public class RobotContainer {
     private final IHopperSubsystem hopper;
 
     private final IRSensor ir;
-    private final IRSensor ir2;
     private final LEDStrip ledStrip;
 
     private final SendableChooser<Command> autos;
@@ -62,7 +62,6 @@ public class RobotContainer {
         navX = SubsystemManager.getNavX();
         aimSubsystem = SubsystemManager.getAimSubsystem();
         ir = SubsystemManager.getIRSensor();
-        ir2 = SubsystemManager.getIrSensor2();
         ledStrip = SubsystemManager.getLedStrip();
 
         swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
@@ -99,7 +98,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
 
         // shooting commands
-        NamedCommands.registerCommand("ShootSpeaker", new AutoShootCommand(shooter, hopper, ledStrip));
+        NamedCommands.registerCommand("ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
     }
@@ -113,10 +112,10 @@ public class RobotContainer {
         // TODO: extract to named class
         ledStrip.setDefaultCommand(new RunCommand(() -> {
             if(ir.hasNote()) {
-                ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(255, 50, 0)));
+                ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(255, 50, 0), 3));
             }
             else {
-                ledStrip.resetToBlank();
+                ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
             }
         }, ledStrip));
 
@@ -133,7 +132,7 @@ public class RobotContainer {
 
         oi.operatorController().getButton(OperatorControls.IntakeRetractButton).whileTrue(new RetractIntakeCommand(intake));
 
-        oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoShootCommand(shooter, hopper, ledStrip));
+        oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.RunTrapShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));

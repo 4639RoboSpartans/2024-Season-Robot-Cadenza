@@ -6,22 +6,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.sensors.IRSensor;
 
-import static frc.robot.constants.Constants.RobotInfo.HopperInfo;
+import static frc.robot.constants.RobotInfo.HopperInfo;
 
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
-    private final IRSensor ir, ir2;
+    private final IRSensor ir;
 
     public HopperSubsystem(int motorID) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
         motor.setIdleMode(CANSparkBase.IdleMode.kCoast);
         this.ir = SubsystemManager.getIRSensor();
-        this.ir2 = SubsystemManager.getIrSensor2();
     }
 
     @Override
     public void run(boolean checkNote) {
-        if ((ir.hasNote() || ir2.hasNote()) && checkNote) {
+        if (ir.hasNote() && checkNote) {
             motor.set(0);
         } else {
             motor.set(HopperInfo.HOPPER_SPEED);
@@ -40,9 +39,5 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
 
     public IRSensor getIR(){
         return ir;
-    }
-
-    public IRSensor getIR2(){
-        return ir2;
     }
 }
