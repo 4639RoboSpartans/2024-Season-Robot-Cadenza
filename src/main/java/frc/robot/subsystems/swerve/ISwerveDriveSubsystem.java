@@ -16,5 +16,4 @@ public interface ISwerveDriveSubsystem extends Subsystem {
     SwerveModule getSwerveModule(String module);
     void resetOdometry(Pose2d pose);
     void resetPose(Pose2d pose);
-    double getHeading();
 }

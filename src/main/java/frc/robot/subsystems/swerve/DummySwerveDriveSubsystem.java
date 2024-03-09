@@ -54,9 +54,4 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     public SwerveModule getSwerveModule(String module){
         return null;
     }
-
-    @Override
-    public double getHeading(){
-        return 0;
-    }
 }

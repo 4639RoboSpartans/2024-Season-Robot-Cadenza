@@ -30,6 +30,8 @@ public class SubsystemManager {
     private static NavX navX;
     private static IRSensor irSensor;
 
+    private static IRSensor irSensor2;
+
     private static LEDStrip ledStrip;
 
     private static ISwerveDriveSubsystem swerveDrive;
@@ -55,11 +57,18 @@ public class SubsystemManager {
         return irSensor;
     }
 
+    public static IRSensor getIrSensor2() {
+        if(irSensor2 == null) {
+            irSensor2 = new IRSensor();
+        }
+        return irSensor2;
+    }
+
     public static LEDStrip getLedStrip() {
         if(ledStrip == null) {
             ledStrip = switch(currentRobot){
                 case ZEUS -> new DummyLEDStrip();
-                case SIREN -> new PhysicalLEDStrip(0, 30);
+                case SIREN -> new PhysicalLEDStrip(0, 64);
             };
         }
         return ledStrip;
@@ -87,8 +96,7 @@ public class SubsystemManager {
             shooter = switch (currentRobot) {
                 case ZEUS -> new DummyShooterSubsystem();
                 case SIREN -> new FalconShooterSubsystem(
-                    Constants.IDs.SHOOTER_SHOOTER_MOTOR_LEFT,
-                    Constants.IDs.SHOOTER_SHOOTER_MOTOR_RIGHT
+                    Constants.IDs.SHOOTER_SHOOTER_MOTOR
                 );
             };
 //            shooter = new DummyShooterSubsystem();

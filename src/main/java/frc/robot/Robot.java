@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         if (autonomousCommand != null) {
-           autonomousCommand.andThen(
+            new WaitCommand(4).andThen(autonomousCommand).andThen(
                 new RunCommand(() -> 
                     CommandScheduler.getInstance()
                     .removeComposedCommand(autonomousCommand)
