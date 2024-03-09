@@ -42,7 +42,8 @@ public class TeleopSwerveDriveCommand extends Command {
 
     private double getRotationSpeed() {
         if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
-            return -aimSubsystem.getRotationSpeed();
+
+            return -aimSubsystem.getSwerveRotation();
         }
         else {
             return -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);

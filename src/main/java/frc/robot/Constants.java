@@ -1,6 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.oi.OI;
@@ -67,6 +69,7 @@ public final class Constants {
             public static final double AIM_ROTATION_SPEED = 2.5;
             public static final PID SWERVE_ROTATOR_PID = new PID(0.0085);
             public static final PID SWERVE_DRIVER_PID = new PID(0.65);
+            public static final double DERIVATIVE_MULTIPLIER = 0.1;
         }
 
         public static final class TrapInfo {

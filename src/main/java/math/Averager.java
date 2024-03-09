@@ -6,6 +6,7 @@ import java.util.Deque;
 public class Averager {
     private final Deque<Double> measurements = new ArrayDeque<>();
     private final int windowSize;
+    private double derivative = 0;
 
     public Averager(int windowSize) {
         this.windowSize = windowSize;
@@ -24,10 +25,17 @@ public class Averager {
     }
 
     public void addMeasurement(double measurement) {
+        double prevValue = getValue();
         measurements.addLast(measurement);
         while(measurements.size() > windowSize) {
             measurements.removeFirst();
         }
+        double currValue = getValue();
+        derivative = Math.abs(prevValue - currValue);
+    }
+
+    public double getDerivative(){
+        return derivative;
     }
 
     public boolean hasMeasurements() {

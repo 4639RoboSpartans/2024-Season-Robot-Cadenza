@@ -42,12 +42,5 @@ public class IRSensor extends SubsystemBase {
         SmartDashboard.putBoolean("IR sensor has note", hasNote());
 
         detection.addMeasurement(rawSensorIsClear() ? 0 : 1);
-
-        if(hasNote()) {
-            SubsystemManager.getLedStrip().usePattern(new SolidLEDPattern(new Color8Bit(255, 200, 0)));
-        }
-        else {
-            SubsystemManager.getLedStrip().usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
-        }
     }
 }
