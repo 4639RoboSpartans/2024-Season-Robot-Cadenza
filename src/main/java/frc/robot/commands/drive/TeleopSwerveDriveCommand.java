@@ -3,6 +3,7 @@ package frc.robot.commands.drive;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.Controls.DriverControls;
 import frc.robot.Constants.RobotInfo.SwerveInfo;
 import frc.robot.oi.OI;
@@ -46,7 +47,7 @@ public class TeleopSwerveDriveCommand extends Command {
             return -aimSubsystem.getSwerveRotation();
         }
         else {
-            return -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
+            return -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * Constants.RobotInfo.SwerveInfo.TELOP_ROBOT_ROTATION_SPEED;
         }
     }
 

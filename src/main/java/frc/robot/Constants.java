@@ -36,7 +36,8 @@ public final class Constants {
         public static final SwerveModuleConfig MODULE_BACK_LEFT = new SwerveModuleConfig(5, 6, 11, offsets[2]);//9.668
         public static final SwerveModuleConfig MODULE_BACK_RIGHT = new SwerveModuleConfig(7, 8, 12, offsets[3]);//50.400
 
-        public static final int SHOOTER_SHOOTER_MOTOR = 13;
+        public static final int SHOOTER_SHOOTER_MOTOR_LEFT = 13;
+        public static final int SHOOTER_SHOOTER_MOTOR_RIGHT = 17;
         public static final int SHOOTER_PIVOT_MOTOR = 14;
 
         public static final int CLIMBER_LEFT = 15;
@@ -70,6 +71,7 @@ public final class Constants {
             public static final PID SWERVE_ROTATOR_PID = new PID(0.0085);
             public static final PID SWERVE_DRIVER_PID = new PID(0.65);
             public static final double DERIVATIVE_MULTIPLIER = 0.1;
+            public static final double TELOP_ROBOT_ROTATION_SPEED = 4;
         }
 
         public static final class TrapInfo {

@@ -59,7 +59,7 @@ public class SubsystemManager {
         if(ledStrip == null) {
             ledStrip = switch(currentRobot){
                 case ZEUS -> new DummyLEDStrip();
-                case SIREN -> new PhysicalLEDStrip(0, 64);
+                case SIREN -> new PhysicalLEDStrip(0, 30);
             };
         }
         return ledStrip;
@@ -87,7 +87,8 @@ public class SubsystemManager {
             shooter = switch (currentRobot) {
                 case ZEUS -> new DummyShooterSubsystem();
                 case SIREN -> new FalconShooterSubsystem(
-                    Constants.IDs.SHOOTER_SHOOTER_MOTOR
+                    Constants.IDs.SHOOTER_SHOOTER_MOTOR_LEFT,
+                    Constants.IDs.SHOOTER_SHOOTER_MOTOR_RIGHT
                 );
             };
 //            shooter = new DummyShooterSubsystem();
