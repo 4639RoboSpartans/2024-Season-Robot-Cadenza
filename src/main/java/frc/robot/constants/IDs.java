@@ -16,7 +16,8 @@ public final class IDs {
     );
 
     public static final int SHOOTER_SHOOTER_LEFT_MOTOR = 13;
-    public static final int SHOOTER_PIVOT_MOTOR = 14;
+    public static final int SHOOTER_PIVOT_MOTOR_LEFT = 14;
+    public static final int SHOOTER_PIVOT_MOTOR_RIGHT = 19;
 
     public static final int CLIMBER_LEFT = 15;
     public static final int CLIMBER_RIGHT = 16;

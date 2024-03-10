@@ -78,7 +78,7 @@ public class SubsystemManager {
         if(shooterPivot == null) {
             shooterPivot = switch(currentRobot){
                 case ZEUS -> new DummyShooterPivotSubsystem();
-                case SIREN -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR, shooter);
+                case SIREN -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
             };
         }
         return shooterPivot;

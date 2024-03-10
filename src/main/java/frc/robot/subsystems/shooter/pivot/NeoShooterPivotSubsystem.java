@@ -15,7 +15,9 @@ import static frc.robot.constants.RobotInfo.ShooterInfo;
 
 public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
     // Components
-    private final CANSparkMax aimMotor;
+    private final CANSparkMax aimMotorLeft;
+    private final CANSparkMax aimMotorRight;
+    
     private final DutyCycleEncoder encoder;
     // References to other subsystems
     private final IShooterSubsystem shooter;
@@ -24,11 +26,14 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     private final PIDController aimPID;
     private boolean isUsingPID = true;
 
-    public NeoShooterPivotSubsystem(int aimMotorID, IShooterSubsystem shooter) {
-        aimMotor = new CANSparkMax(aimMotorID, CANSparkMax.MotorType.kBrushless);
-        aimMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+    public NeoShooterPivotSubsystem(int aimMotorLeftID, int aimMotorRightID, IShooterSubsystem shooter) {
+        aimMotorLeft = new CANSparkMax(aimMotorLeftID, CANSparkMax.MotorType.kBrushless);
+        aimMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
         encoder = new DutyCycleEncoder(IDs.SHOOTER_PIVOT_ENCODER_DIO_PORT);
         
+        aimMotorRight = new CANSparkMax(aimMotorRightID, CANSparkMax.MotorType.kBrushless);
+        aimMotorRight.follow(aimMotorLeft, true);
+
         this.shooter = shooter;
         aimSubsystem = SubsystemManager.getAimSubsystem();
         
@@ -58,7 +63,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         double currentAngle = getCurrentAngle();
         double pidOutput = aimPID.calculate(currentAngle);
 
-        aimMotor.set(pidOutput);
+        aimMotorLeft.set(pidOutput);
 
         SmartDashboard.putNumber("CurrentShooterAngle", currentAngle);
         SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
@@ -70,6 +75,6 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     }
 
     public void stop(){
-        aimMotor.stopMotor();
+        aimMotorLeft.stopMotor();
     }
 }
