@@ -23,7 +23,7 @@ public final class Controls {
         public static final OI.Buttons RunAmpShooterButton = OI.Buttons.LEFT_BUMPER;
         public static final OI.Buttons ManualShooterButton = OI.Buttons.LEFT_TRIGGER;
 
-        public static final OI.Buttons RunTrapShooterButton = OI.Buttons.RIGHT_BUMPER;
+        public static final OI.Buttons RunTrapShooterButton = OI.Buttons.B_BUTTON;
 
         public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
         public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
@@ -31,6 +31,8 @@ public final class Controls {
         public static final OI.Buttons IntakeRetractButton = OI.Buttons.POV_UP;
 
         public static final OI.Buttons ToggleIR = OI.Buttons.A_BUTTON;
+
+        public static final OI.Buttons LaunchShooterButton = OI.Buttons.RIGHT_BUMPER;
 
     }
 }

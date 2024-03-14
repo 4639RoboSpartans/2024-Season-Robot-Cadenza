@@ -56,6 +56,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
             case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
             case TRAP -> ShooterInfo.SHOOTER_TRAP_SETPOINT.angle();
             case IDLE -> ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT;
+            case LAUNCH -> ShooterInfo.SHOOTER_LAUNCH_SETPOINT.angle();
         };
 
         aimPID.setSetpoint(targetAngle);

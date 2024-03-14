@@ -45,7 +45,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         shooterMotorRight.getConfigurator().apply(
                 new CurrentLimitsConfigs().withStatorCurrentLimit(4)
         );
-        shooterMotorRight.setControl(new Follower(shooterMotorLeftID, true));
+            shooterMotorRight.setControl(new Follower(shooterMotorLeftID, true));
 
         shooterOutputAverager = new Averager(Constants.POSE_WINDOW_LENGTH);
 
@@ -65,6 +65,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             case AMP -> SHOOTER_AMP_SETPOINT.speed();
             case TRAP -> SHOOTER_TRAP_SETPOINT.speed();
             case IDLE -> 0;
+            case LAUNCH -> SHOOTER_LAUNCH_SETPOINT.speed();
         };
     }
 

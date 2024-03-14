@@ -136,6 +136,7 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.RunTrapShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
+        oi.operatorController().getButton(OperatorControls.LaunchShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
 
         oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 

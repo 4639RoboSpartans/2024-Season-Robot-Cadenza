@@ -45,7 +45,7 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.1, 0.001, 0.015);
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.085, 0.001, 0.015);
         public static final double AIM_ROT_POW = 0.7;
 
     }
@@ -58,16 +58,32 @@ public final class RobotInfo {
         }
 
         public enum ShootingMode {
-            AUTO_SPEAKER, SPEAKER, AMP, TRAP, IDLE
+            AUTO_SPEAKER, SPEAKER, AMP, TRAP, IDLE, LAUNCH
         }
 
         public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
-                new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(25, .85)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(28, .86)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.84, new ShooterInfo.ShooterSetpoint(30, .867)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.2, new ShooterInfo.ShooterSetpoint(30, .875)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.6, new ShooterInfo.ShooterSetpoint(32, .883)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.8, new ShooterInfo.ShooterSetpoint(42, .9)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.9, new ShooterInfo.ShooterSetpoint(26.75, .84275)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(27.25, .84325)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(27.25, .84375)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(27.75, .8475)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(28.5, .855)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(30, .8605)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(32, .86775)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(33.5, .873)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(36, .878)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(39, .88325)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(41, .887)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.0, new ShooterInfo.ShooterSetpoint(44, .889)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.1, new ShooterInfo.ShooterSetpoint(46, .889)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.2, new ShooterInfo.ShooterSetpoint(48, .8905)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.3, new ShooterInfo.ShooterSetpoint(50, .892)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.4, new ShooterInfo.ShooterSetpoint(52, .8935)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.5, new ShooterInfo.ShooterSetpoint(54.5, .895)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.6, new ShooterInfo.ShooterSetpoint(57.5, .8965)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.7, new ShooterInfo.ShooterSetpoint(57.5, .89675)),
+                // Max speed is 57.5
+                // Min angle is .9
+                // Max angle is .84375
         };
 
         public static final double SHOOTER_IDLE_SPEED = 0.2;
@@ -80,12 +96,16 @@ public final class RobotInfo {
                 .85
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                40,
-                .835
+                44,
+                .889
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_TRAP_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 20,
                 .82
+        );
+        public static final ShooterInfo.ShooterSetpoint SHOOTER_LAUNCH_SETPOINT = new ShooterInfo.ShooterSetpoint(
+            30, 
+            .85
         );
 
         public static final double SHOOTER_VOLTAGE = 10;
