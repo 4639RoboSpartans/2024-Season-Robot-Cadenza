@@ -51,6 +51,8 @@ public final class RobotInfo {
     }
 
     public static class ShooterInfo {
+        public static double LimelightOffsetY = -0.1524;
+        public static double LimelightOffsetX = -0.0762;
         public record ShooterSetpoint(double speed, double angle) {
         }
 

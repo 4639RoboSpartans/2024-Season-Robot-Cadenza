@@ -1,6 +1,7 @@
 package frc.robot.network;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static frc.robot.constants.RobotInfo.ShooterInfo;
 
 public class LimeLight {
     private LimeLight() {}
@@ -30,10 +31,12 @@ public class LimeLight {
     }
 
     public static double getXDistance() {
-        return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 0);
+        double rawDistance =  getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 0);
+        return rawDistance + ShooterInfo.LimelightOffsetX;
     }
     public static double getYDistance() {
-        return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 1);
+        double rawDistance =  getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 1);
+        return rawDistance + ShooterInfo.LimelightOffsetY;
     }
     public static double getZDistance() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 2);
