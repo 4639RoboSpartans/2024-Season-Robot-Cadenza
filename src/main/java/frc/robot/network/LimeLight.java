@@ -23,7 +23,7 @@ public class LimeLight {
     }
 
     public static double getTx() {
-        return Network.getTable("limelight").getDouble("tx");
+        return Network.getTable("limelight").getDouble("tx") + ShooterInfo.LimelightTxOffset;
     }
 
     public static double getTy() {
