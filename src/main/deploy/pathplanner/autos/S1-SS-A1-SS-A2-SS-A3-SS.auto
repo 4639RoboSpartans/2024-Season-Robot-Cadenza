@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.4141988456249237,
-      "y": 7.372641086578369
+      "x": 0.4236080944538117,
+      "y": 7.333699226379395
     },
-    "rotation": 3.431560853372087e-36
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,32 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootSpeaker"
+            "name": "AutonAimCommand"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -43,15 +68,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "A1-SS"
+            "name": "AutonAimCommand"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ShootSpeaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -61,7 +105,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SS-A2"
+                  "pathName": "A1-A2"
                 }
               },
               {
@@ -76,7 +120,32 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootSpeaker"
+            "name": "AutonAimCommand"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -96,6 +165,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A3-SS3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutonAimCommand"
           }
         },
         {
