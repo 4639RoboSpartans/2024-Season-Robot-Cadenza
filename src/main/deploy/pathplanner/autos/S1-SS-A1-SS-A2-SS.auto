@@ -42,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake command"
+                  "name": "IntakeCommand"
                 }
               }
             ]

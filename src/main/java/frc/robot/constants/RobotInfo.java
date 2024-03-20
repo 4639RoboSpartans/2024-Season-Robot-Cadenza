@@ -65,7 +65,7 @@ public final class RobotInfo {
         }
 
         public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
-                new ShooterInfo.ShooterSetpointMeasurement(1.15, new ShooterInfo.ShooterSetpoint(28, .808)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.15, new ShooterInfo.ShooterSetpoint(28.5, .80)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(28, .809)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(27.875, .811)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.4, new ShooterInfo.ShooterSetpoint(27.75, .814)),
@@ -76,10 +76,10 @@ public final class RobotInfo {
                 new ShooterInfo.ShooterSetpointMeasurement(1.9, new ShooterInfo.ShooterSetpoint(26.75, .842)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(27.25, .84325)),    
                 new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(27.25, .84375)),    
-                new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(28, .8445)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(28.5, .855)),    
-                new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(30, .8605)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(32, .86775)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(28, .845)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(29, .8515)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(30.5, .8635)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(32, .86675)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(33.5, .873)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(36, .878)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(39, .88325)),

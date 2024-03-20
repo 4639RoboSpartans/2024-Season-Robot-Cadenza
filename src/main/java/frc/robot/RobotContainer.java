@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.drive.AutonAimCommand;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.commands.climber.ExtendClimberCommand;
@@ -91,6 +92,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
         //drive commands
         NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
+        NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem,aimSubsystem, 0.5));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
@@ -137,6 +139,7 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.RunTrapShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.LaunchShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
+
 
         oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 
