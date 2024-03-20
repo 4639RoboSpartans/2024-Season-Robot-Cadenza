@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.shooter.*;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.commands.climber.ExtendClimberCommand;
@@ -20,10 +21,6 @@ import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.drive.AmpAimCommand;
 import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.intake.*;
-import frc.robot.commands.shooter.AutoAmpCommand;
-import frc.robot.commands.shooter.AutoSpeakerCommand;
-import frc.robot.commands.shooter.AutoTrapCommand;
-import frc.robot.commands.shooter.ManualShootCommand;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
 import frc.robot.led.SolidLEDPattern;
@@ -136,7 +133,8 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.RunTrapShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
-        oi.operatorController().getButton(OperatorControls.LaunchShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
+        oi.operatorController().getButton(OperatorControls.LaunchShooterButton).whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
+        oi.operatorController().getButton(OperatorControls.ShooterIntake).whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
 
         oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 

@@ -29,6 +29,7 @@ public final class Controls {
         public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
         public static final OI.Buttons IntakeExtendButton = OI.Buttons.POV_DOWN;
         public static final OI.Buttons IntakeRetractButton = OI.Buttons.POV_UP;
+        public static final OI.Buttons ShooterIntake = OI.Buttons.POV_RIGHT;
 
         public static final OI.Buttons ToggleIR = OI.Buttons.A_BUTTON;
 
