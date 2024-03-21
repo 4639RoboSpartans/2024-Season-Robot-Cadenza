@@ -7,6 +7,6 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 
 public class ShooterIntakeCommand extends ShootCommand{
     public ShooterIntakeCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip){
-        super(shooter, hopper, ledStrip, RobotInfo.ShooterInfo.ShootingMode.INTAKE);
+        super(shooter, hopper, ledStrip, RobotInfo.ShooterInfo.ShootingMode.INTAKE, true);
     }
 }

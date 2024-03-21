@@ -16,7 +16,18 @@ public class ShootCommand extends Command {
     private final IHopperSubsystem hopper;
     private final ShootingMode mode;
     private final LEDStrip ledStrip;
+    private final boolean hopperReverse;
 
+    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean hopperReverse) {
+        this.shooter = shooter;
+        this.hopper = hopper;
+        this.mode = mode;
+        this.ledStrip = ledStrip;
+
+        addRequirements(shooter, hopper, ledStrip);
+
+        this.hopperReverse = hopperReverse;
+    }
     public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode) {
         this.shooter = shooter;
         this.hopper = hopper;
@@ -24,6 +35,8 @@ public class ShootCommand extends Command {
         this.ledStrip = ledStrip;
 
         addRequirements(shooter, hopper, ledStrip);
+
+        this.hopperReverse = false;
     }
 
     @Override
@@ -37,7 +50,10 @@ public class ShootCommand extends Command {
 
         if(shooter.isReady()) {
             ledStrip.usePattern(DisplayInfo.readyPattern);
-            hopper.run(false);
+            if (hopperReverse){
+                hopper.runBackwards();;
+            }
+            else hopper.run(false);
         }
         else {
             ledStrip.usePattern(DisplayInfo.notReadyPattern);

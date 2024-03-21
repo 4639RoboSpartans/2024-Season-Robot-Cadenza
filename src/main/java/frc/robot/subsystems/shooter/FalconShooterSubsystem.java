@@ -64,9 +64,8 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
             case AMP -> SHOOTER_AMP_SETPOINT.speed();
             case TRAP -> SHOOTER_TRAP_SETPOINT.speed();
-            case IDLE -> 0;
+            case IDLE, INTAKE -> 0;
             case LAUNCH -> SHOOTER_LAUNCH_SETPOINT.speed();
-            case INTAKE -> SHOOTER_INTAKE_SETPOINT.speed();
         };
     }
 
@@ -82,6 +81,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     private void applyIdleSpeed(){
         shooterMotorLeft.set(ShooterInfo.SHOOTER_IDLE_SPEED);
     }
+    private void applyIntakeSpeed() { shooterMotorLeft.set(ShooterInfo.SHOOTER_INTAKE_SPEED); }
 
     @Override
     public void periodic() {
@@ -90,8 +90,9 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         SmartDashboard.putNumber("shooter target speed", getTargetSpeed());
 
         switch (shootingMode) {
-            case AUTO_SPEAKER, SPEAKER, AMP, TRAP, INTAKE -> applyBangBangControl(getTargetSpeed());
+            case AUTO_SPEAKER, SPEAKER, AMP, TRAP, LAUNCH -> applyBangBangControl(getTargetSpeed());
             case IDLE -> applyIdleSpeed();
+            case INTAKE -> applyIntakeSpeed();
         }
     }
 

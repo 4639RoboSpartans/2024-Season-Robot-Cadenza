@@ -51,7 +51,7 @@ public final class RobotInfo {
     }
 
     public static class ShooterInfo {
-        public static double LimelightTxOffset = -5;
+        public static double LimelightTxOffset = -8;
         public static double LimelightOffsetY = -0.1651;
         public static double LimelightOffsetX = -0.1524;
         public record ShooterSetpoint(double speed, double angle) {
@@ -65,7 +65,7 @@ public final class RobotInfo {
         }
 
         public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
-                new ShooterInfo.ShooterSetpointMeasurement(1.15, new ShooterInfo.ShooterSetpoint(28.5, .80)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.15, new ShooterInfo.ShooterSetpoint(28.5, .775)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(28, .809)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(27.875, .811)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.4, new ShooterInfo.ShooterSetpoint(27.75, .814)),
@@ -82,7 +82,7 @@ public final class RobotInfo {
                 new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(32, .86675)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(33.5, .873)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(36, .878)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(39, .88325)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(39, .8825)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(41, .887)),
                 new ShooterInfo.ShooterSetpointMeasurement(3.0, new ShooterInfo.ShooterSetpoint(44, .889)),
                 new ShooterInfo.ShooterSetpointMeasurement(3.1, new ShooterInfo.ShooterSetpoint(46, .889)),
@@ -98,6 +98,7 @@ public final class RobotInfo {
         };
 
         public static final double SHOOTER_IDLE_SPEED = 0.2;
+        public static final double SHOOTER_INTAKE_SPEED = -0.35;
         public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
 
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
@@ -115,7 +116,7 @@ public final class RobotInfo {
                 .82
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_LAUNCH_SETPOINT = new ShooterInfo.ShooterSetpoint(
-            30, 
+            45,
             .85
         );
 
