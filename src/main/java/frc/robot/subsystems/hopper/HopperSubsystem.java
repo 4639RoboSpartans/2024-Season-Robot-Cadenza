@@ -19,17 +19,17 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     }
 
     @Override
-    public void run(boolean checkNote) {
+    public void run(boolean checkNote, double speed) {
         if (ir.hasNote() && checkNote) {
             motor.set(0);
         } else {
-            motor.set(HopperInfo.HOPPER_SPEED);
+            motor.set(speed);
         }
     }
 
     @Override
-    public void runBackwards() {
-        motor.set(-HopperInfo.HOPPER_SPEED);
+    public void runBackwards(double speed) {
+        motor.set(-speed);
     }
 
     @Override

@@ -3,6 +3,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DisplayInfo;
+import frc.robot.constants.RobotInfo.HopperInfo;
 import frc.robot.constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.led.LEDPattern;
 import frc.robot.led.LEDStrip;
@@ -51,9 +52,12 @@ public class ShootCommand extends Command {
         if(shooter.isReady()) {
             ledStrip.usePattern(DisplayInfo.readyPattern);
             if (hopperReverse){
-                hopper.runBackwards();;
+                hopper.runBackwards(HopperInfo.HOPPER_SPEED);;
             }
-            else hopper.run(false);
+            else hopper.run(false, switch(mode) {
+                 case AMP -> 0.8;
+                 default -> HopperInfo.HOPPER_SPEED;
+            });
         }
         else {
             ledStrip.usePattern(DisplayInfo.notReadyPattern);

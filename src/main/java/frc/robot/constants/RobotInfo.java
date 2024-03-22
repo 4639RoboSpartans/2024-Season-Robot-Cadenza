@@ -27,7 +27,7 @@ public final class RobotInfo {
     public static final class IntakeInfo {
 
         public static final double INTAKE_SPEED = -0.6 * 1.6;
-        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.45;
+        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.48;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
         public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
     }
@@ -104,12 +104,12 @@ public final class RobotInfo {
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
 
         public static final ShooterInfo.ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                8.5,
-                .79
+                8.4,
+                .81
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                44,
-                .889
+                28,
+                .809
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_TRAP_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 20,
