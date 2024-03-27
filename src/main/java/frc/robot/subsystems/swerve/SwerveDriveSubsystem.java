@@ -60,6 +60,20 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         resetOdometry(new Pose2d());
     }
 
+    public void useTeleopCurrentLimits() {
+        moduleFrontLeft.useTeleopCurrentLimits();
+        moduleFrontRight.useTeleopCurrentLimits();
+        moduleBackLeft.useTeleopCurrentLimits();
+        moduleBackRight.useTeleopCurrentLimits();
+    }
+
+    public void useAutonCurrentLimits() {
+        moduleFrontLeft.useAutonCurrentLimits();
+        moduleFrontRight.useAutonCurrentLimits();
+        moduleBackLeft.useAutonCurrentLimits();
+        moduleBackRight.useAutonCurrentLimits();
+    }
+
     public Pose2d getPose() {
         return odometrySubsystem.getOdometry().getPoseMeters();
     }

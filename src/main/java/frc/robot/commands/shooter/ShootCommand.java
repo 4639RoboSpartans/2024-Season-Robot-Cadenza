@@ -1,5 +1,6 @@
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DisplayInfo;
@@ -18,6 +19,8 @@ public class ShootCommand extends Command {
     private final ShootingMode mode;
     private final LEDStrip ledStrip;
     private final boolean hopperReverse;
+
+    private double startTime;
 
     public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean hopperReverse) {
         this.shooter = shooter;
@@ -43,6 +46,7 @@ public class ShootCommand extends Command {
     @Override
     public void initialize() {
         System.out.println("Starting AutoShoot!");
+        startTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -61,7 +65,15 @@ public class ShootCommand extends Command {
         }
         else {
             ledStrip.usePattern(DisplayInfo.notReadyPattern);
-            hopper.stop();
+            if(Timer.getFPGATimestamp() > startTime + switch(mode) {
+                case AMP -> 0.08;
+                default -> 0.12;
+            }){
+                hopper.stop();
+            }
+            else {
+                hopper.run(false, HopperInfo.HOPPER_SPEED);
+            }
         }
     }
 

@@ -26,7 +26,7 @@ public final class RobotInfo {
 
     public static final class IntakeInfo {
 
-        public static final double INTAKE_SPEED = -0.6 * 1.6;
+        public static final double INTAKE_SPEED = -0.96;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.48;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
         public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
@@ -45,7 +45,7 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.085, 0.001, 0.015);
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.1, 0.001, 0.015);
         public static final double AIM_ROT_POW = 0.7;
 
     }
@@ -66,16 +66,16 @@ public final class RobotInfo {
 
         public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
                 new ShooterInfo.ShooterSetpointMeasurement(1.15, new ShooterInfo.ShooterSetpoint(28.5, .775)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(28, .809)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(28, .805)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(27.875, .811)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.4, new ShooterInfo.ShooterSetpoint(27.75, .814)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.5, new ShooterInfo.ShooterSetpoint(27.75, .82)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.6, new ShooterInfo.ShooterSetpoint(27.75, .825)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.7, new ShooterInfo.ShooterSetpoint(27.75, .83)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.8, new ShooterInfo.ShooterSetpoint(27.75, .834)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.9, new ShooterInfo.ShooterSetpoint(26.75, .842)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(27.25, .84325)),    
-                new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(27.25, .84375)),    
+                new ShooterInfo.ShooterSetpointMeasurement(1.9, new ShooterInfo.ShooterSetpoint(27.75, .841)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(27.75, .84325)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(27.75, .844)),    
                 new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(28, .845)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(29, .8515)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(30.5, .8635)),
@@ -104,19 +104,16 @@ public final class RobotInfo {
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
 
         public static final ShooterInfo.ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                8.4,
-                .81
+                8.45,
+                .81275
         );
-        public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                28,
-                .809
-        );
+        public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = measurements[2].setpoint;
         public static final ShooterInfo.ShooterSetpoint SHOOTER_TRAP_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 20,
                 .82
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_LAUNCH_SETPOINT = new ShooterInfo.ShooterSetpoint(
-            45,
+            30,
             .85
         );
 

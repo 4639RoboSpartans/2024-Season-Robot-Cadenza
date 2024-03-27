@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import frc.robot.oi.OI;
+import frc.robot.oi.OI.Buttons;
 
 public final class Controls {
 
@@ -16,6 +17,10 @@ public final class Controls {
         public static final OI.Buttons ClimberSwap2Button = OI.Buttons.POV_RIGHT;
 
         public static final OI.Buttons AmpAlignButton = OI.Buttons.X_BUTTON;
+
+        public static final OI.Buttons[] ResetNavXButtons = {
+            OI.Buttons.A_BUTTON, Buttons.B_BUTTON
+        };
     }
 
     public static final class OperatorControls {

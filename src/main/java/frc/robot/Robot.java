@@ -6,6 +6,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -13,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.network.LimeLight;
+import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 public class Robot extends TimedRobot {
     private Command autonomousCommand;
@@ -27,6 +31,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
         LimeLight.writeValuesToSmartDashboard();
     }
 
@@ -34,13 +39,19 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
 
+        ((SwerveDriveSubsystem) SubsystemManager.getSwerveDrive()).useAutonCurrentLimits();
+
         if (autonomousCommand != null) {
-            new WaitCommand(0).andThen(autonomousCommand).andThen(
-                new RunCommand(() -> 
-                    CommandScheduler.getInstance()
-                    .removeComposedCommand(autonomousCommand)
-                )
-            ).schedule();
+            new WaitCommand(robotContainer.autonDelay.getSelected())
+                .andThen(autonomousCommand)
+                .schedule();
+        }
+    }
+
+    @Override
+    public void autonomousExit() {
+        if(autonomousCommand != null){
+            CommandScheduler.getInstance().removeComposedCommand(autonomousCommand);
         }
     }
 
@@ -49,6 +60,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+
+        ((SwerveDriveSubsystem) SubsystemManager.getSwerveDrive()).useTeleopCurrentLimits();
     }
 
     @Override

@@ -54,12 +54,33 @@ public class SwerveModule {
         driverPID = SwerveInfo.SWERVE_DRIVER_PID_CONSTANTS.create();
         driverPID.setTolerance(0.1); //drive change
 
-        CurrentLimitsConfigs motorCurrentLimiter = new CurrentLimitsConfigs()
+        useAutonCurrentLimits();
+    }
+
+    public void useAutonCurrentLimits() {
+        CurrentLimitsConfigs driverCurrentLimiter = new CurrentLimitsConfigs()
                 .withStatorCurrentLimit(26)
                 .withStatorCurrentLimitEnable(true);
 
-        driver.getConfigurator().apply(motorCurrentLimiter);
-        rotator.getConfigurator().apply(motorCurrentLimiter);
+        CurrentLimitsConfigs rotatorCurrentLimiter = new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(26)
+                .withStatorCurrentLimitEnable(true);
+
+        driver.getConfigurator().apply(driverCurrentLimiter);
+        rotator.getConfigurator().apply(rotatorCurrentLimiter);
+    }
+
+    public void useTeleopCurrentLimits() {
+        CurrentLimitsConfigs driverCurrentLimiter = new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(35)
+                .withStatorCurrentLimitEnable(true);
+
+        CurrentLimitsConfigs rotatorCurrentLimiter = new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(26)
+                .withStatorCurrentLimitEnable(true);
+
+        driver.getConfigurator().apply(driverCurrentLimiter);
+        rotator.getConfigurator().apply(rotatorCurrentLimiter);
     }
 
     private static boolean isNegligible(SwerveModuleState state) {

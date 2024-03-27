@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.AutonAimCommand;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Controls.DriverControls;
@@ -26,6 +27,7 @@ import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
 import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
+import frc.robot.oi.OI.Buttons;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.aim.AimSubsystem;
@@ -53,7 +55,9 @@ public class RobotContainer {
     private final LEDStrip ledStrip;
 
     private final SendableChooser<Command> autos;
+    public final SendableChooser<Integer> autonDelay;
     public static SendableChooser<Boolean> alliance;
+    
 
     public RobotContainer() {
         oi = new OI();
@@ -70,6 +74,15 @@ public class RobotContainer {
         climber = SubsystemManager.getClimber();
 
         nameCommands();
+
+        autonDelay = new SendableChooser<>();
+        autonDelay.setDefaultOption("No Delay", 0);
+        autonDelay.addOption("4s", 4);
+        autonDelay.addOption("5s", 5);
+        autonDelay.addOption("6s", 6);
+        autonDelay.addOption("7s", 7);
+        autonDelay.addOption("8s", 8);
+        SmartDashboard.putData("Auton Delay", autonDelay);
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
@@ -141,6 +154,22 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 
         oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem, aimSubsystem));
+
+
+
+        new Trigger(() -> {
+            for(Buttons x : DriverControls.ResetNavXButtons) {
+                if(!oi.driverController().getButton(x).getAsBoolean()) {
+                    return false;
+                }
+            }
+            return true;
+        }).whileTrue(new Command() {
+            @Override
+            public void initialize() {
+                navX.reset();
+            }
+        });
     }
 
     public Command getAutonomousCommand() {
