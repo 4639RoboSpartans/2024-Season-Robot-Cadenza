@@ -28,9 +28,22 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "ShootSpeaker"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootSpeaker"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    }
+                  ]
                 }
               },
               {

@@ -45,15 +45,16 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.1, 0.001, 0.015);
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.06, 0, 0);
         public static final double AIM_ROT_POW = 0.7;
+        public static final double AIM_UPWARDS_TILT = Math.PI/6;
 
     }
 
     public static class ShooterInfo {
         public static double LimelightTxOffset = -8;
         public static double LimelightOffsetY = -0.1651;
-        public static double LimelightOffsetX = -0.1524;
+        public static double LimelightOffsetX = -0.2667;
         public record ShooterSetpoint(double speed, double angle) {
         }
 

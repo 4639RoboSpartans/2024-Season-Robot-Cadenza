@@ -50,4 +50,16 @@ public class LimeLight {
     public static double getZRotation() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 5);
     }
+
+    public static double getRobotRelativeXDistance() {
+        double rawDistance =  getOrNaN(Network.getTable("limelight").getDoubleArray("targetpose_robotspace"), 0);
+        return rawDistance + ShooterInfo.LimelightOffsetX;
+    }
+    public static double getRobotRelativeYDistance() {
+        double rawDistance =  getOrNaN(Network.getTable("limelight").getDoubleArray("targetpose_robotspace"), 1);
+        return rawDistance + ShooterInfo.LimelightOffsetY;
+    }
+    public static double getRobotRelativeZDistance() {
+        return getOrNaN(Network.getTable("limelight").getDoubleArray("targetpose_robotspace"), 2);
+    }
 }
