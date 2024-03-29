@@ -99,7 +99,7 @@ public class SubsystemManager {
     
     public static AimSubsystem getAimSubsystem() {
         if(aimSubsystem == null) {
-            aimSubsystem = new AimSubsystem(navX);
+            aimSubsystem = new AimSubsystem();
         }
         return aimSubsystem;
     }
@@ -114,8 +114,9 @@ public class SubsystemManager {
                     IDs.INTAKE_MOTOR,
                     IDs.INTAKE_ENCODER_DIO_PORT
                 );
+                // case SIREN -> new DummyIntakeSubsystem();
             };
-        }
+        };
         return intake;
     }
 

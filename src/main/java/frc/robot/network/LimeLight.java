@@ -36,7 +36,7 @@ public class LimeLight {
     }
     public static double getYDistance() {
         double rawDistance =  getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 1);
-        return rawDistance + ShooterInfo.LimelightOffsetY;
+        return rawDistance + ShooterInfo.LimelightOffsetZ;
     }
     public static double getZDistance() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("camerapose_targetspace"), 2);
@@ -57,9 +57,12 @@ public class LimeLight {
     }
     public static double getRobotRelativeYDistance() {
         double rawDistance =  getOrNaN(Network.getTable("limelight").getDoubleArray("targetpose_robotspace"), 1);
-        return rawDistance + ShooterInfo.LimelightOffsetY;
+        return rawDistance + ShooterInfo.LimelightOffsetZ;
     }
     public static double getRobotRelativeZDistance() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("targetpose_robotspace"), 2);
+    }
+    public static double getRobotRelativeXRotation() {
+        return getOrNaN(Network.getTable("limelight").getDoubleArray("targetpose_robotspace"), 3);
     }
 }

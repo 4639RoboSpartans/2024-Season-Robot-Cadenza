@@ -67,7 +67,7 @@ public class ShootCommand extends Command {
             ledStrip.usePattern(DisplayInfo.notReadyPattern);
             if(Timer.getFPGATimestamp() > startTime + switch(mode) {
                 case AMP -> 0.08;
-                default -> 0.12;
+                default -> 0;
             }){
                 hopper.stop();
             }
