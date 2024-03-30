@@ -29,7 +29,7 @@ public final class RobotInfo {
         public static final double INTAKE_SPEED = -0.5;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.48;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
-        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(8, 0, 0);
+        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
     }
 
     public static final class HopperInfo {
