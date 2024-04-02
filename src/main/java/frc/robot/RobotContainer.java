@@ -40,7 +40,7 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
-    private final OI oi;
+    public static OI oi;
     private final NavX navX;
 
     private final ISwerveDriveSubsystem swerveDriveSubsystem;

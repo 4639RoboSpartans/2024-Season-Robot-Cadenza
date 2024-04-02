@@ -1,15 +1,15 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
+import frc.robot.constants.Controls;
 import frc.robot.constants.DisplayInfo;
 import frc.robot.constants.RobotInfo.HopperInfo;
 import frc.robot.constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.led.LEDPattern;
 import frc.robot.led.LEDStrip;
-import frc.robot.led.PhasingLEDPattern;
-import frc.robot.led.SolidLEDPattern;
+import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 
@@ -20,27 +20,23 @@ public class ShootCommand extends Command {
     private final LEDStrip ledStrip;
     private final boolean hopperReverse;
 
+    private final boolean requireSeperateShootButton;
+
     private double startTime;
 
-    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean hopperReverse) {
+    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean hopperReverse, boolean requireSeperateShootButton) {
         this.shooter = shooter;
         this.hopper = hopper;
         this.mode = mode;
         this.ledStrip = ledStrip;
+        this.requireSeperateShootButton = requireSeperateShootButton;
 
         addRequirements(shooter, hopper, ledStrip);
 
         this.hopperReverse = hopperReverse;
     }
-    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode) {
-        this.shooter = shooter;
-        this.hopper = hopper;
-        this.mode = mode;
-        this.ledStrip = ledStrip;
-
-        addRequirements(shooter, hopper, ledStrip);
-
-        this.hopperReverse = false;
+    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean requireSeperateShootButton) {
+        this(shooter, hopper, ledStrip, mode, false, requireSeperateShootButton);
     }
 
     @Override
@@ -55,13 +51,18 @@ public class ShootCommand extends Command {
 
         if(shooter.isReady()) {
             ledStrip.usePattern(DisplayInfo.readyPattern);
-            if (hopperReverse){
-                hopper.runBackwards(HopperInfo.HOPPER_SPEED);;
+
+            if (!requireSeperateShootButton || RobotContainer.oi.operatorController().getButton(
+                    Controls.OperatorControls.FeedShooterButton
+            ).getAsBoolean()) {
+                if (hopperReverse) {
+                    hopper.runBackwards(HopperInfo.HOPPER_SPEED);
+                    ;
+                } else hopper.run(false, switch (mode) {
+                    case AMP -> 0.8;
+                    default -> HopperInfo.HOPPER_SPEED;
+                });
             }
-            else hopper.run(false, switch(mode) {
-                 case AMP -> 0.8;
-                 default -> HopperInfo.HOPPER_SPEED;
-            });
         }
         else {
             ledStrip.usePattern(DisplayInfo.notReadyPattern);

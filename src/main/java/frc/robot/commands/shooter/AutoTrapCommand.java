@@ -7,6 +7,6 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 
 public class AutoTrapCommand extends ShootCommand{
     public AutoTrapCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip) {
-        super(shooter, hopper, ledStrip, RobotInfo.ShooterInfo.ShootingMode.TRAP);
+        super(shooter, hopper, ledStrip, RobotInfo.ShooterInfo.ShootingMode.TRAP, false);
     }
 }
