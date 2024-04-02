@@ -47,6 +47,6 @@ public class IntakeCommand extends Command {
 
     @Override
     public boolean isFinished(){
-        return seen == true && Timer.getFPGATimestamp() - noteTime > 0.125;
+        return seen == true && Timer.getFPGATimestamp() - noteTime > 0.;
     }
 }

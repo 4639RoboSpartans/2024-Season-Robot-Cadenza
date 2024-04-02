@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2.371119976043701,
+      "y": 5.567087650299072
+    },
+    "rotation": -1.8094218898812342e-38
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "tuning path 3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}

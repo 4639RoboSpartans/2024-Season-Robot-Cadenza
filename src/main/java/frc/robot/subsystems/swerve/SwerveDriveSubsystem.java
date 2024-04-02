@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.IDs;
@@ -47,8 +48,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 this::getRobotRelativeSpeeds,
                 this::setRawMovement,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(56, 0, 0.0), //TODO: find constants for 2024 robot
-                        new PIDConstants(256, 0, 0.0), //TODO: find constants for 2024 robot
+                        SwerveInfo.TranslationPID, //TODO: find constants for 2024 robot
+                        SwerveInfo.RotationPID, //TODO: find constants for 2024 robot
                         4,
                         0.4,
                         new ReplanningConfig()
@@ -128,6 +129,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleFrontRight.periodic();
         moduleBackLeft.periodic();
         moduleBackRight.periodic();
+        SmartDashboard.putNumber("pose x", odometrySubsystem.getOdometry().getPoseMeters().getTranslation().getX());
+        SmartDashboard.putNumber("pose y", odometrySubsystem.getOdometry().getPoseMeters().getTranslation().getY());
+        SmartDashboard.putNumber("heading pose", odometrySubsystem.getOdometry().getPoseMeters().getRotation().getDegrees());
     }
 
     public void setBrakeMode() {

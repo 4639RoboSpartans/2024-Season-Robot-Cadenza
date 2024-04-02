@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -18,6 +20,9 @@ public final class RobotInfo {
         public static final PIDTemplate SWERVE_DRIVER_PID_CONSTANTS = new PIDTemplate(3.25);
         public static final double DERIVATIVE_MULTIPLIER = 0.1;
         public static final double TELOP_ROTATION_SPEED = 4;
+
+        public static final PIDConstants TranslationPID = new PIDConstants(64, 0, 0.0);
+        public static final PIDConstants RotationPID = new PIDConstants(64, 0, 0.0);
     }
 
     public static final class TrapInfo {
@@ -26,9 +31,9 @@ public final class RobotInfo {
 
     public static final class IntakeInfo {
 
-        public static final double INTAKE_SPEED = -0.5;
-        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.48;
-        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.69;
+        public static final double INTAKE_SPEED = -0.8;
+        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.3;
+        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.52;
         public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
     }
 
@@ -45,7 +50,7 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.08, 0.01, 0);
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.12, 0.01, 0);
         public static final double AIM_ROT_POW = 0.7;
         public static final double AIM_UPWARDS_TILT = Math.PI/6;
 
@@ -54,7 +59,7 @@ public final class RobotInfo {
     public static class ShooterInfo {
         public static double LimelightTxOffset = -8;
         public static double LimelightOffsetZ = -0.1651;
-        public static double LimelightOffsetX = -0.1867;
+        public static double LimelightOffsetX = -0.1267;
         public record ShooterSetpoint(double speed, double angle) {
         }
 
@@ -66,36 +71,42 @@ public final class RobotInfo {
         }
 
         public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
-                new ShooterInfo.ShooterSetpointMeasurement(1.15, new ShooterInfo.ShooterSetpoint(24, .8)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(24.5, .8)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(24.5, .805)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.4, new ShooterInfo.ShooterSetpoint(25, .81)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.5, new ShooterInfo.ShooterSetpoint(25.5, .8125)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.6, new ShooterInfo.ShooterSetpoint(25.5, .815)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.7, new ShooterInfo.ShooterSetpoint(25.5, .82)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.8, new ShooterInfo.ShooterSetpoint(27.75, .834)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.9, new ShooterInfo.ShooterSetpoint(27.75, .841)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(27.75, .84325)),    
-                // new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(27.75, .844)),    
-                // new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(28, .845)),
-                // new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(29, .8515)),
-                // new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(30.5, .8635)),
-                // new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(32, .86675)),
-                // new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(33.5, .873)),
-                // new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(36, .878)),
-                // new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(39, .8825)),
-                // new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(41, .887)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.0, new ShooterInfo.ShooterSetpoint(44, .889)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.1, new ShooterInfo.ShooterSetpoint(46, .889)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.2, new ShooterInfo.ShooterSetpoint(48, .8905)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.3, new ShooterInfo.ShooterSetpoint(50, .892)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.4, new ShooterInfo.ShooterSetpoint(52, .8935)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.5, new ShooterInfo.ShooterSetpoint(54.5, .895)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.6, new ShooterInfo.ShooterSetpoint(57.5, .8965)),
-                // new ShooterInfo.ShooterSetpointMeasurement(3.7, new ShooterInfo.ShooterSetpoint(57.5, .89675))
-                // Max speed is 57.5
+                new ShooterInfo.ShooterSetpointMeasurement(1.1, new ShooterInfo.ShooterSetpoint(24, .802)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(24, .805)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(24.5, .809)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.4, new ShooterInfo.ShooterSetpoint(24.5, .8125)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.5, new ShooterInfo.ShooterSetpoint(25, .817)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.6, new ShooterInfo.ShooterSetpoint(25, .821)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.7, new ShooterInfo.ShooterSetpoint(25, .83)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.8, new ShooterInfo.ShooterSetpoint(25.5, .833)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.9, new ShooterInfo.ShooterSetpoint(26, .8395)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(26, .842)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(26.5, .845)),    
+                new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(26.5, .8495)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(26.75, .8575)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(27, .8605)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(27.25, .863)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(27.65, .863)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(28.25, .865)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(29.25, .8675)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(30.6, .87)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.0, new ShooterInfo.ShooterSetpoint(32.25, .8735)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.1, new ShooterInfo.ShooterSetpoint(34.5, .876)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.2, new ShooterInfo.ShooterSetpoint(37, .8815)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.3, new ShooterInfo.ShooterSetpoint(39.5, .884)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.4, new ShooterInfo.ShooterSetpoint(42, .886)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.5, new ShooterInfo.ShooterSetpoint(45, .886)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.6, new ShooterInfo.ShooterSetpoint(47.5, .89)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.7, new ShooterInfo.ShooterSetpoint(50, .892)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.8, new ShooterInfo.ShooterSetpoint(52.5, .892)),
+                new ShooterInfo.ShooterSetpointMeasurement(3.9, new ShooterInfo.ShooterSetpoint(54.5, .893)),
+                new ShooterInfo.ShooterSetpointMeasurement(4.0, new ShooterInfo.ShooterSetpoint(55.75, .8945)),
+                new ShooterInfo.ShooterSetpointMeasurement(4.1, new ShooterInfo.ShooterSetpoint(56.5, .896)),
+                new ShooterInfo.ShooterSetpointMeasurement(4.2, new ShooterInfo.ShooterSetpoint(57.25, .897)),
+                new ShooterInfo.ShooterSetpointMeasurement(4.3, new ShooterInfo.ShooterSetpoint(58.5, .898))
+                // Max speed is 58.5
                 // Min angle is .9
-                // Max angle is .84375
+            
         };
 
         public static final double SHOOTER_IDLE_SPEED = 0.2;

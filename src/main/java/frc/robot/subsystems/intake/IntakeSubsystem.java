@@ -67,6 +67,8 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         SmartDashboard.putNumber("pivot pid output", pidOutput);
 
         pivotMotorLeft.set(pidOutput);
+
+        SmartDashboard.putNumber("intake pivot output", pivotMotorRight.getAppliedOutput());
     }
 
     public void stop() {
