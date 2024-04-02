@@ -40,5 +40,6 @@ public final class Controls {
 
         public static final OI.Buttons LaunchShooterButton = OI.Buttons.RIGHT_BUMPER;
 
+        public static final Buttons FeedShooterButton = Buttons.POV_LEFT;
     }
 }
