@@ -116,7 +116,7 @@ public final class RobotInfo {
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
 
         public static final ShooterInfo.ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                7.1,
+                6.9,
                 .811
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = measurements[2].setpoint;
