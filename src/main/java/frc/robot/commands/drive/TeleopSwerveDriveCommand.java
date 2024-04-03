@@ -32,8 +32,8 @@ public class TeleopSwerveDriveCommand extends Command {
     public void execute() {
         double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-
-        double rotateSpeed = getRotationSpeed();
+        double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
+        double rotateSpeed = getRotationSpeed() * (1 + rotationMultiplier);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);

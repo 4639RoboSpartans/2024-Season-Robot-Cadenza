@@ -20,11 +20,11 @@ public class IRSensor extends SubsystemBase {
     }
 
     public boolean rawSensorIsClear() {
-        // Since the IR sensor returns true if it is clear and not misaligned or
+        // Since the IR sensor returns true if it is clear or misaligned or
         // malfunctioning, to make use of the redundancy provided by having two
         // sensors, we use OR so that a misaligned sensor (which always returns
         // true) is equivalent to having no sensor.
-        return sensor1.get() ;//|| sensor2.get();
+        return sensor1.get();
     }
 
     public void setActive(boolean active) {
