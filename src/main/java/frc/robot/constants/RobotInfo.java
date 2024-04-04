@@ -9,7 +9,7 @@ public final class RobotInfo {
     public static final class SwerveInfo {
         public static final double centerToWheel = 0.245;
 
-        public static final int K_P_MULTIPLIER = 1;
+        public static final double K_P_MULTIPLIER = 1;
         public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(new Translation2d(centerToWheel, centerToWheel), new Translation2d(centerToWheel, -centerToWheel), new Translation2d(-centerToWheel, centerToWheel), new Translation2d(-centerToWheel, -centerToWheel));
 
         // Change MOVEMENT_SPEED to 1.0 for max speed
@@ -86,7 +86,7 @@ public final class RobotInfo {
                 new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(26.75, .8575)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(27, .8605)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(27.25, .863)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(27.65, .863)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(27.65, .8635)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(28.25, .865)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(29.25, .8685)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(30.6, .871)),
@@ -116,7 +116,7 @@ public final class RobotInfo {
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
 
         public static final ShooterInfo.ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                6.9,
+                6.6,
                 .811
         );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = measurements[2].setpoint;

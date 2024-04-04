@@ -3,8 +3,10 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotInfo.HopperInfo;
+import frc.robot.constants.RobotInfo.IntakeInfo;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.intake.IIntakeSubsystem.ExtensionState;
 
 public class IntakeCommand extends Command {
     private final IIntakeSubsystem intake;
@@ -24,12 +26,16 @@ public class IntakeCommand extends Command {
     public void execute() {
         intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED);
         intake.intake();
-        hopper.run(false, HopperInfo.HOPPER_SPEED);
         if (!seen){
+            hopper.run(false, HopperInfo.HOPPER_SPEED);
             if (hopper.getIR().hasNote()){
                 noteTime = Timer.getFPGATimestamp();
                 seen = true;
+                intake.setExtended(ExtensionState.RETRACTED);
             }
+        }
+        else {
+            hopper.run(false, HopperInfo.HOPPER_SPEED / 2, true);
         }
     }
 
@@ -47,6 +53,7 @@ public class IntakeCommand extends Command {
 
     @Override
     public boolean isFinished(){
-        return seen == true && Timer.getFPGATimestamp() - noteTime > 0.;
+        return seen == true && Timer.getFPGATimestamp() - noteTime > 0.14;
     }
+
 }

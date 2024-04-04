@@ -8,4 +8,5 @@ public class DummyHopperSubsystem extends SubsystemBase implements IHopperSubsys
     public void runBackwards(double speed) {}
     public void stop() {}
     public IRSensor getIR() { return null; }
+    public void run(boolean checkNote, double speed, boolean reversed) {}
 }

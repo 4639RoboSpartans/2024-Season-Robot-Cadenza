@@ -8,4 +8,5 @@ public interface IHopperSubsystem extends Subsystem {
     void runBackwards(double speed);
     void stop();
     IRSensor getIR();
+    void run(boolean checkNOte, double speed, boolean reversed);
 }

@@ -3,16 +3,16 @@ package frc.robot.constants;
 public final class IDs {
     // Swerve uses up motor ids 1-12
     public static final SwerveModuleConfiguration MODULE_FRONT_LEFT = new SwerveModuleConfiguration(
-        1, 2, 9, Constants.swerveOffsets[0]
+        1, 2, 9, Constants.swerveOffsets[0]//, 0.8
     );
     public static final SwerveModuleConfiguration MODULE_FRONT_RIGHT = new SwerveModuleConfiguration(
-        3, 4, 10, Constants.swerveOffsets[1]
+        3, 4, 10, Constants.swerveOffsets[1]//, 0.5
     );
     public static final SwerveModuleConfiguration MODULE_BACK_LEFT = new SwerveModuleConfiguration(
-        5, 6, 11, Constants.swerveOffsets[2]
+        5, 6, 11, Constants.swerveOffsets[2]//, 0.8
     );
     public static final SwerveModuleConfiguration MODULE_BACK_RIGHT = new SwerveModuleConfiguration(
-        7, 8, 12, Constants.swerveOffsets[3]
+        7, 8, 12, Constants.swerveOffsets[3]//, 0.8
     );
 
     public static final int SHOOTER_SHOOTER_LEFT_MOTOR = 13;
