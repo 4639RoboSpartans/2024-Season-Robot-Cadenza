@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.4236080944538117,
-      "y": 7.333699226379395
+      "x": 1.3350534439086914,
+      "y": 5.598077774047852
     },
     "rotation": 0.0
   },
@@ -12,21 +12,53 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "S1-SS"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutonAimCommand"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 0.5
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "S2-A2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutonAimCommand"
           }
         },
         {
@@ -61,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SS-A1"
+                  "pathName": "A2-A1"
                 }
               },
               {
@@ -77,12 +109,6 @@
           "type": "named",
           "data": {
             "name": "AutonAimCommand"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {

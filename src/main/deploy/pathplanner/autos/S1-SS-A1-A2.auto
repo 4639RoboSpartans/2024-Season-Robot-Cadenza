@@ -124,6 +124,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "A1 turn"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [

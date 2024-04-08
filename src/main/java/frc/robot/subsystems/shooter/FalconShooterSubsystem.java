@@ -111,6 +111,9 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     }
 
     private boolean isUpToSpeed() {
-        return Math.abs(getCurrentSpeed()) >= Math.abs(getTargetSpeed()) * 0.95;
+        return Math.abs(getCurrentSpeed()) >= Math.abs(getTargetSpeed()) * switch(shootingMode) {
+            case AMP -> .98;
+            default -> 0.95;
+        };
     }
 }
