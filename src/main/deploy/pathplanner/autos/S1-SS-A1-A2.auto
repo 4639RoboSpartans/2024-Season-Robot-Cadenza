@@ -12,21 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "S1-SS"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {
@@ -40,28 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "race",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ShootSpeaker"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
-                      }
-                    }
-                  ]
+                  "name": "ExtendIntake"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ExtendIntake"
+                  "name": "ShootSpeaker"
                 }
               }
             ]
@@ -99,12 +74,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -124,9 +93,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "A1 turn"
+            "waitTime": 0.5
           }
         },
         {
@@ -149,21 +118,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "A2 turn"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "AutonAimCommand"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {
