@@ -32,4 +32,9 @@ class _AimCommand extends Command {
     public void end(boolean interrupted) {
         swerveDriveSubsystem.stop();
     }
+
+    @Override
+    public boolean isFinished(){
+        return aimSubsystem.isAtSetpoint();
+    }
 }

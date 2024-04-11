@@ -19,9 +19,14 @@ import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 public class Robot extends TimedRobot {
+    private static boolean isAuton = false;
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
+
+    public static boolean isInAuton(){
+        return isAuton;
+    }
 
     @Override
     public void robotInit() {
@@ -38,6 +43,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
+        isAuton = true;
 
         ((SwerveDriveSubsystem) SubsystemManager.getSwerveDrive()).useAutonCurrentLimits();
 
@@ -50,6 +56,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit() {
+        isAuton = false;
         if(autonomousCommand != null){
             CommandScheduler.getInstance().removeComposedCommand(autonomousCommand);
         }
@@ -57,6 +64,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        isAuton = false;
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }

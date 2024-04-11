@@ -12,7 +12,9 @@ public class ShooterMeasurementLERPer {
 
         SmartDashboard.putNumber("Limelight distance: ", distance);
 
-        ShooterSetpointMeasurement a = ShooterInfo.measurements[0], b = ShooterInfo.measurements[1];
+        ShooterSetpointMeasurement
+                a = ShooterInfo.measurements[0],
+                b = ShooterInfo.measurements[1];
         for(int i = 1; i < ShooterInfo.measurements.length; i++) {
             a = ShooterInfo.measurements[i - 1];
             b = ShooterInfo.measurements[i];

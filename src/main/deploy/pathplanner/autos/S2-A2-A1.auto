@@ -56,9 +56,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "AutonAimCommand"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutonAimCommand"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
+                }
+              }
+            ]
           }
         },
         {
@@ -106,9 +119,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "AutonAimCommand"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutonAimCommand"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
+                }
+              }
+            ]
           }
         },
         {

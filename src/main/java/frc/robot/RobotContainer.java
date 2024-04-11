@@ -24,6 +24,7 @@ import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.drive.AmpAimCommand;
 import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.intake.*;
+import frc.robot.constants.RobotInfo;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
 import frc.robot.led.SolidLEDPattern;
@@ -31,6 +32,7 @@ import frc.robot.oi.OI;
 import frc.robot.oi.OI.Buttons;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.aim.AimInterface;
 import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
@@ -103,7 +105,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
         //drive commands
         NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
-        NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem,aimSubsystem, 1));
+        NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem,aimSubsystem, RobotInfo.AimInfo.AIM_TIME));
+        NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter, RobotInfo.AimInfo.AIM_TIME));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));

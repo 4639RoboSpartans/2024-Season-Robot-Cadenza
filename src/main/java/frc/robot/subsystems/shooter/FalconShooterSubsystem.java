@@ -7,6 +7,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
@@ -79,7 +80,10 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     }
 
     private void applyIdleSpeed(){
-        shooterMotorLeft.set(ShooterInfo.SHOOTER_IDLE_SPEED);
+        double speed = Robot.isInAuton()
+                ? SHOOTER_AUTON_IDLE_SPEED
+                : SHOOTER_IDLE_SPEED;
+        shooterMotorLeft.set(speed);
     }
     private void applyIntakeSpeed() { shooterMotorLeft.set(ShooterInfo.SHOOTER_INTAKE_SPEED); }
 

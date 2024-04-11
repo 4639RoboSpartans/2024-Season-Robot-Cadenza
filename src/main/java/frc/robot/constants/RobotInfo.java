@@ -53,6 +53,7 @@ public final class RobotInfo {
         public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.12, 0.01, 0);
         public static final double AIM_ROT_POW = 0.7;
         public static final double AIM_UPWARDS_TILT = Math.PI/6;
+        public static final double AIM_TIME = 0.75;
 
     }
 
@@ -71,7 +72,7 @@ public final class RobotInfo {
         }
 
         public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
-                new ShooterInfo.ShooterSetpointMeasurement(1.0, new ShooterInfo.ShooterSetpoint(24.5, .812)),
+                new ShooterInfo.ShooterSetpointMeasurement(1.0, new ShooterInfo.ShooterSetpoint(24.75, .812)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.1, new ShooterInfo.ShooterSetpoint(24.5, .815)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(24.5, .817)),
                 new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(24.5, .817)),
@@ -88,7 +89,7 @@ public final class RobotInfo {
                 new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(27, .8575)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.45, new ShooterInfo.ShooterSetpoint(27, .8585)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(27.25, .862)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(27.65, .8635)),
+                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(27.5, .86325)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(28.75, .866)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(29.25, .8675)),
                 new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(30.6, .8705)),
@@ -112,6 +113,7 @@ public final class RobotInfo {
         };
 
         public static final double SHOOTER_IDLE_SPEED = 0.2;
+        public static final double SHOOTER_AUTON_IDLE_SPEED = 0.35;
         public static final double SHOOTER_INTAKE_SPEED = -0.35;
         public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .90;
 
