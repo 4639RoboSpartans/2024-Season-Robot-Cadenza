@@ -53,8 +53,7 @@ public final class RobotInfo {
         public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.12, 0.01, 0);
         public static final double AIM_ROT_POW = 0.7;
         public static final double AIM_UPWARDS_TILT = Math.PI/6;
-        public static final double AIM_TIME = 0.75;
-
+        public static final double AIM_TIME = 0.5;
     }
 
     public static class ShooterInfo {

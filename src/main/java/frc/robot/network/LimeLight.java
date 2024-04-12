@@ -65,4 +65,8 @@ public class LimeLight {
     public static double getRobotRelativeXRotation() {
         return getOrNaN(Network.getTable("limelight").getDoubleArray("targetpose_robotspace"), 3);
     }
+
+    public static boolean seesAprilTags(){
+        return !Double.isNaN(getTx());
+    }
 }

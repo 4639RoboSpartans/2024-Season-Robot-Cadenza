@@ -119,6 +119,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "A1-SS"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -169,7 +175,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A1-A3"
+                  "pathName": "SS-A3"
                 }
               },
               {

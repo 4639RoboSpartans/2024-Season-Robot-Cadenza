@@ -42,7 +42,7 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
 
     @Override
     public boolean isAtSetpoint() {
-        return Math.abs(angle.getValue()) <= AimInfo.AIM_TOLERANCE;
+        return Math.abs(angle.getValue()) <= AimInfo.AIM_TOLERANCE && LimeLight.seesAprilTags();
     }
 
     @Override
