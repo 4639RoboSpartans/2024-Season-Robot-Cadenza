@@ -95,14 +95,14 @@ public class SwerveModule {
         int moduleID = rotator.getDeviceID() / 2;
         double currModuleRotation = getRotationInDegrees();
 
-        SmartDashboard.putString("Module %d current rotation".formatted(moduleID), "%.2f degrees".formatted(currModuleRotation));
+        SmartDashboard.putString("Module %d current rotation".formatted(moduleID), "%.2fdeg".formatted(currModuleRotation));
         SmartDashboard.putString("Module %d current speed".formatted(moduleID), "%.2f".formatted(driver.getVelocity().getValue()));
 
         double rotatorPIDOutput = rotationPID.calculate(currModuleRotation);
         double driverPIDOutput = - driverPID.calculate(targetSpeed); //drive change
 
         SmartDashboard.putString("Module %d target speed".formatted(moduleID), "%.2f".formatted(targetSpeed));
-        SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "%.2f degrees".formatted(rotationPID.getSetpoint()));
+        SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "%.2fdeg".formatted(rotationPID.getSetpoint()));
         SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "%.2f".formatted(rotatorPIDOutput));
         SmartDashboard.putNumber("Error", driverPID.getVelocityError());
 

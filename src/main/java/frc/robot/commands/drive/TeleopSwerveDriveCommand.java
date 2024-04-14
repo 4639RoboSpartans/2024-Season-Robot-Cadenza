@@ -33,21 +33,23 @@ public class TeleopSwerveDriveCommand extends Command {
         double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
-        double rotateSpeed = getRotationSpeed() * (1 + rotationMultiplier);
+        double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
         SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
     }
 
-    private double getRotationSpeed() {
+    private double getRotationSpeed(double rotationMultiplier) {
+        double rawSpeed;
         if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
 
-            return -aimSubsystem.getSwerveRotation();
+            rawSpeed =  (-aimSubsystem.getSwerveRotation()-oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED) * (1+rotationMultiplier*15);
         }
         else {
-            return -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED;
+            rawSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED;
         }
+        return rawSpeed * (1 + rotationMultiplier);
     }
 
     @Override

@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -34,5 +36,11 @@ public class NavX extends SubsystemBase {
 
     public void reset() {
         ahrs.reset();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putString("heading", "%.2fdeg".formatted(getRotation2d().getDegrees()));
+        SmartDashboard.putString("matchTime", "%d".formatted((int) Timer.getMatchTime()));
     }
 }
