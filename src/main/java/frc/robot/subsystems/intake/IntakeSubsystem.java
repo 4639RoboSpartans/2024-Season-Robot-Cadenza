@@ -12,35 +12,35 @@ import frc.robot.constants.IDs;
 import static frc.robot.constants.RobotInfo.IntakeInfo;
 
 public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
-//    private final CANSparkMax pivotMotorLeft;
-//    private final CANSparkMax pivotMotorRight;
+    private final CANSparkMax pivotMotorLeft;
+    private final CANSparkMax pivotMotorRight;
     private final CANSparkMax intakeMotor;
 
     private final PIDController pivotPID;
     private final DutyCycleEncoder encoder;
 
     public IntakeSubsystem(int pivotMotorLeftID, int pivotMotorRightID, int intakeMotorID, int encoderID) {
-//        pivotMotorLeft = new CANSparkMax(pivotMotorLeftID, CANSparkMax.MotorType.kBrushless);
-//        pivotMotorRight = new CANSparkMax(pivotMotorRightID, CANSparkMax.MotorType.kBrushless);
+        pivotMotorLeft = new CANSparkMax(pivotMotorLeftID, CANSparkMax.MotorType.kBrushless);
+        pivotMotorRight = new CANSparkMax(pivotMotorRightID, CANSparkMax.MotorType.kBrushless);
         intakeMotor = new CANSparkMax(intakeMotorID, CANSparkMax.MotorType.kBrushless);
 
         pivotPID = IntakeInfo.INTAKE_PIVOT_PID_CONSTANTS.create();
 
-//        pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
-//        pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-//        pivotMotorLeft.setInverted(false);
-//        pivotMotorRight.follow(pivotMotorLeft, true);
+        pivotMotorLeft.setInverted(false);
+        pivotMotorRight.follow(pivotMotorLeft, true);
 
         encoder = new DutyCycleEncoder(IDs.INTAKE_ENCODER_DIO_PORT);
-//        setExtended(ExtensionState.RETRACTED);
+        setExtended(ExtensionState.RETRACTED);
     }
 
     public void setExtended(ExtensionState extended) {
-//        pivotPID.setSetpoint(switch (extended){
-//            case EXTENDED -> IntakeInfo.INTAKE_PIVOT_EXTENDED_SETPOINT;
-//            case RETRACTED -> IntakeInfo.INTAKE_PIVOT_DEFAULT_SETPOINT;
-//        });
+        pivotPID.setSetpoint(switch (extended){
+            case EXTENDED -> IntakeInfo.INTAKE_PIVOT_EXTENDED_SETPOINT;
+            case RETRACTED -> IntakeInfo.INTAKE_PIVOT_DEFAULT_SETPOINT;
+        });
     }
 
     //Spins intake motor to intake notes
@@ -66,16 +66,16 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         SmartDashboard.putNumber("current pivot pos", getPosition());
         SmartDashboard.putNumber("pivot pid output", pidOutput);
 
-//        pivotMotorLeft.set(pidOutput);
+        pivotMotorLeft.set(pidOutput);
 
-//        SmartDashboard.putNumber("intake pivot output", pivotMotorRight.getAppliedOutput());
+        SmartDashboard.putNumber("intake pivot output", pivotMotorRight.getAppliedOutput());
     }
 
     public void stop() {
         pivotPID.setSetpoint(getPosition());
 
-//        pivotMotorLeft.stopMotor();
-//        pivotMotorRight.stopMotor();
+        pivotMotorLeft.stopMotor();
+        pivotMotorRight.stopMotor();
         intakeMotor.stopMotor();
     }
 
