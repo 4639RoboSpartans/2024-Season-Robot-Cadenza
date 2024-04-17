@@ -57,7 +57,9 @@ public class RobotContainer {
     private final IRSensor ir;
     private final LEDStrip ledStrip;
 
-    private final SendableChooser<Command> autos;
+    private final SendableChooser<Command> S1autos;
+    private final SendableChooser<Command> S2autos;
+    private final SendableChooser<Command> S3autos;
     public final SendableChooser<Integer> autonDelay;
     public static SendableChooser<Boolean> alliance;
     
@@ -87,7 +89,7 @@ public class RobotContainer {
         autonDelay.addOption("8s", 8);
         SmartDashboard.putData("Auton Delay", autonDelay);
 
-        autos = AutoBuilder.buildAutoChooser();
+        S1autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
 
         alliance = new SendableChooser<>();
