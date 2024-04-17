@@ -31,7 +31,7 @@ public final class RobotInfo {
 
     public static final class IntakeInfo {
 
-        public static final double INTAKE_SPEED = -0.7;
+        public static final double INTAKE_SPEED = -0.9;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
         public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
