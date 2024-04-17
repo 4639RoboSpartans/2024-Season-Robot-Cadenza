@@ -8,15 +8,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.led.LEDPattern;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import org.ejml.data.Submatrix;
 
 public class Robot extends TimedRobot {
     private static boolean isAuton = false;
@@ -38,6 +37,27 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         LimeLight.writeValuesToSmartDashboard();
+    }
+
+    @Override
+    public void disabledPeriodic() {
+
+        boolean isRedAlliance = RobotContainer.alliance.getSelected();
+
+        LEDPattern pattern = isRedAlliance ? (led, time) -> {
+            double x = led * 0.1 + time * 3;
+            double h = 8 * Math.pow(Math.sin(x / 2), 2);
+            return new Color8Bit(Color.fromHSV((int) h, 255, 255));
+        } : (led, time) -> {
+            time *= 2;
+            double x = led * 0.2 + time * 3;
+            double h = 20 * Math.pow(Math.sin(x), 2) + 90;
+            double v = Math.pow(Math.sin(time), 2) * 0.9 + 0.1;
+
+            return new Color8Bit(Color.fromHSV((int)(h), 255, (int)(255 * v)));
+        };
+
+        SubsystemManager.getLedStrip().usePattern(pattern);
     }
 
     @Override
