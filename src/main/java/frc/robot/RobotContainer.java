@@ -84,7 +84,10 @@ public class RobotContainer {
         autonDelay.addOption("5s", 5);
         autonDelay.addOption("6s", 6);
         autonDelay.addOption("7s", 7);
-        autonDelay.addOption("8s", 8);
+        autonDelay.addOption("8s", 8);  
+        autonDelay.addOption("9s", 9);
+        autonDelay.addOption("10s", 10);
+        autonDelay.addOption("11s", 11);
         SmartDashboard.putData("Auton Delay", autonDelay);
 
         autos = AutoBuilder.buildAutoChooser();
@@ -108,7 +111,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem,aimSubsystem, RobotInfo.AimInfo.AIM_TIME));
         NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter, RobotInfo.AimInfo.AIM_TIME));
         //intake commands
-        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper));
+        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper, ledStrip));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
         NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
@@ -140,7 +143,7 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
         oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper));
+        oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper, ledStrip));
  
         oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
 
