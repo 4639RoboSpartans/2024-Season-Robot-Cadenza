@@ -41,17 +41,11 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
-    public void resetOdometry(Pose2d pose) {
-
-    }
-
-    @Override
-    public void resetPose(Pose2d pose) {
-
-    }
-
-    @Override
     public SwerveModule getSwerveModule(String module){
         return null;
+    }
+
+    public void resetPose(Pose2d pose){
+        
     }
 }

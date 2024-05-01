@@ -2,17 +2,22 @@ package frc.robot.subsystems.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.IDs;
 import frc.robot.constants.RobotInfo.SwerveInfo;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 
@@ -26,7 +31,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     private final NavX navx;
 
-    private final OdometrySubsystem odometrySubsystem;
+    private final SwerveDrivePoseEstimator m_poseEstimator;
 
     private ChassisSpeeds chassisSpeeds;
 
@@ -37,7 +42,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleFrontRight = new SwerveModule(IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
-        odometrySubsystem = new OdometrySubsystem(this, navx);
+        m_poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, navx.getRotation2d(), getStates(), new Pose2d());
+        m_poseEstimator.resetPosition(getRotation2d(), getStates(), getPose());
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
         setBrakeMode();
@@ -48,8 +54,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 this::getRobotRelativeSpeeds,
                 this::setRawMovement,
                 new HolonomicPathFollowerConfig(
-                        SwerveInfo.TranslationPID, //TODO: find constants for 2024 robot
-                        SwerveInfo.RotationPID, //TODO: find constants for 2024 robot
+                        SwerveInfo.TranslationPID,
+                        SwerveInfo.RotationPID,
                         4,
                         0.4,
                         new ReplanningConfig()
@@ -57,8 +63,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 () -> RobotContainer.alliance.getSelected(),
                 this
         );
-
-        resetOdometry(new Pose2d());
     }
 
     public void useTeleopCurrentLimits() {
@@ -76,7 +80,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     public Pose2d getPose() {
-        return odometrySubsystem.getOdometry().getPoseMeters();
+        return m_poseEstimator.getEstimatedPosition();
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -125,13 +129,31 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     @Override
     public void periodic() {
+        boolean doRejectUpdate = false;
+        LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        if(Math.abs(navx.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            doRejectUpdate = true;
+        }
+        if(mt2.tagCount == 0)
+        {
+            doRejectUpdate = true;
+        }
+        if(!doRejectUpdate)
+        {
+            m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            m_poseEstimator.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
+        }
+        else {
+            m_poseEstimator.update(navx.getRotation2d(), getStates());
+        }
         moduleFrontLeft.periodic();
         moduleFrontRight.periodic();
         moduleBackLeft.periodic();
         moduleBackRight.periodic();
-        SmartDashboard.putNumber("pose x", odometrySubsystem.getOdometry().getPoseMeters().getTranslation().getX());
-        SmartDashboard.putNumber("pose y", odometrySubsystem.getOdometry().getPoseMeters().getTranslation().getY());
-        SmartDashboard.putNumber("heading pose", odometrySubsystem.getOdometry().getPoseMeters().getRotation().getDegrees());
     }
 
     public void setBrakeMode() {
@@ -148,14 +170,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleBackRight.setCoastMode();
     }
 
-    public void resetOdometry(Pose2d pose) {
-        resetPose(pose);
-    }
-
-    public void resetPose(Pose2d pose) {
-        odometrySubsystem.resetOdometry(pose);
-    }
-
     public SwerveModule getSwerveModule(String module) {
         return switch (module) {
             case "FL" -> moduleFrontLeft;
@@ -168,5 +182,18 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     public double getHeading(){
         return navx.getHeading();
+    }
+
+    public SwerveModulePosition[] getStates(){
+        return new SwerveModulePosition[]{
+            moduleFrontLeft.getPosition(),
+            moduleFrontRight.getPosition(),
+            moduleBackLeft.getPosition(),
+            moduleBackRight.getPosition()
+        };
+    }
+
+    public void resetPose(Pose2d pose){
+        m_poseEstimator.resetPosition(new Rotation2d(getHeading()), getStates(), pose);
     }
 }

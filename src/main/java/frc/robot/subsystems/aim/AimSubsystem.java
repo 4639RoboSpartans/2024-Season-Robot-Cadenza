@@ -3,6 +3,7 @@ package frc.robot.subsystems.aim;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 import frc.robot.constants.Constants;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
@@ -77,7 +78,7 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
         double distance = Math.hypot(x, z);
         SmartDashboard.putNumber("distance ", distance);
 
-        this.angle.addMeasurement(tangent);
+        this.angle.addMeasurement(LimelightHelpers.getTX("limelight"));
 
         this.x.addMeasurement(x);
         this.z.addMeasurement(z);

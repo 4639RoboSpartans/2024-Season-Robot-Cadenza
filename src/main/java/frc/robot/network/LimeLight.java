@@ -1,6 +1,8 @@
 package frc.robot.network;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.LimelightHelpers;
+
 import static frc.robot.constants.RobotInfo.ShooterInfo;
 
 public class LimeLight {
@@ -23,11 +25,11 @@ public class LimeLight {
     }
 
     public static double getTx() {
-        return Network.getTable("limelight").getDouble("tx") + ShooterInfo.LimelightTxOffset;
+        return LimelightHelpers.getTX("limelight");
     }
 
     public static double getTy() {
-        return Network.getTable("limelight").getDouble("ty");
+        return LimelightHelpers.getTY("limelight");
     }
 
     public static double getXDistance() {

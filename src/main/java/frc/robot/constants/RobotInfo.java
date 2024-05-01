@@ -21,8 +21,8 @@ public final class RobotInfo {
         public static final double DERIVATIVE_MULTIPLIER = 0.1;
         public static final double TELOP_ROTATION_SPEED = 4;
 
-        public static final PIDConstants TranslationPID = new PIDConstants(56, 0, 0.0);
-        public static final PIDConstants RotationPID = new PIDConstants(256, 0, 0.0);
+        public static final PIDConstants TranslationPID = new PIDConstants(16, 0, 0.0);
+        public static final PIDConstants RotationPID = new PIDConstants(8, 0, 0.0);
     }
 
     public static final class TrapInfo {
