@@ -7,10 +7,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public final class RobotInfo {
     public static final class SwerveInfo {
-        public static final double centerToWheel = 0.245;
+        public static final double centerToWheelMeters = 0.245;
 
         public static final double K_P_MULTIPLIER = 1;
-        public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(new Translation2d(centerToWheel, centerToWheel), new Translation2d(centerToWheel, -centerToWheel), new Translation2d(-centerToWheel, centerToWheel), new Translation2d(-centerToWheel, -centerToWheel));
+        public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(new Translation2d(centerToWheelMeters, centerToWheelMeters), new Translation2d(centerToWheelMeters, -centerToWheelMeters), new Translation2d(-centerToWheelMeters, centerToWheelMeters), new Translation2d(-centerToWheelMeters, -centerToWheelMeters));
 
         // Change MOVEMENT_SPEED to 1.0 for max speed
         public static final double CURRENT_MAX_ROBOT_MPS = 9;
@@ -49,7 +49,7 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.12, 0.01, 0);
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.05, 0.01, 0);
         public static final double AIM_ROT_POW = 0.7;
         public static final double AIM_UPWARDS_TILT = Math.PI/6;
         public static final double AIM_TIME = 0.5;

@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class NavX extends SubsystemBase {
     private final AHRS ahrs;
     private double prevHeading;
+    private double prevRate;
 
     public NavX() {
         ahrs = new AHRS(SPI.Port.kMXP);
-        prevHeading = getRotation2d().getDegrees();
     }
 
     public double getHeading() {
@@ -44,6 +44,14 @@ public class NavX extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putString("heading", "%.2fdeg".formatted(getRotation2d().getDegrees()));
         SmartDashboard.putString("matchTime", "%d".formatted((int) Timer.getMatchTime()));
+        if (getRate() != 0){
+            SmartDashboard.putNumber("rate", getRate());
+            prevRate = getRate();
+        }
+        else {
+            SmartDashboard.putNumber("rate", prevRate);
+        }
+        prevHeading = getRotation2d().getDegrees();
     }
 
     public double getRate() {

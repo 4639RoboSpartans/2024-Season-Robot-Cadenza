@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -35,15 +36,17 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     private ChassisSpeeds chassisSpeeds;
 
+    private final Field2d m_field = new Field2d();
+
     public SwerveDriveSubsystem() {
+        SmartDashboard.putData("Field", m_field);
         navx = SubsystemManager.getNavX();
 
         moduleFrontLeft = new SwerveModule(IDs.MODULE_FRONT_LEFT);
         moduleFrontRight = new SwerveModule(IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
-        m_poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, navx.getRotation2d(), getStates(), new Pose2d());
-        m_poseEstimator.resetPosition(getRotation2d(), getStates(), getPose());
+        m_poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, navx.getRotation2d(), getStates(), LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
         setBrakeMode();
@@ -129,32 +132,42 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     @Override
     public void periodic() {
+        moduleFrontLeft.periodic();
+        moduleFrontRight.periodic();
+        moduleBackLeft.periodic();
+        moduleBackRight.periodic();
+        updateOdometry();
+        m_field.setRobotPose(getPose());
+        SmartDashboard.putData("Field", m_field);
+        SmartDashboard.putNumber("FL", moduleFrontLeft.getPosition().distanceMeters);
+        SmartDashboard.putNumber("FR", moduleFrontRight.getPosition().distanceMeters);
+        SmartDashboard.putNumber("BL", moduleBackLeft.getPosition().distanceMeters);
+        SmartDashboard.putNumber("BR", moduleBackRight.getPosition().distanceMeters);
+    }
+
+    public void updateOdometry() {
+        m_poseEstimator.update(
+            navx.getRotation2d(),
+            getStates());
         boolean doRejectUpdate = false;
         LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         if(Math.abs(navx.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         {
-            doRejectUpdate = true;
+        doRejectUpdate = true;
         }
         if(mt2.tagCount == 0)
         {
-            doRejectUpdate = true;
+        doRejectUpdate = true;
         }
         if(!doRejectUpdate)
         {
-            m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            m_poseEstimator.addVisionMeasurement(
-                mt2.pose,
-                mt2.timestampSeconds);
+        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        m_poseEstimator.addVisionMeasurement(
+            mt2.pose,
+            mt2.timestampSeconds);
         }
-        else {
-            m_poseEstimator.update(navx.getRotation2d(), getStates());
-        }
-        moduleFrontLeft.periodic();
-        moduleFrontRight.periodic();
-        moduleBackLeft.periodic();
-        moduleBackRight.periodic();
-    }
+      }
 
     public void setBrakeMode() {
         moduleFrontLeft.setBrakeMode();

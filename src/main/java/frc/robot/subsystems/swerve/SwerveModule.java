@@ -13,6 +13,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.constants.SwerveModuleConfiguration;
 import math.MathUtil;
+import math.UnitConverter;
 
 public class SwerveModule {
     private final TalonFX driver, rotator;
@@ -25,7 +26,7 @@ public class SwerveModule {
     private double targetSpeed = 0;
 
     public SwerveModule(SwerveModuleConfiguration swerveModuleData) {
-        driveConversionFactor = (1. / 2048) * (1 / 6.55) * (0.1016) * Math.PI;
+        driveConversionFactor = 2 * Math.PI * UnitConverter.inchesToMeters(4) / 4096;
 
         driver = switch (Constants.currentRobot) {
             case ZEUS -> new TalonFX(swerveModuleData.driveMotorID());
@@ -52,7 +53,7 @@ public class SwerveModule {
         rotationPID.enableContinuousInput(-180, 180);
 
         driverPID = SwerveInfo.SWERVE_DRIVER_PID_CONSTANTS.create();
-        driverPID.setTolerance(0.1); //drive change
+        driverPID.setTolerance(0.1); //drive change  
 
         useAutonCurrentLimits();
     }
@@ -171,6 +172,6 @@ public class SwerveModule {
     }
 
     public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(getDriveDistance(), new Rotation2d(getTurningPosition()));
+        return new SwerveModulePosition(getDriveDistance(), Rotation2d.fromDegrees(getTurningPosition()));
     }
 }
