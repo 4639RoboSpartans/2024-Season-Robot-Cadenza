@@ -21,7 +21,7 @@ public class NavX extends SubsystemBase {
     }
 
     public double getHeading() {
-        return ahrs.getCompassHeading();
+        return getRotation2d().getDegrees();
     }
 
     public double getRoll() {

@@ -149,6 +149,12 @@ public class SwerveModule {
         return new SwerveModuleState(moduleSpeed, rotation);
     }
 
+    public double[] getStateAsArray() {
+        double moduleSpeed = getDriveVelocity();
+        double rotationDegrees = getRotationInDegrees();
+        return new double[]{moduleSpeed, rotationDegrees};
+    }
+
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getRotationInDegrees()));
         setTargetSpeed(optimizedState.speedMetersPerSecond);
@@ -172,6 +178,6 @@ public class SwerveModule {
     }
 
     public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(getDriveDistance(), Rotation2d.fromDegrees(getTurningPosition()));
+        return new SwerveModulePosition(getDriveDistance(), Rotation2d.fromDegrees(getTurningPosition() + 90));
     }
 }

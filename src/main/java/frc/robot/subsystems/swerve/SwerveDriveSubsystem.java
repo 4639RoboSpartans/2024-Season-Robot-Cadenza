@@ -9,9 +9,14 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics.SwerveDriveWheelStates;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +51,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleFrontRight = new SwerveModule(IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
+        navx.reset();
         m_poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, navx.getRotation2d(), getStates(), LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
@@ -66,6 +72,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 () -> RobotContainer.alliance.getSelected(),
                 this
         );
+        
+        sendSwerve();
     }
 
     public void useTeleopCurrentLimits() {
@@ -139,10 +147,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         updateOdometry();
         m_field.setRobotPose(getPose());
         SmartDashboard.putData("Field", m_field);
-        SmartDashboard.putNumber("FL", moduleFrontLeft.getPosition().distanceMeters);
-        SmartDashboard.putNumber("FR", moduleFrontRight.getPosition().distanceMeters);
-        SmartDashboard.putNumber("BL", moduleBackLeft.getPosition().distanceMeters);
-        SmartDashboard.putNumber("BR", moduleBackRight.getPosition().distanceMeters);
+        SmartDashboard.putNumberArray("FL", getStatesAsArray());
     }
 
     public void updateOdometry() {
@@ -151,23 +156,46 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             getStates());
         boolean doRejectUpdate = false;
         LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        if(Math.abs(navx.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
-        doRejectUpdate = true;
-        }
-        if(mt2.tagCount == 0)
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        // if(Math.abs(navx.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        // {
+        // doRejectUpdate = true;
+        // }
+        if(mt2.pose.getTranslation().equals(new Translation2d(0, 0)))
         {
         doRejectUpdate = true;
         }
         if(!doRejectUpdate)
         {
-        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.4,0.4,9999999));
         m_poseEstimator.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);
         }
-      }
+    }
+
+    public void sendSwerve(){
+        SmartDashboard.putData("Swerve Drive", new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("SwerveDrive");
+
+            builder.addDoubleProperty("Front Left Angle", () -> Math.toRadians(moduleFrontLeft.getRotationInDegrees()), null);
+            builder.addDoubleProperty("Front Left Velocity", () -> moduleFrontLeft.getDriveVelocity(), null);
+
+            builder.addDoubleProperty("Front Right Angle", () -> Math.toRadians(moduleFrontRight.getRotationInDegrees()), null);
+            builder.addDoubleProperty("Front Right Velocity", () -> moduleFrontRight.getDriveVelocity(), null);
+
+            builder.addDoubleProperty("Back Left Angle", () -> Math.toRadians(moduleBackLeft.getRotationInDegrees()), null);
+            builder.addDoubleProperty("Back Left Velocity", () -> moduleBackLeft.getDriveVelocity(), null);
+
+            builder.addDoubleProperty("Back Right Angle", () -> Math.toRadians(moduleBackRight.getRotationInDegrees()), null);
+            builder.addDoubleProperty("Back Right Velocity", () -> moduleBackRight.getDriveVelocity(), null);
+
+            builder.addDoubleProperty("Robot Angle", () -> navx.getRotation2d().getRadians(), null);
+        }
+        });
+    }
 
     public void setBrakeMode() {
         moduleFrontLeft.setBrakeMode();
@@ -204,6 +232,18 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             moduleBackLeft.getPosition(),
             moduleBackRight.getPosition()
         };
+    }
+    public double[] getStatesAsArray(){
+        double[] res = new double[8];
+        res[0] = moduleFrontLeft.getState().angle.getDegrees();
+        res[1] = moduleFrontLeft.getStateAsArray()[0];
+        res[2] = moduleFrontRight.getState().angle.getDegrees();
+        res[3] = moduleFrontRight.getStateAsArray()[0];
+        res[4] = moduleBackLeft.getState().angle.getDegrees();
+        res[5] = moduleBackLeft.getStateAsArray()[0];
+        res[6] = moduleBackRight.getState().angle.getDegrees();
+        res[7] = moduleBackRight.getStateAsArray()[0];
+        return res;
     }
 
     public void resetPose(Pose2d pose){
