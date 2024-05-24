@@ -101,6 +101,7 @@ public class RobotContainer {
         configureBindings();
     }
 
+
     private void nameCommands(){
         //climber commands
         NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));

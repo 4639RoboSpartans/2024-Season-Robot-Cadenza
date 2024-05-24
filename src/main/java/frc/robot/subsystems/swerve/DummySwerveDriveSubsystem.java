@@ -48,4 +48,8 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     public void resetPose(Pose2d pose){
         
     }
+
+    public Pose2d getPose(){
+        return null;
+    }
 }

@@ -53,14 +53,11 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
         Pose2d currBotPose = swerveDriveSubsystem.getPose();
         Translation2d currBotTranslation = currBotPose.getTranslation();
         Translation2d speakerPose;
-        if (swerveDriveSubsystem.getRotation2d().getDegrees() > 135 && swerveDriveSubsystem.getRotation2d().getDegrees() < 225){
+        if (SmartDashboard.getBoolean("Alliance", false)){
             speakerPose = FieldConstants.speakerPose_red;
         }
-        else if (swerveDriveSubsystem.getRotation2d().getDegrees() < 45 || swerveDriveSubsystem.getRotation2d().getDegrees() > 315){
-            speakerPose = FieldConstants.speakerPose_blue;
-        }
         else {
-            return new Translation2d();
+            speakerPose = FieldConstants.speakerPose_blue;
         }
         return currBotTranslation.minus(speakerPose);
     }

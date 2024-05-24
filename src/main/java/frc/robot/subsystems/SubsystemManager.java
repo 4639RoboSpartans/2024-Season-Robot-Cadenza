@@ -99,7 +99,7 @@ public class SubsystemManager {
     
     public static AimSubsystem getAimSubsystem() {
         if(aimSubsystem == null) {
-            aimSubsystem = new AimSubsystem();
+            aimSubsystem = new AimSubsystem(swerveDrive);
         }
         return aimSubsystem;
     }
