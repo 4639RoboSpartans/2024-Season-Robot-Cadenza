@@ -15,4 +15,5 @@ public interface ISwerveDriveSubsystem extends Subsystem {
     void setCoastMode();
     SwerveModule getSwerveModule(String module);
     void resetPose(Pose2d pose);
+    Pose2d getPose();
 }

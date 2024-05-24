@@ -1,12 +1,16 @@
 package frc.robot.subsystems.aim;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.constants.Constants;
+import frc.robot.constants.FieldConstants;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
+import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import math.Averager;
 import math.MathUtil;
 
@@ -14,6 +18,7 @@ import static frc.robot.constants.RobotInfo.AimInfo;
 import static frc.robot.constants.RobotInfo.ShooterInfo.LimelightOffsetX;
 import static frc.robot.constants.RobotInfo.ShooterInfo.LimelightOffsetZ;
 import static frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpoint;
+
 import static frc.robot.constants.RobotInfo.SwerveInfo;
 
 public class AimSubsystem extends SubsystemBase implements AimInterface {
@@ -23,17 +28,41 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
     private final Averager angle = new Averager(Constants.POSE_WINDOW_LENGTH);
     private final Averager x = new Averager(Constants.POSE_WINDOW_LENGTH);
     private final Averager z = new Averager(Constants.POSE_WINDOW_LENGTH);
-    public AimSubsystem(){
+    private final ISwerveDriveSubsystem swerveDriveSubsystem;
+    public AimSubsystem(ISwerveDriveSubsystem swerveDriveSubsystem){
+        this.swerveDriveSubsystem = swerveDriveSubsystem;
     }
 
     @Override
     public double getSwerveRotation(){
         if (!angle.hasMeasurements()) return 0;
 
-        double yRotation = angle.getValue();
+        double yRotation = getYDegrees();
         yRotation *= (1 + getTxDerivative() * SwerveInfo.DERIVATIVE_MULTIPLIER);
 
         return rotationPID.calculate(MathUtil.signedPow(yRotation, AimInfo.AIM_ROT_POW)) * SwerveInfo.AIM_ROTATION_SPEED;
+    }
+
+    public double getYDegrees(){
+        Translation2d speakerVector = getVector();
+        double yRotation = Math.tan(speakerVector.getX() / speakerVector.getY());
+        return yRotation;
+    }
+
+    public Translation2d getVector(){
+        Pose2d currBotPose = swerveDriveSubsystem.getPose();
+        Translation2d currBotTranslation = currBotPose.getTranslation();
+        Translation2d speakerPose;
+        if (swerveDriveSubsystem.getRotation2d().getDegrees() > 135 && swerveDriveSubsystem.getRotation2d().getDegrees() < 225){
+            speakerPose = FieldConstants.speakerPose_red;
+        }
+        else if (swerveDriveSubsystem.getRotation2d().getDegrees() < 45 || swerveDriveSubsystem.getRotation2d().getDegrees() > 315){
+            speakerPose = FieldConstants.speakerPose_blue;
+        }
+        else {
+            return new Translation2d();
+        }
+        return currBotTranslation.minus(speakerPose);
     }
 
     @Override
@@ -58,27 +87,15 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
 
     @Override
     public void periodic() {
-        double x = LimeLight.getRobotRelativeXDistance();
-        double z = LimeLight.getRobotRelativeZDistance();
-        double angle = LimeLight.getRobotRelativeXRotation();
-        // double angle = LimeLight.getTx();
-        double tangent = -Math.atan((x + LimelightOffsetX) / (z  - LimelightOffsetZ));
-        if (angle == 0){
-            tangent = 0;
-            SmartDashboard.putBoolean("sees limelight", false);
-        }
-        else 
-            SmartDashboard.putBoolean("sees limelight", true);
-        SmartDashboard.putNumber("atan", tangent);
-        SmartDashboard.putNumber("x", x);
-        SmartDashboard.putNumber("z", z);
-        SmartDashboard.putNumber("angle", angle);
-        SmartDashboard.putNumber("degrees", Math.toDegrees(angle));
+        Translation2d speakerVector = getVector();
+        double x = speakerVector.getY();
+        double z = speakerVector.getX();
+        double angle = getYDegrees();
 
         double distance = Math.hypot(x, z);
         SmartDashboard.putNumber("distance ", distance);
 
-        this.angle.addMeasurement(LimelightHelpers.getTX("limelight"));
+        this.angle.addMeasurement(angle);
 
         this.x.addMeasurement(x);
         this.z.addMeasurement(z);
