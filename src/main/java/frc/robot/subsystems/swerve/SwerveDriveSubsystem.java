@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics.SwerveDriveWheelStates;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -156,12 +157,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             getStates());
         boolean doRejectUpdate = false;
         LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        Pose2d curr_pose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
         // if(Math.abs(navx.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         // {
         // doRejectUpdate = true;
         // }
-        if(mt2.pose.getTranslation().equals(new Translation2d(0, 0)))
+        if(curr_pose.getTranslation().equals(new Translation2d(0, 0)))
         {
         doRejectUpdate = true;
         }
@@ -169,8 +170,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         {
         m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.4,0.4,9999999));
         m_poseEstimator.addVisionMeasurement(
-            mt2.pose,
-            mt2.timestampSeconds);
+            curr_pose,
+            Timer.getFPGATimestamp() );
         }
     }
 
