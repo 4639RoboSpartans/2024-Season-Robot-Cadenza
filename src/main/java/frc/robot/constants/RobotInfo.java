@@ -31,7 +31,7 @@ public final class RobotInfo {
 
     public static final class IntakeInfo {
 
-        public static final double INTAKE_SPEED = -0.7;
+        public static final double INTAKE_SPEED = -0.85;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
         public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
@@ -39,7 +39,7 @@ public final class RobotInfo {
 
     public static final class HopperInfo {
 
-        public static final double HOPPER_SPEED = 0.7;
+        public static final double HOPPER_SPEED = 0.8;//was 0.7
     }
 
     public static final class ClimberInfo {
@@ -49,7 +49,7 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.05, 0.01, 0);
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.00005, 0.01, 0);
         public static final double AIM_ROT_POW = 0.7;
         public static final double AIM_UPWARDS_TILT = Math.PI/6;
         public static final double AIM_TIME = 0.5;

@@ -4,13 +4,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.estimator.PoseEstimator;
+
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -28,6 +30,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 
+
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
     private final SwerveModule
@@ -38,7 +41,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     private final NavX navx;
 
-    private final SwerveDrivePoseEstimator m_poseEstimator;
+    private final PoseEstimator m_poseEstimator;
 
     private ChassisSpeeds chassisSpeeds;
 
@@ -53,7 +56,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
         navx.reset();
-        m_poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, navx.getRotation2d(), getStates(), LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
+        m_poseEstimator = new PoseEstimator<>(SwerveInfo.SwerveDriveKinematics, null, null, null)
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
         setBrakeMode();
@@ -168,7 +171,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         }
         if(!doRejectUpdate)
         {
-        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.4,0.4,9999999));
+        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(1,1,9999999));
         m_poseEstimator.addVisionMeasurement(
             curr_pose,
             Timer.getFPGATimestamp() );

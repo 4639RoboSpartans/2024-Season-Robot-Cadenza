@@ -45,8 +45,8 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
 
     public double getYDegrees(){
         Translation2d speakerVector = getVector();
-        double yRotation = Math.tan(speakerVector.getX() / speakerVector.getY());
-        return yRotation;
+        double yRotation = Math.toDegrees(Math.tan(speakerVector.getY() / speakerVector.getX()));
+        return yRotation - swerveDriveSubsystem.getRotation2d().getDegrees();
     }
 
     public Translation2d getVector(){
@@ -91,6 +91,9 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
 
         double distance = Math.hypot(x, z);
         SmartDashboard.putNumber("distance ", distance);
+        SmartDashboard.putNumber("angle", this.angle.getValue());
+        SmartDashboard.putNumber("x", x);
+        SmartDashboard.putNumber("z", z);
 
         this.angle.addMeasurement(angle);
 

@@ -65,11 +65,11 @@ public class RobotContainer {
     public RobotContainer() {
         oi = new OI();
         navX = SubsystemManager.getNavX();
-        aimSubsystem = SubsystemManager.getAimSubsystem();
         ir = SubsystemManager.getIRSensor();
         ledStrip = SubsystemManager.getLedStrip();
 
         swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
+        aimSubsystem = SubsystemManager.getAimSubsystem();
 
         shooter = SubsystemManager.getShooter();
         intake = SubsystemManager.getIntake();
@@ -164,20 +164,6 @@ public class RobotContainer {
         oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem, aimSubsystem));
 
 
-
-        new Trigger(() -> {
-            for(Buttons x : DriverControls.ResetNavXButtons) {
-                if(!oi.driverController().getButton(x).getAsBoolean()) {
-                    return false;
-                }
-            }
-            return true;
-        }).whileTrue(new Command() {
-            @Override
-            public void initialize() {
-                navX.reset();
-            }
-        });
     }
 
     public Command getAutonomousCommand() {
