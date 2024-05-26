@@ -69,8 +69,6 @@ public class Robot extends TimedRobot {
         autonomousCommand = robotContainer.getAutonomousCommand();
         isAuton = true;
 
-        ((SwerveDriveSubsystem) SubsystemManager.getSwerveDrive()).useAutonCurrentLimits();
-
         if (autonomousCommand != null) {
             new WaitCommand(robotContainer.autonDelay.getSelected())
                 .andThen(autonomousCommand)
@@ -92,8 +90,6 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-
-        ((SwerveDriveSubsystem) SubsystemManager.getSwerveDrive()).useTeleopCurrentLimits();
     }
 
     @Override

@@ -5,18 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
-    @Override
-    public Rotation2d getRotation2d() {
-        return new Rotation2d();
-    }
 
     @Override
     public void setMovement(ChassisSpeeds chassisSpeeds) {
-
-    }
-
-    @Override
-    public void setRawMovement(ChassisSpeeds chassisSpeeds) {
 
     }
 
@@ -30,26 +21,16 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
 
     }
 
-    @Override
-    public void setBrakeMode() {
-
-    }
-
-    @Override
-    public void setCoastMode() {
-
-    }
-
-    @Override
-    public SwerveModule getSwerveModule(String module){
-        return null;
-    }
-
     public void resetPose(Pose2d pose){
         
     }
 
     public Pose2d getPose(){
+        return null;
+    }
+
+    @Override
+    public Rotation2d getRotation2d(){
         return null;
     }
 }

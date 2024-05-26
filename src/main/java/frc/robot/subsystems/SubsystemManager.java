@@ -21,7 +21,9 @@ import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
+import frc.robot.subsystems.swerve.GyroIONavX;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.ModuleIOTalonFX;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 import static frc.robot.constants.Constants.currentRobot;
@@ -69,7 +71,12 @@ public class SubsystemManager {
 
     public static ISwerveDriveSubsystem getSwerveDrive() {
         if(swerveDrive == null) {
-            swerveDrive = new SwerveDriveSubsystem();
+            swerveDrive = new SwerveDriveSubsystem(
+            new GyroIONavX(),
+            new ModuleIOTalonFX(0),
+            new ModuleIOTalonFX(1),
+            new ModuleIOTalonFX(2),
+            new ModuleIOTalonFX(3));
         }
         return swerveDrive;
     }

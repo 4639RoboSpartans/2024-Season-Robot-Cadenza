@@ -81,7 +81,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         this::getPose,
         this::setPose,
         () -> kinematics.toChassisSpeeds(getModuleStates()),
-        this::runVelocity,
+        this::setMovement,
         new HolonomicPathFollowerConfig(
             MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
         () ->
@@ -167,7 +167,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
    *
    * @param speeds Speeds in meters/sec
    */
-  public void runVelocity(ChassisSpeeds speeds) {
+  public void setMovement(ChassisSpeeds speeds) {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
@@ -187,7 +187,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
   /** Stops the drive. */
   public void stop() {
-    runVelocity(new ChassisSpeeds());
+    setMovement(new ChassisSpeeds());
   }
 
   /**
@@ -276,5 +276,13 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
       new Translation2d(-TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
       new Translation2d(-TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0)
     };
+  }
+
+  public void resetPose(Pose2d pose){
+    poseEstimator.resetPosition(gyroInputs.yawPosition, getModulePositions(), pose);
+  }
+
+  public Rotation2d getRotation2d(){
+    return gyroInputs.yawPosition;
   }
 }

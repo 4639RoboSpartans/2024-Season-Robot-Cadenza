@@ -21,7 +21,6 @@ import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
-import frc.robot.commands.drive.AmpAimCommand;
 import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.intake.*;
 import frc.robot.constants.RobotInfo;
@@ -160,8 +159,6 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.ShooterIntake).whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
 
         oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
-
-        oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem, aimSubsystem));
 
 
     }

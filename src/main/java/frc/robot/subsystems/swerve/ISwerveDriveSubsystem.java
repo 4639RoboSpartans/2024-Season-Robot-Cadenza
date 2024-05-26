@@ -8,12 +8,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public interface ISwerveDriveSubsystem extends Subsystem {
     Rotation2d getRotation2d();
     void setMovement(ChassisSpeeds chassisSpeeds);
-    void setRawMovement(ChassisSpeeds chassisSpeeds);
     void stop();
     void periodic();
-    void setBrakeMode();
-    void setCoastMode();
-    Module getSwerveModule(String module);
     void resetPose(Pose2d pose);
     Pose2d getPose();
 }
