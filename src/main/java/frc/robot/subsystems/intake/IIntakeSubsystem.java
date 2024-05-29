@@ -3,17 +3,18 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public interface IIntakeSubsystem extends Subsystem {
-    enum ExtensionState {
-        EXTENDED, RETRACTED
-    }
+  enum ExtensionState {
+    EXTENDED,
+    RETRACTED
+  }
 
-    void setExtended(ExtensionState extended);
+  void setExtended(ExtensionState extended);
 
-    void outtake();
+  void outtake();
 
-    void stopIntake();
+  void stopIntake();
 
-    void stop();
+  void stop();
 
-    void intake();
+  void intake();
 }

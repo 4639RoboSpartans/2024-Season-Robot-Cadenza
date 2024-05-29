@@ -16,168 +16,183 @@ import math.MathUtil;
 import math.UnitConverter;
 
 public class SwerveModule {
-    private final TalonFX driver, rotator;
-    private final CANcoder rotationEncoder;
-    private final PIDController rotationPID;
-    private final PIDController driverPID;
+  private final TalonFX driver, rotator;
+  private final CANcoder rotationEncoder;
+  private final PIDController rotationPID;
+  private final PIDController driverPID;
 
-    private final double rotationOffsetDegrees;
-    private final double driveConversionFactor;
-    private double targetSpeed = 0;
+  private final double rotationOffsetDegrees;
+  private final double driveConversionFactor;
+  private double targetSpeed = 0;
 
-    public SwerveModule(SwerveModuleConfiguration swerveModuleData) {
-        driveConversionFactor = 2 * Math.PI * UnitConverter.inchesToMeters(4) / 4096;
+  public SwerveModule(SwerveModuleConfiguration swerveModuleData) {
+    driveConversionFactor = 2 * Math.PI * UnitConverter.inchesToMeters(4) / 4096;
 
-        driver = switch (Constants.currentRobot) {
-            case ZEUS -> new TalonFX(swerveModuleData.driveMotorID());
-            case SIREN -> new TalonFX(swerveModuleData.driveMotorID(), "Canivore1");
+    driver =
+        switch (Constants.currentRobot) {
+          case ZEUS -> new TalonFX(swerveModuleData.driveMotorID());
+          case SIREN -> new TalonFX(swerveModuleData.driveMotorID(), "Canivore1");
         };
-        rotator = switch (Constants.currentRobot) {
-            case ZEUS -> new TalonFX(swerveModuleData.rotatorMotorID());
-            case SIREN -> new TalonFX(swerveModuleData.rotatorMotorID(), "Canivore1");
+    rotator =
+        switch (Constants.currentRobot) {
+          case ZEUS -> new TalonFX(swerveModuleData.rotatorMotorID());
+          case SIREN -> new TalonFX(swerveModuleData.rotatorMotorID(), "Canivore1");
         };
-        rotator.setInverted(true);
+    rotator.setInverted(true);
 
-        driver.setNeutralMode(NeutralModeValue.Brake);
-        rotator.setNeutralMode(NeutralModeValue.Brake);
+    driver.setNeutralMode(NeutralModeValue.Brake);
+    rotator.setNeutralMode(NeutralModeValue.Brake);
 
-        rotationEncoder = switch(Constants.currentRobot) {
-            case ZEUS -> new CANcoder(swerveModuleData.encoderID());
-            case SIREN -> new CANcoder(swerveModuleData.encoderID(), "Canivore1");
+    rotationEncoder =
+        switch (Constants.currentRobot) {
+          case ZEUS -> new CANcoder(swerveModuleData.encoderID());
+          case SIREN -> new CANcoder(swerveModuleData.encoderID(), "Canivore1");
         };
 
-        rotationOffsetDegrees = swerveModuleData.rotationOffset();
+    rotationOffsetDegrees = swerveModuleData.rotationOffset();
 
-        rotationPID = SwerveInfo.SWERVE_ROTATOR_PID_CONSTANTS.adjustKp(swerveModuleData.rotatorPIDkPMultiplier()).create();
-        rotationPID.setTolerance(0.1);
-        rotationPID.enableContinuousInput(-180, 180);
+    rotationPID =
+        SwerveInfo.SWERVE_ROTATOR_PID_CONSTANTS
+            .adjustKp(swerveModuleData.rotatorPIDkPMultiplier())
+            .create();
+    rotationPID.setTolerance(0.1);
+    rotationPID.enableContinuousInput(-180, 180);
 
-        driverPID = SwerveInfo.SWERVE_DRIVER_PID_CONSTANTS.create();
-        driverPID.setTolerance(0.1); //drive change  
+    driverPID = SwerveInfo.SWERVE_DRIVER_PID_CONSTANTS.create();
+    driverPID.setTolerance(0.1); // drive change
 
-        useAutonCurrentLimits();
-    }
+    useAutonCurrentLimits();
+  }
 
-    public void useAutonCurrentLimits() {
-        CurrentLimitsConfigs driverCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(26)
-                .withStatorCurrentLimitEnable(true);
+  public void useAutonCurrentLimits() {
+    CurrentLimitsConfigs driverCurrentLimiter =
+        new CurrentLimitsConfigs().withStatorCurrentLimit(26).withStatorCurrentLimitEnable(true);
 
-        CurrentLimitsConfigs rotatorCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(26)
-                .withStatorCurrentLimitEnable(true);
+    CurrentLimitsConfigs rotatorCurrentLimiter =
+        new CurrentLimitsConfigs().withStatorCurrentLimit(26).withStatorCurrentLimitEnable(true);
 
-        driver.getConfigurator().apply(driverCurrentLimiter);
-        rotator.getConfigurator().apply(rotatorCurrentLimiter);
-    }
+    driver.getConfigurator().apply(driverCurrentLimiter);
+    rotator.getConfigurator().apply(rotatorCurrentLimiter);
+  }
 
-    public void useTeleopCurrentLimits() {
-        CurrentLimitsConfigs driverCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(35)
-                .withStatorCurrentLimitEnable(true);
+  public void useTeleopCurrentLimits() {
+    CurrentLimitsConfigs driverCurrentLimiter =
+        new CurrentLimitsConfigs().withStatorCurrentLimit(35).withStatorCurrentLimitEnable(true);
 
-        CurrentLimitsConfigs rotatorCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(26)
-                .withStatorCurrentLimitEnable(true);
+    CurrentLimitsConfigs rotatorCurrentLimiter =
+        new CurrentLimitsConfigs().withStatorCurrentLimit(26).withStatorCurrentLimitEnable(true);
 
-        driver.getConfigurator().apply(driverCurrentLimiter);
-        rotator.getConfigurator().apply(rotatorCurrentLimiter);
-    }
+    driver.getConfigurator().apply(driverCurrentLimiter);
+    rotator.getConfigurator().apply(rotatorCurrentLimiter);
+  }
 
-    private static boolean isNegligible(SwerveModuleState state) {
-        return state.speedMetersPerSecond < 0.0001;
-    }
+  private static boolean isNegligible(SwerveModuleState state) {
+    return state.speedMetersPerSecond < 0.0001;
+  }
 
-    public void reset() {
-        rotationPID.reset();
-    }
+  public void reset() {
+    rotationPID.reset();
+  }
 
-    public void periodic() {
-        int moduleID = rotator.getDeviceID() / 2;
-        double currModuleRotation = getRotationInDegrees();
+  public void periodic() {
+    int moduleID = rotator.getDeviceID() / 2;
+    double currModuleRotation = getRotationInDegrees();
 
-        SmartDashboard.putString("Module %d current rotation".formatted(moduleID), "%.2fdeg".formatted(currModuleRotation));
-        SmartDashboard.putString("Module %d current speed".formatted(moduleID), "%.2f".formatted(driver.getVelocity().getValue()));
+    SmartDashboard.putString(
+        "Module %d current rotation".formatted(moduleID), "%.2fdeg".formatted(currModuleRotation));
+    SmartDashboard.putString(
+        "Module %d current speed".formatted(moduleID),
+        "%.2f".formatted(driver.getVelocity().getValue()));
 
-        double rotatorPIDOutput = rotationPID.calculate(currModuleRotation);
-        double driverPIDOutput = - driverPID.calculate(targetSpeed); //drive change
+    double rotatorPIDOutput = rotationPID.calculate(currModuleRotation);
+    double driverPIDOutput = -driverPID.calculate(targetSpeed); // drive change
 
-        SmartDashboard.putString("Module %d target speed".formatted(moduleID), "%.2f".formatted(targetSpeed));
-        SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "%.2fdeg".formatted(rotationPID.getSetpoint()));
-        SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "%.2f".formatted(rotatorPIDOutput));
-        SmartDashboard.putNumber("Error", driverPID.getVelocityError());
+    SmartDashboard.putString(
+        "Module %d target speed".formatted(moduleID), "%.2f".formatted(targetSpeed));
+    SmartDashboard.putString(
+        "Module %d target rotation".formatted(moduleID),
+        "%.2fdeg".formatted(rotationPID.getSetpoint()));
+    SmartDashboard.putString(
+        "Module %d rotator PID output".formatted(moduleID), "%.2f".formatted(rotatorPIDOutput));
+    SmartDashboard.putNumber("Error", driverPID.getVelocityError());
 
-        rotator.set(rotatorPIDOutput);
-        driver.set(driverPIDOutput * SwerveInfo.MOVEMENT_SPEED); //drive change-to do: change targetSpeed to driverPIDOutput
-    }
+    rotator.set(rotatorPIDOutput);
+    driver.set(
+        driverPIDOutput
+            * SwerveInfo
+                .MOVEMENT_SPEED); // drive change-to do: change targetSpeed to driverPIDOutput
+  }
 
-    public double getRotationInDegrees() {
-        double rawRotationInDegrees = rotationEncoder.getAbsolutePosition().getValue() * 360 - rotationOffsetDegrees;
-        return MathUtil.mod(rawRotationInDegrees, -180, 180);
-    }
+  public double getRotationInDegrees() {
+    double rawRotationInDegrees =
+        rotationEncoder.getAbsolutePosition().getValue() * 360 - rotationOffsetDegrees;
+    return MathUtil.mod(rawRotationInDegrees, -180, 180);
+  }
 
-    private void setTargetSpeed(double targetSpeed) {
-        this.targetSpeed = targetSpeed;
-    }
+  private void setTargetSpeed(double targetSpeed) {
+    this.targetSpeed = targetSpeed;
+  }
 
-    private void setRotation(double degrees) {
-        rotationPID.setSetpoint(degrees);
-    }
+  private void setRotation(double degrees) {
+    rotationPID.setSetpoint(degrees);
+  }
 
-    public double getDriveVelocity() {
-        return driver.getVelocity().getValue() * driveConversionFactor;
-    }
+  public double getDriveVelocity() {
+    return driver.getVelocity().getValue() * driveConversionFactor;
+  }
 
-    public double getDriveDistance() {
-        return driver.getPosition().getValue() * driveConversionFactor;
-    }
+  public double getDriveDistance() {
+    return driver.getPosition().getValue() * driveConversionFactor;
+  }
 
-    public double getTurningVelocity() {
-        return rotationEncoder.getVelocity().getValue();
-    }
+  public double getTurningVelocity() {
+    return rotationEncoder.getVelocity().getValue();
+  }
 
-    public double getTurningPosition() {
-        double rawRotation = rotationEncoder.getAbsolutePosition().getValue() - rotationOffsetDegrees;
+  public double getTurningPosition() {
+    double rawRotation = rotationEncoder.getAbsolutePosition().getValue() - rotationOffsetDegrees;
 
-        return MathUtil.mod(rawRotation, -180, 180);
-    }
+    return MathUtil.mod(rawRotation, -180, 180);
+  }
 
-    public SwerveModuleState getState() {
-        double moduleSpeed = getDriveVelocity();
-        double rotationDegrees = getRotationInDegrees();
-        Rotation2d rotation = Rotation2d.fromDegrees(rotationDegrees);
-        return new SwerveModuleState(moduleSpeed, rotation);
-    }
+  public SwerveModuleState getState() {
+    double moduleSpeed = getDriveVelocity();
+    double rotationDegrees = getRotationInDegrees();
+    Rotation2d rotation = Rotation2d.fromDegrees(rotationDegrees);
+    return new SwerveModuleState(moduleSpeed, rotation);
+  }
 
-    public double[] getStateAsArray() {
-        double moduleSpeed = getDriveVelocity();
-        double rotationDegrees = getRotationInDegrees();
-        return new double[]{moduleSpeed, rotationDegrees};
-    }
+  public double[] getStateAsArray() {
+    double moduleSpeed = getDriveVelocity();
+    double rotationDegrees = getRotationInDegrees();
+    return new double[] {moduleSpeed, rotationDegrees};
+  }
 
-    public void setState(SwerveModuleState state) {
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getRotationInDegrees()));
-        setTargetSpeed(optimizedState.speedMetersPerSecond);
-        setRotation(optimizedState.angle.getDegrees());
-    }
+  public void setState(SwerveModuleState state) {
+    SwerveModuleState optimizedState =
+        SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getRotationInDegrees()));
+    setTargetSpeed(optimizedState.speedMetersPerSecond);
+    setRotation(optimizedState.angle.getDegrees());
+  }
 
-    public void stop() {
-        setTargetSpeed(0);
-        setRotation(getRotationInDegrees());
+  public void stop() {
+    setTargetSpeed(0);
+    setRotation(getRotationInDegrees());
 
-        driver.stopMotor();
-        rotator.stopMotor();
-    }
+    driver.stopMotor();
+    rotator.stopMotor();
+  }
 
-    public void setBrakeMode(){
-        driver.setNeutralMode(NeutralModeValue.Brake);
-    }
+  public void setBrakeMode() {
+    driver.setNeutralMode(NeutralModeValue.Brake);
+  }
 
-    public void setCoastMode(){
-        driver.setNeutralMode(NeutralModeValue.Coast);
-    }
+  public void setCoastMode() {
+    driver.setNeutralMode(NeutralModeValue.Coast);
+  }
 
-    public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(getDriveDistance(), Rotation2d.fromDegrees(getTurningPosition() + 90));
-    }
+  public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(
+        getDriveDistance(), Rotation2d.fromDegrees(getTurningPosition() + 90));
+  }
 }

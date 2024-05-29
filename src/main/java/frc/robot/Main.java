@@ -6,32 +6,31 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
  * Do NOT add any static variables to this class, or any initialization at all. Unless you know what
- * you are doing, do not modify this file except to change the parameter class to the startRobot call.
+ * you are doing, do not modify this file except to change the parameter class to the startRobot
+ * call.
  */
 public final class Main {
-    private Main() {
+  private Main() {}
+
+  /**
+   * Main initialization method. Do not perform any initialization here.
+   *
+   * <p>If you change your main Robot class (name), change the parameter type.
+   */
+  public static void main(String... args) {
+    try {
+      Files.find(Path.of("./home/lvuser/deploy"), 4, (p, bfa) -> true).forEach(System.out::println);
+    } catch (IOException e) {
+      System.out.println("Oops");
+      e.printStackTrace();
     }
 
-    /**
-     * Main initialization method. Do not perform any initialization here.
-     * <p>
-     * If you change your main Robot class (name), change the parameter type.
-     */
-    public static void main(String... args) {
-        try {
-            Files.find(Path.of("./home/lvuser/deploy"), 4, (p, bfa) -> true).forEach(System.out::println);
-        } catch (IOException e) {
-            System.out.println("Oops");
-            e.printStackTrace();
-        }
-
-        RobotBase.startRobot(Robot::new);
-    }
+    RobotBase.startRobot(Robot::new);
+  }
 }

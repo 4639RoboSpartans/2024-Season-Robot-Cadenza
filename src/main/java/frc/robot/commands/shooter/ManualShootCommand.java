@@ -6,7 +6,7 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 
 public class ManualShootCommand extends ShootCommand {
-    public ManualShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip){
-        super(shooter, hopper, ledStrip, ShootingMode.SPEAKER, false);
-    }
+  public ManualShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip) {
+    super(shooter, hopper, ledStrip, ShootingMode.SPEAKER, false);
+  }
 }
