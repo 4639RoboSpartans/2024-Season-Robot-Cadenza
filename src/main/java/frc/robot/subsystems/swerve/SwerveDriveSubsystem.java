@@ -151,11 +151,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         0,
         0);
     Pose2d curr_pose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-    // if(Math.abs(navx.getRate()) > 720) // if our angular velocity is greater than 720 degrees per
-    // second, ignore vision updates
-    // {
-    // doRejectUpdate = true;
-    // }
     if (curr_pose.getTranslation().equals(new Translation2d(0, 0))) {
       doRejectUpdate = true;
     }

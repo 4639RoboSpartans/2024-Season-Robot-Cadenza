@@ -12,13 +12,15 @@ public class NavX extends SubsystemBase {
   private final AHRS ahrs;
   private double prevHeading;
   private double prevRate;
+  private double offset;
 
   public NavX() {
     ahrs = new AHRS(SPI.Port.kMXP);
+    offset = 0.0;
   }
 
   public double getHeading() {
-    return getRotation2d().getDegrees();
+    return getRawRotation2d().getDegrees() - offset;
   }
 
   public double getRoll() {
@@ -30,16 +32,20 @@ public class NavX extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d() {
+    return Rotation2d.fromDegrees(getHeading());
+  }
+
+  private Rotation2d getRawRotation2d(){
     return ahrs.getRotation2d();
   }
 
   public void reset() {
-    ahrs.reset();
+    offset = getHeading();
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putString("heading", "%.2fdeg".formatted(getRotation2d().getDegrees()));
+    SmartDashboard.putString("heading", "%.2fdeg".formatted(getHeading()));
     SmartDashboard.putString("matchTime", "%d".formatted((int) Timer.getMatchTime()));
     if (getRate() != 0) {
       SmartDashboard.putNumber("rate", getRate());
@@ -47,10 +53,14 @@ public class NavX extends SubsystemBase {
     } else {
       SmartDashboard.putNumber("rate", prevRate);
     }
-    prevHeading = getRotation2d().getDegrees();
+    prevHeading = getHeading();
   }
 
-  public double getRate() {
+  private double getRawRate() {
     return Math.abs(getRotation2d().getDegrees() - prevHeading) * 50;
+  }
+
+  public double getRate(){
+    return SmartDashboard.getNumber("rate", getRawRate());
   }
 }
