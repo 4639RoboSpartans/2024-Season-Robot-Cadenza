@@ -5,16 +5,16 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.constants.RobotInfo;
 
 public interface AimInterface extends Subsystem, Sendable {
-    double getSwerveRotation();
+  double getSwerveRotation();
 
-    boolean isAtSetpoint();
+  boolean isAtSetpoint();
 
-    RobotInfo.ShooterInfo.ShooterSetpoint getShooterSetpoint();
+  RobotInfo.ShooterInfo.ShooterSetpoint getShooterSetpoint();
 
-    @Override
-    void periodic();
+  @Override
+  void periodic();
 
-    void resetPID();
+  void resetPID();
 
-    double getTxDerivative();
+  double getTxDerivative();
 }

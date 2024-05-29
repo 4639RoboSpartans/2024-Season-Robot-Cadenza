@@ -172,7 +172,6 @@ spotless {
             include "**/*.json"
             exclude "**/build/**", "**/build-*/**"
         }
-        gson().indentWithSpaces(2)
     }
     format "misc", {
         target fileTree(".") {

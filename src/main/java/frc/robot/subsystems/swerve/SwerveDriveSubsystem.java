@@ -42,7 +42,7 @@ import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem{
+public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
   private static final double MAX_LINEAR_SPEED = Units.feetToMeters(14.5);
   private static final double TRACK_WIDTH_X = Units.inchesToMeters(25.0);
   private static final double TRACK_WIDTH_Y = Units.inchesToMeters(25.0);
@@ -282,52 +282,47 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     };
   }
 
-  public void resetPose(Pose2d pose){
+  public void resetPose(Pose2d pose) {
     poseEstimator.resetPosition(gyroInputs.yawPosition, getModulePositions(), pose);
   }
 
-  public Rotation2d getRotation2d(){
+  public Rotation2d getRotation2d() {
     return gyroInputs.yawPosition;
   }
 
   public void sendSwerve() {
     SmartDashboard.putData(
-            "Swerve Drive",
-            new Sendable() {
-              @Override
-              public void initSendable(SendableBuilder builder) {
-                builder.setSmartDashboardType("SwerveDrive");
+        "Swerve Drive",
+        new Sendable() {
+          @Override
+          public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("SwerveDrive");
 
-                builder.addDoubleProperty(
-                        "Front Left Angle",
-                        () -> Math.toRadians(modules[0].getAngle().getDegrees()),
-                        null);
-                builder.addDoubleProperty(
-                        "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
+            builder.addDoubleProperty(
+                "Front Left Angle", () -> Math.toRadians(modules[0].getAngle().getDegrees()), null);
+            builder.addDoubleProperty(
+                "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
 
-                builder.addDoubleProperty(
-                        "Front Right Angle",
-                        () -> Math.toRadians(modules[1].getAngle().getDegrees()),
-                        null);
-                builder.addDoubleProperty(
-                        "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
+            builder.addDoubleProperty(
+                "Front Right Angle",
+                () -> Math.toRadians(modules[1].getAngle().getDegrees()),
+                null);
+            builder.addDoubleProperty(
+                "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
 
-                builder.addDoubleProperty(
-                        "Back Left Angle",
-                        () -> Math.toRadians(modules[2].getAngle().getDegrees()),
-                        null);
-                builder.addDoubleProperty(
-                        "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
+            builder.addDoubleProperty(
+                "Back Left Angle", () -> Math.toRadians(modules[2].getAngle().getDegrees()), null);
+            builder.addDoubleProperty(
+                "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
 
-                builder.addDoubleProperty(
-                        "Back Right Angle",
-                        () -> Math.toRadians(modules[3].getAngle().getDegrees()),
-                        null);
-                builder.addDoubleProperty(
-                        "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
+            builder.addDoubleProperty(
+                "Back Right Angle", () -> Math.toRadians(modules[3].getAngle().getDegrees()), null);
+            builder.addDoubleProperty(
+                "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
 
-                builder.addDoubleProperty("Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
-              }
-            });
+            builder.addDoubleProperty(
+                "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
+          }
+        });
   }
 }

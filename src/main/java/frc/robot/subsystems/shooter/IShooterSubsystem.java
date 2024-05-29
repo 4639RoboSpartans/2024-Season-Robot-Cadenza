@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.constants.RobotInfo.ShooterInfo.ShootingMode;
 
 public interface IShooterSubsystem extends Subsystem {
-    boolean isReady();
+  boolean isReady();
 
-    void setShootingMode(ShootingMode shooting);
+  void setShootingMode(ShootingMode shooting);
 
-    ShootingMode getShootingMode();
+  ShootingMode getShootingMode();
 }
