@@ -16,8 +16,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CTRSwerveDrivetrain {
+public class SwerveDriveSubsystem extends SubsystemBase{
     private final int ModuleCount;
 
     private CTRSwerveModule[] m_modules;
@@ -64,7 +65,7 @@ public class CTRSwerveDrivetrain {
                 m_allSignals[(i * 4) + 3] = signals[3];
             }
             m_allSignals[m_allSignals.length - 2] = m_pigeon2.getYaw();
-            m_allSignals[m_allSignals.length - 1] = m_pigeon2.getAngularVelocityZ();
+            m_allSignals[m_allSignals.length - 1] = m_pigeon2.getAngularVelocityZDevice();
         }
 
         @Override
@@ -96,7 +97,7 @@ public class CTRSwerveDrivetrain {
                 // Assume Pigeon2 is flat-and-level so latency compensation can be performed
                 double yawDegrees =
                         BaseStatusSignal.getLatencyCompensatedValue(
-                                m_pigeon2.getYaw(), m_pigeon2.getAngularVelocityZ());
+                                m_pigeon2.getYaw(), m_pigeon2.getAngularVelocityZDevice());
 
                 m_odometry.update(Rotation2d.fromDegrees(yawDegrees), m_modulePositions);
                 m_field.setRobotPose(m_odometry.getPoseMeters());
@@ -116,7 +117,7 @@ public class CTRSwerveDrivetrain {
         }
     }
 
-    public CTRSwerveDrivetrain(
+    public SwerveDriveSubsystem(
             SwerveDriveTrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         ModuleCount = modules.length;
 

@@ -37,14 +37,14 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
-import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
   public static OI oi;
   private final NavX navX;
 
-  private final ISwerveDriveSubsystem swerveDriveSubsystem;
+  private final SwerveDriveSubsystem swerveDriveSubsystem;
 
   private final IShooterSubsystem shooter;
   private final IIntakeSubsystem intake;

@@ -4,13 +4,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.aim.AimSubsystem;
-import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 public class AmpAimCommand extends Command {
-  private final ISwerveDriveSubsystem swerveDriveSubsystem;
+  private final SwerveDriveSubsystem swerveDriveSubsystem;
   private final AimSubsystem aimSubsystem;
 
-  public AmpAimCommand(ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem) {
+  public AmpAimCommand(SwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem) {
     this.swerveDriveSubsystem = swerveDriveSubsystem;
     this.aimSubsystem = aimSubsystem;
     addRequirements(swerveDriveSubsystem, aimSubsystem);
@@ -18,7 +18,7 @@ public class AmpAimCommand extends Command {
 
   @Override
   public void initialize() {
-    swerveDriveSubsystem.stop();
+    swerveDriveSubsystem.driveStopMotion();
   }
 
   @Override
@@ -29,12 +29,12 @@ public class AmpAimCommand extends Command {
 
     ChassisSpeeds chassisSpeeds =
         new ChassisSpeeds(forwardsCorrection, sidewaysCorrection, rotateSpeed);
-    swerveDriveSubsystem.setRawMovement(chassisSpeeds);
+    swerveDriveSubsystem.driveRobotCentric(chassisSpeeds);
   }
 
   @Override
   public void end(boolean interrupted) {
-    swerveDriveSubsystem.stop();
+    swerveDriveSubsystem.driveStopMotion();
   }
 
   // TODO: test before using in matches

@@ -13,7 +13,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
-import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import math.Averager;
 import math.MathUtil;
 
@@ -24,9 +24,9 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
   private final Averager angle = new Averager(Constants.POSE_WINDOW_LENGTH);
   private final Averager x = new Averager(Constants.POSE_WINDOW_LENGTH);
   private final Averager z = new Averager(Constants.POSE_WINDOW_LENGTH);
-  private final ISwerveDriveSubsystem swerveDriveSubsystem;
+  private final SwerveDriveSubsystem swerveDriveSubsystem;
 
-  public AimSubsystem(ISwerveDriveSubsystem swerveDriveSubsystem) {
+  public AimSubsystem(SwerveDriveSubsystem swerveDriveSubsystem) {
     this.swerveDriveSubsystem = swerveDriveSubsystem;
   }
 
@@ -48,7 +48,7 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
   }
 
   public Translation2d getVector() {
-    Pose2d currBotPose = swerveDriveSubsystem.getPose();
+    Pose2d currBotPose = swerveDriveSubsystem.getPoseMeters();
     Translation2d currBotTranslation = currBotPose.getTranslation();
     Translation2d speakerPose;
     if (SmartDashboard.getBoolean("Alliance", false)) {

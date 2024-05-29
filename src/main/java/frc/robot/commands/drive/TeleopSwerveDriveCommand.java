@@ -8,15 +8,15 @@ import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.aim.AimSubsystem;
-import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 public class TeleopSwerveDriveCommand extends Command {
-  private final ISwerveDriveSubsystem swerveDriveSubsystem;
+  private final SwerveDriveSubsystem swerveDriveSubsystem;
   private final AimSubsystem aimSubsystem;
   private final OI oi;
 
   public TeleopSwerveDriveCommand(
-      ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
+      SwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
     this.swerveDriveSubsystem = swerveDriveSubsystem;
     this.aimSubsystem = aimSubsystem;
     this.oi = oi;
@@ -25,7 +25,7 @@ public class TeleopSwerveDriveCommand extends Command {
 
   @Override
   public void initialize() {
-    swerveDriveSubsystem.stop();
+    swerveDriveSubsystem.driveStopMotion();
   }
 
   @Override
@@ -40,7 +40,7 @@ public class TeleopSwerveDriveCommand extends Command {
     double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
-    swerveDriveSubsystem.setMovement(chassisSpeeds);
+    swerveDriveSubsystem.driveFieldCentric(chassisSpeeds);
     SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
   }
 
@@ -63,6 +63,6 @@ public class TeleopSwerveDriveCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    swerveDriveSubsystem.stop();
+    swerveDriveSubsystem.driveStopMotion();
   }
 }
