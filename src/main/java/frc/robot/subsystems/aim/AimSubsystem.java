@@ -44,7 +44,7 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
   public double getYDegrees() {
     Translation2d speakerVector = getVector();
     double yRotation = Math.toDegrees(Math.tan(speakerVector.getY() / speakerVector.getX()));
-    return yRotation - swerveDriveSubsystem.getRotation2d().getDegrees();
+    return yRotation - swerveDriveSubsystem.getRotation2d().getDegrees() + 180;
   }
 
   public Translation2d getVector() {
