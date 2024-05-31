@@ -56,7 +56,7 @@ public class ModuleIOTalonFX implements ModuleIO {
 
   // Gear ratios for SDS MK4i L2, adjust as necessary
   private final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
-  private final double TURN_GEAR_RATIO = 150.0 / 7.0;
+  private final double TURN_GEAR_RATIO = 150.0 / 7.0 / 2;
 
   private final boolean isTurnMotorInverted = true;
   private final Rotation2d absoluteEncoderOffset;
@@ -64,28 +64,28 @@ public class ModuleIOTalonFX implements ModuleIO {
   public ModuleIOTalonFX(int index) {
     switch (index) {
       case 0:
-        driveTalon = new TalonFX(1);
-        turnTalon = new TalonFX(2);
-        cancoder = new CANcoder(9);
-        absoluteEncoderOffset = Rotation2d.fromRotations(0.373); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(1, "Canivore1");
+        turnTalon = new TalonFX(2, "Canivore1");
+        cancoder = new CANcoder(9, "Canivore1");
+        absoluteEncoderOffset = Rotation2d.fromRotations(0.379); // MUST BE CALIBRATED
         break;
       case 1:
-        driveTalon = new TalonFX(3);
-        turnTalon = new TalonFX(4);
-        cancoder = new CANcoder(10);
-        absoluteEncoderOffset = Rotation2d.fromRotations(0.429); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(3, "Canivore1");
+        turnTalon = new TalonFX(4, "Canivore1");
+        cancoder = new CANcoder(10, "Canivore1");
+        absoluteEncoderOffset = Rotation2d.fromRotations(0.432); // MUST BE CALIBRATED
         break;
       case 2:
-        driveTalon = new TalonFX(5);
-        turnTalon = new TalonFX(6);
-        cancoder = new CANcoder(11);
-        absoluteEncoderOffset = Rotation2d.fromRotations(0.234); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(5, "Canivore1");
+        turnTalon = new TalonFX(6, "Canivore1");
+        cancoder = new CANcoder(11, "Canivore1");
+        absoluteEncoderOffset = Rotation2d.fromRotations(0.734); // MUST BE CALIBRATED
         break;
       case 3:
-        driveTalon = new TalonFX(7);
-        turnTalon = new TalonFX(8);
-        cancoder = new CANcoder(12);
-        absoluteEncoderOffset = Rotation2d.fromRotations(0.46); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(7, "Canivore1");
+        turnTalon = new TalonFX(8, "Canivore1");
+        cancoder = new CANcoder(12, "Canivore1");
+        absoluteEncoderOffset = Rotation2d.fromRotations(0.96); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -95,7 +95,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
     driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     driveTalon.getConfigurator().apply(driveConfig);
-    setDriveBrakeMode(true);
+    setDriveBrakeMode(false);
 
     var turnConfig = new TalonFXConfiguration();
     turnConfig.CurrentLimits.SupplyCurrentLimit = 30.0;

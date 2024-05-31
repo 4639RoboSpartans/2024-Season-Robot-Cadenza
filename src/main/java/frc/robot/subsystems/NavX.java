@@ -12,6 +12,7 @@ public class NavX extends SubsystemBase {
   private final AHRS ahrs;
   private double prevHeading;
   private double prevRate;
+  private double offset = 0;
 
   public NavX() {
     ahrs = new AHRS(SPI.Port.kMXP);
@@ -30,11 +31,11 @@ public class NavX extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d() {
-    return ahrs.getRotation2d();
+    return ahrs.getRotation2d().minus(new Rotation2d(offset));
   }
 
   public void reset() {
-    ahrs.reset();
+    offset = getRotation2d().getRadians();
   }
 
   @Override

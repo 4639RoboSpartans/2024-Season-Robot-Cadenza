@@ -34,10 +34,13 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -54,6 +57,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
+  Field2d m_field = new Field2d();
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -119,6 +123,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 null,
                 this));
     sendSwerve();
+    m_field.setRobotPose(getPose());
+    SmartDashboard.putData(m_field);
   }
 
   public void periodic() {
@@ -162,8 +168,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
       rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
     }
 
+    Pose2d limeLightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+    if (!(limeLightPose.getX() == 0) && !(limeLightPose.getY() == 0)) {
+      poseEstimator.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
+    }
+
     // Apply odometry update
     poseEstimator.update(rawGyroRotation, modulePositions);
+    m_field.setRobotPose(getPose());
   }
 
   /**
@@ -173,7 +185,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
    */
   public void setMovement(ChassisSpeeds speeds) {
     // Calculate module setpoints
-    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+    ChassisSpeeds discreteSpeeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+            ChassisSpeeds.discretize(speeds, 0.02), gyroInputs.yawPosition);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, MAX_LINEAR_SPEED);
 

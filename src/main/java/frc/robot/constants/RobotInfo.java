@@ -53,7 +53,7 @@ public final class RobotInfo {
   public static final class AimInfo {
 
     public static final double AIM_TOLERANCE = Math.toRadians(1);
-    public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.00005, 0.01, 0);
+    public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.05, 0, 0);
     public static final double AIM_ROT_POW = 0.7;
     public static final double AIM_UPWARDS_TILT = Math.PI / 6;
     public static final double AIM_TIME = 0.5;
