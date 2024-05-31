@@ -6,15 +6,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.led.LEDPattern;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.SubsystemManager;
+import org.littletonrobotics.junction.LoggedRobot;
 
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private static boolean isAuton = false;
   private Command autonomousCommand;
 
