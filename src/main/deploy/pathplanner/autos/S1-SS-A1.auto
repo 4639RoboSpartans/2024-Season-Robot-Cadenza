@@ -5,7 +5,7 @@
       "x": 0.4236080944538117,
       "y": 7.333699226379395
     },
-    "rotation": 0.0
+    "rotation": -1.007603077230029e-17
   },
   "command": {
     "type": "sequential",
@@ -15,12 +15,6 @@
           "type": "path",
           "data": {
             "pathName": "S1-SS"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutonAimCommand"
           }
         },
         {
@@ -71,12 +65,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutonAimCommand"
           }
         },
         {

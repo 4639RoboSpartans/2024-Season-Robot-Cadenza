@@ -5,7 +5,7 @@
       "x": 1.3350534439086914,
       "y": 5.598077774047852
     },
-    "rotation": 0.0
+    "rotation": 2.482318280275311e-27
   },
   "command": {
     "type": "sequential",
@@ -62,12 +62,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutonAimCommand"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "SpinupCommand"
                 }
               }
@@ -119,21 +113,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "A1-SS"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutonAimCommand"
-                }
-              },
               {
                 "type": "named",
                 "data": {
