@@ -172,57 +172,6 @@
                 "data": {
                   "name": "ShootSpeaker"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ExtendIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SS-C2 v2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "C2-SS v2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootSpeaker"
-                }
               }
             ]
           }
