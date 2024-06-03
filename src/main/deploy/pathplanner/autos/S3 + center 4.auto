@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.4236080944538117,
-      "y": 7.333699226379395
+      "x": 0.41288694739341736,
+      "y": 3.908378124237061
     },
-    "rotation": -1.007603077230029e-17
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -18,90 +18,14 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "S1-SS"
+                  "pathName": "S3-C5"
                 }
               },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootSpeaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ExtendIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "IntakeCommand"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SS-A1"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootSpeaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ExtendIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeCommand"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "A1-C1"
-                }
               }
             ]
           }
@@ -113,7 +37,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C1-SS"
+                  "pathName": "C5-SS"
                 }
               },
               {
@@ -151,13 +75,121 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SS-C2"
+                  "pathName": "SS-C4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake command"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C4-SS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SS-C3"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "IntakeCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C3-SS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SS-C2 v2"
                 }
               }
             ]
@@ -190,12 +222,6 @@
                 "type": "named",
                 "data": {
                   "name": "ShootSpeaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ExtendIntake"
                 }
               }
             ]
