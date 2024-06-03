@@ -5,7 +5,7 @@
       "x": 1.3350534439086914,
       "y": 5.598077774047852
     },
-    "rotation": 2.482318280275311e-27
+    "rotation": 1.0073720816592203e-27
   },
   "command": {
     "type": "sequential",
@@ -45,12 +45,6 @@
                 "data": {
                   "name": "IntakeCommand"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
               }
             ]
           }
@@ -89,12 +83,6 @@
                 "data": {
                   "name": "IntakeCommand"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
               }
             ]
           }
@@ -127,12 +115,6 @@
                 "data": {
                   "pathName": "A1-SS"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
               }
             ]
           }
@@ -150,7 +132,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "SpinupCommand"
+                  "name": "ExtendIntake"
                 }
               }
             ]
@@ -170,12 +152,6 @@
                 "type": "named",
                 "data": {
                   "name": "IntakeCommand"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
                 }
               }
             ]

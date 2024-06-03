@@ -39,12 +39,6 @@
                 "data": {
                   "pathName": "C5-SS"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
               }
             ]
           }
@@ -96,12 +90,6 @@
                 "data": {
                   "pathName": "C4-SS"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
               }
             ]
           }
@@ -152,12 +140,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "C3-SS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
                 }
               }
             ]

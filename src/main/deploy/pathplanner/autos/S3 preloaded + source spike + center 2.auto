@@ -5,7 +5,7 @@
       "x": 0.41288694739341736,
       "y": 3.908378124237061
     },
-    "rotation": 1.3862628757021754e-21
+    "rotation": 5.190773892965435e-17
   },
   "command": {
     "type": "sequential",
@@ -102,12 +102,6 @@
                 "data": {
                   "pathName": "C5-SS"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
               }
             ]
           }
@@ -158,12 +152,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "C4-SS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
                 }
               }
             ]
