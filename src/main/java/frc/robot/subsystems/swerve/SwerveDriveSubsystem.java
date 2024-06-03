@@ -184,6 +184,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
    * @param speeds Speeds in meters/sec
    */
   public void setMovement(ChassisSpeeds speeds) {
+    SmartDashboard.putNumber("gyro heading", gyroInputs.yawPosition.getDegrees());
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(

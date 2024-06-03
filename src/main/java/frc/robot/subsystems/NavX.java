@@ -16,6 +16,7 @@ public class NavX extends SubsystemBase {
 
   public NavX() {
     ahrs = new AHRS(SPI.Port.kMXP);
+    offset = ahrs.getRotation2d().getRadians();
   }
 
   public double getHeading() {
@@ -35,7 +36,7 @@ public class NavX extends SubsystemBase {
   }
 
   public void reset() {
-    offset = getRotation2d().getRadians();
+    offset = ahrs.getRotation2d().getRadians();
   }
 
   @Override
@@ -49,6 +50,7 @@ public class NavX extends SubsystemBase {
       SmartDashboard.putNumber("rate", prevRate);
     }
     prevHeading = getRotation2d().getDegrees();
+    SmartDashboard.putNumber("offset", offset);
   }
 
   public double getRate() {
