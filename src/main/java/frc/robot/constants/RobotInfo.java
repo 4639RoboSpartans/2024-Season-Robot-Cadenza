@@ -4,6 +4,8 @@ import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
+import java.util.Arrays;
+
 public final class RobotInfo {
   public static final class SwerveInfo {
     public static final double centerToWheelMeters = 0.245;
@@ -18,19 +20,13 @@ public final class RobotInfo {
 
     // Change MOVEMENT_SPEED to 1.0 for max speed
     public static final double CURRENT_MAX_ROBOT_MPS = 9;
-    public static final double MOVEMENT_SPEED = .5;
     public static final double AIM_ROTATION_SPEED = 2.5;
-    public static final PIDTemplate SWERVE_ROTATOR_PID_CONSTANTS = new PIDTemplate(0.0085);
-    public static final PIDTemplate SWERVE_DRIVER_PID_CONSTANTS = new PIDTemplate(3.25);
     public static final double DERIVATIVE_MULTIPLIER = 0.1;
     public static final double TELOP_ROTATION_SPEED = 4;
 
     public static final PIDConstants TranslationPID = new PIDConstants(16, 0, 0.0);
     public static final PIDConstants RotationPID = new PIDConstants(8, 0, 0.0);
-  }
-
-  public static final class TrapInfo {
-    // TODO: make trap subsystem and put constants here
+    public static final PIDTemplate TELEOP_ROTATION_PID = new PIDTemplate(0.5, 0, 0);
   }
 
   public static final class IntakeInfo {
@@ -81,12 +77,9 @@ public final class RobotInfo {
 
     public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
       new ShooterInfo.ShooterSetpointMeasurement(1.0, new ShooterInfo.ShooterSetpoint(24.75, .482)),
-      new ShooterInfo.ShooterSetpointMeasurement(
-          1.1, new ShooterInfo.ShooterSetpoint(24.75, .4845)),
-      new ShooterInfo.ShooterSetpointMeasurement(
-          1.2, new ShooterInfo.ShooterSetpoint(24.75, .4895)),
-      new ShooterInfo.ShooterSetpointMeasurement(
-          1.3, new ShooterInfo.ShooterSetpoint(24.75, .4925)),
+      new ShooterInfo.ShooterSetpointMeasurement(1.1, new ShooterInfo.ShooterSetpoint(24.75, .4845)),
+      new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(24.75, .4895)),
+      new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(24.75, .4925)),
       new ShooterInfo.ShooterSetpointMeasurement(1.4, new ShooterInfo.ShooterSetpoint(24.75, .495)),
       new ShooterInfo.ShooterSetpointMeasurement(1.5, new ShooterInfo.ShooterSetpoint(25, .4999)),
       new ShooterInfo.ShooterSetpointMeasurement(1.6, new ShooterInfo.ShooterSetpoint(25, .505)),
@@ -96,14 +89,12 @@ public final class RobotInfo {
       new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(26.25, .517)),
       new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(26.5, .519)),
       new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(26.5, .5235)),
-      new ShooterInfo.ShooterSetpointMeasurement(
-          2.3, new ShooterInfo.ShooterSetpoint(26.75, .5305)),
+      new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(26.75, .5305)),
       new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(27, .531)),
       new ShooterInfo.ShooterSetpointMeasurement(2.45, new ShooterInfo.ShooterSetpoint(27.5, .531)),
       new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(27.75, .532)),
       new ShooterInfo.ShooterSetpointMeasurement(2.55, new ShooterInfo.ShooterSetpoint(28, .533)),
-      new ShooterInfo.ShooterSetpointMeasurement(
-          2.6, new ShooterInfo.ShooterSetpoint(28.5, .53625)),
+      new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(28.5, .53625)),
       new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(29.25, .536)),
       new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(29.5, .5415)),
       new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(30.6, .5445)),
@@ -119,14 +110,13 @@ public final class RobotInfo {
       new ShooterInfo.ShooterSetpointMeasurement(3.9, new ShooterInfo.ShooterSetpoint(54.5, .5665)),
       new ShooterInfo.ShooterSetpointMeasurement(4.0, new ShooterInfo.ShooterSetpoint(55.75, .568)),
       new ShooterInfo.ShooterSetpointMeasurement(4.1, new ShooterInfo.ShooterSetpoint(56.5, .569)),
-      new ShooterInfo.ShooterSetpointMeasurement(
-          4.2, new ShooterInfo.ShooterSetpoint(57.25, .5705)),
+      new ShooterInfo.ShooterSetpointMeasurement(4.2, new ShooterInfo.ShooterSetpoint(57.25, .5705)),
       new ShooterInfo.ShooterSetpointMeasurement(4.3, new ShooterInfo.ShooterSetpoint(58.5, .571)),
       new ShooterInfo.ShooterSetpointMeasurement(4.5, new ShooterInfo.ShooterSetpoint(58.75, .571)),
       // Max speed is 58.5
       // Min angle is .9
-
     };
+
 
     public static final double SHOOTER_IDLE_SPEED = 0.2;
     public static final double SHOOTER_AUTON_IDLE_SPEED = 0.35;

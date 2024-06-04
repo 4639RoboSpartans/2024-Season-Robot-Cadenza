@@ -17,4 +17,8 @@ public interface ISwerveDriveSubsystem extends Subsystem {
   void resetPose(Pose2d pose);
 
   Pose2d getPose();
+
+  Rotation2d getDesiredRotation();
+
+  void resetDesiredRotation();
 }
