@@ -27,10 +27,13 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
   }
 
   @Override
-  public Rotation2d getDesiredRotation(){
+  public Rotation2d getDesiredRotation() {
     return null;
   }
 
   @Override
   public void resetDesiredRotation() {}
+
+  @Override
+  public void setDesiredRotation(Rotation2d desiredRotation) {}
 }

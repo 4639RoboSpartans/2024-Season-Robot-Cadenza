@@ -91,7 +91,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 new HolonomicPathFollowerConfig(
                         RobotInfo.SwerveInfo.TranslationPID,
                         RobotInfo.SwerveInfo.RotationPID,
-                        MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS,
+                        MAX_LINEAR_SPEED,
+                        DRIVE_BASE_RADIUS,
                         new ReplanningConfig()),
                 () ->
                         DriverStation.getAlliance().isPresent()
@@ -99,8 +100,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 this);
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
-                (activePath) -> Logger.recordOutput(
-                        "Odometry/Trajectory", activePath.toArray(new Pose2d[0])));
+                (activePath) ->
+                        Logger.recordOutput("Odometry/Trajectory", activePath.toArray(new Pose2d[0])));
         PathPlannerLogging.setLogTargetPoseCallback(
                 (targetPose) -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
 
@@ -313,9 +314,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                             "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
 
                     builder.addDoubleProperty(
-                            "Front Right Angle",
-                            () -> Math.toRadians(modules[1].getAngle().getDegrees()),
-                            null);
+                            "Front Right Angle", () -> Math.toRadians(modules[1].getAngle().getDegrees()), null);
                     builder.addDoubleProperty(
                             "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
 
@@ -329,8 +328,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                     builder.addDoubleProperty(
                             "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
 
-                    builder.addDoubleProperty(
-                            "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
+                    builder.addDoubleProperty("Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
                 });
     }
 
@@ -340,5 +338,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     public Rotation2d getDesiredRotation() {
         return desiredRotation;
+    }
+
+    public void setDesiredRotation(Rotation2d desiredRotation){
+        this.desiredRotation = desiredRotation;
     }
 }
