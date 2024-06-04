@@ -6,7 +6,6 @@ import frc.robot.constants.IDs;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
@@ -20,6 +19,8 @@ import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOTalonFX;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
@@ -40,7 +41,6 @@ public class SubsystemManager {
 
   private static IShooterSubsystem shooter;
   private static IShooterPivotSubsystem shooterPivot;
-  private static AimSubsystem aimSubsystem;
   private static IIntakeSubsystem intake;
   private static IHopperSubsystem hopper;
   private static IClimberSubsystem climber;
@@ -97,21 +97,16 @@ public class SubsystemManager {
 
   public static IShooterSubsystem getShooter() {
     if (shooter == null) {
-      shooter =
-          switch (currentRobot) {
-            case ZEUS -> new DummyShooterSubsystem();
-            case SIREN -> new FalconShooterSubsystem(
-                IDs.SHOOTER_SHOOTER_LEFT_MOTOR, IDs.SHOOTER_SHOOTER_RIGHT_MOTOR);
-          };
+      switch (currentRobot) {
+        case ZEUS:
+          shooter = new DummyShooterSubsystem();
+        case SIREN:
+          ShooterIO shooterIO = new ShooterIOTalonFX();
+          shooter = new FalconShooterSubsystem(shooterIO);
+      }
+      ;
     }
     return shooter;
-  }
-
-  public static AimSubsystem getAimSubsystem() {
-    if (aimSubsystem == null) {
-      aimSubsystem = new AimSubsystem(swerveDrive);
-    }
-    return aimSubsystem;
   }
 
   public static IIntakeSubsystem getIntake() {

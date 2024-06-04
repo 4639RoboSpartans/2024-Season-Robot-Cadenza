@@ -3,46 +3,34 @@ package frc.robot.subsystems.shooter;
 import static frc.robot.constants.RobotInfo.ShooterInfo;
 import static frc.robot.constants.RobotInfo.ShooterInfo.*;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.constants.RobotInfo.ShooterInfo;
+import frc.robot.constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
+import frc.robot.util.AimUtil;
 import math.Averager;
 
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
   // Components
-  private final TalonFX shooterMotorLeft;
-  private final TalonFX shooterMotorRight;
+  private final ShooterIO shooterMotors;
   private final IShooterPivotSubsystem shooterPivot;
   // Other references
-  private final AimSubsystem aimSubsystem;
+  private final ShooterIOInputsAutoLogged shooterIOInputs = new ShooterIOInputsAutoLogged();
   // Controllers
   private final Averager shooterOutputAverager;
   private final BangBangController bangBangController;
   // State
   private ShootingMode shootingMode;
 
-  public FalconShooterSubsystem(int shooterMotorLeftID, int shooterMotorRightID) {
-    this.aimSubsystem = SubsystemManager.getAimSubsystem();
+  public FalconShooterSubsystem(ShooterIO shooter) {
     this.shooterPivot = SubsystemManager.getShooterPivot(this);
 
-    shooterMotorLeft = new TalonFX(shooterMotorLeftID);
-    shooterMotorRight = new TalonFX(shooterMotorRightID);
-    shooterMotorLeft.setNeutralMode(NeutralModeValue.Coast);
-    shooterMotorRight.setNeutralMode(NeutralModeValue.Coast);
-
-    shooterMotorLeft.setInverted(true);
-    shooterMotorLeft.getConfigurator().apply(new CurrentLimitsConfigs().withStatorCurrentLimit(4));
-    shooterMotorRight.getConfigurator().apply(new CurrentLimitsConfigs().withStatorCurrentLimit(4));
-    shooterMotorRight.setControl(new Follower(shooterMotorLeftID, true));
+    shooterMotors = shooter;
 
     shooterOutputAverager = new Averager(Constants.POSE_WINDOW_LENGTH);
 
@@ -52,12 +40,12 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
   }
 
   private double getCurrentSpeed() {
-    return shooterMotorLeft.getVelocity().getValue();
+    return shooterIOInputs.shooterSpeed;
   }
 
   private double getTargetSpeed() {
     return switch (shootingMode) {
-      case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().speed();
+      case AUTO_SPEAKER -> AimUtil.getShooterSetpoint().speed();
       case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
       case AMP -> SHOOTER_AMP_SETPOINT.speed();
       case TRAP -> SHOOTER_TRAP_SETPOINT.speed();
@@ -72,20 +60,21 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     shooterOutputAverager.addMeasurement(controllerOutput);
 
-    shooterMotorLeft.setVoltage(shooterOutputAverager.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
+    shooterMotors.setShooterVoltage(shooterOutputAverager.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
   }
 
   private void applyIdleSpeed() {
     double speed = Robot.isInAuton() ? SHOOTER_AUTON_IDLE_SPEED : SHOOTER_IDLE_SPEED;
-    shooterMotorLeft.set(speed);
+    shooterMotors.set(speed);
   }
 
   private void applyIntakeSpeed() {
-    shooterMotorLeft.set(ShooterInfo.SHOOTER_INTAKE_SPEED);
+    shooterMotors.set(ShooterInfo.SHOOTER_INTAKE_SPEED);
   }
 
   @Override
   public void periodic() {
+    shooterMotors.updateInputs(shooterIOInputs);
     SmartDashboard.putString("shooting mode", shootingMode.toString());
     SmartDashboard.putNumber("shooter speed", getCurrentSpeed());
     SmartDashboard.putNumber("shooter target speed", getTargetSpeed());
@@ -112,11 +101,10 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
   }
 
   private boolean isUpToSpeed() {
-    return Math.abs(getCurrentSpeed())
-        >= Math.abs(getTargetSpeed())
-            * switch (shootingMode) {
-              case AMP -> .98;
-              default -> 0.95;
-            };
+    double rawSpeed = Math.abs(getCurrentSpeed());
+    if (shootingMode == ShootingMode.AMP) {
+      return rawSpeed >= Math.abs(getTargetSpeed()) * 0.98;
+    }
+    return rawSpeed >= Math.abs(getTargetSpeed()) * 0.95;
   }
 }

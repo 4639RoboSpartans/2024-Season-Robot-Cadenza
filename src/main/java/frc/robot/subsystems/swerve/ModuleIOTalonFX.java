@@ -55,7 +55,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final StatusSignal<Double> turnCurrent;
 
   // Gear ratios for SDS MK4i L2, adjust as necessary
-  private final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+  private final double DRIVE_GEAR_RATIO = 6.55;
   private final double TURN_GEAR_RATIO = 150.0 / 7.0 / 2;
 
   private final boolean isTurnMotorInverted = true;
