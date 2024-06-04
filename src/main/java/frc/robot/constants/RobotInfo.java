@@ -4,13 +4,11 @@ import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
-import java.util.Arrays;
 
 public final class RobotInfo {
   public static final class SwerveInfo {
     public static final double centerToWheelMeters = 0.245;
 
-    public static final double K_P_MULTIPLIER = 1;
     public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS =
         new SwerveDriveKinematics(
             new Translation2d(centerToWheelMeters, centerToWheelMeters),
@@ -51,14 +49,10 @@ public final class RobotInfo {
     public static final double AIM_TOLERANCE = Math.toRadians(1);
     public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.05, 0, 0);
     public static final double AIM_ROT_POW = 0.7;
-    public static final double AIM_UPWARDS_TILT = Math.PI / 6;
     public static final double AIM_TIME = 0.5;
   }
 
   public static class ShooterInfo {
-    public static double LimelightTxOffset = -8;
-    public static double LimelightOffsetZ = -0.1651;
-    public static double LimelightOffsetX = -0.1267;
 
     public record ShooterSetpoint(double speed, double angle) {}
 

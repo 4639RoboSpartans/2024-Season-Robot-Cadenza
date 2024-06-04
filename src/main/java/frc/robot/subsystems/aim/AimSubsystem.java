@@ -9,9 +9,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
-import frc.robot.network.LimeLight;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import math.Averager;
@@ -66,7 +66,7 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
 
   @Override
   public boolean isAtSetpoint() {
-    return Math.abs(angle.getValue()) <= AimInfo.AIM_TOLERANCE && LimeLight.seesAprilTags();
+    return Math.abs(angle.getValue()) <= AimInfo.AIM_TOLERANCE && LimelightHelpers.getTargetCount("limelight") > 0;
   }
 
   @Override

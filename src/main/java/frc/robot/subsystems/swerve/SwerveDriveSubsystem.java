@@ -23,15 +23,12 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -58,19 +55,19 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
-    private Field2d m_field = new Field2d();
+    private final Field2d field = new Field2d();
     private Rotation2d desiredRotation;
 
-    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+    private final SwerveDriveKinematics kinematics = RobotInfo.SwerveInfo.SWERVE_DRIVE_KINEMATICS;
     private Rotation2d rawGyroRotation = new Rotation2d();
-    private SwerveModulePosition[] lastModulePositions = // For delta tracking
+    private final SwerveModulePosition[] lastModulePositions = // For delta tracking
             new SwerveModulePosition[]{
                     new SwerveModulePosition(),
                     new SwerveModulePosition(),
                     new SwerveModulePosition(),
                     new SwerveModulePosition()
             };
-    private SwerveDrivePoseEstimator poseEstimator =
+    private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
     public SwerveDriveSubsystem(
@@ -102,14 +99,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 this);
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
-                (activePath) -> {
-                    Logger.recordOutput(
-                            "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-                });
+                (activePath) -> Logger.recordOutput(
+                        "Odometry/Trajectory", activePath.toArray(new Pose2d[0])));
         PathPlannerLogging.setLogTargetPoseCallback(
-                (targetPose) -> {
-                    Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-                });
+                (targetPose) -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
 
         // Configure SysId
         sysId =
@@ -128,8 +121,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                                 null,
                                 this));
         sendSwerve();
-        m_field.setRobotPose(getPose());
-        SmartDashboard.putData(m_field);
+        field.setRobotPose(getPose());
+        SmartDashboard.putData(field);
         desiredRotation = gyroInputs.yawPosition;
     }
 
@@ -148,8 +141,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         }
         // Log empty setpoint states when disabled
         if (DriverStation.isDisabled()) {
-            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[]{});
-            Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[]{});
+            Logger.recordOutput("SwerveStates/Setpoints");
+            Logger.recordOutput("SwerveStates/SetpointsOptimized");
         }
 
         // Read wheel positions and deltas from each module
@@ -176,12 +169,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
         Pose2d limeLightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
         if (!(limeLightPose.getX() == 0) && !(limeLightPose.getY() == 0)) {
-            poseEstimator.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
+            addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
         }
 
         // Apply odometry update
         poseEstimator.update(rawGyroRotation, modulePositions);
-        m_field.setRobotPose(getPose());
+        field.setRobotPose(getPose());
     }
 
     /**
@@ -218,20 +211,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     /**
-     * Stops the drive and turns the modules to an X arrangement to resist movement. The modules will
-     * return to their normal orientations the next time a nonzero velocity is requested.
-     */
-    public void stopWithX() {
-        Rotation2d[] headings = new Rotation2d[4];
-        for (int i = 0; i < 4; i++) {
-            headings[i] = getModuleTranslations()[i].getAngle();
-        }
-        kinematics.resetHeadings(headings);
-        stop();
-    }
-
-    /**
-     * Returns a command to run a quasistatic test in the specified direction.
+     * Returns a command to run a quasi static test in the specified direction.
      */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return sysId.quasistatic(direction);
@@ -245,7 +225,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     /**
-     * Returns the module states (turn angles and drive velocities) for all of the modules.
+     * Returns the module states (turn angles and drive velocities) for all the modules.
      */
     @AutoLogOutput(key = "SwerveStates/Measured")
     private SwerveModuleState[] getModuleStates() {
@@ -257,7 +237,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     /**
-     * Returns the module positions (turn angles and drive positions) for all of the modules.
+     * Returns the module positions (turn angles and drive positions) for all the modules.
      */
     private SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] states = new SwerveModulePosition[4];
@@ -313,18 +293,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         return MAX_ANGULAR_SPEED;
     }
 
-    /**
-     * Returns an array of module translations.
-     */
-    public static Translation2d[] getModuleTranslations() {
-        return new Translation2d[]{
-                new Translation2d(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
-                new Translation2d(TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0),
-                new Translation2d(-TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
-                new Translation2d(-TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0)
-        };
-    }
-
     public void resetPose(Pose2d pose) {
         poseEstimator.resetPosition(gyroInputs.yawPosition, getModulePositions(), pose);
     }
@@ -336,36 +304,33 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     public void sendSwerve() {
         SmartDashboard.putData(
                 "Swerve Drive",
-                new Sendable() {
-                    @Override
-                    public void initSendable(SendableBuilder builder) {
-                        builder.setSmartDashboardType("SwerveDrive");
+                builder -> {
+                    builder.setSmartDashboardType("SwerveDrive");
 
-                        builder.addDoubleProperty(
-                                "Front Left Angle", () -> Math.toRadians(modules[0].getAngle().getDegrees()), null);
-                        builder.addDoubleProperty(
-                                "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
+                    builder.addDoubleProperty(
+                            "Front Left Angle", () -> Math.toRadians(modules[0].getAngle().getDegrees()), null);
+                    builder.addDoubleProperty(
+                            "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
 
-                        builder.addDoubleProperty(
-                                "Front Right Angle",
-                                () -> Math.toRadians(modules[1].getAngle().getDegrees()),
-                                null);
-                        builder.addDoubleProperty(
-                                "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
+                    builder.addDoubleProperty(
+                            "Front Right Angle",
+                            () -> Math.toRadians(modules[1].getAngle().getDegrees()),
+                            null);
+                    builder.addDoubleProperty(
+                            "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
 
-                        builder.addDoubleProperty(
-                                "Back Left Angle", () -> Math.toRadians(modules[2].getAngle().getDegrees()), null);
-                        builder.addDoubleProperty(
-                                "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
+                    builder.addDoubleProperty(
+                            "Back Left Angle", () -> Math.toRadians(modules[2].getAngle().getDegrees()), null);
+                    builder.addDoubleProperty(
+                            "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
 
-                        builder.addDoubleProperty(
-                                "Back Right Angle", () -> Math.toRadians(modules[3].getAngle().getDegrees()), null);
-                        builder.addDoubleProperty(
-                                "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
+                    builder.addDoubleProperty(
+                            "Back Right Angle", () -> Math.toRadians(modules[3].getAngle().getDegrees()), null);
+                    builder.addDoubleProperty(
+                            "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
 
-                        builder.addDoubleProperty(
-                                "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
-                    }
+                    builder.addDoubleProperty(
+                            "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
                 });
     }
 
