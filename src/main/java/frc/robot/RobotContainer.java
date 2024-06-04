@@ -26,6 +26,7 @@ import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
 import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
+import frc.robot.oi.OI.Buttons;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.aim.AimSubsystem;
@@ -188,6 +189,19 @@ public class RobotContainer {
         .whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
 
     oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
+
+    oi.driverController()
+        .getButton(Buttons.A_BUTTON)
+        .onTrue(
+            new RunCommand(
+                () -> {
+                  if (oi.driverController().getButton(Buttons.B_BUTTON).getAsBoolean()) {
+                    navX.reset();
+                    SmartDashboard.putBoolean("navx reset", true);
+                  } else {
+                    SmartDashboard.putBoolean("navx reset", false);
+                  }
+                }));
   }
 
   public Command getAutonomousCommand() {

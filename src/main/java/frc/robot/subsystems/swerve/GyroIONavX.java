@@ -1,12 +1,13 @@
 package frc.robot.subsystems.swerve;
 
 import frc.robot.subsystems.NavX;
+import frc.robot.subsystems.SubsystemManager;
 
 public class GyroIONavX implements GyroIO {
   private final NavX navX;
 
   public GyroIONavX() {
-    navX = new NavX();
+    navX = SubsystemManager.getNavX();
   }
 
   @Override
