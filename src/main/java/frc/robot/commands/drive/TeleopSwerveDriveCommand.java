@@ -62,9 +62,9 @@ public class TeleopSwerveDriveCommand extends Command {
             Rotation2d currAngle = swerveDriveSubsystem.getRotation2d();
             double rotationOffset = currAngle.minus(botAngle).getRadians();
             double givenOffset = Math.copySign(
-                    Math.pow(rotationOffset, 1 + rotationMultiplier * AimInfo.aimScalar),
+                    Math.pow(rotationOffset, 1 + rotationMultiplier * SwerveInfo.rotationScalar),
                     rotationOffset);
-            rawSpeed = aimPID.calculate(givenOffset);
+            rawSpeed = aimPID.calculate(givenOffset) * SwerveInfo.ROTATION_MULTIPLIER;
             if (turning) turning = false;
         }
         else if (driverRotationInput != 0) {
@@ -75,7 +75,10 @@ public class TeleopSwerveDriveCommand extends Command {
             Rotation2d currAngle = swerveDriveSubsystem.getRotation2d();
             Rotation2d desiredAngle = swerveDriveSubsystem.getDesiredRotation();
             double rotationOffset = currAngle.minus(desiredAngle).getRadians();
-            rawSpeed = rotationPID.calculate(rotationOffset);
+            double givenOffset = Math.copySign(
+                    Math.pow(rotationOffset, 1 + rotationMultiplier * SwerveInfo.rotationScalar),
+                    rotationOffset);
+            rawSpeed = rotationPID.calculate(givenOffset) * SwerveInfo.ROTATION_MULTIPLIER;
             if (turning) {
                 swerveDriveSubsystem.resetDesiredRotation();
                 turning = false;

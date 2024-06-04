@@ -18,7 +18,10 @@ public final class RobotInfo {
         // Change MOVEMENT_SPEED to 1.0 for max speed
         public static final double CURRENT_MAX_ROBOT_MPS = 9;
         public static final double TELOP_ROTATION_SPEED = 4;
+
         //TODO: tune these
+        public static final double ROTATION_MULTIPLIER = 0.5;
+        public static final double rotationScalar = 0.5;
         public static final PIDConstants TranslationPID = new PIDConstants(16, 0, 0.0);
         public static final PIDConstants RotationPID = new PIDConstants(8, 0, 0.0);
         public static final PIDTemplate TELEOP_ROTATION_PID = new PIDTemplate(0.5, 0, 0);
@@ -45,7 +48,6 @@ public final class RobotInfo {
 
         public static final PIDTemplate aimPID = new PIDTemplate(.8, 0, 0); //TODO: tune this
         public static final double AIM_TIME = 0.5;
-        public static final double aimScalar = 0.5; //TODO: tune this
     }
 
     public static class ShooterInfo {
