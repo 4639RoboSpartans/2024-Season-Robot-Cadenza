@@ -1,6 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import static frc.robot.constants.RobotInfo.ShooterInfo;
 import static frc.robot.constants.RobotInfo.ShooterInfo.*;
 
 import edu.wpi.first.math.controller.BangBangController;
@@ -15,7 +14,7 @@ import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.util.AimUtil;
 import math.Averager;
 
-public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
+public class ShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
   // Components
   private final ShooterIO shooterMotors;
   private final IShooterPivotSubsystem shooterPivot;
@@ -27,7 +26,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
   // State
   private ShootingMode shootingMode;
 
-  public FalconShooterSubsystem(ShooterIO shooter) {
+  public ShooterSubsystem(ShooterIO shooter) {
     this.shooterPivot = SubsystemManager.getShooterPivot(this);
 
     shooterMotors = shooter;

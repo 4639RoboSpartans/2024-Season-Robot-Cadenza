@@ -72,4 +72,9 @@ public class ShooterIOTalonFX implements ShooterIO {
       rightTalon.setNeutralMode(NeutralModeValue.Brake);
     }
   }
+
+  @Override
+  public void stop() {
+    leftTalon.stopMotor();
+  }
 }

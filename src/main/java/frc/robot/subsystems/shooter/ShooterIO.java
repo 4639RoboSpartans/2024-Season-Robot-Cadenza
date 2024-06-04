@@ -19,4 +19,6 @@ public interface ShooterIO {
 
   /** sets percent speed. */
   default void set(double percent) {}
+
+  default void stop() {}
 }

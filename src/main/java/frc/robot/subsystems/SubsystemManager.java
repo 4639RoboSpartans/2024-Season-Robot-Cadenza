@@ -17,13 +17,15 @@ import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
-import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
-import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
+import frc.robot.subsystems.shooter.pivot.ShooterPivotIO;
+import frc.robot.subsystems.shooter.pivot.ShooterPivotIOSparkMax;
+import frc.robot.subsystems.shooter.pivot.ShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.GyroIONavX;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.ModuleIOTalonFX;
@@ -85,12 +87,14 @@ public class SubsystemManager {
 
   public static IShooterPivotSubsystem getShooterPivot(IShooterSubsystem shooter) {
     if (shooterPivot == null) {
-      shooterPivot =
-          switch (currentRobot) {
-            case ZEUS -> new DummyShooterPivotSubsystem();
-            case SIREN -> new NeoShooterPivotSubsystem(
-                IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
-          };
+      switch (currentRobot) {
+        case ZEUS:
+          shooterPivot = new DummyShooterPivotSubsystem();
+        case SIREN:
+          ShooterPivotIO shooterPivotIO = new ShooterPivotIOSparkMax();
+          shooterPivot = new ShooterPivotSubsystem(shooter, shooterPivotIO);
+      }
+      ;
     }
     return shooterPivot;
   }
@@ -102,7 +106,7 @@ public class SubsystemManager {
           shooter = new DummyShooterSubsystem();
         case SIREN:
           ShooterIO shooterIO = new ShooterIOTalonFX();
-          shooter = new FalconShooterSubsystem(shooterIO);
+          shooter = new ShooterSubsystem(shooterIO);
       }
       ;
     }

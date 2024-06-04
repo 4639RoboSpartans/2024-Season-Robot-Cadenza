@@ -2,20 +2,19 @@ package frc.robot.subsystems.shooter.pivot;
 
 import static frc.robot.constants.RobotInfo.ShooterInfo;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IDs;
+import frc.robot.constants.RobotInfo.ShooterInfo;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.util.AimUtil;
 
-public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
+public class ShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
   // Components
-  private final CANSparkMax aimMotorLeft;
-  private final CANSparkMax aimMotorRight;
+  private final ShooterPivotIO shooterPivotIO;
+  private final ShooterPivotIOInputsAutoLogged shooterPivotInputs;
 
   private final DutyCycleEncoder encoder;
   // References to other subsystems
@@ -24,14 +23,10 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
   private final PIDController aimPID;
   private boolean isUsingPID = true;
 
-  public NeoShooterPivotSubsystem(
-      int aimMotorLeftID, int aimMotorRightID, IShooterSubsystem shooter) {
-    aimMotorLeft = new CANSparkMax(aimMotorLeftID, CANSparkMax.MotorType.kBrushless);
-    aimMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
+  public ShooterPivotSubsystem(IShooterSubsystem shooter, ShooterPivotIO shooterPivotIO) {
+    this.shooterPivotIO = shooterPivotIO;
+    this.shooterPivotInputs = new ShooterPivotIOInputsAutoLogged();
     encoder = new DutyCycleEncoder(IDs.SHOOTER_PIVOT_ENCODER_DIO_PORT);
-
-    aimMotorRight = new CANSparkMax(aimMotorRightID, CANSparkMax.MotorType.kBrushless);
-    aimMotorRight.follow(aimMotorLeft, true);
 
     this.shooter = shooter;
 
@@ -46,6 +41,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
 
   @Override
   public void periodic() {
+    shooterPivotIO.updateInputs(shooterPivotInputs);
     if (!isUsingPID) return;
 
     double targetAngle =
@@ -65,7 +61,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     double currentAngle = getCurrentAngle();
     double pidOutput = aimPID.calculate(currentAngle);
 
-    aimMotorLeft.set(pidOutput);
+    shooterPivotIO.set(pidOutput);
 
     SmartDashboard.putNumber("CurrentShooterAngle", currentAngle);
     SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
@@ -77,6 +73,6 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
   }
 
   public void stop() {
-    aimMotorLeft.stopMotor();
+    shooterPivotIO.stop();
   }
 }
