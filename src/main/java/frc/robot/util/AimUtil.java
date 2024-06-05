@@ -12,12 +12,12 @@ import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 
 public class AimUtil {
-  public static Rotation2d getRotation() {
-    Translation2d speakerVector = getVector();
+  public static Rotation2d getSpeakerRotation() {
+    Translation2d speakerVector = getSpeakerVector();
     return new Rotation2d(Math.tan(speakerVector.getY() / speakerVector.getX()));
   }
 
-  public static Translation2d getVector() {
+  public static Translation2d getSpeakerVector() {
     Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
     Translation2d currBotTranslation = currBotPose.getTranslation();
     Translation2d speakerPose;
@@ -30,8 +30,26 @@ public class AimUtil {
     return speakerPose.minus(currBotTranslation);
   }
 
+  public static Rotation2d getAmpRotation() {
+    Translation2d speakerVector = getAmpVector();
+    return new Rotation2d(Math.tan(speakerVector.getY() / speakerVector.getX()));
+  }
+
+  public static Translation2d getAmpVector() {
+    Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
+    Translation2d currBotTranslation = currBotPose.getTranslation();
+    Translation2d speakerPose;
+    if (DriverStation.getAlliance().isPresent()
+            && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+      speakerPose = FieldConstants.ampPose_red;
+    } else {
+      speakerPose = FieldConstants.ampPose_blue;
+    }
+    return speakerPose.minus(currBotTranslation);
+  }
+
   public static ShooterSetpoint getShooterSetpoint() {
-    Translation2d speakerRelativeBotPose = getVector();
+    Translation2d speakerRelativeBotPose = getSpeakerVector();
     ShooterSetpoint result =
         ShooterMeasurementLERPer.get(speakerRelativeBotPose.getY(), speakerRelativeBotPose.getX());
 
