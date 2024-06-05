@@ -21,7 +21,7 @@ class _AimCommand extends Command {
 
   @Override
   public void execute() {
-    swerveDriveSubsystem.setDesiredRotation(AimUtil.getSpeakerRotation());
+    swerveDriveSubsystem.setDesiredRotation(AimUtil.getSpeakerRotation(0, 0));
     double rotateSpeed =
         swerveDriveSubsystem.getRawRotationSpeed() * RobotInfo.SwerveInfo.TELEOP_AIM_SPEED;
 

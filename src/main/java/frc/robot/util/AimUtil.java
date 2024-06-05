@@ -44,7 +44,7 @@ public class AimUtil {
     Translation2d currBotTranslation = currBotPose.getTranslation();
     Translation2d ampPose;
     if (DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+        && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
       ampPose = FieldConstants.ampPose_red;
     } else {
       ampPose = FieldConstants.ampPose_blue;
@@ -52,7 +52,8 @@ public class AimUtil {
     return ampPose.minus(currBotTranslation);
   }
 
-  private static Translation2d getShootingVector(Translation2d noteVector, Translation2d botVector){
+  private static Translation2d getShootingVector(
+      Translation2d noteVector, Translation2d botVector) {
     return noteVector.minus(botVector);
   }
 
