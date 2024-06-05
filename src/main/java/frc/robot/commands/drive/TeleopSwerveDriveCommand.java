@@ -39,23 +39,23 @@ public class TeleopSwerveDriveCommand extends Command {
                 -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis)
                         * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
-        double rotateSpeed = getRotationSpeed(rotationMultiplier);
+        double rotateSpeed = getRotationSpeed(rotationMultiplier, forwardsSpeed, sidewaysSpeed);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setMovement(chassisSpeeds);
         SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
     }
 
-    private void updateDesiredRotation(double rawInput) {
+    private void updateDesiredRotation(double rawInputRotation, double forwardSpeed, double sidewaysSpeed) {
         if (oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
             if (wasTurning) wasTurning = false;
             if (SubsystemManager.getShooter().getShootingMode() == RobotInfo.ShooterInfo.ShootingMode.LAUNCH) {
-                swerveDriveSubsystem.setDesiredRotation(AimUtil.getAmpRotation());
+                swerveDriveSubsystem.setDesiredRotation(AimUtil.getAmpRotation(forwardSpeed, sidewaysSpeed));
             } else {
-                swerveDriveSubsystem.setDesiredRotation(AimUtil.getSpeakerRotation());
+                swerveDriveSubsystem.setDesiredRotation(AimUtil.getSpeakerRotation(forwardSpeed, sidewaysSpeed));
             }
         } else {
-            if (rawInput != 0) {
+            if (rawInputRotation != 0) {
                 wasTurning = true;
             } else {
                 if (wasTurning) {
@@ -66,9 +66,9 @@ public class TeleopSwerveDriveCommand extends Command {
         }
     }
 
-    private double getRotationSpeed(double rotationMultiplier) {
+    private double getRotationSpeed(double rotationMultiplier, double forwardSpeed, double sidewaysSpeed) {
         double rawInput = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
-        updateDesiredRotation(rawInput);
+        updateDesiredRotation(rawInput, forwardSpeed, sidewaysSpeed);
         if (rawInput != 0) {
             return rawInput * (1 + rotationMultiplier) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         } else {

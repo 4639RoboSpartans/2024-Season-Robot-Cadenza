@@ -12,9 +12,11 @@ import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 
 public class AimUtil {
-  public static Rotation2d getSpeakerRotation() {
+  public static Rotation2d getSpeakerRotation(double forwardsSpeed, double sidewaysSpeed) {
     Translation2d speakerVector = getSpeakerVector();
-    return new Rotation2d(Math.tan(speakerVector.getY() / speakerVector.getX()));
+    Translation2d botVector = new Translation2d(sidewaysSpeed, forwardsSpeed);
+    Translation2d shootingVector = getShootingVector(speakerVector, botVector);
+    return new Rotation2d(Math.tan(shootingVector.getY() / shootingVector.getX()));
   }
 
   public static Translation2d getSpeakerVector() {
@@ -30,22 +32,28 @@ public class AimUtil {
     return speakerPose.minus(currBotTranslation);
   }
 
-  public static Rotation2d getAmpRotation() {
-    Translation2d speakerVector = getAmpVector();
-    return new Rotation2d(Math.tan(speakerVector.getY() / speakerVector.getX()));
+  public static Rotation2d getAmpRotation(double forwardsSpeed, double sidewaysSpeed) {
+    Translation2d ampVector = getAmpVector();
+    Translation2d botVector = new Translation2d(sidewaysSpeed, forwardsSpeed);
+    Translation2d shootingVector = getShootingVector(ampVector, botVector);
+    return new Rotation2d(Math.tan(shootingVector.getY() / shootingVector.getX()));
   }
 
   public static Translation2d getAmpVector() {
     Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
     Translation2d currBotTranslation = currBotPose.getTranslation();
-    Translation2d speakerPose;
+    Translation2d ampPose;
     if (DriverStation.getAlliance().isPresent()
             && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-      speakerPose = FieldConstants.ampPose_red;
+      ampPose = FieldConstants.ampPose_red;
     } else {
-      speakerPose = FieldConstants.ampPose_blue;
+      ampPose = FieldConstants.ampPose_blue;
     }
-    return speakerPose.minus(currBotTranslation);
+    return ampPose.minus(currBotTranslation);
+  }
+
+  private static Translation2d getShootingVector(Translation2d noteVector, Translation2d botVector){
+    return noteVector.minus(botVector);
   }
 
   public static ShooterSetpoint getShooterSetpoint() {
