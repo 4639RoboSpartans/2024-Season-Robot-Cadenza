@@ -7,6 +7,7 @@ import static frc.robot.constants.RobotInfo.SwerveInfo;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -44,19 +45,27 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
   public double getYDegrees() {
     Translation2d speakerVector = getVector();
     double yRotation = Math.toDegrees(Math.tan(speakerVector.getY() / speakerVector.getX()));
-    return yRotation - swerveDriveSubsystem.getRotation2d().getDegrees() + 180;
+    if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+      return yRotation - swerveDriveSubsystem.getRotation2d().getDegrees() % 360;
+    } else {
+      return yRotation - swerveDriveSubsystem.getRotation2d().getDegrees();
+    }
+    //    return yRotation;
   }
 
   public Translation2d getVector() {
     Pose2d currBotPose = swerveDriveSubsystem.getPose();
     Translation2d currBotTranslation = currBotPose.getTranslation();
     Translation2d speakerPose;
-    if (SmartDashboard.getBoolean("Alliance", false)) {
+    if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
       speakerPose = FieldConstants.speakerPose_red;
+      return speakerPose.minus(currBotTranslation);
     } else {
       speakerPose = FieldConstants.speakerPose_blue;
+      return speakerPose.minus(currBotTranslation);
     }
-    return currBotTranslation.minus(speakerPose);
   }
 
   @Override

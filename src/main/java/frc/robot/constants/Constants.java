@@ -3,7 +3,7 @@ package frc.robot.constants;
 public final class Constants {
   public static final double DEADZONE_VALUE = 0.08;
   public static final int POSE_WINDOW_LENGTH = 1;
-  public static final double INTAKE_PIVOT_UP_MULTIPLIER = 2;
+  public static final double INTAKE_PIVOT_UP_MULTIPLIER = 5;
 
   public enum CurrentRobot {
     ZEUS,
