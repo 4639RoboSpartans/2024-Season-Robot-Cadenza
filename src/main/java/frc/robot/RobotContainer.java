@@ -29,7 +29,6 @@ import frc.robot.oi.OI;
 import frc.robot.oi.OI.Buttons;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
@@ -47,7 +46,6 @@ public class RobotContainer {
   private final IShooterSubsystem shooter;
   private final IIntakeSubsystem intake;
   private final IClimberSubsystem climber;
-  private final AimSubsystem aimSubsystem;
   private final IHopperSubsystem hopper;
 
   private final IRSensor ir;
@@ -64,7 +62,6 @@ public class RobotContainer {
     ledStrip = SubsystemManager.getLedStrip();
 
     swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
-    aimSubsystem = SubsystemManager.getAimSubsystem();
 
     shooter = SubsystemManager.getShooter();
     intake = SubsystemManager.getIntake();
@@ -103,13 +100,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
     // drive commands
     NamedCommands.registerCommand(
-        "ManualSwerveDriveCommand",
-        new TeleopSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
+        "ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
     NamedCommands.registerCommand(
-        "AutonAimCommand",
-        new AutonAimCommand(swerveDriveSubsystem, aimSubsystem, RobotInfo.AimInfo.AIM_TIME));
-    NamedCommands.registerCommand(
-        "SpinupCommand", new ShooterSpinupCommand(shooter, RobotInfo.AimInfo.AIM_TIME));
+        "AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
+    NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter));
     // intake commands
     NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper, ledStrip));
     NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
@@ -125,8 +119,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    swerveDriveSubsystem.setDefaultCommand(
-        new TeleopSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
+    swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
 
     // TODO: extract to named class
     ledStrip.setDefaultCommand(

@@ -1,5 +1,6 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -7,20 +8,20 @@ import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.util.AimUtil;
 
 public class TeleopSwerveDriveCommand extends Command {
   private final ISwerveDriveSubsystem swerveDriveSubsystem;
-  private final AimSubsystem aimSubsystem;
   private final OI oi;
+  private final PIDController rotationController;
+  private boolean wasTurning = false;
 
-  public TeleopSwerveDriveCommand(
-      ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
+  public TeleopSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
     this.swerveDriveSubsystem = swerveDriveSubsystem;
-    this.aimSubsystem = aimSubsystem;
     this.oi = oi;
-    addRequirements(swerveDriveSubsystem, aimSubsystem);
+    rotationController = SwerveInfo.TeleopRotationPID.create();
+    addRequirements(swerveDriveSubsystem);
   }
 
   @Override
@@ -44,21 +45,30 @@ public class TeleopSwerveDriveCommand extends Command {
     SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
   }
 
-  private double getRotationSpeed(double rotationMultiplier) {
-    double rawSpeed;
+  private void updateDesiredRotation(double rawInput) {
     if (oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
-
-      rawSpeed =
-          (-aimSubsystem.getSwerveRotation()
-                  - oi.driverController().getAxis(DriverControls.SwerveRotationAxis)
-                      * SwerveInfo.TELOP_ROTATION_SPEED)
-              * (1 + rotationMultiplier * 15);
+      if (wasTurning) wasTurning = false;
+      swerveDriveSubsystem.setDesiredRotation(AimUtil.getRotation());
     } else {
-      rawSpeed =
-          -oi.driverController().getAxis(DriverControls.SwerveRotationAxis)
-              * SwerveInfo.TELOP_ROTATION_SPEED;
+      if (rawInput != 0) {
+        wasTurning = true;
+      } else {
+        if (wasTurning) {
+          wasTurning = false;
+          swerveDriveSubsystem.setDesiredRotation(swerveDriveSubsystem.getRotation2d());
+        }
+      }
     }
-    return rawSpeed * (1 + rotationMultiplier);
+  }
+
+  private double getRotationSpeed(double rotationMultiplier) {
+    double rawInput = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
+    updateDesiredRotation(rawInput);
+    if (rawInput != 0) {
+      return rawInput * (1 + rotationMultiplier) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+    } else {
+      return swerveDriveSubsystem.getRawRotationSpeed() * (1 + rotationMultiplier);
+    }
   }
 
   @Override

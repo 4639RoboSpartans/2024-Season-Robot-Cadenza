@@ -15,18 +15,13 @@ public final class RobotInfo {
             new Translation2d(-centerToWheelMeters, centerToWheelMeters),
             new Translation2d(-centerToWheelMeters, -centerToWheelMeters));
 
-    // Change MOVEMENT_SPEED to 1.0 for max speed
     public static final double CURRENT_MAX_ROBOT_MPS = 9;
-    public static final double AIM_ROTATION_SPEED = 2.5;
-    public static final double DERIVATIVE_MULTIPLIER = 0.1;
     public static final double TELOP_ROTATION_SPEED = 6;
+    public static final double TELEOP_AIM_SPEED = 4; // TODO: tune this
+    public static final PIDTemplate TeleopRotationPID = new PIDTemplate(0.5, 0, 0);
 
     public static final PIDConstants TranslationPID = new PIDConstants(1, 0, 0.0);
     public static final PIDConstants RotationPID = new PIDConstants(2, 0, 0.0);
-  }
-
-  public static final class TrapInfo {
-    // TODO: make trap subsystem and put constants here
   }
 
   public static final class IntakeInfo {
@@ -47,18 +42,14 @@ public final class RobotInfo {
   }
 
   public static final class AimInfo {
-
-    public static final double AIM_TOLERANCE = Math.toRadians(1);
-    public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.07, 0, 0.005);
-    public static final double AIM_ROT_POW = 0.8;
-    public static final double AIM_UPWARDS_TILT = Math.PI / 6;
     public static final double AIM_TIME = 0.5;
   }
 
+  public static final class VisionInfo {
+    public static final double visionScalar = 1;
+  }
+
   public static class ShooterInfo {
-    public static double LimelightTxOffset = -8;
-    public static double LimelightOffsetZ = -0.1651;
-    public static double LimelightOffsetX = -0.1267;
 
     public record ShooterSetpoint(double speed, double angle) {}
 

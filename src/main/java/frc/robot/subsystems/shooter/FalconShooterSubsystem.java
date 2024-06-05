@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
+import frc.robot.util.AimUtil;
 import math.Averager;
 
 public class FalconShooterSubsystem extends SubsystemBase implements IShooterSubsystem {
@@ -22,8 +22,6 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
   private final TalonFX shooterMotorLeft;
   private final TalonFX shooterMotorRight;
   private final IShooterPivotSubsystem shooterPivot;
-  // Other references
-  private final AimSubsystem aimSubsystem;
   // Controllers
   private final Averager shooterOutputAverager;
   private final BangBangController bangBangController;
@@ -31,7 +29,6 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
   private ShootingMode shootingMode;
 
   public FalconShooterSubsystem(int shooterMotorLeftID, int shooterMotorRightID) {
-    this.aimSubsystem = SubsystemManager.getAimSubsystem();
     this.shooterPivot = SubsystemManager.getShooterPivot(this);
 
     shooterMotorLeft = new TalonFX(shooterMotorLeftID);
@@ -57,7 +54,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
   private double getTargetSpeed() {
     return switch (shootingMode) {
-      case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().speed();
+      case AUTO_SPEAKER -> AimUtil.getShooterSetpoint().speed();
       case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
       case AMP -> SHOOTER_AMP_SETPOINT.speed();
       case TRAP -> SHOOTER_TRAP_SETPOINT.speed();

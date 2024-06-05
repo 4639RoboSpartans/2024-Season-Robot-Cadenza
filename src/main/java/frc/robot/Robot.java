@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.led.LEDPattern;
-import frc.robot.network.LimeLight;
 import frc.robot.subsystems.SubsystemManager;
 import org.littletonrobotics.junction.LoggedRobot;
 
@@ -32,8 +31,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
-    LimeLight.writeValuesToSmartDashboard();
   }
 
   @Override

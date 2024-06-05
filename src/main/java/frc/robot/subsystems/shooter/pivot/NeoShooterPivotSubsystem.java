@@ -9,9 +9,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IDs;
-import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.util.AimUtil;
 
 public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterPivotSubsystem {
   // Components
@@ -21,7 +20,6 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
   private final DutyCycleEncoder encoder;
   // References to other subsystems
   private final IShooterSubsystem shooter;
-  private final AimSubsystem aimSubsystem;
   // Control
   private final PIDController aimPID;
   private boolean isUsingPID = true;
@@ -36,7 +34,6 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     aimMotorRight.follow(aimMotorLeft, true);
 
     this.shooter = shooter;
-    aimSubsystem = SubsystemManager.getAimSubsystem();
 
     aimPID = ShooterInfo.SHOOTER_AIM_PID_CONSTANTS.create();
     aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
@@ -53,7 +50,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
 
     double targetAngle =
         switch (shooter.getShootingMode()) {
-              case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().angle();
+              case AUTO_SPEAKER -> AimUtil.getShooterSetpoint().angle();
               case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
               case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
               case TRAP -> ShooterInfo.SHOOTER_TRAP_SETPOINT.angle();

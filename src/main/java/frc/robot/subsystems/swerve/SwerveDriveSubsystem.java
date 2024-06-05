@@ -20,8 +20,11 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -40,7 +43,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
-import frc.robot.constants.RobotInfo.SwerveInfo;
+import frc.robot.constants.RobotInfo.*;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -55,6 +58,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
   Field2d m_field = new Field2d();
+  private Rotation2d desiredRotation;
+  private final PIDController rotationController = SwerveInfo.TeleopRotationPID.create();
 
   private SwerveDriveKinematics kinematics = SwerveInfo.SWERVE_DRIVE_KINEMATICS;
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -170,8 +175,16 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     Pose2d limeLightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+    Pose3d botPose = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
+    double dist =
+        Math.sqrt(
+            Math.pow(botPose.getX(), 2)
+                + Math.pow(botPose.getY(), 2)
+                + Math.pow(botPose.getZ(), 2));
     if (!(limeLightPose.getX() == 0) && !(limeLightPose.getY() == 0)) {
-      poseEstimator.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
+      poseEstimator.setVisionMeasurementStdDevs(
+          VecBuilder.fill(dist * VisionInfo.visionScalar, dist * VisionInfo.visionScalar, 0.1));
+      addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
     }
 
     // Apply odometry update
@@ -317,5 +330,26 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
           }
         });
+  }
+
+  @Override
+  public void resetDesiredRotation() {
+    desiredRotation = getRotation2d();
+  }
+
+  @Override
+  public void setDesiredRotation(Rotation2d desiredRotation) {
+    this.desiredRotation = desiredRotation;
+  }
+
+  @Override
+  public Rotation2d getDesiredRotation() {
+    return desiredRotation;
+  }
+
+  @Override
+  public double getRawRotationSpeed() {
+    return rotationController.calculate(desiredRotation.minus(getRotation2d()).getDegrees())
+        * SwerveInfo.TELEOP_AIM_SPEED;
   }
 }

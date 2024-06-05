@@ -6,7 +6,6 @@ import frc.robot.constants.IDs;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
@@ -40,7 +39,6 @@ public class SubsystemManager {
 
   private static IShooterSubsystem shooter;
   private static IShooterPivotSubsystem shooterPivot;
-  private static AimSubsystem aimSubsystem;
   private static IIntakeSubsystem intake;
   private static IHopperSubsystem hopper;
   private static IClimberSubsystem climber;
@@ -105,13 +103,6 @@ public class SubsystemManager {
           };
     }
     return shooter;
-  }
-
-  public static AimSubsystem getAimSubsystem() {
-    if (aimSubsystem == null) {
-      aimSubsystem = new AimSubsystem(swerveDrive);
-    }
-    return aimSubsystem;
   }
 
   public static IIntakeSubsystem getIntake() {
