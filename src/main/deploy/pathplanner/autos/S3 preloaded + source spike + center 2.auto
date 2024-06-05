@@ -102,6 +102,25 @@
                 "data": {
                   "pathName": "C5-SS"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.2
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SpinupCommand"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -152,6 +171,25 @@
                 "type": "path",
                 "data": {
                   "pathName": "C4-SS"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.7
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SpinupCommand"
+                      }
+                    }
+                  ]
                 }
               }
             ]

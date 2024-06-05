@@ -2,15 +2,28 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3350534439086914,
-      "y": 5.598077774047852
+      "x": 0.4040962159633637,
+      "y": 4.13388729095459
     },
-    "rotation": 1.0073720816592203e-27
+    "rotation": 4.133007065046548e-17
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "S3-SS"
+                }
+              }
+            ]
+          }
+        },
         {
           "type": "parallel",
           "data": {
@@ -37,7 +50,51 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "S2-A2"
+                  "pathName": "SS-A3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake command"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A3-A2"
                 }
               },
               {
@@ -87,7 +144,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCommand"
+                  "name": "Intake command"
                 }
               },
               {

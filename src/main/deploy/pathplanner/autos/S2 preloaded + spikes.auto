@@ -45,6 +45,12 @@
                 "data": {
                   "name": "IntakeCommand"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
+                }
               }
             ]
           }
@@ -83,6 +89,12 @@
                 "data": {
                   "name": "IntakeCommand"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
+                }
               }
             ]
           }
@@ -114,6 +126,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "A1-SS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
                 }
               }
             ]
@@ -152,6 +170,12 @@
                 "type": "named",
                 "data": {
                   "name": "IntakeCommand"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinupCommand"
                 }
               }
             ]
