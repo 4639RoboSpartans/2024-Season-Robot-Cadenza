@@ -125,45 +125,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A1-SS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinupCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootSpeaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ExtendIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SS-A3"
+                  "pathName": "A1-A3"
                 }
               },
               {
