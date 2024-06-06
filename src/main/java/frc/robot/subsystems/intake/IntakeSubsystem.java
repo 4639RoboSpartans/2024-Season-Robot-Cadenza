@@ -5,6 +5,7 @@ import static frc.robot.constants.RobotInfo.IntakeInfo;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -71,6 +72,10 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     pivotMotorLeft.set(pidOutput);
 
     SmartDashboard.putNumber("intake pivot output", pivotMotorRight.getAppliedOutput());
+
+    if (DriverStation.isDisabled()){
+      setExtended(ExtensionState.RETRACTED);
+    }
   }
 
   public void stop() {
