@@ -22,10 +22,7 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
-import frc.robot.subsystems.swerve.GyroIONavX;
-import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
-import frc.robot.subsystems.swerve.ModuleIOTalonFX;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.*;
 
 public class SubsystemManager {
   private static NavX navX;
@@ -70,13 +67,18 @@ public class SubsystemManager {
 
   public static ISwerveDriveSubsystem getSwerveDrive() {
     if (swerveDrive == null) {
-      swerveDrive =
-          new SwerveDriveSubsystem(
-              new GyroIONavX(),
-              new ModuleIOTalonFX(0),
-              new ModuleIOTalonFX(1),
-              new ModuleIOTalonFX(2),
-              new ModuleIOTalonFX(3));
+        switch (currentRobot){
+            case ZEUS:
+                swerveDrive = new DummySwerveDriveSubsystem();
+            case SIREN:
+                swerveDrive =
+                        new SwerveDriveSubsystem(
+                                new GyroIONavX(),
+                                new ModuleIOTalonFX(0),
+                                new ModuleIOTalonFX(1),
+                                new ModuleIOTalonFX(2),
+                                new ModuleIOTalonFX(3));
+        }
     }
     return swerveDrive;
   }
