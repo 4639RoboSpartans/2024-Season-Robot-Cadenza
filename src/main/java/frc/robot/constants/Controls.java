@@ -19,6 +19,8 @@ public final class Controls {
     public static final OI.Buttons AmpAlignButton = OI.Buttons.X_BUTTON;
 
     public static final OI.Buttons[] ResetNavXButtons = {OI.Buttons.A_BUTTON, Buttons.B_BUTTON};
+
+    public static OI.Buttons ToggleFieldRelative = OI.Buttons.Y_BUTTON;
   }
 
   public static final class OperatorControls {

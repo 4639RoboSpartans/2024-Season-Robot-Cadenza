@@ -183,6 +183,8 @@ public class RobotContainer {
 
     oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 
+    oi.driverController().getButton(DriverControls.ToggleFieldRelative).onTrue(new RunCommand(swerveDriveSubsystem::toggleFieldRelative));
+
     oi.driverController()
         .getButton(Buttons.A_BUTTON)
         .onTrue(

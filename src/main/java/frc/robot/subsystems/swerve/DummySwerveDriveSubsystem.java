@@ -38,6 +38,9 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
   }
 
   @Override
+  public void toggleFieldRelative() {}
+
+  @Override
   public Rotation2d getRotation2d() {
     return null;
   }
