@@ -103,7 +103,7 @@ public class RobotContainer {
         "ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
     NamedCommands.registerCommand(
         "AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
-    NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter));
+    NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter, 1.0));
     // intake commands
     NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper, ledStrip));
     NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
@@ -183,7 +183,9 @@ public class RobotContainer {
 
     oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 
-    oi.driverController().getButton(DriverControls.ToggleFieldRelative).onTrue(new RunCommand(swerveDriveSubsystem::toggleFieldRelative));
+    oi.driverController()
+        .getButton(DriverControls.ToggleFieldRelative)
+        .onTrue(new RunCommand(swerveDriveSubsystem::toggleFieldRelative));
 
     oi.driverController()
         .getButton(Buttons.A_BUTTON)

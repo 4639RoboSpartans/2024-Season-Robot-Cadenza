@@ -73,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     SmartDashboard.putNumber("intake pivot output", pivotMotorRight.getAppliedOutput());
 
-    if (DriverStation.isDisabled()){
+    if (DriverStation.isDisabled()) {
       setExtended(ExtensionState.RETRACTED);
     }
   }
