@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
+import frc.robot.commands.drive.AmpAimCommand;
 import frc.robot.commands.drive.AutonAimCommand;
 import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.intake.*;
@@ -186,6 +187,10 @@ public class RobotContainer {
     oi.driverController()
         .getButton(DriverControls.ToggleFieldRelative)
         .onTrue(new RunCommand(swerveDriveSubsystem::toggleFieldRelative));
+
+    oi.driverController()
+        .getButton(DriverControls.AmpAlignButton)
+        .whileTrue(new AmpAimCommand(swerveDriveSubsystem));
 
     oi.driverController()
         .getButton(Buttons.A_BUTTON)

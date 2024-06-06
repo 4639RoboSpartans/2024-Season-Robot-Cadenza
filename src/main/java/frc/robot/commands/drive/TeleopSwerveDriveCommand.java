@@ -75,7 +75,7 @@ public class TeleopSwerveDriveCommand extends Command {
     double rawInput = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis);
     updateDesiredRotation(rawInput, forwardSpeed, sidewaysSpeed);
     if (rawInput != 0) {
-      return rawInput * (1 + rotationMultiplier) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+      return rawInput * (1 + rotationMultiplier) * SwerveInfo.TELOP_ROTATION_SPEED;
     } else {
       return swerveDriveSubsystem.getRawRotationSpeed() * (1 + rotationMultiplier);
     }

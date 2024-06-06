@@ -28,11 +28,6 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
   public void setDesiredRotation(Rotation2d desiredRotation) {}
 
   @Override
-  public Rotation2d getDesiredRotation() {
-    return null;
-  }
-
-  @Override
   public double getRawRotationSpeed() {
     return 0;
   }

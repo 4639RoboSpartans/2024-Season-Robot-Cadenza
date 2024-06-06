@@ -35,7 +35,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
 import frc.robot.constants.RobotInfo.*;
+import frc.robot.util.DriverStationUtil;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -98,9 +98,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             MAX_LINEAR_SPEED,
             DRIVE_BASE_RADIUS,
             new ReplanningConfig()),
-        () ->
-            DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red,
+        DriverStationUtil::isRed,
         this);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
@@ -343,11 +341,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   @Override
   public void setDesiredRotation(Rotation2d desiredRotation) {
     this.desiredRotation = desiredRotation;
-  }
-
-  @Override
-  public Rotation2d getDesiredRotation() {
-    return desiredRotation;
   }
 
   @Override

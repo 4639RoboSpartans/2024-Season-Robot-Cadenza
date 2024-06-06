@@ -22,8 +22,6 @@ public interface ISwerveDriveSubsystem extends Subsystem {
 
   void setDesiredRotation(Rotation2d desiredRotation);
 
-  Rotation2d getDesiredRotation();
-
   double getRawRotationSpeed();
 
   void toggleFieldRelative();

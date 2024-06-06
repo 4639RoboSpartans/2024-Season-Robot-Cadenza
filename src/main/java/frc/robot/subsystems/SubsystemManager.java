@@ -67,18 +67,18 @@ public class SubsystemManager {
 
   public static ISwerveDriveSubsystem getSwerveDrive() {
     if (swerveDrive == null) {
-        switch (currentRobot){
-            case ZEUS:
-                swerveDrive = new DummySwerveDriveSubsystem();
-            case SIREN:
-                swerveDrive =
-                        new SwerveDriveSubsystem(
-                                new GyroIONavX(),
-                                new ModuleIOTalonFX(0),
-                                new ModuleIOTalonFX(1),
-                                new ModuleIOTalonFX(2),
-                                new ModuleIOTalonFX(3));
-        }
+      switch (currentRobot) {
+        case ZEUS:
+          swerveDrive = new DummySwerveDriveSubsystem();
+        case SIREN:
+          swerveDrive =
+              new SwerveDriveSubsystem(
+                  new GyroIONavX(),
+                  new ModuleIOTalonFX(0),
+                  new ModuleIOTalonFX(1),
+                  new ModuleIOTalonFX(2),
+                  new ModuleIOTalonFX(3));
+      }
     }
     return swerveDrive;
   }

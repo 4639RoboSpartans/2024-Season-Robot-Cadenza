@@ -19,6 +19,8 @@ public final class RobotInfo {
     public static final double TELOP_ROTATION_SPEED = 6;
     public static final double TELEOP_AIM_SPEED = 4; // TODO: tune this
     public static final PIDTemplate TeleopRotationPID = new PIDTemplate(0.5, 0, 0);
+    public static double TeleopTranslationScalar = 0.5;
+    public static double AimTranslationDeadzone = 0.05;
 
     public static final PIDConstants TranslationPID = new PIDConstants(1, 0, 0.0);
     public static final PIDConstants RotationPID = new PIDConstants(2, 0, 0.0);

@@ -5,7 +5,6 @@ import static frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.SubsystemManager;
@@ -23,13 +22,12 @@ public class AimUtil {
     Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
     Translation2d currBotTranslation = currBotPose.getTranslation();
     Translation2d speakerPose;
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+    if (DriverStationUtil.isRed()) {
       speakerPose = FieldConstants.speakerPose_red;
     } else {
       speakerPose = FieldConstants.speakerPose_blue;
     }
-    return speakerPose.minus(currBotTranslation);
+    return currBotTranslation.minus(speakerPose);
   }
 
   public static Rotation2d getAmpRotation(double forwardsSpeed, double sidewaysSpeed) {
@@ -43,13 +41,12 @@ public class AimUtil {
     Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
     Translation2d currBotTranslation = currBotPose.getTranslation();
     Translation2d ampPose;
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+    if (DriverStationUtil.isRed()) {
       ampPose = FieldConstants.ampPose_red;
     } else {
       ampPose = FieldConstants.ampPose_blue;
     }
-    return ampPose.minus(currBotTranslation);
+    return currBotTranslation.minus(ampPose);
   }
 
   private static Translation2d getShootingVector(
@@ -60,7 +57,8 @@ public class AimUtil {
   public static ShooterSetpoint getShooterSetpoint() {
     Translation2d speakerRelativeBotPose = getSpeakerVector();
     ShooterSetpoint result =
-        ShooterMeasurementLERPer.get(speakerRelativeBotPose.getY(), speakerRelativeBotPose.getX());
+        ShooterMeasurementLERPer.get(
+            Math.abs(speakerRelativeBotPose.getY()), Math.abs(speakerRelativeBotPose.getX()));
 
     SmartDashboard.putNumber("Shooter Angle: ", result.angle());
     SmartDashboard.putNumber("Shooter Speed: ", result.speed());
