@@ -3,6 +3,7 @@ package frc.robot.commands.drive;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
@@ -34,13 +35,15 @@ public class AmpAimCommand extends Command {
     if (Math.abs(y) < SwerveInfo.AimTranslationDeadzone) {
       y = 0;
     }
+    SmartDashboard.putNumber("amp x", x);
+    SmartDashboard.putNumber("amp y", y);
     if (DriverStationUtil.isRed()) {
-      swerveDriveSubsystem.setDesiredRotation(Rotation2d.fromDegrees(270));
-      forwardsInput = -x * SwerveInfo.TeleopTranslationScalar;
-      sidewaysInput = y * SwerveInfo.TeleopTranslationScalar;
-    } else {
       swerveDriveSubsystem.setDesiredRotation(Rotation2d.fromDegrees(90));
       forwardsInput = x * SwerveInfo.TeleopTranslationScalar;
+      sidewaysInput = y * SwerveInfo.TeleopTranslationScalar;
+    } else {
+      swerveDriveSubsystem.setDesiredRotation(Rotation2d.fromDegrees(270));
+      forwardsInput = -x * SwerveInfo.TeleopTranslationScalar;
       sidewaysInput = -y * SwerveInfo.TeleopTranslationScalar;
     }
     ChassisSpeeds toAmp =

@@ -17,12 +17,12 @@ public final class RobotInfo {
 
     public static final double CURRENT_MAX_ROBOT_MPS = 9;
     public static final double TELOP_ROTATION_SPEED = 6;
-    public static final double TELEOP_AIM_SPEED = 4; // TODO: tune this
-    public static final PIDTemplate TeleopRotationPID = new PIDTemplate(0.5, 0, 0);
-    public static double TeleopTranslationScalar = 0.5;
+    public static final double TELEOP_AIM_SPEED = 8; // TODO: tune this
+    public static final PIDTemplate TeleopRotationPID = new PIDTemplate(0.005, 0, 0);
+    public static double TeleopTranslationScalar = 0.8;
     public static double AimTranslationDeadzone = 0.05;
 
-    public static final PIDConstants TranslationPID = new PIDConstants(1, 0, 0.0);
+    public static final PIDConstants TranslationPID = new PIDConstants(1, 20, 0.0);
     public static final PIDConstants RotationPID = new PIDConstants(2, 0, 0.0);
   }
 
@@ -31,7 +31,7 @@ public final class RobotInfo {
     public static final double INTAKE_SPEED = -0.85;
     public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
     public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
-    public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.6, 0, 0.02);
+    public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.006, 0, 0.02);
   }
 
   public static final class HopperInfo {

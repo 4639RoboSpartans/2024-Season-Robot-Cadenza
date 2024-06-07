@@ -130,10 +130,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     sendSwerve();
     m_field.setRobotPose(getPose());
     SmartDashboard.putData(m_field);
+    desiredRotation = getRotation2d();
   }
 
   public void periodic() {
     gyroIO.updateInputs(gyroInputs);
+    SmartDashboard.putNumber("desired rotation", desiredRotation.getDegrees());
     Logger.processInputs("Drive/Gyro", gyroInputs);
     for (var module : modules) {
       module.periodic();
@@ -259,11 +261,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     return poseEstimator.getEstimatedPosition();
   }
 
-  /** Returns the current odometry rotation. */
-  public Rotation2d getRotation() {
-    return getPose().getRotation();
-  }
-
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
@@ -345,7 +342,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
   @Override
   public double getRawRotationSpeed() {
-    return rotationController.calculate(desiredRotation.minus(getRotation2d()).getDegrees())
+    return -rotationController.calculate(desiredRotation.minus(getRotation2d()).getDegrees())
         * SwerveInfo.TELEOP_AIM_SPEED;
   }
 
