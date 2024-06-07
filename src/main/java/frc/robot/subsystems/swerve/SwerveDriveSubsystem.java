@@ -23,10 +23,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -43,13 +40,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
 import frc.robot.constants.RobotInfo.*;
+import frc.robot.util.AimUtil;
 import frc.robot.util.DriverStationUtil;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
-  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(14.5);
+  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(10.5);
   private static final double DRIVE_BASE_RADIUS = 0.245;
   private static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
@@ -176,21 +174,17 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     Pose2d limeLightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-    Pose3d botPose = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
-    double dist =
-        Math.sqrt(
-            Math.pow(botPose.getX(), 2)
-                + Math.pow(botPose.getY(), 2)
-                + Math.pow(botPose.getZ(), 2));
-    if (!(limeLightPose.getX() == 0) && !(limeLightPose.getY() == 0)) {
-      poseEstimator.setVisionMeasurementStdDevs(
-          VecBuilder.fill(dist * VisionInfo.visionScalar, dist * VisionInfo.visionScalar, 0.1));
-      addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
-    }
+    Pose2d limeLight2Pose = LimelightHelpers.getBotPose2d_wpiBlue("limelight-slhs");
+    addVisionMeasurement(limeLightPose);
+    addVisionMeasurement(limeLight2Pose);
 
     // Apply odometry update
     poseEstimator.update(rawGyroRotation, modulePositions);
     m_field.setRobotPose(getPose());
+
+    Translation2d speakerPose = AimUtil.getSpeakerVector();
+    double distance = Math.hypot(speakerPose.getX(), speakerPose.getY());
+    SmartDashboard.putNumber("distance", distance);
   }
 
   /**
@@ -272,8 +266,18 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
    * @param visionPose The pose of the robot as measured by the vision camera.
    * @param timestamp The timestamp of the vision measurement in seconds.
    */
-  public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
-    poseEstimator.addVisionMeasurement(visionPose, timestamp);
+  public void addVisionMeasurement(Pose2d visionPose) {
+    Pose3d botPose = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
+    double dist =
+        Math.sqrt(
+            Math.pow(botPose.getX(), 2)
+                + Math.pow(botPose.getY(), 2)
+                + Math.pow(botPose.getZ(), 2));
+    if (!(visionPose.getX() == 0) && !(visionPose.getY() == 0)) {
+      poseEstimator.setVisionMeasurementStdDevs(
+          VecBuilder.fill(dist * VisionInfo.visionScalar, dist * VisionInfo.visionScalar, 0.1));
+      poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+    }
   }
 
   /** Returns the maximum linear speed in meters per sec. */
