@@ -2,27 +2,21 @@ package frc.robot.subsystems;
 
 import static frc.robot.constants.Constants.currentRobot;
 
-import frc.robot.constants.IDs;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
 import frc.robot.subsystems.aim.AimSubsystem;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.DummyHopperSubsystem;
-import frc.robot.subsystems.hopper.HopperSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
-import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
-import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.GyroIONavX;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.ModuleIOTalonFX;
@@ -88,8 +82,10 @@ public class SubsystemManager {
       shooterPivot =
           switch (currentRobot) {
             case ZEUS -> new DummyShooterPivotSubsystem();
-            case SIREN -> new NeoShooterPivotSubsystem(
-                IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
+              //            case SIREN -> new NeoShooterPivotSubsystem(
+              //                IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT,
+              // shooter);
+            case SIREN -> new DummyShooterPivotSubsystem();
           };
     }
     return shooterPivot;
@@ -100,8 +96,9 @@ public class SubsystemManager {
       shooter =
           switch (currentRobot) {
             case ZEUS -> new DummyShooterSubsystem();
-            case SIREN -> new FalconShooterSubsystem(
-                IDs.SHOOTER_SHOOTER_LEFT_MOTOR, IDs.SHOOTER_SHOOTER_RIGHT_MOTOR);
+              //            case SIREN -> new FalconShooterSubsystem(
+              //                IDs.SHOOTER_SHOOTER_LEFT_MOTOR, IDs.SHOOTER_SHOOTER_RIGHT_MOTOR);
+            case SIREN -> new DummyShooterSubsystem();
           };
     }
     return shooter;
@@ -119,12 +116,12 @@ public class SubsystemManager {
       intake =
           switch (currentRobot) {
             case ZEUS -> new DummyIntakeSubsystem();
-            case SIREN -> new IntakeSubsystem(
-                IDs.INTAKE_PIVOT_MOTOR_LEFT,
-                IDs.INTAKE_PIVOT_MOTOR_RIGHT,
-                IDs.INTAKE_MOTOR,
-                IDs.INTAKE_ENCODER_DIO_PORT);
-              // case SIREN -> new DummyIntakeSubsystem();
+              //            case SIREN -> new IntakeSubsystem(
+              //                IDs.INTAKE_PIVOT_MOTOR_LEFT,
+              //                IDs.INTAKE_PIVOT_MOTOR_RIGHT,
+              //                IDs.INTAKE_MOTOR,
+              //                IDs.INTAKE_ENCODER_DIO_PORT);
+            case SIREN -> new DummyIntakeSubsystem();
           };
     }
     ;
@@ -136,7 +133,8 @@ public class SubsystemManager {
       hopper =
           switch (currentRobot) {
             case ZEUS -> new DummyHopperSubsystem();
-            case SIREN -> new HopperSubsystem(IDs.HOPPER_MOTOR);
+              //            case SIREN -> new HopperSubsystem(IDs.HOPPER_MOTOR);
+            case SIREN -> new DummyHopperSubsystem();
           };
     }
     return hopper;
@@ -147,7 +145,8 @@ public class SubsystemManager {
       climber =
           switch (currentRobot) {
             case ZEUS -> new DummyClimberSubsystem();
-            case SIREN -> new ClimberSubsystem(IDs.CLIMBER_LEFT, IDs.CLIMBER_RIGHT);
+              //            case SIREN -> new ClimberSubsystem(IDs.CLIMBER_LEFT, IDs.CLIMBER_RIGHT);
+            case SIREN -> new DummyClimberSubsystem();
           };
     }
     return climber;
