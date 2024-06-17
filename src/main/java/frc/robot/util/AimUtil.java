@@ -15,7 +15,7 @@ public class AimUtil {
     Translation2d speakerVector = getSpeakerVector();
     Translation2d botVector = new Translation2d(sidewaysSpeed, forwardsSpeed);
     Translation2d shootingVector = getShootingVector(speakerVector, botVector);
-    return new Rotation2d(Math.tan(shootingVector.getY() / shootingVector.getX()));
+    return Rotation2d.fromRadians(Math.atan(shootingVector.getY() / shootingVector.getX()));
   }
 
   public static Translation2d getSpeakerVector() {
@@ -34,7 +34,7 @@ public class AimUtil {
     Translation2d ampVector = getAmpVector();
     Translation2d botVector = new Translation2d(sidewaysSpeed, forwardsSpeed);
     Translation2d shootingVector = getShootingVector(ampVector, botVector);
-    return new Rotation2d(Math.tan(shootingVector.getY() / shootingVector.getX()));
+    return new Rotation2d(Math.atan(shootingVector.getY() / shootingVector.getX()));
   }
 
   public static Translation2d getAmpVector() {

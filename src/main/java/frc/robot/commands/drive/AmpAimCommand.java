@@ -25,30 +25,7 @@ public class AmpAimCommand extends Command {
 
   @Override
   public void execute() {
-    Translation2d AmpRelativeBotPose = AimUtil.getAmpVector();
-    double x = AmpRelativeBotPose.getX();
-    double y = AmpRelativeBotPose.getY();
-    double forwardsInput, sidewaysInput;
-    if (Math.abs(x) < SwerveInfo.AimTranslationDeadzone) {
-      x = 0;
-    }
-    if (Math.abs(y) < SwerveInfo.AimTranslationDeadzone) {
-      y = 0;
-    }
-    SmartDashboard.putNumber("amp x", x);
-    SmartDashboard.putNumber("amp y", y);
-    if (DriverStationUtil.isRed()) {
-      swerveDriveSubsystem.setDesiredRotation(Rotation2d.fromDegrees(90));
-      forwardsInput = x * SwerveInfo.TeleopTranslationScalar;
-      sidewaysInput = y * SwerveInfo.TeleopTranslationScalar;
-    } else {
-      swerveDriveSubsystem.setDesiredRotation(Rotation2d.fromDegrees(270));
-      forwardsInput = -x * SwerveInfo.TeleopTranslationScalar;
-      sidewaysInput = -y * SwerveInfo.TeleopTranslationScalar;
-    }
-    ChassisSpeeds toAmp =
-        new ChassisSpeeds(forwardsInput, sidewaysInput, swerveDriveSubsystem.getRawRotationSpeed());
-    swerveDriveSubsystem.setMovement(toAmp);
+
   }
 
   @Override

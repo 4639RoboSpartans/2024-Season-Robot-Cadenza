@@ -29,22 +29,24 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
+import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotInfo.*;
 import frc.robot.util.AimUtil;
 import frc.robot.util.DriverStationUtil;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+
+import java.util.function.DoubleSupplier;
 
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
   private static final double MAX_LINEAR_SPEED = Units.feetToMeters(10.5);
@@ -55,21 +57,20 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
-  Field2d m_field = new Field2d();
-  private Rotation2d desiredRotation;
+  Field2d field = new Field2d();
+  private Pose2d desiredPose;
   private final PIDController rotationController = SwerveInfo.TeleopRotationPID.create();
-  private boolean fieldRelative = true;
 
-  private SwerveDriveKinematics kinematics = SwerveInfo.SWERVE_DRIVE_KINEMATICS;
+  private final SwerveDriveKinematics kinematics = SwerveInfo.SWERVE_DRIVE_KINEMATICS;
   private Rotation2d rawGyroRotation = new Rotation2d();
-  private SwerveModulePosition[] lastModulePositions = // For delta tracking
+  private final SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
         new SwerveModulePosition(),
         new SwerveModulePosition(),
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
-  private SwerveDrivePoseEstimator poseEstimator =
+  private final SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   public SwerveDriveSubsystem(
@@ -126,14 +127,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 null,
                 this));
     sendSwerve();
-    m_field.setRobotPose(getPose());
-    SmartDashboard.putData(m_field);
-    desiredRotation = getRotation2d();
+    field.setRobotPose(getPose());
+    SmartDashboard.putData(field);
+    desiredPose = getPose();
   }
 
   public void periodic() {
     gyroIO.updateInputs(gyroInputs);
-    SmartDashboard.putNumber("desired rotation", desiredRotation.getDegrees());
+    SmartDashboard.putNumber("desired rotation", desiredPose.getRotation().getDegrees());
     Logger.processInputs("Drive/Gyro", gyroInputs);
     for (var module : modules) {
       module.periodic();
@@ -180,7 +181,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     // Apply odometry update
     poseEstimator.update(rawGyroRotation, modulePositions);
-    m_field.setRobotPose(getPose());
+    field.setRobotPose(getPose());
 
     Translation2d speakerPose = AimUtil.getSpeakerVector();
     double distance = Math.hypot(speakerPose.getX(), speakerPose.getY());
@@ -195,10 +196,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   public void setMovement(ChassisSpeeds speeds) {
     SmartDashboard.putNumber("gyro heading", gyroInputs.yawPosition.getDegrees());
     // Calculate module setpoints
-    ChassisSpeeds chassisSpeeds = speeds;
-    if (fieldRelative) {
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroInputs.yawPosition);
-    }
+    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroInputs.yawPosition);
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, MAX_LINEAR_SPEED);
@@ -264,7 +262,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
    * Adds a vision measurement to the pose estimator.
    *
    * @param visionPose The pose of the robot as measured by the vision camera.
-   * @param timestamp The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(Pose2d visionPose) {
     Pose3d botPose = LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
@@ -301,57 +298,127 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   public void sendSwerve() {
     SmartDashboard.putData(
         "Swerve Drive",
-        new Sendable() {
-          @Override
-          public void initSendable(SendableBuilder builder) {
-            builder.setSmartDashboardType("SwerveDrive");
+            builder -> {
+              builder.setSmartDashboardType("SwerveDrive");
 
-            builder.addDoubleProperty(
-                "Front Left Angle", () -> Math.toRadians(modules[0].getAngle().getDegrees()), null);
-            builder.addDoubleProperty(
-                "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
+              builder.addDoubleProperty(
+                  "Front Left Angle", () -> Math.toRadians(modules[0].getAngle().getDegrees()), null);
+              builder.addDoubleProperty(
+                  "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
 
-            builder.addDoubleProperty(
-                "Front Right Angle",
-                () -> Math.toRadians(modules[1].getAngle().getDegrees()),
-                null);
-            builder.addDoubleProperty(
-                "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
+              builder.addDoubleProperty(
+                  "Front Right Angle",
+                  () -> Math.toRadians(modules[1].getAngle().getDegrees()),
+                  null);
+              builder.addDoubleProperty(
+                  "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
 
-            builder.addDoubleProperty(
-                "Back Left Angle", () -> Math.toRadians(modules[2].getAngle().getDegrees()), null);
-            builder.addDoubleProperty(
-                "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
+              builder.addDoubleProperty(
+                  "Back Left Angle", () -> Math.toRadians(modules[2].getAngle().getDegrees()), null);
+              builder.addDoubleProperty(
+                  "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
 
-            builder.addDoubleProperty(
-                "Back Right Angle", () -> Math.toRadians(modules[3].getAngle().getDegrees()), null);
-            builder.addDoubleProperty(
-                "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
+              builder.addDoubleProperty(
+                  "Back Right Angle", () -> Math.toRadians(modules[3].getAngle().getDegrees()), null);
+              builder.addDoubleProperty(
+                  "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
 
-            builder.addDoubleProperty(
-                "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
-          }
-        });
+              builder.addDoubleProperty(
+                  "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
+            });
   }
 
   @Override
   public void resetDesiredRotation() {
-    desiredRotation = getRotation2d();
+    setDesiredRotation(getRotation2d());
   }
 
   @Override
   public void setDesiredRotation(Rotation2d desiredRotation) {
-    this.desiredRotation = desiredRotation;
+    desiredPose = new Pose2d(getPose().getTranslation(), desiredRotation);
   }
 
   @Override
   public double getRawRotationSpeed() {
-    return -rotationController.calculate(desiredRotation.minus(getRotation2d()).getDegrees())
+    return -rotationController.calculate(desiredPose.getRotation().minus(getRotation2d()).getDegrees())
         * SwerveInfo.TELEOP_AIM_SPEED;
   }
 
   @Override
-  public void toggleFieldRelative() {
-    fieldRelative = !fieldRelative;
+  public double getAimRotationSpeed(double forwardsSpeed, double sidewaysSpeed){
+    Translation2d speakerTranslation = AimUtil.getSpeakerVector();
+    Rotation2d rawRotation = Rotation2d.fromRadians(Math.atan(speakerTranslation.getY() / speakerTranslation.getX())).minus(getRotation2d());
+    double totalSpeed = Math.hypot(forwardsSpeed, sidewaysSpeed);
+    double speakerSidewaysSpeed = totalSpeed * Math.sin(rawRotation.getRadians());
+    return getRawRotationSpeed() * Math.abs(speakerSidewaysSpeed) * SwerveInfo.AimTranslationScalar;
+  }
+
+  @Override
+  public double getRawXSpeed(){
+    double x = desiredPose.getX();
+    double forwardsInput;
+    if (Math.abs(x) < SwerveInfo.AimTranslationDeadzone) {
+      x = 0;
+    }
+    if (DriverStationUtil.isRed()) {
+      forwardsInput = x * SwerveInfo.TeleopTranslationScalar;
+    } else {
+      forwardsInput = -x * SwerveInfo.TeleopTranslationScalar;
+    }
+    return forwardsInput;
+  }
+
+  @Override
+  public double getRawYSpeed(){
+    double y = desiredPose.getY();
+    if (Math.abs(y) < SwerveInfo.AimTranslationDeadzone) {
+      y = 0;
+    }
+    double sidewaysInput;
+    if (DriverStationUtil.isRed()) {
+      sidewaysInput = y * SwerveInfo.TeleopTranslationScalar;
+    } else {
+      sidewaysInput = -y * SwerveInfo.TeleopTranslationScalar;
+    }
+    return sidewaysInput;
+  }
+
+  @Override
+  public void setDesiredPose(Pose2d pose){
+    desiredPose = pose;
+  }
+
+  @Override
+  public void setDesiredTranslation(Translation2d translation){
+    desiredPose = new Pose2d(translation, getRotation2d());
+  }
+
+  @Override
+  public Command ampAimCommand(){
+    return new RunCommand(() -> {
+      if (DriverStationUtil.isRed()) {
+        setDesiredTranslation(FieldConstants.ampPose_red);
+        setDesiredRotation(Rotation2d.fromDegrees(90));
+      } else {
+        setDesiredTranslation(FieldConstants.ampPose_blue);
+        setDesiredRotation(Rotation2d.fromDegrees(-90));
+      }
+      setMovement(new ChassisSpeeds(getRawXSpeed(), getRawYSpeed(), getRawRotationSpeed()));
+    }, this);
+  }
+
+  @Override
+  public Command speakerAimCommand(DoubleSupplier forwardsSpeeds, DoubleSupplier sidewaysSpeeds){
+    return new RunCommand(() -> {
+      setDesiredRotation(AimUtil.getSpeakerRotation(
+              forwardsSpeeds.getAsDouble(),
+              sidewaysSpeeds.getAsDouble()));
+      setMovement(new ChassisSpeeds(
+              forwardsSpeeds.getAsDouble(),
+              sidewaysSpeeds.getAsDouble(),
+              getAimRotationSpeed(
+                      forwardsSpeeds.getAsDouble(),
+                      sidewaysSpeeds.getAsDouble())));
+    }, this);
   }
 }

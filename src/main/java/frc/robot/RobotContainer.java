@@ -39,174 +39,177 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
-  public static OI oi;
-  private final NavX navX;
+    public static OI oi;
+    private final NavX navX;
 
-  private final ISwerveDriveSubsystem swerveDriveSubsystem;
+    private final ISwerveDriveSubsystem swerveDriveSubsystem;
 
-  private final IShooterSubsystem shooter;
-  private final IIntakeSubsystem intake;
-  private final IClimberSubsystem climber;
-  private final IHopperSubsystem hopper;
+    private final IShooterSubsystem shooter;
+    private final IIntakeSubsystem intake;
+    private final IClimberSubsystem climber;
+    private final IHopperSubsystem hopper;
 
-  private final IRSensor ir;
-  private final LEDStrip ledStrip;
+    private final IRSensor ir;
+    private final LEDStrip ledStrip;
 
-  private final SendableChooser<Command> autos;
-  public final SendableChooser<Integer> autonDelay;
-  public static SendableChooser<Boolean> alliance;
+    private final SendableChooser<Command> autos;
+    public final SendableChooser<Integer> autonDelay;
+    public static SendableChooser<Boolean> alliance;
 
-  public RobotContainer() {
-    oi = new OI();
-    navX = SubsystemManager.getNavX();
-    ir = SubsystemManager.getIRSensor();
-    ledStrip = SubsystemManager.getLedStrip();
+    public RobotContainer() {
+        oi = new OI();
+        navX = SubsystemManager.getNavX();
+        ir = SubsystemManager.getIRSensor();
+        ledStrip = SubsystemManager.getLedStrip();
 
-    swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
+        swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
 
-    shooter = SubsystemManager.getShooter();
-    intake = SubsystemManager.getIntake();
-    hopper = SubsystemManager.getHopper();
-    climber = SubsystemManager.getClimber();
+        shooter = SubsystemManager.getShooter();
+        intake = SubsystemManager.getIntake();
+        hopper = SubsystemManager.getHopper();
+        climber = SubsystemManager.getClimber();
 
-    nameCommands();
+        nameCommands();
 
-    autonDelay = new SendableChooser<>();
-    autonDelay.setDefaultOption("No Delay", 0);
-    autonDelay.addOption("4s", 4);
-    autonDelay.addOption("5s", 5);
-    autonDelay.addOption("6s", 6);
-    autonDelay.addOption("7s", 7);
-    autonDelay.addOption("8s", 8);
-    autonDelay.addOption("9s", 9);
-    autonDelay.addOption("10s", 10);
-    autonDelay.addOption("11s", 11);
-    SmartDashboard.putData("Auton Delay", autonDelay);
+        autonDelay = new SendableChooser<>();
+        autonDelay.setDefaultOption("No Delay", 0);
+        autonDelay.addOption("4s", 4);
+        autonDelay.addOption("5s", 5);
+        autonDelay.addOption("6s", 6);
+        autonDelay.addOption("7s", 7);
+        autonDelay.addOption("8s", 8);
+        autonDelay.addOption("9s", 9);
+        autonDelay.addOption("10s", 10);
+        autonDelay.addOption("11s", 11);
+        SmartDashboard.putData("Auton Delay", autonDelay);
 
-    autos = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Autons", autos);
+        autos = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Autons", autos);
 
-    alliance = new SendableChooser<>();
-    alliance.addOption("Red", true);
-    alliance.setDefaultOption("Blue", false);
-    SmartDashboard.putData("Alliance", alliance);
+        alliance = new SendableChooser<>();
+        alliance.addOption("Red", true);
+        alliance.setDefaultOption("Blue", false);
+        SmartDashboard.putData("Alliance", alliance);
 
-    configureBindings();
-  }
+        configureBindings();
+    }
 
-  private void nameCommands() {
-    // climber commands
-    NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
-    NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
-    NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
-    // drive commands
-    NamedCommands.registerCommand(
-        "ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
-    NamedCommands.registerCommand(
-        "AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
-    NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter, 1.0));
-    // intake commands
-    NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper, ledStrip));
-    NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
-    NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
-    NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
+    private void nameCommands() {
+        // climber commands
+        NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
+        NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
+        NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
+        // drive commands
+        NamedCommands.registerCommand(
+                "ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
+        NamedCommands.registerCommand(
+                "AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
+        NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter, 1.0));
+        // intake commands
+        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper, ledStrip));
+        NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
+        NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
+        NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
 
-    // shooting commands
-    NamedCommands.registerCommand(
-        "ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));
-    NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
-    NamedCommands.registerCommand(
-        "ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
-  }
+        // shooting commands
+        NamedCommands.registerCommand(
+                "ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));
+        NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
+        NamedCommands.registerCommand(
+                "ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
+    }
 
-  private void configureBindings() {
-    swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
+    private void configureBindings() {
+        swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
 
-    // TODO: extract to named class
-    ledStrip.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              if (ir.hasNote()) {
-                ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(255, 50, 0), 3));
-              } else {
-                ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
-              }
-            },
-            ledStrip));
+        // TODO: extract to named class
+        ledStrip.setDefaultCommand(
+                new RunCommand(
+                        () -> {
+                            if (ir.hasNote()) {
+                                ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(255, 50, 0), 3));
+                            } else {
+                                ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
+                            }
+                        },
+                        ledStrip));
 
-    oi.driverController()
-        .getButton(DriverControls.ClimberExtendButton)
-        .whileTrue(new ExtendClimberCommand(climber));
-    oi.driverController()
-        .getButton(DriverControls.ClimberRetractButton)
-        .whileTrue(new RetractClimberCommand(climber));
-    oi.driverController()
-        .getButton(DriverControls.ClimberSwap1Button)
-        .whileTrue(new ManualClimbCommand(climber, 1, -1));
-    oi.driverController()
-        .getButton(DriverControls.ClimberSwap2Button)
-        .whileTrue(new ManualClimbCommand(climber, -1, 1));
+        oi.driverController()
+                .getButton(DriverControls.ClimberExtendButton)
+                .whileTrue(new ExtendClimberCommand(climber));
+        oi.driverController()
+                .getButton(DriverControls.ClimberRetractButton)
+                .whileTrue(new RetractClimberCommand(climber));
+        oi.driverController()
+                .getButton(DriverControls.ClimberSwap1Button)
+                .whileTrue(new ManualClimbCommand(climber, 1, -1));
+        oi.driverController()
+                .getButton(DriverControls.ClimberSwap2Button)
+                .whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-    oi.operatorController()
-        .getButton(OperatorControls.IntakeButton)
-        .whileTrue(new IntakeCommand(intake, hopper, ledStrip));
+        oi.operatorController()
+                .getButton(OperatorControls.IntakeButton)
+                .whileTrue(new IntakeCommand(intake, hopper, ledStrip));
 
-    oi.operatorController()
-        .getButton(OperatorControls.OuttakeButton)
-        .whileTrue(new OuttakeCommand(intake, hopper));
+        oi.operatorController()
+                .getButton(OperatorControls.OuttakeButton)
+                .whileTrue(new OuttakeCommand(intake, hopper));
 
-    oi.operatorController()
-        .getButton(OperatorControls.IntakeExtendButton)
-        .whileTrue(new ExtendIntakeCommand(intake));
+        oi.operatorController()
+                .getButton(OperatorControls.IntakeExtendButton)
+                .whileTrue(new ExtendIntakeCommand(intake));
 
-    oi.operatorController()
-        .getButton(OperatorControls.IntakeRetractButton)
-        .whileTrue(new RetractIntakeCommand(intake));
+        oi.operatorController()
+                .getButton(OperatorControls.IntakeRetractButton)
+                .whileTrue(new RetractIntakeCommand(intake));
 
-    oi.operatorController()
-        .getButton(OperatorControls.RunSpeakerShooterButton)
-        .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
-    oi.operatorController()
-        .getButton(OperatorControls.RunAmpShooterButton)
-        .whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
-    oi.operatorController()
-        .getButton(OperatorControls.ManualShooterButton)
-        .whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
-    oi.operatorController()
-        .getButton(OperatorControls.RunTrapShooterButton)
-        .whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
-    oi.operatorController()
-        .getButton(OperatorControls.LaunchShooterButton)
-        .whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
-    oi.operatorController()
-        .getButton(OperatorControls.ShooterIntake)
-        .whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
+        oi.operatorController()
+                .getButton(OperatorControls.RunSpeakerShooterButton)
+                .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
+        oi.operatorController()
+                .getButton(OperatorControls.RunAmpShooterButton)
+                .whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
+        oi.operatorController()
+                .getButton(OperatorControls.ManualShooterButton)
+                .whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
+        oi.operatorController()
+                .getButton(OperatorControls.RunTrapShooterButton)
+                .whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
+        oi.operatorController()
+                .getButton(OperatorControls.LaunchShooterButton)
+                .whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
+        oi.operatorController()
+                .getButton(OperatorControls.ShooterIntake)
+                .whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
 
-    oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
+        oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 
-    oi.driverController()
-        .getButton(DriverControls.ToggleFieldRelative)
-        .onTrue(new RunCommand(swerveDriveSubsystem::toggleFieldRelative));
+        oi.driverController()
+                .getButton(DriverControls.AmpAlignButton)
+                .whileTrue(swerveDriveSubsystem.ampAimCommand());
 
-    oi.driverController()
-        .getButton(DriverControls.AmpAlignButton)
-        .whileTrue(new AmpAimCommand(swerveDriveSubsystem));
+        oi.driverController()
+                .getButton(DriverControls.AimButton)
+                .whileTrue(swerveDriveSubsystem.speakerAimCommand(
+                        () -> oi.driverController().getAxis(DriverControls.SwerveRotationAxis),
+                        () -> oi.driverController().getAxis(DriverControls.SwerveStrafeAxis)
+                ));
 
-    oi.driverController()
-        .getButton(Buttons.A_BUTTON)
-        .onTrue(
-            new RunCommand(
-                () -> {
-                  if (oi.driverController().getButton(Buttons.B_BUTTON).getAsBoolean()) {
-                    navX.reset();
-                    SmartDashboard.putBoolean("navx reset", true);
-                  } else {
-                    SmartDashboard.putBoolean("navx reset", false);
-                  }
-                }));
-  }
+        oi.driverController()
+                .getButton(Buttons.A_BUTTON)
+                .onTrue(
+                        new RunCommand(
+                                () -> {
+                                    if (oi.driverController().getButton(Buttons.B_BUTTON).getAsBoolean()) {
+                                        navX.reset();
+                                        SmartDashboard.putBoolean("navx reset", true);
+                                    } else {
+                                        SmartDashboard.putBoolean("navx reset", false);
+                                    }
+                                }));
+    }
 
-  public Command getAutonomousCommand() {
-    return autos.getSelected();
-  }
+    public Command getAutonomousCommand() {
+        return autos.getSelected();
+    }
 }
