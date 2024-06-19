@@ -1,11 +1,8 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.RobotInfo;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
-import frc.robot.util.AimUtil;
 import frc.robot.util.MovementUtil;
 
 class _AimCommand extends Command {
