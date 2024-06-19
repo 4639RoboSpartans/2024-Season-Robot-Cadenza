@@ -1,10 +1,12 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotInfo;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.util.AimUtil;
+import frc.robot.util.MovementUtil;
 
 class _AimCommand extends Command {
   private final ISwerveDriveSubsystem swerveDriveSubsystem;
@@ -17,16 +19,14 @@ class _AimCommand extends Command {
   @Override
   public void initialize() {
     swerveDriveSubsystem.stop();
+    MovementUtil.reset();
+    MovementUtil.lockToSpeaker();
   }
 
   @Override
   public void execute() {
-    swerveDriveSubsystem.setDesiredRotation(AimUtil.getSpeakerRotation(0, 0));
-    double rotateSpeed =
-        swerveDriveSubsystem.getRawRotationSpeed() * RobotInfo.SwerveInfo.TELEOP_AIM_SPEED;
-
-    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, rotateSpeed);
-    swerveDriveSubsystem.setMovement(chassisSpeeds);
+    Pose2d pose = swerveDriveSubsystem.getPose();
+    swerveDriveSubsystem.setMovement(MovementUtil.getRobotRelative(pose));
   }
 
   @Override
