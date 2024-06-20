@@ -60,7 +60,7 @@ public class RobotContainer {
   public static SendableChooser<Boolean> alliance;
 
   public RobotContainer() {
-    oi = new OI();
+    oi = SubsystemManager.getOI();
     navX = SubsystemManager.getNavX();
     aimSubsystem = SubsystemManager.getAimSubsystem();
     ir = SubsystemManager.getIRSensor();

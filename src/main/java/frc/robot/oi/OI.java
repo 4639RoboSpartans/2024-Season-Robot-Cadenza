@@ -79,4 +79,25 @@ public class OI {
       return id;
     }
   }
+
+  public static class AxesInputs {
+    public double x, y;
+
+    AxesInputs(double x, double y) {
+      this.x = x;
+      this.y = y;
+    }
+  }
+
+  public AxesInputs getLeftStickInputs() {
+    double x = driverController.getAxis(Axes.LEFT_STICK_X);
+    double y = driverController.getAxis(Axes.LEFT_STICK_Y);
+    return new AxesInputs(x, y);
+  }
+
+  public AxesInputs getRightStickInputs() {
+    double x = driverController.getAxis(Axes.RIGHT_STICK_X);
+    double y = driverController.getAxis(Axes.RIGHT_STICK_Y);
+    return new AxesInputs(x, y);
+  }
 }

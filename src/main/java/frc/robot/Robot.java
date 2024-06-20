@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.led.LEDPattern;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 public class Robot extends TimedRobot {
   private static boolean isAuton = false;
@@ -71,8 +70,6 @@ public class Robot extends TimedRobot {
     autonomousCommand = robotContainer.getAutonomousCommand();
     isAuton = true;
 
-    ((SwerveDriveSubsystem) SubsystemManager.getSwerveDrive()).useAutonCurrentLimits();
-
     if (autonomousCommand != null) {
       new WaitCommand(robotContainer.autonDelay.getSelected())
           .andThen(autonomousCommand)
@@ -94,8 +91,6 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-
-    ((SwerveDriveSubsystem) SubsystemManager.getSwerveDrive()).useTeleopCurrentLimits();
   }
 
   @Override

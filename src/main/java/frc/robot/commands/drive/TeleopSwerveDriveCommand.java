@@ -1,26 +1,24 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Controls.DriverControls;
-import frc.robot.constants.RobotInfo.SwerveInfo;
+import frc.robot.constants.FieldConstants;
 import frc.robot.oi.OI;
-import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.aim.AimSubsystem;
+import frc.robot.subsystems.swerve.MovementUtil;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem.DriveState;
 
 public class TeleopSwerveDriveCommand extends Command {
   private final SwerveDriveSubsystem swerveDriveSubsystem;
-  private final AimSubsystem aimSubsystem;
   private final OI oi;
 
   public TeleopSwerveDriveCommand(
-      SwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
+      SwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
     this.swerveDriveSubsystem = swerveDriveSubsystem;
-    this.aimSubsystem = aimSubsystem;
     this.oi = oi;
-    addRequirements(swerveDriveSubsystem, aimSubsystem);
+    addRequirements(swerveDriveSubsystem);
   }
 
   @Override
@@ -30,35 +28,13 @@ public class TeleopSwerveDriveCommand extends Command {
 
   @Override
   public void execute() {
-    double forwardsSpeed =
-        oi.driverController().getAxis(DriverControls.SwerveForwardAxis)
-            * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-    double sidewaysSpeed =
-        -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis)
-            * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-    double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
-    double rotateSpeed = getRotationSpeed(rotationMultiplier);
-
-    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
-    swerveDriveSubsystem.driveFieldCentric(chassisSpeeds);
-    SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
-  }
-
-  private double getRotationSpeed(double rotationMultiplier) {
-    double rawSpeed;
     if (oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
-
-      rawSpeed =
-          (-aimSubsystem.getSwerveRotation()
-                  - oi.driverController().getAxis(DriverControls.SwerveRotationAxis)
-                      * SwerveInfo.TELOP_ROTATION_SPEED)
-              * (1 + rotationMultiplier * 15);
+      swerveDriveSubsystem.setState(DriveState.SPEAKER_LOCK);
     } else {
-      rawSpeed =
-          -oi.driverController().getAxis(DriverControls.SwerveRotationAxis)
-              * SwerveInfo.TELOP_ROTATION_SPEED;
+      swerveDriveSubsystem.setState(DriveState.MANUAL);
     }
-    return rawSpeed * (1 + rotationMultiplier);
+    swerveDriveSubsystem.driveFieldCentric(
+        MovementUtil.getRobotRelative(swerveDriveSubsystem.getPoseMeters()));
   }
 
   @Override
