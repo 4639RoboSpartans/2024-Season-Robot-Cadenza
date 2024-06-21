@@ -44,10 +44,10 @@ public class TeleopSwerveDriveCommand extends Command {
         double rawSpeed;
         if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
 
-            rawSpeed =  (-aimSubsystem.getSwerveRotation()-oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED) * (1+rotationMultiplier*15);
+            rawSpeed =  aimSubsystem.getSwerveRotation();
         }
         else {
-            rawSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED;
+            rawSpeed = oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED;
         }
         return rawSpeed * (1 + rotationMultiplier);
     }

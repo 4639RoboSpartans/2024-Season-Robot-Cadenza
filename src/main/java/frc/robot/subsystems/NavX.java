@@ -13,13 +13,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class NavX extends SubsystemBase {
     private final AHRS ahrs;
+    private Rotation2d offset;
 
     public NavX() {
         ahrs = new AHRS(SPI.Port.kMXP);
+        offset = new Rotation2d();
     }
 
     public double getHeading() {
-        return ahrs.getCompassHeading();
+        return getRotation2d().getDegrees();
     }
 
     public double getRoll() {
@@ -31,11 +33,11 @@ public class NavX extends SubsystemBase {
     }
 
     public Rotation2d getRotation2d() {
-        return ahrs.getRotation2d();
+        return ahrs.getRotation2d().minus(offset);
     }
 
     public void reset() {
-        ahrs.reset();
+        offset = ahrs.getRotation2d();
     }
 
     @Override

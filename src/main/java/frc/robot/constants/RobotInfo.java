@@ -16,7 +16,7 @@ public final class RobotInfo {
         public static final double CURRENT_MAX_ROBOT_MPS = 9;
         public static final double MOVEMENT_SPEED = .5;
         public static final double AIM_ROTATION_SPEED = 2.5;
-        public static final PIDTemplate SWERVE_ROTATOR_PID_CONSTANTS = new PIDTemplate(0.0085);
+        public static final PIDTemplate SWERVE_ROTATOR_PID_CONSTANTS = new PIDTemplate(0.0065, 0, 0.00001);
         public static final PIDTemplate SWERVE_DRIVER_PID_CONSTANTS = new PIDTemplate(3.25);
         public static final double DERIVATIVE_MULTIPLIER = 0.1;
         public static final double TELOP_ROTATION_SPEED = 4;
@@ -31,7 +31,7 @@ public final class RobotInfo {
 
     public static final class IntakeInfo {
 
-        public static final double INTAKE_SPEED = -0.7;
+        public static final double INTAKE_SPEED = -0.8;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
         public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
@@ -49,7 +49,7 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.12, 0.01, 0);
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.1, 0.01, 0.00001);
         public static final double AIM_ROT_POW = 0.7;
         public static final double AIM_UPWARDS_TILT = Math.PI/6;
         public static final double AIM_TIME = 0.5;
@@ -118,10 +118,8 @@ public final class RobotInfo {
 
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
 
-        public static final ShooterInfo.ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                6.8,
-                .49
-        );
+        public static final ShooterInfo.ShooterSetpoint SHOOTER_AMP_SETPOINT =
+        new ShooterInfo.ShooterSetpoint(6.8, .49);
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = measurements[2].setpoint;
         public static final ShooterInfo.ShooterSetpoint SHOOTER_TRAP_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 20,

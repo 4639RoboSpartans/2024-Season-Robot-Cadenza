@@ -17,4 +17,5 @@ public interface AimInterface extends Subsystem, Sendable {
     void resetPID();
 
     double getTxDerivative();
+
 }

@@ -124,11 +124,11 @@ public class SwerveModule {
     }
 
     public double getDriveVelocity() {
-        return driver.getVelocity().getValue() * driveConversionFactor;
+        return driver.getVelocity().getValue() / -6.55 * 0.0508;
     }
 
     public double getDriveDistance() {
-        return driver.getPosition().getValue() * driveConversionFactor;
+        return driver.getPosition().getValue() / -6.55 * 0.0508;
     }
 
     public double getTurningVelocity() {
