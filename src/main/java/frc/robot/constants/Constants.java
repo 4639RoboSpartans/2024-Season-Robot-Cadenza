@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.08;
     public static final int POSE_WINDOW_LENGTH = 1;
@@ -15,7 +17,10 @@ public final class Constants {
             -54.98, -122.4, 74.44, 121.92
     };
     private static final double[] newOffsets = {
-            135.36, 155.23, -94.98, -88.23
+            Rotation2d.fromRotations(-0.119).getDegrees(),
+            Rotation2d.fromRotations(-0.07).getDegrees(),
+            Rotation2d.fromRotations(-0.265 + 0.5).getDegrees(),
+            Rotation2d.fromRotations(0.474).getDegrees(),
     };
     static final double[] swerveOffsets = switch (currentRobot) {
         case ZEUS -> oldOffsets;

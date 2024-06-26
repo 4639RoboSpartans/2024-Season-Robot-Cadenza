@@ -15,14 +15,14 @@ public final class RobotInfo {
         // Change MOVEMENT_SPEED to 1.0 for max speed
         public static final double CURRENT_MAX_ROBOT_MPS = 9;
         public static final double MOVEMENT_SPEED = .5;
-        public static final double AIM_ROTATION_SPEED = 2.5;
-        public static final PIDTemplate SWERVE_ROTATOR_PID_CONSTANTS = new PIDTemplate(0.0085);
-        public static final PIDTemplate SWERVE_DRIVER_PID_CONSTANTS = new PIDTemplate(3.25);
+        public static final double AIM_ROTATION_SPEED = 4;
+        public static final PIDTemplate SWERVE_ROTATOR_PID_CONSTANTS = new PIDTemplate(0.0065, 0, 0.00001);
+        public static final PIDTemplate SWERVE_DRIVER_PID_CONSTANTS = new PIDTemplate(0.1);
         public static final double DERIVATIVE_MULTIPLIER = 0.1;
-        public static final double TELOP_ROTATION_SPEED = 4;
+        public static final double TELOP_ROTATION_SPEED = 12;
 
-        public static final PIDConstants TranslationPID = new PIDConstants(56, 0, 0.0);
-        public static final PIDConstants RotationPID = new PIDConstants(256, 0, 0.0);
+        public static final PIDConstants TranslationPID = new PIDConstants(12, 0, 0.0);
+        public static final PIDConstants RotationPID = new PIDConstants(16, 0, 0.0);
     }
 
     public static final class TrapInfo {
@@ -49,8 +49,8 @@ public final class RobotInfo {
     public static final class AimInfo {
 
         public static final double AIM_TOLERANCE = Math.toRadians(1);
-        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(0.12, 0.01, 0);
-        public static final double AIM_ROT_POW = 0.7;
+        public static final PIDTemplate LIMELIGHT_AIM_PID_CONSTANTS = new PIDTemplate(2, 0.01, 0);
+        public static final double AIM_ROT_POW = 1.2;
         public static final double AIM_UPWARDS_TILT = Math.PI/6;
         public static final double AIM_TIME = 0.5;
     }

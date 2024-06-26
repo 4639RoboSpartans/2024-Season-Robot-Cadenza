@@ -59,12 +59,12 @@ public class SwerveModule {
 
     public void useAutonCurrentLimits() {
         CurrentLimitsConfigs driverCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(26)
-                .withStatorCurrentLimitEnable(true);
+                .withSupplyCurrentLimit(40)
+                .withSupplyCurrentLimitEnable(true);
 
         CurrentLimitsConfigs rotatorCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(26)
-                .withStatorCurrentLimitEnable(true);
+                .withSupplyCurrentLimit(30)
+                .withSupplyCurrentLimitEnable(true);
 
         driver.getConfigurator().apply(driverCurrentLimiter);
         rotator.getConfigurator().apply(rotatorCurrentLimiter);
@@ -72,12 +72,12 @@ public class SwerveModule {
 
     public void useTeleopCurrentLimits() {
         CurrentLimitsConfigs driverCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(35)
-                .withStatorCurrentLimitEnable(true);
+                .withSupplyCurrentLimit(40)
+                .withSupplyCurrentLimitEnable(true);
 
         CurrentLimitsConfigs rotatorCurrentLimiter = new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(26)
-                .withStatorCurrentLimitEnable(true);
+                .withSupplyCurrentLimit(30)
+                .withSupplyCurrentLimitEnable(true);
 
         driver.getConfigurator().apply(driverCurrentLimiter);
         rotator.getConfigurator().apply(rotatorCurrentLimiter);
@@ -99,11 +99,12 @@ public class SwerveModule {
         SmartDashboard.putString("Module %d current speed".formatted(moduleID), "%.2f".formatted(driver.getVelocity().getValue()));
 
         double rotatorPIDOutput = rotationPID.calculate(currModuleRotation);
-        double driverPIDOutput = - driverPID.calculate(targetSpeed); //drive change
+        double driverPIDOutput = -driverPID.calculate(getDriveVelocity(), targetSpeed); //drive change
 
         SmartDashboard.putString("Module %d target speed".formatted(moduleID), "%.2f".formatted(targetSpeed));
         SmartDashboard.putString("Module %d target rotation".formatted(moduleID), "%.2fdeg".formatted(rotationPID.getSetpoint()));
         SmartDashboard.putString("Module %d rotator PID output".formatted(moduleID), "%.2f".formatted(rotatorPIDOutput));
+        SmartDashboard.putString("Module %d driver PID output".formatted(moduleID), "%.2f".formatted(driverPIDOutput));
         SmartDashboard.putNumber("Error", driverPID.getVelocityError());
 
         rotator.set(rotatorPIDOutput);
@@ -124,11 +125,11 @@ public class SwerveModule {
     }
 
     public double getDriveVelocity() {
-        return driver.getVelocity().getValue() * driveConversionFactor;
+        return driver.getVelocity().getValueAsDouble() / 6.55 * 2 * Math.PI * 0.0508;
     }
 
     public double getDriveDistance() {
-        return driver.getPosition().getValue() * driveConversionFactor;
+        return driver.getPosition().getValueAsDouble() / 6.55 * 2 * Math.PI * 0.0508;
     }
 
     public double getTurningVelocity() {

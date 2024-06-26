@@ -4,15 +4,22 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.IDs;
 import frc.robot.constants.RobotInfo.SwerveInfo;
+import frc.robot.network.LimelightHelpers;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 
@@ -26,7 +33,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     private final NavX navx;
 
-    private final OdometrySubsystem odometrySubsystem;
+    private final SwerveDrivePoseEstimator poseEstimator;
+    private final Field2d field;
 
     private ChassisSpeeds chassisSpeeds;
 
@@ -37,7 +45,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleFrontRight = new SwerveModule(IDs.MODULE_FRONT_RIGHT);
         moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
         moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
-        odometrySubsystem = new OdometrySubsystem(this, navx);
+        poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, navx.getRotation2d(), getPositions(), new Pose2d());
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
         setBrakeMode();
@@ -59,6 +67,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         );
 
         resetOdometry(new Pose2d());
+        field = new Field2d();
     }
 
     public void useTeleopCurrentLimits() {
@@ -76,7 +85,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     public Pose2d getPose() {
-        return odometrySubsystem.getOdometry().getPoseMeters();
+        return poseEstimator.getEstimatedPosition();
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -129,9 +138,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         moduleFrontRight.periodic();
         moduleBackLeft.periodic();
         moduleBackRight.periodic();
-        SmartDashboard.putNumber("pose x", odometrySubsystem.getOdometry().getPoseMeters().getTranslation().getX());
-        SmartDashboard.putNumber("pose y", odometrySubsystem.getOdometry().getPoseMeters().getTranslation().getY());
-        SmartDashboard.putNumber("heading pose", odometrySubsystem.getOdometry().getPoseMeters().getRotation().getDegrees());
+        poseEstimator.update(navx.getRotation2d(), getPositions());
+        field.setRobotPose(getPose());
+        SmartDashboard.putData(field);
+        Pose2d limelightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+        Translation2d limelightTrans = limelightPose.getTranslation();
+        if (limelightTrans.getX() != 0 && limelightTrans.getY() != 0) {
+            poseEstimator.addVisionMeasurement(limelightPose, Timer.getFPGATimestamp());
+        }
     }
 
     public void setBrakeMode() {
@@ -153,7 +167,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     }
 
     public void resetPose(Pose2d pose) {
-        odometrySubsystem.resetOdometry(pose);
+        poseEstimator.resetPosition(navx.getRotation2d(), getPositions(), pose);
     }
 
     public SwerveModule getSwerveModule(String module) {
@@ -168,5 +182,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     public double getHeading(){
         return navx.getHeading();
+    }
+
+    public SwerveModulePosition[] getPositions() {
+        return new SwerveModulePosition[] {
+                getSwerveModule("FL").getPosition(),
+                getSwerveModule("FR").getPosition(),
+                getSwerveModule("BL").getPosition(),
+                getSwerveModule("BR").getPosition(),
+        };
     }
 }
