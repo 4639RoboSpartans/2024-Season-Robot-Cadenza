@@ -29,29 +29,14 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     public void periodic() {
 
     }
-
+    
     @Override
-    public void setBrakeMode() {
-
-    }
-
-    @Override
-    public void setCoastMode() {
-
-    }
-
-    @Override
-    public void resetOdometry(Pose2d pose) {
-
+    public Pose2d getPose() {
+        return null;
     }
 
     @Override
     public void resetPose(Pose2d pose) {
 
-    }
-
-    @Override
-    public SwerveModule getSwerveModule(String module){
-        return null;
     }
 }
