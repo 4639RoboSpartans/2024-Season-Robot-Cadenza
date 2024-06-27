@@ -1,17 +1,19 @@
 package frc.robot.constants;
 
+import frc.lib.SwerveModuleConstants;
+
 public final class IDs {
     // Swerve uses up motor ids 1-12
-    public static final SwerveModuleConfiguration MODULE_FRONT_LEFT = new SwerveModuleConfiguration(
+    public static final SwerveModuleConstants MODULE_FRONT_LEFT = new SwerveModuleConstants(
         1, 2, 9, Constants.swerveOffsets[0]//, 0.8
     );
-    public static final SwerveModuleConfiguration MODULE_FRONT_RIGHT = new SwerveModuleConfiguration(
+    public static final SwerveModuleConstants MODULE_FRONT_RIGHT = new SwerveModuleConstants(
         3, 4, 10, Constants.swerveOffsets[1]//, 0.5
     );
-    public static final SwerveModuleConfiguration MODULE_BACK_LEFT = new SwerveModuleConfiguration(
+    public static final SwerveModuleConstants MODULE_BACK_LEFT = new SwerveModuleConstants(
         5, 6, 11, Constants.swerveOffsets[2]//, 0.8
     );
-    public static final SwerveModuleConfiguration MODULE_BACK_RIGHT = new SwerveModuleConfiguration(
+    public static final SwerveModuleConstants MODULE_BACK_RIGHT = new SwerveModuleConstants(
         7, 8, 12, Constants.swerveOffsets[3]//, 0.8
     );
 

@@ -10,6 +10,7 @@ import frc.robot.constants.IDs;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
+import frc.robot.util.AimUtil;
 
 import static frc.robot.constants.RobotInfo.ShooterInfo;
 
@@ -51,7 +52,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         if(!isUsingPID) return;
 
         double targetAngle = switch (shooter.getShootingMode()) {
-            case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().angle();
+            case AUTO_SPEAKER -> AimUtil.getShooterSetpoint().angle();
             case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
             case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
             case TRAP -> ShooterInfo.SHOOTER_TRAP_SETPOINT.angle();

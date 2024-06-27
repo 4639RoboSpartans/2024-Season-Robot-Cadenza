@@ -1,91 +1,164 @@
 package frc.robot.subsystems.aim;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
-import frc.robot.network.LimeLight;
-import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
-import math.Averager;
-import math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.constants.FieldConstants;
+import frc.robot.oi.OI;
+import frc.robot.subsystems.SubsystemManager;
+import frc.robot.util.DriverStationUtil;
 
-import static frc.robot.constants.RobotInfo.AimInfo;
-import static frc.robot.constants.RobotInfo.ShooterInfo.LimelightOffsetX;
-import static frc.robot.constants.RobotInfo.ShooterInfo.LimelightOffsetZ;
-import static frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpoint;
-import static frc.robot.constants.RobotInfo.SwerveInfo;
+public class AimSubsystem {
+    private static Translation2d desiredPose, targetLock;
+    private static Rotation2d desiredRotation;
+    private static boolean toDesired, locked, useRotation;
+    public static boolean configured = false;
 
-public class AimSubsystem extends SubsystemBase implements AimInterface {
+    private static final OI oi = SubsystemManager.getOI();
 
-    private final PIDController rotationPID = AimInfo.LIMELIGHT_AIM_PID_CONSTANTS.create();
+    private static final PIDController rotationPID = new PIDController(0.08, 0, 0);
+    private static final PIDController movementXPID = new PIDController(0.5, 0, 0);
+    private static final PIDController movementYPID = new PIDController(0.5, 0, 0);
 
-    private final Averager angle = new Averager(Constants.POSE_WINDOW_LENGTH);
-    private final Averager x = new Averager(Constants.POSE_WINDOW_LENGTH);
-    private final Averager z = new Averager(Constants.POSE_WINDOW_LENGTH);
-    public AimSubsystem(){
+    public static void configure(
+            Translation2d desiredPose,
+            Translation2d targetLock,
+            Rotation2d desiredRotation,
+            boolean toDesired,
+            boolean locked,
+            boolean useRotation) {
+        AimSubsystem.desiredPose = desiredPose;
+        AimSubsystem.targetLock = targetLock;
+        AimSubsystem.desiredRotation = desiredRotation;
+        AimSubsystem.toDesired = toDesired;
+        AimSubsystem.locked = locked;
+        AimSubsystem.useRotation = useRotation;
+        configured = true;
     }
 
-    @Override
-    public double getSwerveRotation(){
-        if (!angle.hasMeasurements()) return 0;
-
-        double yRotation = angle.getValue();
-        yRotation *= (1 + getTxDerivative() * SwerveInfo.DERIVATIVE_MULTIPLIER);
-
-        return rotationPID.calculate(MathUtil.signedPow(yRotation, AimInfo.AIM_ROT_POW)) * SwerveInfo.AIM_ROTATION_SPEED;
+    public static void setLocked(Translation2d targetLock) {
+        AimSubsystem.locked = true;
+        AimSubsystem.useRotation = false;
+        AimSubsystem.targetLock = targetLock;
     }
 
-    @Override
-    public double getTxDerivative(){
-        return x.getDerivative();
+    public static void setLocked(Rotation2d desiredRotation) {
+        AimSubsystem.locked = true;
+        AimSubsystem.useRotation = true;
+        AimSubsystem.desiredRotation = desiredRotation;
     }
 
-    @Override
-    public boolean isAtSetpoint() {
-        return Math.abs(angle.getValue()) <= AimInfo.AIM_TOLERANCE && LimeLight.seesAprilTags();
+    public static void setLocked(boolean locked) {
+        AimSubsystem.locked = locked;
     }
 
-    @Override
-    public ShooterSetpoint getShooterSetpoint() {
-        ShooterSetpoint result = ShooterMeasurementLERPer.get(x.getValue(), z.getValue());
-
-        SmartDashboard.putNumber("Shooter Angle: ", result.angle());
-        SmartDashboard.putNumber("Shooter Speed: ", result.speed());
-        
-        return result;
+    public static void setToDesired(Translation2d desiredPose) {
+        AimSubsystem.toDesired = true;
+        AimSubsystem.desiredPose = desiredPose;
     }
 
-    @Override
-    public void periodic() {
-        double x = LimeLight.getRobotRelativeXDistance();
-        double z = LimeLight.getRobotRelativeZDistance();
-        double angle = LimeLight.getRobotRelativeXRotation();
-        // double angle = LimeLight.getTx();
-        double tangent = -Math.atan((x + LimelightOffsetX) / (z  - LimelightOffsetZ));
-        if (angle == 0){
-            tangent = 0;
-            SmartDashboard.putBoolean("sees limelight", false);
+    public static void setToDesired(boolean toDesired) {
+        AimSubsystem.toDesired = toDesired;
+    }
+
+    public static Rotation2d getDesiredRotation(Pose2d robotPose) {
+        if (useRotation) {
+            return desiredRotation;
+        } else {
+            Translation2d currTranslation = robotPose.getTranslation();
+            Translation2d robotToPose = currTranslation.minus(targetLock);
+            if (DriverStationUtil.isRed()) {
+                robotToPose = new Translation2d().minus(robotToPose);
+            }
+            double x = robotToPose.getX();
+            double y = robotToPose.getY();
+            return Rotation2d.fromRadians(Math.atan(y / x));
         }
-        else 
-            SmartDashboard.putBoolean("sees limelight", true);
-        SmartDashboard.putNumber("atan", tangent);
-        SmartDashboard.putNumber("x", x);
-        SmartDashboard.putNumber("z", z);
-        SmartDashboard.putNumber("angle", angle);
-        SmartDashboard.putNumber("degrees", Math.toDegrees(angle));
-
-        double distance = Math.hypot(x, z);
-        SmartDashboard.putNumber("distance ", distance);
-
-        this.angle.addMeasurement(tangent);
-
-        this.x.addMeasurement(x);
-        this.z.addMeasurement(z);
-
     }
 
-    @Override
-    public void resetPID(){
-        rotationPID.reset();
+    public static Translation2d getPoseOffset(Pose2d robotPose) {
+        Translation2d currTranslation = robotPose.getTranslation();
+        double currX = currTranslation.getX();
+        double currY = currTranslation.getY();
+        double targetX = desiredPose.getX();
+        double targetY = desiredPose.getY();
+        double xDiff, yDiff;
+        if (DriverStationUtil.isRed()) {
+            xDiff = currX - targetX;
+            yDiff = targetY - currY;
+        } else {
+            xDiff = targetX - currX;
+            yDiff = currY - targetY;
+        }
+        return new Translation2d(xDiff, yDiff);
+    }
+
+    public static ChassisSpeeds getRobotRelative(Pose2d robotPose) {
+        Rotation2d desiredRotation = getDesiredRotation(robotPose);
+        Translation2d translationDiff = getPoseOffset(robotPose);
+        double rotationSpeed;
+        if (locked) {
+            rotationPID.setSetpoint(desiredRotation.getDegrees());
+            rotationSpeed = rotationPID.calculate(desiredRotation.getDegrees());
+        } else {
+            rotationSpeed = -oi.driverController().getAxis(OI.Axes.RIGHT_STICK_X);
+        }
+        double xSpeed, ySpeed;
+        if (toDesired) {
+            movementXPID.setSetpoint(0);
+            movementYPID.setSetpoint(0);
+            xSpeed = movementXPID.calculate(translationDiff.getX());
+            ySpeed = movementYPID.calculate(translationDiff.getY());
+        } else {
+            xSpeed = oi.driverController().getAxis(OI.Axes.LEFT_STICK_X);
+            ySpeed = oi.driverController().getAxis(OI.Axes.LEFT_STICK_Y);
+        }
+        return ChassisSpeeds.fromFieldRelativeSpeeds(
+                ySpeed, xSpeed, rotationSpeed, robotPose.getRotation());
+    }
+
+    public static void reset() {
+        locked = false;
+        toDesired = false;
+    }
+
+    public static boolean atTranslation(Pose2d robotPose) {
+        Translation2d currDiff = getPoseOffset(robotPose);
+        double x = Math.abs(currDiff.getX());
+        double y = Math.abs(currDiff.getY());
+        return x < 0.02 && y < 0.02;
+    }
+
+    public static boolean atRotation(Pose2d robotPose) {
+        double rotationDiffDegrees =
+                Math.abs(desiredRotation.minus(robotPose.getRotation()).getDegrees());
+        return rotationDiffDegrees < 5;
+    }
+
+    public static boolean atPose(Pose2d robotPose) {
+        if (toDesired && locked) {
+            return atTranslation(robotPose) && atRotation(robotPose);
+        } else {
+            return false;
+        }
+    }
+
+    public static void lockToSpeaker() {
+        if (DriverStationUtil.isRed()){
+            setLocked(FieldConstants.speakerPose_red);
+        } else {
+            setLocked(FieldConstants.speakerPose_blue);
+        }
+    }
+
+    public static void driveToAmp() {
+        if (DriverStationUtil.isRed()){
+            setToDesired(FieldConstants.ampPose_red);
+        }
+        else {
+            setToDesired(FieldConstants.ampPose_blue);
+        }
     }
 }

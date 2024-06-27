@@ -1,195 +1,137 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.swerve;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.estimator.PoseEstimator;
+import com.ctre.phoenix6.BaseStatusSignal;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.constants.IDs;
-import frc.robot.constants.RobotInfo.SwerveInfo;
+import frc.robot.constants.RobotInfo;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
-    private final SwerveModule
-            moduleFrontLeft,
-            moduleFrontRight,
-            moduleBackLeft,
-            moduleBackRight;
-
-    private final NavX navx;
-
-    private final SwerveDrivePoseEstimator poseEstimator;
-    private final Field2d field;
-
-    private ChassisSpeeds chassisSpeeds;
+    private SwerveModule[] swerveModules;
+    private NavX navX;
+    private SwerveDrivePoseEstimator poseEstimator;
+    BaseStatusSignal[] signals;
 
     public SwerveDriveSubsystem() {
-        navx = SubsystemManager.getNavX();
+        swerveModules = new SwerveModule[]{
+                new SwerveModule(0, IDs.MODULE_FRONT_LEFT),
 
-        moduleFrontLeft = new SwerveModule(IDs.MODULE_FRONT_LEFT);
-        moduleFrontRight = new SwerveModule(IDs.MODULE_FRONT_RIGHT);
-        moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
-        moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
-        poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, navx.getRotation2d(), getPositions(), new Pose2d());
-        this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
+                new SwerveModule(1, IDs.MODULE_FRONT_RIGHT),
 
-        setBrakeMode();
+                new SwerveModule(2, IDs.MODULE_BACK_LEFT),
 
-        AutoBuilder.configureHolonomic(
-                this::getPose,
-                this::resetPose,
-                this::getRobotRelativeSpeeds,
-                this::setRawMovement,
-                new HolonomicPathFollowerConfig(
-                        SwerveInfo.TranslationPID, //TODO: find constants for 2024 robot
-                        SwerveInfo.RotationPID, //TODO: find constants for 2024 robot
-                        4,
-                        0.4,
-                        new ReplanningConfig()
-                ),
-                () -> RobotContainer.alliance.getSelected(),
-                this
-        );
+                new SwerveModule(3, IDs.MODULE_BACK_RIGHT)
+        };
 
-        resetOdometry(new Pose2d());
-        field = new Field2d();
+        navX = SubsystemManager.getNavX();
+
+        signals = new BaseStatusSignal[16];
+        for (int i = 0; i < 4; i++) {
+            BaseStatusSignal[] tempSignals = swerveModules[i].getSignals();
+            signals[i * 4 + 0] = tempSignals[0];
+            signals[i * 4 + 1] = tempSignals[1];
+            signals[i * 4 + 2] = tempSignals[2];
+            signals[i * 4 + 3] = tempSignals[3];
+        }
     }
 
-    public void useTeleopCurrentLimits() {
-        moduleFrontLeft.useTeleopCurrentLimits();
-        moduleFrontRight.useTeleopCurrentLimits();
-        moduleBackLeft.useTeleopCurrentLimits();
-        moduleBackRight.useTeleopCurrentLimits();
-    }
-
-    public void useAutonCurrentLimits() {
-        moduleFrontLeft.useAutonCurrentLimits();
-        moduleFrontRight.useAutonCurrentLimits();
-        moduleBackLeft.useAutonCurrentLimits();
-        moduleBackRight.useAutonCurrentLimits();
-    }
-
+    @Override
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
     }
 
-    public ChassisSpeeds getRobotRelativeSpeeds() {
-        return chassisSpeeds;
-    }
-
-    public Rotation2d getRotation2d() {
-        return navx.getRotation2d();
-    }
-
-    public void setMovement(ChassisSpeeds chassisSpeeds) {
-        ChassisSpeeds robotCentricSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, navx.getRotation2d());
-        setRawMovement(robotCentricSpeeds);
-        chassisSpeeds = robotCentricSpeeds;
-    }
-
-    public void setRawMovement(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] swerveModuleStates = SwerveInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-        setModulesStates(
-                swerveModuleStates[0],
-                swerveModuleStates[1],
-                swerveModuleStates[2],
-                swerveModuleStates[3]
-        );
-        this.chassisSpeeds = chassisSpeeds;
-    }
-
-    private void setModulesStates(
-            SwerveModuleState stateFrontLeft,
-            SwerveModuleState stateFrontRight,
-            SwerveModuleState stateBackLeft,
-            SwerveModuleState stateBackRight
-    ) {
-        moduleFrontLeft.setState(stateFrontLeft);
-        moduleFrontRight.setState(stateFrontRight);
-        moduleBackLeft.setState(stateBackLeft);
-        moduleBackRight.setState(stateBackRight);
-    }
-
-    public void stop() {
-        moduleBackLeft.stop();
-        moduleBackRight.stop();
-        moduleFrontLeft.stop();
-        moduleFrontLeft.stop();
-    }
-
     @Override
     public void periodic() {
-        moduleFrontLeft.periodic();
-        moduleFrontRight.periodic();
-        moduleBackLeft.periodic();
-        moduleBackRight.periodic();
-        poseEstimator.update(navx.getRotation2d(), getPositions());
-        field.setRobotPose(getPose());
-        SmartDashboard.putData(field);
+        poseEstimator.update(navX.getRotation2d(), getPositions(true));
         Pose2d limelightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-        Translation2d limelightTrans = limelightPose.getTranslation();
-        if (limelightTrans.getX() != 0 && limelightTrans.getY() != 0) {
+        if (limelightPose.getX() != 0 && limelightPose.getY() != 0) {
             poseEstimator.addVisionMeasurement(limelightPose, Timer.getFPGATimestamp());
+        }
+        if (DriverStation.isDisabled()) {
+            lock();
         }
     }
 
-    public void setBrakeMode() {
-        moduleFrontLeft.setBrakeMode();
-        moduleFrontRight.setBrakeMode();
-        moduleBackLeft.setBrakeMode();
-        moduleBackRight.setBrakeMode();
-    }
-
-    public void setCoastMode() {
-        moduleFrontLeft.setCoastMode();
-        moduleFrontRight.setCoastMode();
-        moduleBackLeft.setCoastMode();
-        moduleBackRight.setCoastMode();
-    }
-
-    public void resetOdometry(Pose2d pose) {
-        resetPose(pose);
-    }
-
+    @Override
     public void resetPose(Pose2d pose) {
-        poseEstimator.resetPosition(navx.getRotation2d(), getPositions(), pose);
+        poseEstimator.resetPosition(navX.getRotation2d(), getPositions(true), pose);
     }
 
-    public SwerveModule getSwerveModule(String module) {
-        return switch (module) {
-            case "FL" -> moduleFrontLeft;
-            case "BL" -> moduleBackLeft;
-            case "FR" -> moduleFrontRight;
-            case "BR" -> moduleBackRight;
-            default -> null;
-        };
+    /**
+     * Main controlling method for driving swerve based on desired speed of drivetrian
+     *
+     * @param chassisSpeeds Desired speed of drivetrain
+     */
+    public void drive(ChassisSpeeds chassisSpeeds) {
+        SwerveModuleState[] states = RobotInfo.SwerveInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        setModuleStates(states);
     }
 
-    public double getHeading(){
-        return navx.getHeading();
+
+    public void setModuleStates(SwerveModuleState[] states) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, 5.0);
+        swerveModules[0].setDesiredState(states[0]);
+        swerveModules[1].setDesiredState(states[1]);
+        swerveModules[2].setDesiredState(states[2]);
+        swerveModules[3].setDesiredState(states[3]);
     }
 
-    public SwerveModulePosition[] getPositions() {
-        return new SwerveModulePosition[] {
-                getSwerveModule("FL").getPosition(),
-                getSwerveModule("FR").getPosition(),
-                getSwerveModule("BL").getPosition(),
-                getSwerveModule("BR").getPosition(),
+
+    @Override
+    public Rotation2d getRotation2d() {
+        return navX.getRotation2d();
+    }
+
+    @Override
+    public void setMovement(ChassisSpeeds chassisSpeeds) {
+        ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, navX.getRotation2d());
+        drive(robotRelative);
+    }
+
+    @Override
+    public void setRawMovement(ChassisSpeeds chassisSpeeds) {
+        drive(chassisSpeeds);
+    }
+
+    public void stop() {
+        swerveModules[0].stop();
+        swerveModules[1].stop();
+        swerveModules[2].stop();
+        swerveModules[3].stop();
+    }
+
+
+    public void lock() {
+        swerveModules[0].setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));
+        swerveModules[1].setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45)));
+        swerveModules[2].setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45)));
+        swerveModules[3].setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));
+    }
+
+
+    public SwerveModulePosition[] getPositions(boolean refresh) {
+        return new SwerveModulePosition[]{
+                swerveModules[0].getPosition(refresh),
+                swerveModules[1].getPosition(refresh),
+                swerveModules[2].getPosition(refresh),
+                swerveModules[3].getPosition(refresh)
         };
     }
 }

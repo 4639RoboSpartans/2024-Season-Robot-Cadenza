@@ -12,6 +12,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
+import frc.robot.util.AimUtil;
 import math.Averager;
 
 import static frc.robot.constants.RobotInfo.ShooterInfo;
@@ -61,7 +62,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     private double getTargetSpeed() {
         return switch (shootingMode) {
-            case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().speed();
+            case AUTO_SPEAKER -> AimUtil.getShooterSetpoint().speed();
             case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
             case AMP -> SHOOTER_AMP_SETPOINT.speed();
             case TRAP -> SHOOTER_TRAP_SETPOINT.speed();

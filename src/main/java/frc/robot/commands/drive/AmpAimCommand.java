@@ -24,16 +24,8 @@ public class AmpAimCommand extends Command {
 
     @Override
     public void execute() {
-        double forwardsCorrection = (LimeLight.getZDistance() + 0.8) * 0.25;
-        double sidewaysCorrection = -(LimeLight.getXDistance()) * 0.25;
-        double rotateSpeed = Math.tanh(LimeLight.getYRotation() * 0.08) * 0.1;
-
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
-                forwardsCorrection,
-                sidewaysCorrection,
-                rotateSpeed
-        );
-        swerveDriveSubsystem.setRawMovement(chassisSpeeds);
+        AimSubsystem.driveToAmp();
+        swerveDriveSubsystem.setMovement(AimSubsystem.getRobotRelative(swerveDriveSubsystem.getPose()));
     }
 
     @Override

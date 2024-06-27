@@ -7,7 +7,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -32,7 +31,6 @@ import frc.robot.oi.OI;
 import frc.robot.oi.OI.Buttons;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimInterface;
 import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
@@ -63,7 +61,7 @@ public class RobotContainer {
     
 
     public RobotContainer() {
-        oi = new OI();
+        oi = SubsystemManager.getOI();
         navX = SubsystemManager.getNavX();
         aimSubsystem = SubsystemManager.getAimSubsystem();
         ir = SubsystemManager.getIRSensor();
