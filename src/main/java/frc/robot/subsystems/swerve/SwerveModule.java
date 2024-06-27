@@ -78,6 +78,12 @@ public class SwerveModule {
         signals[1] = driveVelocity;
         signals[2] = anglePosition;
         signals[3] = angleVelocity;
+
+        BaseStatusSignal.setUpdateFrequencyForAll(50.0,
+                signals[0],
+                signals[1],
+                signals[2],
+                signals[3]);
     }
 
     public void setDesiredState(SwerveModuleState desiredState){
@@ -166,14 +172,7 @@ public class SwerveModule {
      * SwerveModulePosition is an object which contains the modules position and modules angle
      * @return The current position of the module
      */
-    public SwerveModulePosition getPosition(boolean refresh) {
-        if(refresh) {
-            drivePosition.refresh();
-            driveVelocity.refresh();
-            anglePosition.refresh();
-            angleVelocity.refresh();
-        }
-
+    public SwerveModulePosition getPosition() {
         double driveRotations = BaseStatusSignal.getLatencyCompensatedValue(drivePosition, driveVelocity);
         double angleRotations = BaseStatusSignal.getLatencyCompensatedValue(anglePosition, angleVelocity);
 
@@ -185,13 +184,8 @@ public class SwerveModule {
         return internalState;
     }
 
-    public SwerveModuleState getState(boolean refresh) {
-        if(refresh) {
-            driveVelocity.refresh();
-            anglePosition.refresh();
-        }
-
-        return new SwerveModuleState(driveVelocity.getValue(), Rotation2d.fromRotations(anglePosition.getValue()));
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(driveVelocity.getValue() / 20.52, Rotation2d.fromRotations(anglePosition.getValue()));
     }
 
     public BaseStatusSignal[] getSignals() {

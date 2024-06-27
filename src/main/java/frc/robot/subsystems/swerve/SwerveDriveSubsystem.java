@@ -142,19 +142,19 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
     public SwerveModulePosition[] getPositions(boolean refresh) {
         return new SwerveModulePosition[]{
-                swerveModules[0].getPosition(refresh),
-                swerveModules[1].getPosition(refresh),
-                swerveModules[2].getPosition(refresh),
-                swerveModules[3].getPosition(refresh)
+                swerveModules[0].getPosition(),
+                swerveModules[1].getPosition(),
+                swerveModules[2].getPosition(),
+                swerveModules[3].getPosition()
         };
     }
 
     public SwerveModuleState[] getStates() {
         return new SwerveModuleState[] {
-                swerveModules[0].getState(true),
-                swerveModules[1].getState(true),
-                swerveModules[2].getState(true),
-                swerveModules[3].getState(true)
+                swerveModules[0].getState(),
+                swerveModules[1].getState(),
+                swerveModules[2].getState(),
+                swerveModules[3].getState()
         };
     }
 }
