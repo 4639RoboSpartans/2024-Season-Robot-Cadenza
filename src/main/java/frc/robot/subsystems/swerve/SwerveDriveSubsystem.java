@@ -6,6 +6,10 @@ package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -50,6 +54,21 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             signals[i * 4 + 2] = tempSignals[2];
             signals[i * 4 + 3] = tempSignals[3];
         }
+        AutoBuilder.configureHolonomic(
+                this::getPose,
+                this::resetPose,
+                () -> RobotInfo.SwerveInfo.SWERVE_DRIVE_KINEMATICS.toChassisSpeeds(getStates()),
+                this::setMovement,
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(14, 0, 0),
+                        new PIDConstants(12, 0, 0),
+                        5,
+                        14.14,
+                        new ReplanningConfig()),
+                () ->
+                        DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
+                this);
     }
 
     @Override
@@ -74,11 +93,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         poseEstimator.resetPosition(navX.getRotation2d(), getPositions(true), pose);
     }
 
-    /**
-     * Main controlling method for driving swerve based on desired speed of drivetrian
-     *
-     * @param chassisSpeeds Desired speed of drivetrain
-     */
     public void drive(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] states = RobotInfo.SwerveInfo.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(states);
@@ -132,6 +146,15 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
                 swerveModules[1].getPosition(refresh),
                 swerveModules[2].getPosition(refresh),
                 swerveModules[3].getPosition(refresh)
+        };
+    }
+
+    public SwerveModuleState[] getStates() {
+        return new SwerveModuleState[] {
+                swerveModules[0].getState(true),
+                swerveModules[1].getState(true),
+                swerveModules[2].getState(true),
+                swerveModules[3].getState(true)
         };
     }
 }

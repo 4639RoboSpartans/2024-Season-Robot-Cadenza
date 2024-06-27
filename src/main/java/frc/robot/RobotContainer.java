@@ -105,8 +105,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
         //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
-        NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem,aimSubsystem, RobotInfo.AimInfo.AIM_TIME));
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
+        NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
         NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter, RobotInfo.AimInfo.AIM_TIME));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper, ledStrip));
@@ -123,7 +123,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(
-                swerveDriveSubsystem, aimSubsystem, oi
+                swerveDriveSubsystem, oi
         ));
 
         // TODO: extract to named class
@@ -158,7 +158,7 @@ public class RobotContainer {
 
         oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
 
-        oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem, aimSubsystem));
+        oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem));
 
 
 

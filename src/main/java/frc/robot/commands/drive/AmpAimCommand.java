@@ -9,12 +9,10 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 public class AmpAimCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
-    private final AimSubsystem aimSubsystem;
 
-    public AmpAimCommand(ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem) {
+    public AmpAimCommand(ISwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.aimSubsystem = aimSubsystem;
-        addRequirements(swerveDriveSubsystem, aimSubsystem);
+        addRequirements(swerveDriveSubsystem);
     }
 
     @Override
