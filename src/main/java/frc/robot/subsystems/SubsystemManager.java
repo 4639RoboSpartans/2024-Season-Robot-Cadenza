@@ -83,11 +83,11 @@ public class SubsystemManager {
         return swerveDrive;
     }
 
-    public static IShooterPivotSubsystem getShooterPivot(IShooterSubsystem shooter) {
+    public static IShooterPivotSubsystem getShooterPivot() {
         if(shooterPivot == null) {
             shooterPivot = switch(currentRobot){
                 case ZEUS -> new DummyShooterPivotSubsystem();
-                case SIREN -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
+                case SIREN -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, getShooter());
             };
         }
         return shooterPivot;
