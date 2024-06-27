@@ -20,10 +20,12 @@ import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.swerve.module.Module;
+import frc.robot.subsystems.swerve.module.ModuleIOTalonFX;
 
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
 
-    private final SwerveModule
+    private final Module
             moduleFrontLeft,
             moduleFrontRight,
             moduleBackLeft,
@@ -40,14 +42,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
     public SwerveDriveSubsystem() {
         navx = SubsystemManager.getNavX();
 
-        moduleFrontLeft = new SwerveModule(IDs.MODULE_FRONT_LEFT);
-        moduleFrontRight = new SwerveModule(IDs.MODULE_FRONT_RIGHT);
-        moduleBackLeft = new SwerveModule(IDs.MODULE_BACK_LEFT);
-        moduleBackRight = new SwerveModule(IDs.MODULE_BACK_RIGHT);
+        moduleFrontLeft = new Module(new ModuleIOTalonFX(0), 0);
+        moduleFrontRight = new Module(new ModuleIOTalonFX(1), 1);
+        moduleBackLeft = new Module(new ModuleIOTalonFX(2), 2);
+        moduleBackRight = new Module(new ModuleIOTalonFX(3), 3);
         poseEstimator = new SwerveDrivePoseEstimator(SwerveInfo.SWERVE_DRIVE_KINEMATICS, getRotation2d(), getPositions(), new Pose2d());
         this.chassisSpeeds = new ChassisSpeeds(0, 0, 0);
-
-        setBrakeMode();
 
         AutoBuilder.configureHolonomic(
                 this::getPose,
@@ -66,20 +66,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         );
 
         resetOdometry(new Pose2d());
-    }
-
-    public void useTeleopCurrentLimits() {
-        moduleFrontLeft.useTeleopCurrentLimits();
-        moduleFrontRight.useTeleopCurrentLimits();
-        moduleBackLeft.useTeleopCurrentLimits();
-        moduleBackRight.useTeleopCurrentLimits();
-    }
-
-    public void useAutonCurrentLimits() {
-        moduleFrontLeft.useAutonCurrentLimits();
-        moduleFrontRight.useAutonCurrentLimits();
-        moduleBackLeft.useAutonCurrentLimits();
-        moduleBackRight.useAutonCurrentLimits();
     }
 
     public Pose2d getPose() {
@@ -117,10 +103,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
             SwerveModuleState stateBackLeft,
             SwerveModuleState stateBackRight
     ) {
-        moduleFrontLeft.setState(stateFrontLeft);
-        moduleFrontRight.setState(stateFrontRight);
-        moduleBackLeft.setState(stateBackLeft);
-        moduleBackRight.setState(stateBackRight);
+        moduleFrontLeft.runSetpoint(stateFrontLeft);
+        moduleFrontRight.runSetpoint(stateFrontRight);
+        moduleBackLeft.runSetpoint(stateBackLeft);
+        moduleBackRight.runSetpoint(stateBackRight);
     }
 
     public void stop() {
@@ -143,20 +129,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         }
     }
 
-    public void setBrakeMode() {
-        moduleFrontLeft.setBrakeMode();
-        moduleFrontRight.setBrakeMode();
-        moduleBackLeft.setBrakeMode();
-        moduleBackRight.setBrakeMode();
-    }
-
-    public void setCoastMode() {
-        moduleFrontLeft.setCoastMode();
-        moduleFrontRight.setCoastMode();
-        moduleBackLeft.setCoastMode();
-        moduleBackRight.setCoastMode();
-    }
-
     public void resetOdometry(Pose2d pose) {
         resetPose(pose);
     }
@@ -165,7 +137,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
         poseEstimator.resetPosition(navx.getRotation2d(), getPositions(), pose);
     }
 
-    public SwerveModule getSwerveModule(String module) {
+    public Module getSwerveModule(String module) {
         return switch (module) {
             case "FL" -> moduleFrontLeft;
             case "BL" -> moduleBackLeft;
