@@ -4,7 +4,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Controls.DriverControls;
-import frc.robot.constants.RobotInfo;
 import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
@@ -36,8 +35,8 @@ public class TeleopSwerveDriveCommand extends Command {
         double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
-        swerveDriveSubsystem.setMovement(chassisSpeeds);
-        SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
+        swerveDriveSubsystem.setFieldCentricMovement(chassisSpeeds);
+        // SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
     }
 
     private double getRotationSpeed(double rotationMultiplier) {

@@ -42,7 +42,7 @@ public class NavX extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putString("heading", "%.2fdeg".formatted(getRotation2d().getDegrees()));
-        SmartDashboard.putString("matchTime", "%d".formatted((int) Timer.getMatchTime()));
+        // SmartDashboard.putString("heading", "%.2fdeg".formatted(getRotation2d().getDegrees()));
+        // SmartDashboard.putString("matchTime", "%d".formatted((int) Timer.getMatchTime()));
     }
 }

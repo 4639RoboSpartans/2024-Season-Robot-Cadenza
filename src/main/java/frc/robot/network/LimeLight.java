@@ -7,15 +7,15 @@ public class LimeLight {
     private LimeLight() {}
 
     public static void writeValuesToSmartDashboard() {
-        SmartDashboard.putNumber("AprilTag: x distance", getXDistance());
-        SmartDashboard.putNumber("AprilTag: y distance", getYDistance());
-        SmartDashboard.putNumber("AprilTag: z distance", getZDistance());
-        SmartDashboard.putNumber("AprilTag: x rotation", getXRotation());
-        SmartDashboard.putNumber("AprilTag: y rotation", getYRotation());
-        SmartDashboard.putNumber("AprilTag: z rotation", getZRotation());
+        // SmartDashboard.putNumber("AprilTag: x distance", getXDistance());
+        // SmartDashboard.putNumber("AprilTag: y distance", getYDistance());
+        // SmartDashboard.putNumber("AprilTag: z distance", getZDistance());
+        // SmartDashboard.putNumber("AprilTag: x rotation", getXRotation());
+        // SmartDashboard.putNumber("AprilTag: y rotation", getYRotation());
+        // SmartDashboard.putNumber("AprilTag: z rotation", getZRotation());
 
-        SmartDashboard.putNumber("AprilTag: tx", Network.getTable("limelight").getDouble("tx"));
-        SmartDashboard.putNumber("AprilTag: ty", Network.getTable("limelight").getDouble("ty"));
+        // SmartDashboard.putNumber("AprilTag: tx", Network.getTable("limelight").getDouble("tx"));
+        // SmartDashboard.putNumber("AprilTag: ty", Network.getTable("limelight").getDouble("ty"));
     }
 
     private static double getOrNaN(double[] arr, int idx){

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.constants.IDs;
+import frc.robot.generated.TunerConstants;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
 import frc.robot.led.LEDStrip;
@@ -22,7 +23,6 @@ import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
-import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 import static frc.robot.constants.Constants.currentRobot;
 
@@ -69,7 +69,7 @@ public class SubsystemManager {
 
     public static ISwerveDriveSubsystem getSwerveDrive() {
         if(swerveDrive == null) {
-            swerveDrive = new SwerveDriveSubsystem();
+            swerveDrive = TunerConstants.DriveTrain;
         }
         return swerveDrive;
     }
@@ -108,12 +108,12 @@ public class SubsystemManager {
         if(intake == null) {
             intake = switch(currentRobot){
                 case ZEUS -> new DummyIntakeSubsystem();
-                case SIREN -> new IntakeSubsystem(
-                    IDs.INTAKE_PIVOT_MOTOR_LEFT,
-                    IDs.INTAKE_PIVOT_MOTOR_RIGHT,
-                    IDs.INTAKE_MOTOR,
-                    IDs.INTAKE_ENCODER_DIO_PORT
-                );
+                case SIREN -> new DummyIntakeSubsystem();//new IntakeSubsystem(
+//                    IDs.INTAKE_PIVOT_MOTOR_LEFT,
+//                    IDs.INTAKE_PIVOT_MOTOR_RIGHT,
+//                    IDs.INTAKE_MOTOR,
+//                    IDs.INTAKE_ENCODER_DIO_PORT
+//                );
                 // case SIREN -> new DummyIntakeSubsystem();
             };
         };
@@ -124,7 +124,7 @@ public class SubsystemManager {
         if(hopper == null) {
             hopper = switch(currentRobot){
                 case ZEUS -> new DummyHopperSubsystem();
-                case SIREN -> new HopperSubsystem(IDs.HOPPER_MOTOR);
+                case SIREN -> new DummyHopperSubsystem();//new HopperSubsystem(IDs.HOPPER_MOTOR);
             };
         }
         return hopper;

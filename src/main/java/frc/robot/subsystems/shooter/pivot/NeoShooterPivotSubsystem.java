@@ -48,31 +48,29 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
 
     @Override
     public void periodic() {
-        if(!isUsingPID) return;
+//        if(!isUsingPID) return;
 
-        double targetAngle = switch (shooter.getShootingMode()) {
-            case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().angle();
-            case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
-            case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
-            case TRAP -> ShooterInfo.SHOOTER_TRAP_SETPOINT.angle();
-            case IDLE -> ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT;
-            case LAUNCH -> ShooterInfo.SHOOTER_LAUNCH_SETPOINT.angle();
-            case INTAKE -> ShooterInfo.SHOOTER_INTAKE_SETPOINT.angle();
-        } + ShooterInfo.AngleOffset;
-
-        aimPID.setSetpoint(targetAngle);
-
-        double currentAngle = getCurrentAngle();
-        double pidOutput = aimPID.calculate(currentAngle);
-
-        aimMotorLeft.set(pidOutput);
-
-        SmartDashboard.putNumber("CurrentShooterAngle", currentAngle);
-        SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
-        SmartDashboard.putNumber("AimPIDOutput", pidOutput);
+//        double targetAngle = switch (shooter.getShootingMode()) {
+//            case AUTO_SPEAKER -> aimSubsystem.getShooterSetpoint().angle();
+//            case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
+//            case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
+//            case TRAP -> ShooterInfo.SHOOTER_TRAP_SETPOINT.angle();
+//            case IDLE -> ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT;
+//            case LAUNCH -> ShooterInfo.SHOOTER_LAUNCH_SETPOINT.angle();
+//            case INTAKE -> ShooterInfo.SHOOTER_INTAKE_SETPOINT.angle();
+//        } + ShooterInfo.AngleOffset;
+//
+//        aimPID.setSetpoint(targetAngle);
+//
+//        double currentAngle = getCurrentAngle();
+//        double pidOutput = aimPID.calculate(currentAngle);
+//
+//        aimMotorLeft.set(pidOutput);
+        // SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
+        // SmartDashboard.putNumber("AimPIDOutput", pidOutput);
     }
 
-    private double getCurrentAngle() {
+    public double getCurrentAngle() {
         return encoder.getAbsolutePosition();
     }
 

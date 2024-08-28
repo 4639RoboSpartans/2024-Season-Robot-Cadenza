@@ -11,7 +11,7 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
-    public void setMovement(ChassisSpeeds chassisSpeeds) {
+    public void setFieldCentricMovement(ChassisSpeeds chassisSpeeds) {
 
     }
 
@@ -26,32 +26,7 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
-    public void periodic() {
+    public void reset() {
 
-    }
-
-    @Override
-    public void setBrakeMode() {
-
-    }
-
-    @Override
-    public void setCoastMode() {
-
-    }
-
-    @Override
-    public void resetOdometry(Pose2d pose) {
-
-    }
-
-    @Override
-    public void resetPose(Pose2d pose) {
-
-    }
-
-    @Override
-    public SwerveModule getSwerveModule(String module){
-        return null;
     }
 }

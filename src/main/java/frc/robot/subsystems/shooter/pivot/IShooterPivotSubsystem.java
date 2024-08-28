@@ -6,4 +6,6 @@ public interface IShooterPivotSubsystem extends Subsystem {
     void stop();
 
     boolean isAtSetPoint();
+
+    double getCurrentAngle();
 }

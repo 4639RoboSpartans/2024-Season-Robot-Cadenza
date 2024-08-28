@@ -49,8 +49,8 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
     public ShooterSetpoint getShooterSetpoint() {
         ShooterSetpoint result = ShooterMeasurementLERPer.get(x.getValue(), z.getValue());
 
-        SmartDashboard.putNumber("Shooter Angle: ", result.angle());
-        SmartDashboard.putNumber("Shooter Speed: ", result.speed());
+        // SmartDashboard.putNumber("Shooter Angle: ", result.angle());
+        // SmartDashboard.putNumber("Shooter Speed: ", result.speed());
         
         return result;
     }
@@ -64,18 +64,18 @@ public class AimSubsystem extends SubsystemBase implements AimInterface {
         double tangent = -Math.atan((x + LimelightOffsetX) / (z  - LimelightOffsetZ));
         if (angle == 0){
             tangent = 0;
-            SmartDashboard.putBoolean("sees limelight", false);
+            // SmartDashboard.putBoolean("sees limelight", false);
         }
         else 
-            SmartDashboard.putBoolean("sees limelight", true);
-        SmartDashboard.putNumber("atan", tangent);
-        SmartDashboard.putNumber("x", x);
-        SmartDashboard.putNumber("z", z);
-        SmartDashboard.putNumber("angle", angle);
-        SmartDashboard.putNumber("degrees", Math.toDegrees(angle));
+            // SmartDashboard.putBoolean("sees limelight", true);
+        // SmartDashboard.putNumber("atan", tangent);
+        // SmartDashboard.putNumber("x", x);
+        // SmartDashboard.putNumber("z", z);
+        // SmartDashboard.putNumber("angle", angle);
+        // SmartDashboard.putNumber("degrees", Math.toDegrees(angle));
 
-        double distance = Math.hypot(x, z);
-        SmartDashboard.putNumber("distance ", distance);
+//        double distance = Math.hypot(x, z);
+        // SmartDashboard.putNumber("distance ", distance);
 
         this.angle.addMeasurement(tangent);
 

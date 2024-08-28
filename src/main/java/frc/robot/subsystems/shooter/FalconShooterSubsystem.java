@@ -89,9 +89,9 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     @Override
     public void periodic() {
-        SmartDashboard.putString("shooting mode", shootingMode.toString());
-        SmartDashboard.putNumber("shooter speed", getCurrentSpeed());
-        SmartDashboard.putNumber("shooter target speed", getTargetSpeed());
+        // SmartDashboard.putString("shooting mode", shootingMode.toString());
+        // SmartDashboard.putNumber("shooter speed", getCurrentSpeed());
+        // SmartDashboard.putNumber("shooter target speed", getTargetSpeed());
 
         switch (shootingMode) {
             case AUTO_SPEAKER, SPEAKER, AMP, TRAP, LAUNCH -> applyBangBangControl(getTargetSpeed());

@@ -41,9 +41,9 @@ public class IRSensor extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putBoolean("IR sensor detects note", !rawSensorIsClear());
-        SmartDashboard.putBoolean("IR sensor active", isActive());
-        SmartDashboard.putBoolean("IR sensor has note", hasNote());
+//        SmartDashboard.putBoolean("IR sensor detects note", !rawSensorIsClear());
+//        SmartDashboard.putBoolean("IR sensor active", isActive());
+//        SmartDashboard.putBoolean("IR sensor has note", hasNote());
 
         noteDetection.addMeasurement(rawSensorIsClear() ? 0 : 1);
     }

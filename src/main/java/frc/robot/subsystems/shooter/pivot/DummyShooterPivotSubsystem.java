@@ -9,4 +9,7 @@ public class DummyShooterPivotSubsystem extends SubsystemBase implements IShoote
 
     public boolean isAtSetPoint() { return false; }
 
+    public double getCurrentAngle() {
+        return 0;
+    }
 }

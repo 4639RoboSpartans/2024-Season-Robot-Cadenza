@@ -10,7 +10,7 @@ public class ShooterMeasurementLERPer {
     public static ShooterSetpoint get(double dx, double dz) {
         double distance = Math.hypot(dx, dz);
 
-        SmartDashboard.putNumber("Limelight distance: ", distance);
+        // SmartDashboard.putNumber("Limelight distance: ", distance);
 
         ShooterSetpointMeasurement
                 a = ShooterInfo.measurements[0],

@@ -88,7 +88,7 @@ public class RobotContainer {
         autonDelay.addOption("9s", 9);
         autonDelay.addOption("10s", 10);
         autonDelay.addOption("11s", 11);
-        SmartDashboard.putData("Auton Delay", autonDelay);
+//        SmartDashboard.putData("Auton Delay", autonDelay);
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
@@ -96,7 +96,7 @@ public class RobotContainer {
         alliance = new SendableChooser<>();
         alliance.addOption("Red", true);
         alliance.setDefaultOption("Blue", false);
-        SmartDashboard.putData("Alliance", alliance);
+         SmartDashboard.putData("Alliance", alliance);
 
         configureBindings();
     }
@@ -171,12 +171,7 @@ public class RobotContainer {
                 }
             }
             return true;
-        }).whileTrue(new Command() {
-            @Override
-            public void initialize() {
-                navX.reset();
-            }
-        });
+        }).whileTrue(new RunCommand(swerveDriveSubsystem::reset));
     }
 
     public Command getAutonomousCommand() {
