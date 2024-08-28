@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-
 import java.util.function.DoubleSupplier;
 
 public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
@@ -52,14 +51,10 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
   }
 
   @Override
-  public void setDesiredPose(Pose2d pose) {
-
-  }
+  public void setDesiredPose(Pose2d pose) {}
 
   @Override
-  public void setDesiredTranslation(Translation2d translation) {
-
-  }
+  public void setDesiredTranslation(Translation2d translation) {}
 
   @Override
   public Command ampAimCommand() {
@@ -70,7 +65,6 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
   public Command speakerAimCommand(DoubleSupplier forwardsSpeeds, DoubleSupplier sidewaysSpeeds) {
     return null;
   }
-
 
   @Override
   public Rotation2d getRotation2d() {

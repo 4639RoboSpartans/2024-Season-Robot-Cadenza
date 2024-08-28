@@ -1,12 +1,11 @@
 package frc.robot.util;
 
-import static frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpoint;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.ShooterSetpoint;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 

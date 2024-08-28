@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.oi.OI.Axes;
+import frc.robot.oi.OI.Buttons;
 import java.util.function.BooleanSupplier;
 
 public class Controller {
@@ -30,7 +32,7 @@ public class Controller {
     }
 
     BooleanSupplier[] special_buttons = {
-      () -> getAxis(OI.Axes.LEFT_TRIGGER) > 0.5, () -> getAxis(OI.Axes.RIGHT_TRIGGER) > 0.5,
+      () -> getAxis(Axes.LEFT_TRIGGER) > 0.5, () -> getAxis(Axes.RIGHT_TRIGGER) > 0.5,
     };
     for (int i = 0; i < NUM_SPECIAL_BUTTONS; i++) {
       buttons[i + NUM_BUTTONS + NUM_POV_BUTTONS] = new Trigger(special_buttons[i]);
@@ -56,13 +58,13 @@ public class Controller {
     return (value / Math.abs(value)) * ((Math.abs(value) - DEADZONE_VALUE) / (1 - DEADZONE_VALUE));
   }
 
-  public double getAxis(OI.Axes axis) {
+  public double getAxis(Axes axis) {
     double rawAxisValue = stick.getRawAxis(axis.getID());
     double multiplier = axis.shouldInvert() ? -1 : 1;
     return deadzone(multiplier * rawAxisValue);
   }
 
-  public Trigger getButton(OI.Buttons button) {
+  public Trigger getButton(Buttons button) {
     return buttons[button.getID()];
   }
 }

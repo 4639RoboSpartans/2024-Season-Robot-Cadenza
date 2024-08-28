@@ -43,10 +43,9 @@ import frc.robot.constants.RobotInfo.*;
 import frc.robot.util.AimUtil;
 import frc.robot.util.DriverStationUtil;
 import frc.robot.util.LocalADStarAK;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
-import java.util.function.DoubleSupplier;
 
 public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveSubsystem {
   private static final double MAX_LINEAR_SPEED = Units.feetToMeters(10.5);
@@ -196,7 +195,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   public void setMovement(ChassisSpeeds speeds) {
     SmartDashboard.putNumber("gyro heading", gyroInputs.yawPosition.getDegrees());
     // Calculate module setpoints
-    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroInputs.yawPosition);
+    ChassisSpeeds chassisSpeeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroInputs.yawPosition);
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, MAX_LINEAR_SPEED);
@@ -298,34 +298,31 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   public void sendSwerve() {
     SmartDashboard.putData(
         "Swerve Drive",
-            builder -> {
-              builder.setSmartDashboardType("SwerveDrive");
+        builder -> {
+          builder.setSmartDashboardType("SwerveDrive");
 
-              builder.addDoubleProperty(
-                  "Front Left Angle", () -> Math.toRadians(modules[0].getAngle().getDegrees()), null);
-              builder.addDoubleProperty(
-                  "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
+          builder.addDoubleProperty(
+              "Front Left Angle", () -> Math.toRadians(modules[0].getAngle().getDegrees()), null);
+          builder.addDoubleProperty(
+              "Front Left Velocity", () -> modules[0].getVelocityMetersPerSec(), null);
 
-              builder.addDoubleProperty(
-                  "Front Right Angle",
-                  () -> Math.toRadians(modules[1].getAngle().getDegrees()),
-                  null);
-              builder.addDoubleProperty(
-                  "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
+          builder.addDoubleProperty(
+              "Front Right Angle", () -> Math.toRadians(modules[1].getAngle().getDegrees()), null);
+          builder.addDoubleProperty(
+              "Front Right Velocity", () -> modules[1].getVelocityMetersPerSec(), null);
 
-              builder.addDoubleProperty(
-                  "Back Left Angle", () -> Math.toRadians(modules[2].getAngle().getDegrees()), null);
-              builder.addDoubleProperty(
-                  "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
+          builder.addDoubleProperty(
+              "Back Left Angle", () -> Math.toRadians(modules[2].getAngle().getDegrees()), null);
+          builder.addDoubleProperty(
+              "Back Left Velocity", () -> modules[2].getVelocityMetersPerSec(), null);
 
-              builder.addDoubleProperty(
-                  "Back Right Angle", () -> Math.toRadians(modules[3].getAngle().getDegrees()), null);
-              builder.addDoubleProperty(
-                  "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
+          builder.addDoubleProperty(
+              "Back Right Angle", () -> Math.toRadians(modules[3].getAngle().getDegrees()), null);
+          builder.addDoubleProperty(
+              "Back Right Velocity", () -> modules[3].getVelocityMetersPerSec(), null);
 
-              builder.addDoubleProperty(
-                  "Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
-            });
+          builder.addDoubleProperty("Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
+        });
   }
 
   @Override
@@ -340,21 +337,24 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
 
   @Override
   public double getRawRotationSpeed() {
-    return -rotationController.calculate(desiredPose.getRotation().minus(getRotation2d()).getDegrees())
+    return -rotationController.calculate(
+            desiredPose.getRotation().minus(getRotation2d()).getDegrees())
         * SwerveInfo.TELEOP_AIM_SPEED;
   }
 
   @Override
-  public double getAimRotationSpeed(double forwardsSpeed, double sidewaysSpeed){
+  public double getAimRotationSpeed(double forwardsSpeed, double sidewaysSpeed) {
     Translation2d speakerTranslation = AimUtil.getSpeakerVector();
-    Rotation2d rawRotation = Rotation2d.fromRadians(Math.atan(speakerTranslation.getY() / speakerTranslation.getX())).minus(getRotation2d());
+    Rotation2d rawRotation =
+        Rotation2d.fromRadians(Math.atan(speakerTranslation.getY() / speakerTranslation.getX()))
+            .minus(getRotation2d());
     double totalSpeed = Math.hypot(forwardsSpeed, sidewaysSpeed);
     double speakerSidewaysSpeed = totalSpeed * Math.sin(rawRotation.getRadians());
     return getRawRotationSpeed() * Math.abs(speakerSidewaysSpeed) * SwerveInfo.AimTranslationScalar;
   }
 
   @Override
-  public double getRawXSpeed(){
+  public double getRawXSpeed() {
     double x = desiredPose.getX();
     double forwardsInput;
     if (Math.abs(x) < SwerveInfo.AimTranslationDeadzone) {
@@ -369,7 +369,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   }
 
   @Override
-  public double getRawYSpeed(){
+  public double getRawYSpeed() {
     double y = desiredPose.getY();
     if (Math.abs(y) < SwerveInfo.AimTranslationDeadzone) {
       y = 0;
@@ -384,41 +384,44 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ISwerveDriveS
   }
 
   @Override
-  public void setDesiredPose(Pose2d pose){
+  public void setDesiredPose(Pose2d pose) {
     desiredPose = pose;
   }
 
   @Override
-  public void setDesiredTranslation(Translation2d translation){
+  public void setDesiredTranslation(Translation2d translation) {
     desiredPose = new Pose2d(translation, getRotation2d());
   }
 
   @Override
-  public Command ampAimCommand(){
-    return new RunCommand(() -> {
-      if (DriverStationUtil.isRed()) {
-        setDesiredTranslation(FieldConstants.ampPose_red);
-        setDesiredRotation(Rotation2d.fromDegrees(90));
-      } else {
-        setDesiredTranslation(FieldConstants.ampPose_blue);
-        setDesiredRotation(Rotation2d.fromDegrees(-90));
-      }
-      setMovement(new ChassisSpeeds(getRawXSpeed(), getRawYSpeed(), getRawRotationSpeed()));
-    }, this);
+  public Command ampAimCommand() {
+    return new RunCommand(
+        () -> {
+          if (DriverStationUtil.isRed()) {
+            setDesiredTranslation(FieldConstants.ampPose_red);
+            setDesiredRotation(Rotation2d.fromDegrees(90));
+          } else {
+            setDesiredTranslation(FieldConstants.ampPose_blue);
+            setDesiredRotation(Rotation2d.fromDegrees(-90));
+          }
+          setMovement(new ChassisSpeeds(getRawXSpeed(), getRawYSpeed(), getRawRotationSpeed()));
+        },
+        this);
   }
 
   @Override
-  public Command speakerAimCommand(DoubleSupplier forwardsSpeeds, DoubleSupplier sidewaysSpeeds){
-    return new RunCommand(() -> {
-      setDesiredRotation(AimUtil.getSpeakerRotation(
-              forwardsSpeeds.getAsDouble(),
-              sidewaysSpeeds.getAsDouble()));
-      setMovement(new ChassisSpeeds(
-              forwardsSpeeds.getAsDouble(),
-              sidewaysSpeeds.getAsDouble(),
-              getAimRotationSpeed(
-                      forwardsSpeeds.getAsDouble(),
-                      sidewaysSpeeds.getAsDouble())));
-    }, this);
+  public Command speakerAimCommand(DoubleSupplier forwardsSpeeds, DoubleSupplier sidewaysSpeeds) {
+    return new RunCommand(
+        () -> {
+          setDesiredRotation(
+              AimUtil.getSpeakerRotation(
+                  forwardsSpeeds.getAsDouble(), sidewaysSpeeds.getAsDouble()));
+          setMovement(
+              new ChassisSpeeds(
+                  forwardsSpeeds.getAsDouble(),
+                  sidewaysSpeeds.getAsDouble(),
+                  getAimRotationSpeed(forwardsSpeeds.getAsDouble(), sidewaysSpeeds.getAsDouble())));
+        },
+        this);
   }
 }
