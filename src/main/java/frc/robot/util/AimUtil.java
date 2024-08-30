@@ -35,6 +35,22 @@ public class AimUtil {
         return Math.hypot(trans.getX(), trans.getY()) <= 9;
     }
 
+    public static boolean inShootingRange() {
+        Translation2d trans = getSpeakerVector();
+        return Math.hypot(trans.getX(), trans.getY()) <= 3;//TODO: tune this
+    }
+
+    public static boolean inShootingSector() {
+        return Math.abs(getSpeakerRotation().getDegrees()) < 45;
+    }
+
+    public static boolean aligned() {
+        Rotation2d speakerRotation = getSpeakerRotation();
+        Rotation2d heading = SubsystemManager.getSwerveDrive().getRotation2d();
+        Rotation2d diff = speakerRotation.minus(heading);
+        return Math.abs(diff.getDegrees()) < 10;//TODO: tune this
+    }
+
     public static Rotation2d getSpeakerRotation() {
         return Rotation2d.fromRadians(Math.atan(getSpeakerVector().getY() / getSpeakerVector().getX()) % (2 * Math.PI));
     }

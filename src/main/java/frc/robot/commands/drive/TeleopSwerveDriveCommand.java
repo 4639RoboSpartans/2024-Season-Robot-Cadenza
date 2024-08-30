@@ -31,8 +31,9 @@ public class TeleopSwerveDriveCommand extends Command {
 
     @Override
     public void execute() {
-        double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-        double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double rawForwardsSpeed = DriverControls.SwerveForwardAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double rawSidewaysSpeed = -DriverControls.SwerveStrafeAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double forwardsSpeed = getForwardsSpeed(rawForwardsSpeed), sidewaysSpeed = getSidewaysSpeed(rawSidewaysSpeed);
         double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
         double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
@@ -50,13 +51,27 @@ public class TeleopSwerveDriveCommand extends Command {
         SmartDashboard.putNumber("speaker y", AimUtil.getSpeakerVector().getY());
         SmartDashboard.putNumber("heading", heading.getDegrees());
         SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
-        if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
+        if(DriverControls.AimButton.getAsBoolean()) {
             rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation(0, 0).getRadians());
         }
         else {
-            rawSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED;
+            rawSpeed = -DriverControls.SwerveRotationAxis.getAsDouble() * SwerveInfo.TELOP_ROTATION_SPEED;
         }
         return rawSpeed * (1 + rotationMultiplier);
+    }
+
+    public double getForwardsSpeed(double forwardsSpeed) {
+        if (DriverControls.SOTF.getAsBoolean()) {
+            return forwardsSpeed / 2;//TODO: tune this
+        }
+        return forwardsSpeed;
+    }
+
+    public double getSidewaysSpeed(double sidewaysSpeed) {
+        if (DriverControls.SOTF.getAsBoolean()) {
+            return sidewaysSpeed / 2;//TODO: tune this
+        }
+        return sidewaysSpeed;
     }
 
     @Override

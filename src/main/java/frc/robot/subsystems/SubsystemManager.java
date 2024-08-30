@@ -5,6 +5,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
 import frc.robot.led.LEDStrip;
+import frc.robot.oi.OI;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
@@ -25,16 +26,21 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import static frc.robot.constants.Constants.currentRobot;
 
 public class SubsystemManager {
-
+    private static OI oi;
     private static LEDStrip ledStrip;
-
     private static ISwerveDriveSubsystem swerveDrive;
-
     private static IShooterSubsystem shooter;
     private static IShooterPivotSubsystem shooterPivot;
     private static IIntakeSubsystem intake;
     private static IHopperSubsystem hopper;
     private static IClimberSubsystem climber;
+
+    public static OI getOI() {
+        if (oi == null) {
+            oi = new OI();
+        }
+        return oi;
+    }
 
     public static LEDStrip getLedStrip() {
         if(ledStrip == null) {

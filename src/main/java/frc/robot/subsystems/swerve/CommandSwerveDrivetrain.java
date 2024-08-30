@@ -161,4 +161,55 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public Pose2d getPose() {
         return this.getState().Pose;
     }
+    /**
+     * Returns a command that makes the robot follow a Choreo path using the ChoreoLib library.
+     * @param pathName The name of a path located in the "deploy/choreo" directory
+     * @param resetPosition If the robot's position should be reset to the starting position of the path
+     * @return A command that makes the robot follow the path
+     */
+    public Command followChoreoPath(String pathName, boolean resetPosition) {
+        return followChoreoPath(pathName, resetPosition, null);
+    }
+
+    /**
+     * Returns a command that makes the robot follow a Choreo path using the ChoreoLib library.
+     * @param pathName The name of a path located in the "deploy/choreo" directory
+     * @param resetPosition If the robot's position should be reset to the starting position of the path
+     * @return A command that makes the robot follow the path
+     */
+    public Command followChoreoPath(String pathName, boolean resetPosition, Function<Double, Double> rotationOverride) {
+        return followChoreoPath(Choreo.getTrajectory(pathName), resetPosition, rotationOverride);
+    }
+
+    /**
+     * Returns a command that makes the robot follow a Choreo path using the ChoreoLib library.
+     * @param trajectory The Choreo trajectory to follow.
+     * @param resetPosition If the robot's position should be reset to the starting position of the path
+     * @return A command that makes the robot follow the path
+     */
+    public Command followChoreoPath(ChoreoTrajectory trajectory, boolean resetPosition, Function<Double, Double> rotationOverride) {
+        List<Command> commands = new ArrayList<>();
+
+        if (resetPosition) {
+            commands.add(runOnce(() -> {
+                seedFieldRelative(Robot.isRed() ? trajectory.getFlippedInitialPose() : trajectory.getInitialPose());
+            }));
+        }
+        commands.add(rotationOverride != null ? choreoRotationCommand(trajectory, rotationOverride) : choreoSwerveCommand(trajectory));
+        return CommandsUtil.sequence(commands);
+    }
+
+    // This is a helper method that creates a command that makes the robot follow a Choreo path
+    private Command choreoSwerveCommand(ChoreoTrajectory trajectory) {
+        return Choreo.choreoSwerveCommand(
+                trajectory,
+                this::getPose,
+                choreoX,
+                choreoY,
+                choreoRotation,
+                this::drive,
+                DriverStationUtil::isRed,
+                this
+        );
+    }
 }

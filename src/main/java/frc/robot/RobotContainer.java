@@ -114,6 +114,9 @@ public class RobotContainer {
 
     private void configureBindings() {
         Trigger inRange = new Trigger(AimUtil::inRange);
+        Trigger inShootingRange = new Trigger(AimUtil::inShootingRange);
+        Trigger aligned = new Trigger(AimUtil::aligned);
+        Trigger inShootingSector = new Trigger(AimUtil::inShootingSector);
 
         swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(
                 swerveDriveSubsystem, oi
@@ -129,35 +132,38 @@ public class RobotContainer {
             }
         }, ledStrip));
 
-        oi.driverController().getButton(DriverControls.ClimberExtendButton).whileTrue(new ExtendClimberCommand(climber));
-        oi.driverController().getButton(DriverControls.ClimberRetractButton).whileTrue(new RetractClimberCommand(climber));
-        oi.driverController().getButton(DriverControls.ClimberSwap1Button).whileTrue(new ManualClimbCommand(climber, 1, -1));
-        oi.driverController().getButton(DriverControls.ClimberSwap2Button).whileTrue(new ManualClimbCommand(climber, -1, 1));
+        DriverControls.ClimberExtendButton.whileTrue(new ExtendClimberCommand(climber));
+        DriverControls.ClimberRetractButton.whileTrue(new RetractClimberCommand(climber));
+        DriverControls.ClimberSwap1Button.whileTrue(new ManualClimbCommand(climber, 1, -1));
+        DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        oi.operatorController().getButton(OperatorControls.IntakeButton).whileTrue(new IntakeCommand(intake, hopper, ledStrip));
+        OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip));
  
-        oi.operatorController().getButton(OperatorControls.OuttakeButton).whileTrue(new OuttakeCommand(intake, hopper));
+        OperatorControls.OuttakeButton.whileTrue(new OuttakeCommand(intake, hopper));
 
-        oi.operatorController().getButton(OperatorControls.IntakeExtendButton).whileTrue(new ExtendIntakeCommand(intake));
+        OperatorControls.IntakeExtendButton.whileTrue(new ExtendIntakeCommand(intake));
 
-        oi.operatorController().getButton(OperatorControls.IntakeRetractButton).whileTrue(new RetractIntakeCommand(intake));
+        OperatorControls.IntakeRetractButton.whileTrue(new RetractIntakeCommand(intake));
 
-        oi.operatorController().getButton(OperatorControls.RunSpeakerShooterButton).whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
-        oi.operatorController().getButton(OperatorControls.RunAmpShooterButton).whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
-        oi.operatorController().getButton(OperatorControls.ManualShooterButton).whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
-        oi.operatorController().getButton(OperatorControls.RunTrapShooterButton).whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
-        oi.operatorController().getButton(OperatorControls.LaunchShooterButton).whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
-        oi.operatorController().getButton(OperatorControls.ShooterIntake).whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
+        OperatorControls.RunSpeakerShooterButton
+                .and(DriverControls.SOTF.negate())
+                .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
+        OperatorControls.RunAmpShooterButton.whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
+        OperatorControls.ManualShooterButton.whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
+        OperatorControls.RunTrapShooterButton.whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
+        OperatorControls.LaunchShooterButton.whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
+        OperatorControls.ShooterIntake.whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
 
-        oi.operatorController().getButton(OperatorControls.ToggleIR).onTrue(hopper.toggleIR());
+        OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
 
-        oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem));
+        DriverControls.AmpAlignButton.whileTrue(new AmpAimCommand(swerveDriveSubsystem));
 
-        oi.driverController().getButton(DriverControls.ResetGyroButton1).and(
-                oi.driverController().getButton(DriverControls.ResetGyroButton2)
-        ).whileTrue(new RunCommand(swerveDriveSubsystem::reset));
+        DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
+                whileTrue(new RunCommand(swerveDriveSubsystem::reset));
 
-        inRange.whileTrue(new ShooterSpinupCommand(shooter));
+        inRange.and(inShootingRange.negate()).whileTrue(new ShooterSpinupCommand(shooter));
+        inShootingRange.and(aligned).and(inShootingSector).and(DriverControls.SOTF)
+                .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
     }
 
     public Command getAutonomousCommand() {

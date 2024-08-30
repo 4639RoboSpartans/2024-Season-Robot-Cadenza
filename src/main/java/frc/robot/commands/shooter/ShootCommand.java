@@ -52,9 +52,7 @@ public class ShootCommand extends Command {
         if(shooter.isReady()) {
             ledStrip.usePattern(DisplayInfo.readyPattern);
 
-            if (!requireSeperateShootButton || RobotContainer.oi.operatorController().getButton(
-                    Controls.OperatorControls.FeedShooterButton
-            ).getAsBoolean()) {
+            if (!requireSeperateShootButton || Controls.OperatorControls.FeedShooterButton.getAsBoolean()) {
                 if (hopperReverse) {
                     hopper.runBackwards(HopperInfo.HOPPER_SPEED);
                     ;
