@@ -8,10 +8,8 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 public class ShooterSpinupCommand extends Command {
     private final IShooterSubsystem shooterSubsystem;
     private double startTime;
-    private final double time;
-    public ShooterSpinupCommand(IShooterSubsystem shooterSubsystem, double time){
+    public ShooterSpinupCommand(IShooterSubsystem shooterSubsystem){
         this.shooterSubsystem = shooterSubsystem;
-        this.time = time;
         addRequirements(shooterSubsystem);
     }
     @Override
@@ -21,6 +19,6 @@ public class ShooterSpinupCommand extends Command {
     }
     @Override
     public boolean isFinished(){
-        return Timer.getFPGATimestamp() - startTime >= time;
+        return false;
     }
 }

@@ -18,9 +18,7 @@ public final class Controls {
 
         public static final OI.Buttons AmpAlignButton = OI.Buttons.X_BUTTON;
 
-        public static final OI.Buttons[] ResetNavXButtons = {
-            OI.Buttons.A_BUTTON, Buttons.B_BUTTON
-        };
+        public static final OI.Buttons ResetGyroButton1 = Buttons.A_BUTTON, ResetGyroButton2 = Buttons.B_BUTTON;
     }
 
     public static final class OperatorControls {

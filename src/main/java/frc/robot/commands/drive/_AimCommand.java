@@ -1,18 +1,17 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.util.AimUtil;
 
 class _AimCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
-    private final AimSubsystem aimSubsystem;
 
-    public _AimCommand(ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem) {
+    public _AimCommand(ISwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.aimSubsystem = aimSubsystem;
-        addRequirements(swerveDriveSubsystem, aimSubsystem);
+        addRequirements(swerveDriveSubsystem);
     }
 
     @Override
@@ -22,9 +21,9 @@ class _AimCommand extends Command {
 
     @Override
     public void execute() {
-        double rotateSpeed = -aimSubsystem.getSwerveRotation();
+        Rotation2d rotateSpeed = AimUtil.getAmpRotation(0, 0);
 
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, rotateSpeed);
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, rotateSpeed.getRadians() / Math.PI);
         swerveDriveSubsystem.setFieldCentricMovement(chassisSpeeds);
     }
 
@@ -35,6 +34,6 @@ class _AimCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return aimSubsystem.isAtSetpoint();
+        return false;
     }
 }

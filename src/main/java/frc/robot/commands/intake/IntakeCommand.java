@@ -32,7 +32,7 @@ public class IntakeCommand extends Command {
         intake.intake();
         if (!seen){
             hopper.run(false, HopperInfo.HOPPER_SPEED);
-            if (hopper.getIR().hasNote()){
+            if (hopper.hasNote()){
                 noteTime = Timer.getFPGATimestamp();
                 seen = true;
                 intake.setExtended(ExtensionState.RETRACTED);

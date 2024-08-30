@@ -80,7 +80,7 @@ public class ShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return hopper.getIR().isActive() && hopper.getIR().rawSensorIsClear();
+        return !hopper.hasNote();
     }
 
     @Override

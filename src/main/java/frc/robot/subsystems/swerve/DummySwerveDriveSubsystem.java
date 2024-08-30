@@ -29,4 +29,9 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     public void reset() {
 
     }
+
+    @Override
+    public Pose2d getPose() {
+        return null;
+    }
 }

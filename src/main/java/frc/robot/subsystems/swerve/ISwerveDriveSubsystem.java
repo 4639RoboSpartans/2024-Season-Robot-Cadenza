@@ -13,4 +13,6 @@ public interface ISwerveDriveSubsystem extends Subsystem {
     void stop();
 
     void reset();
+
+    Pose2d getPose();
 }

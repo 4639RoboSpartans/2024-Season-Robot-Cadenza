@@ -25,13 +25,6 @@ public final class Main {
      * If you change your main Robot class (name), change the parameter type.
      */
     public static void main(String... args) {
-        try {
-            Files.find(Path.of("./home/lvuser/deploy"), 4, (p, bfa) -> true).forEach(System.out::println);
-        } catch (IOException e) {
-            System.out.println("Oops");
-            e.printStackTrace();
-        }
-
         RobotBase.startRobot(Robot::new);
     }
 }

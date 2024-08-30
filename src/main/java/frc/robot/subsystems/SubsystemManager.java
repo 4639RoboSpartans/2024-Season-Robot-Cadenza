@@ -14,23 +14,18 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.constants.Constants.currentRobot;
 
 public class SubsystemManager {
     private static NavX navX;
-    private static IRSensor irSensor;
-
-    private static IRSensor irSensor2;
 
     private static LEDStrip ledStrip;
 
@@ -38,7 +33,6 @@ public class SubsystemManager {
 
     private static IShooterSubsystem shooter;
     private static IShooterPivotSubsystem shooterPivot;
-    private static AimSubsystem aimSubsystem;
     private static IIntakeSubsystem intake;
     private static IHopperSubsystem hopper;
     private static IClimberSubsystem climber;
@@ -48,13 +42,6 @@ public class SubsystemManager {
             navX = new NavX();
         }
         return navX;
-    }
-
-    public static IRSensor getIRSensor() {
-        if(irSensor == null) {
-            irSensor = new IRSensor();
-        }
-        return irSensor;
     }
 
     public static LEDStrip getLedStrip() {
@@ -96,24 +83,18 @@ public class SubsystemManager {
         }
         return shooter;
     }
-    
-    public static AimSubsystem getAimSubsystem() {
-        if(aimSubsystem == null) {
-            aimSubsystem = new AimSubsystem();
-        }
-        return aimSubsystem;
-    }
 
     public static IIntakeSubsystem getIntake() {
         if(intake == null) {
             intake = switch(currentRobot){
                 case ZEUS -> new DummyIntakeSubsystem();
-                case SIREN -> new DummyIntakeSubsystem();//new IntakeSubsystem(
-//                    IDs.INTAKE_PIVOT_MOTOR_LEFT,
-//                    IDs.INTAKE_PIVOT_MOTOR_RIGHT,
-//                    IDs.INTAKE_MOTOR,
-//                    IDs.INTAKE_ENCODER_DIO_PORT
-//                );
+                case SIREN -> //new DummyIntakeSubsystem();
+                 new IntakeSubsystem(
+                    IDs.INTAKE_PIVOT_MOTOR_LEFT,
+                    IDs.INTAKE_PIVOT_MOTOR_RIGHT,
+                    IDs.INTAKE_MOTOR,
+                    IDs.INTAKE_ENCODER_DIO_PORT
+                );
                 // case SIREN -> new DummyIntakeSubsystem();
             };
         };
@@ -124,7 +105,8 @@ public class SubsystemManager {
         if(hopper == null) {
             hopper = switch(currentRobot){
                 case ZEUS -> new DummyHopperSubsystem();
-                case SIREN -> new DummyHopperSubsystem();//new HopperSubsystem(IDs.HOPPER_MOTOR);
+                case SIREN -> //new DummyHopperSubsystem();
+                 new HopperSubsystem(IDs.HOPPER_MOTOR);
             };
         }
         return hopper;

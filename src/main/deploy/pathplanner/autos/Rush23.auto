@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2899744510650635,
-      "y": 5.590954303741455
+      "x": 1.3436737060546875,
+      "y": 5.555154800415039
     },
-    "rotation": 2.3290650938749047e-25
+    "rotation": -7.451870920759716e-27
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "123.1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootSpeaker"
+            "pathName": "Rush23.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "123.2"
+            "pathName": "Rush23.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Rush23.3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Rush23.4"
           }
         }
       ]

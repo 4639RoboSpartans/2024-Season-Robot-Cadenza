@@ -1,5 +1,7 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -7,19 +9,19 @@ import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.util.AimUtil;
 
 public class TeleopSwerveDriveCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
-    private final AimSubsystem aimSubsystem;
+    private final PIDController RotationPID;
     private final OI oi;
 
-    public TeleopSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, AimSubsystem aimSubsystem, OI oi) {
+    public TeleopSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
-        this.aimSubsystem = aimSubsystem;
+        RotationPID = SwerveInfo.TeleopRotationPID.create();
         this.oi = oi;
-        addRequirements(swerveDriveSubsystem, aimSubsystem);
+        addRequirements(swerveDriveSubsystem);
     }
 
     @Override
@@ -41,9 +43,15 @@ public class TeleopSwerveDriveCommand extends Command {
 
     private double getRotationSpeed(double rotationMultiplier) {
         double rawSpeed;
+        Rotation2d heading = swerveDriveSubsystem.getRotation2d();
+        Rotation2d speaker = AimUtil.getSpeakerRotation(0, 0);
+        SmartDashboard.putNumber("speaker angle", speaker.getDegrees());
+        SmartDashboard.putNumber("speaker x", AimUtil.getSpeakerVector().getX());
+        SmartDashboard.putNumber("speaker y", AimUtil.getSpeakerVector().getY());
+        SmartDashboard.putNumber("heading", heading.getDegrees());
+        SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
         if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
-
-            rawSpeed =  (-aimSubsystem.getSwerveRotation()-oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED) * (1+rotationMultiplier*15);
+            rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation(0, 0).getRadians());
         }
         else {
             rawSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED;

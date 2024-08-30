@@ -7,12 +7,15 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.AutonAimCommand;
 import frc.robot.commands.shooter.*;
@@ -32,14 +35,12 @@ import frc.robot.oi.OI;
 import frc.robot.oi.OI.Buttons;
 import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.aim.AimInterface;
-import frc.robot.subsystems.aim.AimSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.sensors.IRSensor;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.util.AimUtil;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -51,10 +52,8 @@ public class RobotContainer {
     private final IShooterSubsystem shooter;
     private final IIntakeSubsystem intake;
     private final IClimberSubsystem climber;
-    private final AimSubsystem aimSubsystem;
     private final IHopperSubsystem hopper;
 
-    private final IRSensor ir;
     private final LEDStrip ledStrip;
 
     private final SendableChooser<Command> autos;
@@ -65,8 +64,6 @@ public class RobotContainer {
     public RobotContainer() {
         oi = new OI();
         navX = SubsystemManager.getNavX();
-        aimSubsystem = SubsystemManager.getAimSubsystem();
-        ir = SubsystemManager.getIRSensor();
         ledStrip = SubsystemManager.getLedStrip();
 
         swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
@@ -88,7 +85,6 @@ public class RobotContainer {
         autonDelay.addOption("9s", 9);
         autonDelay.addOption("10s", 10);
         autonDelay.addOption("11s", 11);
-//        SmartDashboard.putData("Auton Delay", autonDelay);
 
         autos = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Autons", autos);
@@ -107,30 +103,32 @@ public class RobotContainer {
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
         //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, aimSubsystem, oi));
-        NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem,aimSubsystem, RobotInfo.AimInfo.AIM_TIME));
-        NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter, RobotInfo.AimInfo.AIM_TIME));
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
+        NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
+        NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter));
         //intake commands
-        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake, hopper, ledStrip));
+        NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip)));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
         NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
 
         // shooting commands
-        NamedCommands.registerCommand("ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));
+        NamedCommands.registerCommand("ShootSpeaker", Commands.deadline(new WaitCommand(3), new AutoSpeakerCommand(shooter, hopper, ledStrip)));
         NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
     }
 
 
     private void configureBindings() {
+        Trigger inRange = new Trigger(AimUtil::inRange);
+
         swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(
-                swerveDriveSubsystem, aimSubsystem, oi
+                swerveDriveSubsystem, oi
         ));
 
         // TODO: extract to named class
         ledStrip.setDefaultCommand(new RunCommand(() -> {
-            if(ir.hasNote()) {
+            if(hopper.hasNote()) {
                 ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(255, 50, 0), 3));
             }
             else {
@@ -158,20 +156,15 @@ public class RobotContainer {
         oi.operatorController().getButton(OperatorControls.LaunchShooterButton).whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
         oi.operatorController().getButton(OperatorControls.ShooterIntake).whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
 
-        oi.operatorController().getButton(OperatorControls.ToggleIR).whileTrue(new ToggleIRCommand(ir));
+        oi.operatorController().getButton(OperatorControls.ToggleIR).onTrue(hopper.toggleIR());
 
-        oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem, aimSubsystem));
+        oi.driverController().getButton(DriverControls.AmpAlignButton).whileTrue(new AmpAimCommand(swerveDriveSubsystem));
 
+        oi.driverController().getButton(DriverControls.ResetGyroButton1).and(
+                oi.driverController().getButton(DriverControls.ResetGyroButton2)
+        ).whileTrue(new RunCommand(swerveDriveSubsystem::reset));
 
-
-        new Trigger(() -> {
-            for(Buttons x : DriverControls.ResetNavXButtons) {
-                if(!oi.driverController().getButton(x).getAsBoolean()) {
-                    return false;
-                }
-            }
-            return true;
-        }).whileTrue(new RunCommand(swerveDriveSubsystem::reset));
+        inRange.whileTrue(new ShooterSpinupCommand(shooter));
     }
 
     public Command getAutonomousCommand() {

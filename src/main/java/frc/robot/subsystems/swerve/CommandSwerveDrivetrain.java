@@ -16,6 +16,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -32,6 +33,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.network.LimelightHelpers.PoseEstimate;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
@@ -70,16 +72,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
 
         AutoBuilder.configureHolonomic(
-                ()->this.getState().Pose, // Supplier of current robot pose
+                () -> this.getState().Pose, // Supplier of current robot pose
                 this::seedFieldRelative,  // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
-                (speeds)->this.setControl(AutoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
+                (speeds) -> this.setControl(AutoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
                 new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
                         new PIDConstants(10, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue)==Alliance.Red, // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, // Assume the path needs to be flipped for Red vs Blue, this is normally the case
                 this); // Subsystem for requirements
     }
 
@@ -136,9 +138,27 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         field.setRobotPose(this.getState().Pose);
         SmartDashboard.putData("field", field);
         SmartDashboard.putNumber("heading", getRotation2d().getDegrees());
+        PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
+        if (pose != null) {
+            addVisionMeasurement(pose.pose, Timer.getFPGATimestamp());
+        }
     }
 
     public void reset() {
         m_pigeon2.reset();
+    }
+
+    public PoseEstimate validatePoseEstimate(PoseEstimate poseEstimate, double deltaSeconds) {
+        if (poseEstimate == null) return null;
+        Pose2d pose2d = poseEstimate.pose;
+        Translation2d trans = pose2d.getTranslation();
+        if (trans.getX() == 0 && trans.getY() == 0) {
+            return null;
+        }
+        return poseEstimate;
+    }
+
+    public Pose2d getPose() {
+        return this.getState().Pose;
     }
 }

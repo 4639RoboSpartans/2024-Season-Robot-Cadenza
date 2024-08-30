@@ -22,7 +22,9 @@ public final class RobotInfo {
         public static final double TELOP_ROTATION_SPEED = 12;
 
         public static final PIDConstants TranslationPID = new PIDConstants(12, 0, 0.0);
-        public static final PIDConstants RotationPID = new PIDConstants(16, 0, 0.0);
+        public static double AimTranslationScalar = 0.5;
+        public static final PIDTemplate TeleopRotationPID = new PIDTemplate(10, 0, 0);
+        public static final double TELEOP_AIM_SPEED = 8; // TODO: tune this
     }
 
     public static final class TrapInfo {
