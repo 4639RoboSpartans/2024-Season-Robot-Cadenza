@@ -34,6 +34,7 @@ import frc.robot.network.LimelightHelpers;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
+import frc.robot.util.AimUtil;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
@@ -160,5 +161,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public Pose2d getPose() {
         return this.getState().Pose;
+    }
+
+    public boolean aligned() {
+        double angle = AimUtil.getSpeakerRotation().getRadians();
+        double heading = this.m_pigeon2.getAngle();
+        return Math.abs(angle - heading) <= 10; //TODO: tune this
     }
 }

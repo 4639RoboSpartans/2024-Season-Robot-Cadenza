@@ -5,6 +5,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.led.DummyLEDStrip;
 import frc.robot.led.PhysicalLEDStrip;
 import frc.robot.led.LEDStrip;
+import frc.robot.oi.OI;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
@@ -37,11 +38,20 @@ public class SubsystemManager {
     private static IHopperSubsystem hopper;
     private static IClimberSubsystem climber;
 
+    private static OI oi;
+
     public static NavX getNavX() {
         if(navX == null) {
             navX = new NavX();
         }
         return navX;
+    }
+
+    public static OI getOI() {
+        if (oi == null) {
+            oi = new OI();
+        }
+        return oi;
     }
 
     public static LEDStrip getLedStrip() {

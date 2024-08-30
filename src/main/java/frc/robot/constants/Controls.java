@@ -1,43 +1,125 @@
 package frc.robot.constants;
 
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.oi.OI;
 import frc.robot.oi.OI.Buttons;
+import frc.robot.subsystems.SubsystemManager;
+
+import java.util.function.DoubleSupplier;
 
 public final class Controls {
 
     public static final class DriverControls {
-        public static final OI.Axes SwerveForwardAxis = OI.Axes.LEFT_STICK_Y;
-        public static final OI.Axes SwerveStrafeAxis = OI.Axes.LEFT_STICK_X;
-        public static final OI.Axes SwerveRotationAxis = OI.Axes.RIGHT_STICK_X;
-        public static final OI.Buttons AimButton = OI.Buttons.LEFT_TRIGGER;
+        public static final DoubleSupplier SwerveForwardAxis = new DoubleSupplier() {
+            @Override
+            public double getAsDouble() {
+                OI oi = SubsystemManager.getOI();
+                return oi.driverController().getAxis(OI.Axes.LEFT_STICK_Y);
+            }
+        };
+        public static final DoubleSupplier SwerveStrafeAxis = new DoubleSupplier() {
+            @Override
+            public double getAsDouble() {
+                OI oi = SubsystemManager.getOI();
+                return oi.driverController().getAxis(OI.Axes.LEFT_STICK_X);
+            }
+        };
+        public static final DoubleSupplier SwerveRotationAxis = new DoubleSupplier() {
+            @Override
+            public double getAsDouble() {
+                OI oi = SubsystemManager.getOI();
+                return oi.driverController().getAxis(OI.Axes.RIGHT_STICK_X);
+            }
+        };
+        public static final Trigger AimButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(OI.Buttons.LEFT_TRIGGER).getAsBoolean();
+        });
 
-        public static final OI.Buttons ClimberExtendButton = OI.Buttons.LEFT_BUMPER;
-        public static final OI.Buttons ClimberRetractButton = OI.Buttons.RIGHT_BUMPER;
-        public static final OI.Buttons ClimberSwap1Button = OI.Buttons.POV_LEFT;
-        public static final OI.Buttons ClimberSwap2Button = OI.Buttons.POV_RIGHT;
+        public static final Trigger ClimberExtendButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.LEFT_BUMPER).getAsBoolean();
+        });
+        public static final Trigger ClimberRetractButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.RIGHT_BUMPER).getAsBoolean();
+        });
+        public static final Trigger SOTF = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.RIGHT_TRIGGER).getAsBoolean();
+        });
+        public static final Trigger ClimberSwap1Button = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.POV_LEFT).getAsBoolean();
+        });
+        public static final Trigger ClimberSwap2Button = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.POV_RIGHT).getAsBoolean();
+        });
 
-        public static final OI.Buttons AmpAlignButton = OI.Buttons.X_BUTTON;
+        public static final Trigger AmpAlignButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.X_BUTTON).getAsBoolean();
+        });
 
-        public static final OI.Buttons ResetGyroButton1 = Buttons.A_BUTTON, ResetGyroButton2 = Buttons.B_BUTTON;
+        public static final Trigger ResetGyroButton1 = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.A_BUTTON).getAsBoolean();
+        });
+        public static final Trigger ResetGyroButton2 = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.B_BUTTON).getAsBoolean();
+        });;
     }
 
     public static final class OperatorControls {
-        public static final OI.Buttons RunSpeakerShooterButton = OI.Buttons.RIGHT_TRIGGER;
-        public static final OI.Buttons RunAmpShooterButton = OI.Buttons.LEFT_BUMPER;
-        public static final OI.Buttons ManualShooterButton = OI.Buttons.LEFT_TRIGGER;
+        public static final Trigger RunSpeakerShooterButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.RIGHT_TRIGGER).getAsBoolean();
+        });
+        public static final Trigger RunAmpShooterButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.LEFT_BUMPER).getAsBoolean();
+        });
+        public static final Trigger ManualShooterButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.LEFT_TRIGGER).getAsBoolean();
+        });
 
-        public static final OI.Buttons RunTrapShooterButton = OI.Buttons.B_BUTTON;
+        public static final Trigger RunTrapShooterButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.B_BUTTON).getAsBoolean();
+        });
 
-        public static final OI.Buttons IntakeButton = OI.Buttons.X_BUTTON;
-        public static final OI.Buttons OuttakeButton = OI.Buttons.Y_BUTTON;
-        public static final OI.Buttons IntakeExtendButton = OI.Buttons.POV_DOWN;
-        public static final OI.Buttons IntakeRetractButton = OI.Buttons.POV_UP;
-        public static final OI.Buttons ShooterIntake = OI.Buttons.POV_RIGHT;
+        public static final Trigger IntakeButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.X_BUTTON).getAsBoolean();
+        });
+        public static final Trigger OuttakeButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.Y_BUTTON).getAsBoolean();
+        });
+        public static final Trigger IntakeExtendButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.POV_DOWN).getAsBoolean();
+        });
+        public static final Trigger IntakeRetractButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.POV_UP).getAsBoolean();
+        });
+        public static final Trigger ToggleIR = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.A_BUTTON).getAsBoolean();
+        });
 
-        public static final OI.Buttons ToggleIR = OI.Buttons.A_BUTTON;
+        public static final Trigger LaunchShooterButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.RIGHT_BUMPER).getAsBoolean();
+        });
 
-        public static final OI.Buttons LaunchShooterButton = OI.Buttons.RIGHT_BUMPER;
-
-        public static final Buttons FeedShooterButton = Buttons.POV_LEFT;
+        public static final Trigger FeedShooterButton = new Trigger(() -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.driverController().getButton(Buttons.POV_LEFT).getAsBoolean();
+        });
     }
 }

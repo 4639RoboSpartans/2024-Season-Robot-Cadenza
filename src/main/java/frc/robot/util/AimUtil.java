@@ -35,6 +35,11 @@ public class AimUtil {
         return Math.hypot(trans.getX(), trans.getY()) <= 9;
     }
 
+    public static boolean inShootingRange() {
+        Translation2d trans = getSpeakerVector();
+        return Math.hypot(trans.getX(), trans.getY()) <= 5;
+    }
+
     public static Rotation2d getSpeakerRotation() {
         return Rotation2d.fromRadians(Math.atan(getSpeakerVector().getY() / getSpeakerVector().getX()) % (2 * Math.PI));
     }

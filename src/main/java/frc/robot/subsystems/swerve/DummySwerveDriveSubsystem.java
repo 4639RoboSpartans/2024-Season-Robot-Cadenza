@@ -34,4 +34,9 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     public Pose2d getPose() {
         return null;
     }
+
+    @Override
+    public boolean aligned() {
+        return false;
+    }
 }

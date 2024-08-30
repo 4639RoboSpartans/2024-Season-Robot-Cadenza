@@ -31,8 +31,10 @@ public class TeleopSwerveDriveCommand extends Command {
 
     @Override
     public void execute() {
-        double forwardsSpeed = oi.driverController().getAxis(DriverControls.SwerveForwardAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-        double sidewaysSpeed = -oi.driverController().getAxis(DriverControls.SwerveStrafeAxis) * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double rawForwardsSpeed = DriverControls.SwerveForwardAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double rawSidewaysSpeed = -DriverControls.SwerveStrafeAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double forwardsSpeed = getForwardsSpeed(rawForwardsSpeed);
+        double sidewaysSpeed = getSidewaysSpeed(rawSidewaysSpeed);
         double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
         double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
@@ -44,19 +46,33 @@ public class TeleopSwerveDriveCommand extends Command {
     private double getRotationSpeed(double rotationMultiplier) {
         double rawSpeed;
         Rotation2d heading = swerveDriveSubsystem.getRotation2d();
-        Rotation2d speaker = AimUtil.getSpeakerRotation(0, 0);
+        Rotation2d speaker = AimUtil.getSpeakerRotation();
         SmartDashboard.putNumber("speaker angle", speaker.getDegrees());
         SmartDashboard.putNumber("speaker x", AimUtil.getSpeakerVector().getX());
         SmartDashboard.putNumber("speaker y", AimUtil.getSpeakerVector().getY());
         SmartDashboard.putNumber("heading", heading.getDegrees());
         SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
-        if(oi.driverController().getButton(DriverControls.AimButton).getAsBoolean()) {
+        if(DriverControls.AimButton.getAsBoolean()) {
             rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation(0, 0).getRadians());
         }
         else {
-            rawSpeed = -oi.driverController().getAxis(DriverControls.SwerveRotationAxis) * SwerveInfo.TELOP_ROTATION_SPEED;
+            rawSpeed = -DriverControls.SwerveRotationAxis.getAsDouble() * SwerveInfo.TELOP_ROTATION_SPEED;
         }
         return rawSpeed * (1 + rotationMultiplier);
+    }
+
+    private double getForwardsSpeed(double rawForwardsSpeed) {
+        if (DriverControls.SOTF.getAsBoolean()) {
+            return rawForwardsSpeed / 3;//TODO: tune this
+        }
+        return rawForwardsSpeed;
+    }
+
+    private double getSidewaysSpeed(double rawSidewaysSpeed) {
+        if (DriverControls.SOTF.getAsBoolean()) {
+            return rawSidewaysSpeed / 3;//TODO: tune this
+        }
+        return rawSidewaysSpeed;
     }
 
     @Override
