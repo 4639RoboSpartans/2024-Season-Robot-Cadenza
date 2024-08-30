@@ -7,8 +7,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -32,8 +30,6 @@ import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
 import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
-import frc.robot.oi.OI.Buttons;
-import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
@@ -45,8 +41,6 @@ import frc.robot.util.AimUtil;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     public static OI oi;
-    private final NavX navX;
-
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
 
     private final IShooterSubsystem shooter;
@@ -63,7 +57,6 @@ public class RobotContainer {
 
     public RobotContainer() {
         oi = new OI();
-        navX = SubsystemManager.getNavX();
         ledStrip = SubsystemManager.getLedStrip();
 
         swerveDriveSubsystem = SubsystemManager.getSwerveDrive();

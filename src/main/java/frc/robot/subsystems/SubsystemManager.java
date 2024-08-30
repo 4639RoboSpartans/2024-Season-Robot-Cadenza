@@ -25,7 +25,6 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import static frc.robot.constants.Constants.currentRobot;
 
 public class SubsystemManager {
-    private static NavX navX;
 
     private static LEDStrip ledStrip;
 
@@ -36,13 +35,6 @@ public class SubsystemManager {
     private static IIntakeSubsystem intake;
     private static IHopperSubsystem hopper;
     private static IClimberSubsystem climber;
-
-    public static NavX getNavX() {
-        if(navX == null) {
-            navX = new NavX();
-        }
-        return navX;
-    }
 
     public static LEDStrip getLedStrip() {
         if(ledStrip == null) {
