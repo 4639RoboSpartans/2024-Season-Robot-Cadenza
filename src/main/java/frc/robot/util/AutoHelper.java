@@ -11,6 +11,7 @@ import frc.robot.commands.shooter.ShooterSpinupCommand;
 import frc.robot.constants.Controls;
 import frc.robot.constants.RobotInfo;
 import frc.robot.led.LEDStrip;
+import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
@@ -23,6 +24,7 @@ public class AutoHelper {
     private static IIntakeSubsystem intake = SubsystemManager.getIntake();
     private static IHopperSubsystem hopper = SubsystemManager.getHopper();
     private static LEDStrip ledStrip = SubsystemManager.getLedStrip();
+    private static OI oi = SubsystemManager.getOI();
 
     public static Command intakeWhileMoving(String pathName) {
         ChoreoTrajectory traj = Choreo.getTrajectory(pathName);
@@ -31,10 +33,10 @@ public class AutoHelper {
         return Commands.deadline(
                 swerve.followChoreoPath(traj, true),
                 startTime < 0 ?
-                        new IntakeCommand(intake, hopper, ledStrip, ):
+                        new IntakeCommand(intake, hopper, ledStrip, oi):
                         Commands.sequence(
                                 new WaitCommand(startTime),
-                                new IntakeCommand(intake, hopper, ledStrip, )
+                                new IntakeCommand(intake, hopper, ledStrip, oi)
                         )
         );
     }

@@ -103,7 +103,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
         NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter));
         //intake commands
-        NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, )));
+        NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, oi)));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
         NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
@@ -136,7 +136,7 @@ public class RobotContainer {
         DriverControls.ClimberSwap1Button.whileTrue(new ManualClimbCommand(climber, 1, -1));
         DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip, ));
+        OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip, oi));
  
         OperatorControls.OuttakeButton.whileTrue(new OuttakeCommand(intake, hopper));
 
