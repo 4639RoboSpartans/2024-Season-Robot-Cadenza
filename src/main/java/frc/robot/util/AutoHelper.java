@@ -43,8 +43,8 @@ public class AutoHelper {
 
     public static Command SOTFCommand(String pathName) {
         /*
-         * max velocity of traj must not be too high, should generate path so that
-         * bot is facing speaker during the whole path
+         * max velocity of traj during SOTF portion must not be too high (<=2 m/s),
+         * should generate path so that bot is facing speaker during SOTF portion
          */
         Command shooterAutoSpinupCommand = new ShooterSpinupCommand(shooter).onlyWhile(Controls.spinupTrigger);
         Command shooterSOTFCommand = new AutoSpeakerCommand(shooter, hopper, ledStrip).onlyWhile(Controls.canSOTF);
