@@ -5,7 +5,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.autos.AutoFactory;
 import frc.robot.commands.drive.AutonAimCommand;
 import frc.robot.commands.shooter.*;
@@ -105,7 +103,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
         NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter));
         //intake commands
-        NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip)));
+        NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, )));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
         NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
@@ -138,7 +136,7 @@ public class RobotContainer {
         DriverControls.ClimberSwap1Button.whileTrue(new ManualClimbCommand(climber, 1, -1));
         DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip));
+        OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip, ));
  
         OperatorControls.OuttakeButton.whileTrue(new OuttakeCommand(intake, hopper));
 

@@ -1,6 +1,8 @@
 package frc.robot.oi;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -14,11 +16,14 @@ public class Controller {
     private static final int NUM_POV_BUTTONS = 4;
     private static final int NUM_SPECIAL_BUTTONS = 2;
 
+    private final XboxController controller;
+
     private final Joystick stick;
     private final Trigger[] buttons;
 
     public Controller(int joystickID) {
         stick = new Joystick(joystickID);
+        controller = new XboxController(joystickID);
 
         buttons = new Trigger[NUM_BUTTONS + NUM_POV_BUTTONS + NUM_SPECIAL_BUTTONS];
 
@@ -68,5 +73,13 @@ public class Controller {
 
     public Trigger getButton(OI.Buttons button) {
         return buttons[button.getID()];
+    }
+
+    public void rumble(double rumbleStrength) {
+        controller.setRumble(GenericHID.RumbleType.kBothRumble, rumbleStrength);
+    }
+
+    public void stopRumble() {
+        controller.setRumble(GenericHID.RumbleType.kBothRumble, 0);
     }
 }

@@ -51,7 +51,7 @@ public class TeleopSwerveDriveCommand extends Command {
         SmartDashboard.putNumber("speaker y", AimUtil.getSpeakerVector().getY());
         SmartDashboard.putNumber("heading", heading.getDegrees());
         SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
-        if(DriverControls.AimButton.getAsBoolean()) {
+        if(DriverControls.AimButton.or(DriverControls.SOTF).getAsBoolean()) {
             rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation(0, 0).getRadians());
         }
         else {

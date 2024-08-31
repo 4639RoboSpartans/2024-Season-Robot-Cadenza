@@ -31,10 +31,10 @@ public class AutoHelper {
         return Commands.deadline(
                 swerve.followChoreoPath(traj, true),
                 startTime < 0 ?
-                        new IntakeCommand(intake, hopper, ledStrip):
+                        new IntakeCommand(intake, hopper, ledStrip, ):
                         Commands.sequence(
                                 new WaitCommand(startTime),
-                                new IntakeCommand(intake, hopper, ledStrip)
+                                new IntakeCommand(intake, hopper, ledStrip, )
                         )
         );
     }
