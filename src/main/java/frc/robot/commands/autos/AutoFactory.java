@@ -31,8 +31,10 @@ public class AutoFactory {
                 Rush01_12,
                 Rush01_13,
                 Spikes,
-                testAuto
+                testAuto("S1-A1 SOTF")
         };
     }
-    public static Command testAuto = AutoHelper.intakeWhileMoving("S1-A1");
+    public static Command testAuto(String pathName) {
+        return AutoHelper.follow(pathName);
+    }
 }

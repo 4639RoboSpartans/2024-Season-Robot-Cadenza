@@ -26,6 +26,10 @@ public class AutoHelper {
     private static LEDStrip ledStrip = SubsystemManager.getLedStrip();
     private static OI oi = SubsystemManager.getOI();
 
+    public static Command follow(String pathName) {
+        return swerve.followChoreoPath(pathName, true);
+    }
+
     public static Command intakeWhileMoving(String pathName) {
         ChoreoTrajectory traj = Choreo.getTrajectory(pathName);
         double time = traj.getTotalTime();
