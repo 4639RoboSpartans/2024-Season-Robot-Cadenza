@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.oi.OI;
 import frc.robot.oi.OI.Buttons;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.util.AimUtil;
 
 import java.util.function.DoubleSupplier;
 
@@ -138,4 +139,13 @@ public final class Controls {
                     return oi.operatorController().getButton(OI.Buttons.POV_LEFT).getAsBoolean();
                 });
     }
+
+
+    private static Trigger inShootingRange = new Trigger(AimUtil::inShootingRange);
+    private static Trigger aligned = new Trigger(AimUtil::aligned);
+    private static Trigger inShootingSector = new Trigger(AimUtil::inShootingSector);
+
+    public static Trigger canSOTF = inShootingRange.and(aligned).and(inShootingSector);
+
+    public static Trigger spinupTrigger = new Trigger(AimUtil::inRange).and(canSOTF.negate());
 }

@@ -2,6 +2,7 @@ package frc.robot.subsystems.hopper;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -14,7 +15,9 @@ import static frc.robot.constants.RobotInfo.HopperInfo;
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
     private final DigitalInput ir;
+    private boolean hasNote = false;
     private boolean irActive;
+    private Debouncer irDebouncer = new Debouncer(0.1);
 
     public HopperSubsystem(int motorID) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
@@ -25,7 +28,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
 
     @Override
     public void run(boolean checkNote, double speed) {
-        if (!ir.get() && checkNote) {
+        if (hasNote && checkNote) {
             motor.set(0);
         } else {
             motor.set(speed);
@@ -53,12 +56,17 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     }
 
     public boolean hasNote() {
-        return !ir.get() && irActive;
+        return hasNote && irActive;
     }
 
     public Command toggleIR() {
         return Commands.runOnce(() -> {
             irActive = !irActive;
         });
+    }
+
+    @Override
+    public void periodic() {
+        hasNote = irDebouncer.calculate(!ir.get());
     }
 }

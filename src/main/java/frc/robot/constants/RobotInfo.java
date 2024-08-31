@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -9,26 +10,16 @@ public final class RobotInfo {
     public static final class SwerveInfo {
         public static final double centerToWheel = 0.245;
 
-        public static final double K_P_MULTIPLIER = 1;
-        public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(new Translation2d(centerToWheel, centerToWheel), new Translation2d(centerToWheel, -centerToWheel), new Translation2d(-centerToWheel, centerToWheel), new Translation2d(-centerToWheel, -centerToWheel));
-
         // Change MOVEMENT_SPEED to 1.0 for max speed
         public static final double CURRENT_MAX_ROBOT_MPS = 9;
-        public static final double MOVEMENT_SPEED = .5;
-        public static final double AIM_ROTATION_SPEED = 4;
-        public static final PIDTemplate SWERVE_ROTATOR_PID_CONSTANTS = new PIDTemplate(0.0065, 0, 0.00001);
-        public static final PIDTemplate SWERVE_DRIVER_PID_CONSTANTS = new PIDTemplate(0.1);
-        public static final double DERIVATIVE_MULTIPLIER = 0.1;
         public static final double TELOP_ROTATION_SPEED = 12;
 
-        public static final PIDConstants TranslationPID = new PIDConstants(12, 0, 0.0);
-        public static double AimTranslationScalar = 0.5;
-        public static final PIDTemplate TeleopRotationPID = new PIDTemplate(10, 0, 0);
-        public static final double TELEOP_AIM_SPEED = 8; // TODO: tune this
-    }
 
-    public static final class TrapInfo {
-        // TODO: make trap subsystem and put constants here
+        public static final PIDController choreoX = new PIDController(10, 0, 0);
+        public static final PIDController choreoY = new PIDController(10, 0, 0);
+        public static final PIDController choreoRotation = new PIDController(10, 0, 0);
+        public static final PIDTemplate TeleopRotationPID = new PIDTemplate(10, 0, 0);
+        public static final double TIME_BEFORE_INTAKE_START = 1;
     }
 
     public static final class IntakeInfo {

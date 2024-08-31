@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.autos.AutoFactory;
 import frc.robot.commands.drive.AutonAimCommand;
 import frc.robot.commands.shooter.*;
+import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.commands.climber.ExtendClimberCommand;
@@ -36,7 +38,6 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
-import frc.robot.util.AimUtil;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -79,7 +80,11 @@ public class RobotContainer {
         autonDelay.addOption("10s", 10);
         autonDelay.addOption("11s", 11);
 
-        autos = AutoBuilder.buildAutoChooser();
+//        autos = AutoBuilder.buildAutoChooser();
+        autos = new SendableChooser<>();
+        for (Command i : AutoFactory.getAutos()) {
+            autos.addOption(i.getName(), i);
+        }
         SmartDashboard.putData("Autons", autos);
 
         alliance = new SendableChooser<>();
@@ -113,10 +118,6 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        Trigger inRange = new Trigger(AimUtil::inRange);
-        Trigger inShootingRange = new Trigger(AimUtil::inShootingRange);
-        Trigger aligned = new Trigger(AimUtil::aligned);
-        Trigger inShootingSector = new Trigger(AimUtil::inShootingSector);
 
         swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(
                 swerveDriveSubsystem, oi
@@ -161,8 +162,8 @@ public class RobotContainer {
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
                 whileTrue(new RunCommand(swerveDriveSubsystem::reset));
 
-        inRange.and(inShootingRange.negate()).whileTrue(new ShooterSpinupCommand(shooter));
-        inShootingRange.and(aligned).and(inShootingSector).and(DriverControls.SOTF)
+        Controls.spinupTrigger.whileTrue(new ShooterSpinupCommand(shooter));
+        Controls.canSOTF.and(DriverControls.SOTF)
                 .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
     }
 
