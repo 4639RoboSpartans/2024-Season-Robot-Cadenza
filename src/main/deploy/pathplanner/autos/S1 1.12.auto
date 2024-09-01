@@ -99,6 +99,25 @@
               }
             ]
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C2-SS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootSpeaker"
+                }
+              }
+            ]
+          }
         }
       ]
     }

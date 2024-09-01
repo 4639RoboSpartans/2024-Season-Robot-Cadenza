@@ -21,6 +21,12 @@ public class AutoFactory {
             AutoHelper.SOTFCommand("C2-C3 SOTF"),
             AutoHelper.followThenShoot("C3-SS")
     );
+    public static Command Rush0_45 = Commands.sequence(
+            AutoHelper.followThenShoot("S3-C5 SOTF.1"),
+            AutoHelper.intakeWhileMoving("S3-C4 SOTF.2"),
+            AutoHelper.SOTFCommand("C5-C4 SOTF"),
+            AutoHelper.followThenShoot("C4-SS")
+    );
     public static Command Spikes = Commands.sequence(
             AutoHelper.SOTFCommand("S2-A2 SOTF"),
             AutoHelper.SOTFCommand("A2-A1 SOTF"),
@@ -36,6 +42,7 @@ public class AutoFactory {
         return new Command[] {
                 Rush01_12,
                 Rush01_13,
+                Rush0_45,
                 Spikes,
                 FU_Auto,
                 testAuto("S1-A1 SOTF")
