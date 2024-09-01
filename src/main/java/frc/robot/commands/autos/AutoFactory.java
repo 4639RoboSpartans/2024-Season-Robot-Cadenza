@@ -2,6 +2,7 @@ package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.SubsystemManager;
 import frc.robot.util.AutoHelper;
 
 import java.util.ArrayList;
@@ -26,15 +27,21 @@ public class AutoFactory {
             AutoHelper.SOTFCommand("A1-A3 SOTF"),
             AutoHelper.shoot()
     );
+    public static Command FU_Auto = Commands.sequence(
+            AutoHelper.intakeWhileMoving("A1-FU.1"),
+            AutoHelper.follow("A1-FU.2"),
+            AutoHelper.followThenShoot("A1-FU.3")
+    );
     public static Command[] getAutos() {
         return new Command[] {
                 Rush01_12,
                 Rush01_13,
                 Spikes,
+                FU_Auto,
                 testAuto("S1-A1 SOTF")
         };
     }
     public static Command testAuto(String pathName) {
-        return AutoHelper.follow(pathName);
+        return AutoHelper.follow(pathName).withName(pathName);
     }
 }

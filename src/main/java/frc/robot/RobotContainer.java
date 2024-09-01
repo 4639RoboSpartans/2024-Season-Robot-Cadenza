@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.autos.AutoFactory;
 import frc.robot.commands.drive.AutonAimCommand;
 import frc.robot.commands.shooter.*;
-import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.commands.climber.ExtendClimberCommand;
@@ -102,7 +101,6 @@ public class RobotContainer {
         //drive commands
         NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
         NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
-        NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter).onlyWhile(Controls.canSOTF));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, oi)));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
@@ -110,7 +108,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
 
         // shooting commands
-        NamedCommands.registerCommand("ShootSpeaker", Commands.deadline(new WaitCommand(3), new AutoSpeakerCommand(shooter, hopper, ledStrip)));
+        NamedCommands.registerCommand("ShootSpeaker", Commands.deadline(new WaitCommand(3), new SOTFCommand(shooter, hopper, ledStrip)));
         NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
     }
@@ -136,6 +134,7 @@ public class RobotContainer {
         DriverControls.ClimberRetractButton.whileTrue(new RetractClimberCommand(climber));
         DriverControls.ClimberSwap1Button.whileTrue(new ManualClimbCommand(climber, 1, -1));
         DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
+        DriverControls.SOTF.whileTrue(new SOTFCommand(shooter, hopper, ledStrip));
 
         OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip, oi));
  
@@ -145,14 +144,11 @@ public class RobotContainer {
 
         OperatorControls.IntakeRetractButton.whileTrue(new RetractIntakeCommand(intake));
 
-        OperatorControls.RunSpeakerShooterButton
-                .and(DriverControls.SOTF.negate())
-                .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
+        OperatorControls.RunSpeakerShooterButton.whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
         OperatorControls.RunAmpShooterButton.whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
         OperatorControls.ManualShooterButton.whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         OperatorControls.RunTrapShooterButton.whileTrue(new AutoTrapCommand(shooter, hopper, ledStrip));
         OperatorControls.LaunchShooterButton.whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
-        OperatorControls.ShooterIntake.whileTrue(new ShooterIntakeCommand(shooter, hopper, ledStrip));
 
         OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
 
@@ -160,10 +156,6 @@ public class RobotContainer {
 
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
                 whileTrue(new RunCommand(swerveDriveSubsystem::reset));
-
-        Controls.spinupTrigger.whileTrue(new ShooterSpinupCommand(shooter));
-        Controls.canSOTF.and(DriverControls.SOTF)
-                .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
     }
 
     public Command getAutonomousCommand() {

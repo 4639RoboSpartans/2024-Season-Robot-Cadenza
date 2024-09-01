@@ -7,15 +7,13 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 
 public class ShooterSpinupCommand extends Command {
     private final IShooterSubsystem shooterSubsystem;
-    private double startTime;
     public ShooterSpinupCommand(IShooterSubsystem shooterSubsystem){
         this.shooterSubsystem = shooterSubsystem;
         addRequirements(shooterSubsystem);
     }
     @Override
     public void initialize(){
-        shooterSubsystem.setShootingMode(RobotInfo.ShooterInfo.ShootingMode.AUTO_SPEAKER);
-        startTime = Timer.getFPGATimestamp();
+        shooterSubsystem.setShootingMode(RobotInfo.ShooterInfo.ShootingMode.SPINUP);
     }
     @Override
     public boolean isFinished(){

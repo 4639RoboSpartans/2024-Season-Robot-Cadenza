@@ -56,7 +56,11 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     }
 
     public boolean hasNote() {
-        return hasNote && irActive;
+        return hasNote;
+    }
+
+    public boolean isIrActive() {
+        return irActive;
     }
 
     public Command toggleIR() {

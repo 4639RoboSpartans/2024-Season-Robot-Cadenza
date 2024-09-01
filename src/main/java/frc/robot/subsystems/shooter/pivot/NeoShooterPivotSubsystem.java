@@ -49,7 +49,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         if(!isUsingPID) return;
 
         double targetAngle = switch (shooter.getShootingMode()) {
-            case AUTO_SPEAKER -> AimUtil.getVelocityCompensatedShooterSetpoint().angle();
+            case AUTO_SPEAKER, SPINUP -> AimUtil.getVelocityCompensatedShooterSetpoint().angle();
             case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
             case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
             case TRAP -> ShooterInfo.SHOOTER_TRAP_SETPOINT.angle();

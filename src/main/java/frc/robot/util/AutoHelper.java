@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.shooter.AutoSpeakerCommand;
+import frc.robot.commands.shooter.SOTFCommand;
 import frc.robot.commands.shooter.ShooterSpinupCommand;
 import frc.robot.constants.Controls;
 import frc.robot.constants.RobotInfo;
@@ -34,7 +35,7 @@ public class AutoHelper {
         ChoreoTrajectory traj = Choreo.getTrajectory(pathName);
         double time = traj.getTotalTime();
         double startTime = time - RobotInfo.SwerveInfo.TIME_BEFORE_INTAKE_START;
-        return Commands.deadline(
+        Command ret = Commands.deadline(
                 swerve.followChoreoPath(traj, true),
                 startTime < 0 ?
                         new IntakeCommand(intake, hopper, ledStrip, oi):
@@ -43,6 +44,11 @@ public class AutoHelper {
                                 new IntakeCommand(intake, hopper, ledStrip, oi)
                         )
         );
+        ret.addRequirements(
+                SubsystemManager.getSwerveDrive(),
+                SubsystemManager.getIntake(),
+                SubsystemManager.getHopper());
+        return ret;
     }
 
     public static Command SOTFCommand(String pathName) {
@@ -51,21 +57,30 @@ public class AutoHelper {
          * should generate path so that bot is facing speaker during SOTF portion
          */
         Command shooterAutoSpinupCommand = new ShooterSpinupCommand(shooter).onlyWhile(Controls.spinupTrigger);
-        Command shooterSOTFCommand = new AutoSpeakerCommand(shooter, hopper, ledStrip).onlyWhile(Controls.canSOTF);
-        return Commands.deadline(
+        Command shooterSOTFCommand = new SOTFCommand(shooter, hopper, ledStrip);
+        Command ret =  Commands.deadline(
                 intakeWhileMoving(pathName),
-                Commands.sequence(
-                shooterAutoSpinupCommand.until(Controls.canSOTF),
-                        shooterSOTFCommand)
+                shooterSOTFCommand
         );
+        ret.addRequirements(
+                SubsystemManager.getSwerveDrive(),
+                SubsystemManager.getShooter(),
+                SubsystemManager.getIntake(),
+                SubsystemManager.getHopper());
+        return ret;
     }
 
     public static Command followThenShoot(String pathname) {
         ChoreoTrajectory traj = Choreo.getTrajectory(pathname);
-        return Commands.sequence(
+        Command ret =  Commands.sequence(
                 swerve.followChoreoPath(traj, true),
-                new AutoSpeakerCommand(shooter, hopper, ledStrip)
+                new SOTFCommand(shooter, hopper, ledStrip)
         );
+        ret.addRequirements(
+                SubsystemManager.getSwerveDrive(),
+                SubsystemManager.getShooter(),
+                SubsystemManager.getHopper());
+        return ret;
     }
 
     public static Command shoot() {

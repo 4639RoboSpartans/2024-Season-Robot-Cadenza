@@ -62,7 +62,7 @@ public final class RobotInfo {
         }
 
         public enum ShootingMode {
-            AUTO_SPEAKER, SPEAKER, AMP, TRAP, IDLE, LAUNCH, INTAKE
+            AUTO_SPEAKER, SPINUP, SPEAKER, AMP, TRAP, IDLE, LAUNCH, INTAKE
         }
 
         public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
