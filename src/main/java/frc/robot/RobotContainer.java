@@ -78,6 +78,7 @@ public class RobotContainer {
         autonDelay.addOption("10s", 10);
         autonDelay.addOption("11s", 11);
 
+//        
 //        autos = AutoBuilder.buildAutoChooser();
         autos = new SendableChooser<>();
         for (Command i : AutoFactory.getAutos()) {
@@ -101,7 +102,7 @@ public class RobotContainer {
         //drive commands
         NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
         NamedCommands.registerCommand("AutonAimCommand", new AutonAimCommand(swerveDriveSubsystem, RobotInfo.AimInfo.AIM_TIME));
-        NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter));
+        NamedCommands.registerCommand("SpinupCommand", new ShooterSpinupCommand(shooter).onlyWhile(Controls.canSOTF));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, oi)));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));

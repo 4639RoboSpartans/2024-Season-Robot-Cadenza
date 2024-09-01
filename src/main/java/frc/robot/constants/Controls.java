@@ -17,11 +17,11 @@ public final class Controls {
         };
         public static final DoubleSupplier SwerveStrafeAxis = () -> {
             OI oi = SubsystemManager.getOI();
-            return oi.driverController().getAxis(OI.Axes.LEFT_STICK_X);
+            return -oi.driverController().getAxis(OI.Axes.LEFT_STICK_X);
         };
         public static final DoubleSupplier SwerveRotationAxis = () -> {
             OI oi = SubsystemManager.getOI();
-            return oi.driverController().getAxis(OI.Axes.RIGHT_STICK_X);
+            return -oi.driverController().getAxis(OI.Axes.RIGHT_STICK_X);
         };
         public static final Trigger AimButton = new Trigger(
                 () -> {

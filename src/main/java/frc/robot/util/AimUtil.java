@@ -2,19 +2,30 @@ package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.Controls;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotInfo;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.ShooterMeasurementLERPer;
 
 public class AimUtil {
+    public static Translation2d getSpeakerRelativeMovement(double forwardsSpeed, double sidewaysSpeed) {
+        Rotation2d speakerRotation = getSpeakerRotation();
+        Rotation2d movementRotation = Rotation2d.fromRadians(Math.atan(sidewaysSpeed / forwardsSpeed));
+        double totalMovement = Math.hypot(forwardsSpeed, sidewaysSpeed);
+        Rotation2d rotation = movementRotation.minus(speakerRotation);
+        return new Translation2d(
+          Math.sin(rotation.getRadians()) * totalMovement,
+          Math.cos(rotation.getRadians()) * totalMovement
+        );
+    }
+
     public static Rotation2d getSpeakerRotation(double forwardsSpeed, double sidewaysSpeed) {
-        Translation2d speakerVector = getSpeakerVector();
-        Translation2d botVector = new Translation2d(sidewaysSpeed, forwardsSpeed);
-        Translation2d shootingVector = getShootingVector(speakerVector, botVector);
-        return Rotation2d.fromRadians(Math.atan(shootingVector.getY() / shootingVector.getX()));
+        Translation2d speakerRelativeMovement = getSpeakerRelativeMovement(forwardsSpeed, sidewaysSpeed);
+        return getSpeakerRotation().plus(Rotation2d.fromDegrees(speakerRelativeMovement.getX() * 1));//TODO: tune scalar
     }
 
     public static Translation2d getSpeakerVector() {
@@ -79,15 +90,22 @@ public class AimUtil {
         return noteVector.minus(botVector);
     }
 
-    public static RobotInfo.ShooterInfo.ShooterSetpoint getShooterSetpoint() {
+    private static RobotInfo.ShooterInfo.ShooterSetpoint getShooterSetpoint(double dist) {
         Translation2d speakerRelativeBotPose = getSpeakerVector();
         RobotInfo.ShooterInfo.ShooterSetpoint result =
-                ShooterMeasurementLERPer.get(
-                        Math.abs(speakerRelativeBotPose.getY()), Math.abs(speakerRelativeBotPose.getX()));
+                ShooterMeasurementLERPer.get(dist);
 
         SmartDashboard.putNumber("Shooter Angle: ", result.angle());
         SmartDashboard.putNumber("Shooter Speed: ", result.speed());
 
         return result;
+    }
+
+    public static RobotInfo.ShooterInfo.ShooterSetpoint getVelocityCompensatedShooterSetpoint() {
+        Translation2d speakerRelativeMovement = getSpeakerRelativeMovement(
+                Controls.DriverControls.SwerveForwardAxis.getAsDouble(),
+                Controls.DriverControls.SwerveStrafeAxis.getAsDouble()
+                );
+        return getShooterSetpoint(speakerRelativeMovement.getY() / 5);//TODO: tune this
     }
 }
