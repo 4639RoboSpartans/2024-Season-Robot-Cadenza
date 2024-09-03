@@ -7,8 +7,7 @@ import frc.robot.constants.RobotInfo.ShooterInfo.ShooterSetpointMeasurement;
 import math.MathUtil;
 
 public class ShooterMeasurementLERPer {
-    public static ShooterSetpoint get(double dx, double dz) {
-        double distance = Math.hypot(dx, dz);
+    public static ShooterSetpoint get(double distance) {
 
         // SmartDashboard.putNumber("Limelight distance: ", distance);
 

@@ -40,24 +40,16 @@ public class ShootCommand extends Command {
     }
 
     @Override
-    public void initialize() {
-        System.out.println("Starting AutoShoot!");
-        startTime = Timer.getFPGATimestamp();
-    }
-
-    @Override
     public void execute() {
         shooter.setShootingMode(mode);
 
         if(shooter.isReady()) {
             ledStrip.usePattern(DisplayInfo.readyPattern);
+            startTime = Timer.getFPGATimestamp();
 
-            if (!requireSeperateShootButton || RobotContainer.oi.operatorController().getButton(
-                    Controls.OperatorControls.FeedShooterButton
-            ).getAsBoolean()) {
+            if (!requireSeperateShootButton || Controls.OperatorControls.FeedShooterButton.getAsBoolean()) {
                 if (hopperReverse) {
                     hopper.runBackwards(HopperInfo.HOPPER_SPEED);
-                    ;
                 } else hopper.run(false, switch (mode) {
                     case AMP -> 0.8;
                     default -> HopperInfo.HOPPER_SPEED;
@@ -80,7 +72,7 @@ public class ShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return !hopper.hasNote();
+        return !hopper.hasNote() && Timer.getFPGATimestamp() - startTime >= 3;
     }
 
     @Override

@@ -1,9 +1,15 @@
 package frc.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.constants.RobotInfo.SwerveInfo.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.Utils;
@@ -14,6 +20,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,11 +41,12 @@ import frc.robot.network.LimelightHelpers;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
-import frc.robot.util.AimUtil;
+import frc.robot.util.CommandsUtil;
+import frc.robot.util.DriverStationUtil;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
- * subsystem so it can be used in command-based projects easily.
+ * subsystem, so it can be used in command-based projects easily.
  */
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem, ISwerveDriveSubsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
@@ -163,9 +171,45 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return this.getState().Pose;
     }
 
-    public boolean aligned() {
-        double angle = AimUtil.getSpeakerRotation().getRadians();
-        double heading = this.m_pigeon2.getAngle();
-        return Math.abs(angle - heading) <= 10; //TODO: tune this
+    /**
+     * Returns a command that makes the robot follow a Choreo path using the ChoreoLib library.
+     * @param pathName The name of a path located in the "deploy/choreo" directory
+     * @param resetPosition If the robot's position should be reset to the starting position of the path
+     * @return A command that makes the robot follow the path
+     */
+    public Command followChoreoPath(String pathName, boolean resetPosition) {
+        return followChoreoPath(Choreo.getTrajectory(pathName), resetPosition);
+    }
+
+    /**
+     * Returns a command that makes the robot follow a Choreo path using the ChoreoLib library.
+     * @param trajectory The Choreo trajectory to follow.
+     * @param resetPosition If the robot's position should be reset to the starting position of the path
+     * @return A command that makes the robot follow the path
+     */
+    public Command followChoreoPath(ChoreoTrajectory trajectory, boolean resetPosition) {
+        List<Command> commands = new ArrayList<>();
+
+        if (resetPosition) {
+            commands.add(runOnce(() -> {
+                seedFieldRelative(DriverStationUtil.isRed() ? trajectory.getFlippedInitialPose() : trajectory.getInitialPose());
+            }));
+        }
+        commands.add(choreoSwerveCommand(trajectory));
+        return CommandsUtil.sequence(commands);
+    }
+
+    // This is a helper method that creates a command that makes the robot follow a Choreo path
+    private Command choreoSwerveCommand(ChoreoTrajectory trajectory) {
+        return Choreo.choreoSwerveCommand(
+                trajectory,
+                () -> this.getPose(),
+                choreoX,
+                choreoY,
+                choreoRotation,
+                this::setFieldCentricMovement,
+                DriverStationUtil::isRed,
+                this
+        );
     }
 }

@@ -58,7 +58,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     private double getTargetSpeed() {
         return switch (shootingMode) {
-            case AUTO_SPEAKER -> AimUtil.getShooterSetpoint().speed();
+            case AUTO_SPEAKER, SPINUP -> AimUtil.getVelocityCompensatedShooterSetpoint().speed();
             case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
             case AMP -> SHOOTER_AMP_SETPOINT.speed();
             case TRAP -> SHOOTER_TRAP_SETPOINT.speed();
@@ -86,10 +86,6 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     @Override
     public void periodic() {
-        // SmartDashboard.putString("shooting mode", shootingMode.toString());
-        // SmartDashboard.putNumber("shooter speed", getCurrentSpeed());
-        // SmartDashboard.putNumber("shooter target speed", getTargetSpeed());
-
         switch (shootingMode) {
             case AUTO_SPEAKER, SPEAKER, AMP, TRAP, LAUNCH -> applyBangBangControl(getTargetSpeed());
             case IDLE -> applyIdleSpeed();

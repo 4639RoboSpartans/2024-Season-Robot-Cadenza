@@ -26,26 +26,14 @@ import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import static frc.robot.constants.Constants.currentRobot;
 
 public class SubsystemManager {
-    private static NavX navX;
-
+    private static OI oi;
     private static LEDStrip ledStrip;
-
     private static ISwerveDriveSubsystem swerveDrive;
-
     private static IShooterSubsystem shooter;
     private static IShooterPivotSubsystem shooterPivot;
     private static IIntakeSubsystem intake;
     private static IHopperSubsystem hopper;
     private static IClimberSubsystem climber;
-
-    private static OI oi;
-
-    public static NavX getNavX() {
-        if(navX == null) {
-            navX = new NavX();
-        }
-        return navX;
-    }
 
     public static OI getOI() {
         if (oi == null) {
