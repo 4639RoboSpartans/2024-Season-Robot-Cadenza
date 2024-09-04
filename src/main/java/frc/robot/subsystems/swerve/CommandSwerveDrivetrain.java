@@ -154,6 +154,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
     }
 
+    @Override
+    public void simulationPeriodic() {
+        /* Assume 20ms update rate, get battery voltage from WPILib */
+        updateSimState(0.020, RobotController.getBatteryVoltage());
+    }
+
     public void reset() {
         m_pigeon2.reset();
     }
