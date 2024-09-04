@@ -62,47 +62,8 @@ public final class RobotInfo {
         }
 
         public enum ShootingMode {
-            AUTO_SPEAKER, SPINUP, SPEAKER, AMP, TRAP, IDLE, LAUNCH, INTAKE
+            AUTO_SPEAKER, SPINUP, SPEAKER, AMP, IDLE, LAUNCH, INTAKE
         }
-
-        public static final ShooterInfo.ShooterSetpointMeasurement[] measurements = {
-                new ShooterInfo.ShooterSetpointMeasurement(1.1, new ShooterInfo.ShooterSetpoint(24.25, ShooterLowerOffset - 0.085)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.2, new ShooterInfo.ShooterSetpoint(24.5, ShooterLowerOffset - 0.083)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.3, new ShooterInfo.ShooterSetpoint(24.5, ShooterLowerOffset - 0.083)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.4, new ShooterInfo.ShooterSetpoint(24.5, ShooterLowerOffset - 0.0785)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.5, new ShooterInfo.ShooterSetpoint(25, ShooterLowerOffset - 0.0745)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.6, new ShooterInfo.ShooterSetpoint(25, ShooterLowerOffset - 0.071)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.7, new ShooterInfo.ShooterSetpoint(25, ShooterLowerOffset - 0.066)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.8, new ShooterInfo.ShooterSetpoint(25.5, ShooterLowerOffset - 0.0635)),
-                new ShooterInfo.ShooterSetpointMeasurement(1.9, new ShooterInfo.ShooterSetpoint(26, ShooterLowerOffset - 0.0605)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.0, new ShooterInfo.ShooterSetpoint(26, ShooterLowerOffset - 0.058)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.1, new ShooterInfo.ShooterSetpoint(26.5, ShooterLowerOffset - 0.055)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.2, new ShooterInfo.ShooterSetpoint(26.5, ShooterLowerOffset - 0.0505)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.3, new ShooterInfo.ShooterSetpoint(26.75, ShooterLowerOffset - 0.0425)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.4, new ShooterInfo.ShooterSetpoint(27, ShooterLowerOffset - 0.0395)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.5, new ShooterInfo.ShooterSetpoint(27.25, ShooterLowerOffset - 0.0384)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.6, new ShooterInfo.ShooterSetpoint(27.65, ShooterLowerOffset - 0.036)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.7, new ShooterInfo.ShooterSetpoint(28.25, ShooterLowerOffset - 0.035)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.8, new ShooterInfo.ShooterSetpoint(29.25, ShooterLowerOffset - 0.0325)),
-                new ShooterInfo.ShooterSetpointMeasurement(2.9, new ShooterInfo.ShooterSetpoint(30.6, ShooterLowerOffset - 0.0295)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.0, new ShooterInfo.ShooterSetpoint(32.25, ShooterLowerOffset - 0.0274)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.1, new ShooterInfo.ShooterSetpoint(34.5, ShooterLowerOffset - 0.0245)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.2, new ShooterInfo.ShooterSetpoint(37, ShooterLowerOffset - 0.0185)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.3, new ShooterInfo.ShooterSetpoint(39.5, ShooterLowerOffset - 0.0164)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.4, new ShooterInfo.ShooterSetpoint(42, ShooterLowerOffset - 0.014)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.5, new ShooterInfo.ShooterSetpoint(45, ShooterLowerOffset - 0.014)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.6, new ShooterInfo.ShooterSetpoint(47.5, ShooterLowerOffset - 0.01)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.7, new ShooterInfo.ShooterSetpoint(50, ShooterLowerOffset - 0.008)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.8, new ShooterInfo.ShooterSetpoint(52.5, ShooterLowerOffset - 0.008)),
-                new ShooterInfo.ShooterSetpointMeasurement(3.9, new ShooterInfo.ShooterSetpoint(54.5, ShooterLowerOffset - 0.007)),
-                new ShooterInfo.ShooterSetpointMeasurement(4.0, new ShooterInfo.ShooterSetpoint(55.75, ShooterLowerOffset - 0.0055)),
-                new ShooterInfo.ShooterSetpointMeasurement(4.1, new ShooterInfo.ShooterSetpoint(56.5, ShooterLowerOffset - 0.0045)),
-                new ShooterInfo.ShooterSetpointMeasurement(4.2, new ShooterInfo.ShooterSetpoint(57.25, ShooterLowerOffset - 0.0035)),
-                new ShooterInfo.ShooterSetpointMeasurement(4.3, new ShooterInfo.ShooterSetpoint(58.5, ShooterLowerOffset - 0.0025))
-                // Max speed is 58.5
-                // Min angle is .9
-
-        };
 
         public static final double SHOOTER_IDLE_SPEED = 0.2;
         public static final double SHOOTER_AUTON_IDLE_SPEED = 0.35;
@@ -116,19 +77,16 @@ public final class RobotInfo {
                 6.8,
                 .8
        );
-        public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = measurements[1].setpoint;
-        public static final ShooterInfo.ShooterSetpoint SHOOTER_TRAP_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                20,
-                .499
-        );
+        public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT =
+                new ShooterSetpointMeasurement(1.2, new ShooterSetpoint(24.5, ShooterLowerOffset - 0.083)).setpoint;
         public static final ShooterInfo.ShooterSetpoint SHOOTER_LAUNCH_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 40,
-                .529
+                .8
         );
 
         public static final ShooterInfo.ShooterSetpoint SHOOTER_INTAKE_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 -15,
-                .529
+                .8
         );
 
         public static final double SHOOTER_VOLTAGE = 10;

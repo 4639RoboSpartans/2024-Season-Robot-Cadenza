@@ -21,7 +21,7 @@ public class AmpAimCommand extends Command {
 
     @Override
     public void execute() {
-        double forwardsCorrection = (LimeLight.getZDistance() + 0.8) * 0.25;
+        double forwardsCorrection = (LimeLight.getZDistance()) * 0.25;
         double sidewaysCorrection = -(LimeLight.getXDistance()) * 0.25;
         double rotateSpeed = Math.tanh(LimeLight.getYRotation() * 0.08) * 0.1;
 
@@ -37,10 +37,4 @@ public class AmpAimCommand extends Command {
     public void end(boolean interrupted) {
         swerveDriveSubsystem.stop();
     }
-
-    // TODO: test before using in matches
-//    @Override
-//    public boolean isFinished() {
-//        return aimSubsystem.isAtSetpoint();
-//    }
 }

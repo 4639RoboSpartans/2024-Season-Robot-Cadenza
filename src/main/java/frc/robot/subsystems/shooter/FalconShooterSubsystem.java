@@ -38,12 +38,12 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
         shooterMotorLeft.setInverted(true);
         shooterMotorLeft.getConfigurator().apply(
-            new CurrentLimitsConfigs().withStatorCurrentLimit(4)
+                new CurrentLimitsConfigs().withStatorCurrentLimit(4)
         );
         shooterMotorRight.getConfigurator().apply(
                 new CurrentLimitsConfigs().withStatorCurrentLimit(4)
         );
-            shooterMotorRight.setControl(new Follower(shooterMotorLeftID, true));
+        shooterMotorRight.setControl(new Follower(shooterMotorLeftID, true));
 
         shooterOutputAverager = new Averager(Constants.POSE_WINDOW_LENGTH);
 
@@ -58,10 +58,9 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     private double getTargetSpeed() {
         return switch (shootingMode) {
-            case AUTO_SPEAKER, SPINUP -> AimUtil.getShooterSetpoint().speed();
+            case AUTO_SPEAKER, SPINUP -> AimUtil.getShooterSetpoint()[0];
             case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
             case AMP -> SHOOTER_AMP_SETPOINT.speed();
-            case TRAP -> SHOOTER_TRAP_SETPOINT.speed();
             case IDLE, INTAKE -> 0;
             case LAUNCH -> SHOOTER_LAUNCH_SETPOINT.speed();
         };
@@ -76,24 +75,27 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
         shooterMotorLeft.setVoltage(shooterOutputAverager.getValue() * ShooterInfo.SHOOTER_VOLTAGE);
     }
 
-    private void applyIdleSpeed(){
+    private void applyIdleSpeed() {
         double speed = Robot.isInAuton()
                 ? SHOOTER_AUTON_IDLE_SPEED
                 : SHOOTER_IDLE_SPEED;
         shooterMotorLeft.set(speed);
     }
-    private void applyIntakeSpeed() { shooterMotorLeft.set(ShooterInfo.SHOOTER_INTAKE_SPEED); }
+
+    private void applyIntakeSpeed() {
+        shooterMotorLeft.set(ShooterInfo.SHOOTER_INTAKE_SPEED);
+    }
 
     @Override
     public void periodic() {
         switch (shootingMode) {
-            case AUTO_SPEAKER, SPEAKER, AMP, TRAP, LAUNCH -> applyBangBangControl(getTargetSpeed());
+            case AUTO_SPEAKER, SPEAKER, AMP, LAUNCH -> applyBangBangControl(getTargetSpeed());
             case IDLE -> applyIdleSpeed();
             case INTAKE -> applyIntakeSpeed();
         }
     }
 
-    public void setShootingMode(ShootingMode shooting){
+    public void setShootingMode(ShootingMode shooting) {
         shootingMode = shooting;
     }
 
@@ -108,7 +110,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     }
 
     private boolean isUpToSpeed() {
-        return Math.abs(getCurrentSpeed()) >= Math.abs(getTargetSpeed()) * switch(shootingMode) {
+        return Math.abs(getCurrentSpeed()) >= Math.abs(getTargetSpeed()) * switch (shootingMode) {
             case AMP -> .98;
             default -> 0.95;
         };

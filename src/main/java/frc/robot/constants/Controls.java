@@ -147,7 +147,7 @@ public final class Controls {
 
     public static Trigger canSOTF = inShootingRange.and(aligned).and(inShootingSector);
 
-    public static Trigger spinupTrigger = new Trigger(AimUtil::inRange).and(canSOTF.negate());
+    public static Trigger spinupTrigger = new Trigger(AimUtil::inRange);
 
     public static double rumbleStrength = 0.5;
 }

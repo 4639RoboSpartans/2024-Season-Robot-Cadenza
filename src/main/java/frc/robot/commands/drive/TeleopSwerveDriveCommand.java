@@ -33,6 +33,12 @@ public class TeleopSwerveDriveCommand extends Command {
     public void execute() {
         double forwardsSpeed = DriverControls.SwerveForwardAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double sidewaysSpeed = DriverControls.SwerveStrafeAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+
+        if (DriverControls.AimButton.getAsBoolean()){
+            forwardsSpeed /= 2;
+            sidewaysSpeed /= 2;
+        }
+
         double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
         double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
@@ -44,14 +50,14 @@ public class TeleopSwerveDriveCommand extends Command {
     private double getRotationSpeed(double rotationMultiplier) {
         double rawSpeed;
         Rotation2d heading = swerveDriveSubsystem.getRotation2d();
-        Rotation2d speaker = AimUtil.getSpeakerRotation(0, 0);
+        Rotation2d speaker = AimUtil.getSpeakerRotation();
         SmartDashboard.putNumber("speaker angle", speaker.getDegrees());
         SmartDashboard.putNumber("speaker x", AimUtil.getSpeakerVector().getX());
         SmartDashboard.putNumber("speaker y", AimUtil.getSpeakerVector().getY());
         SmartDashboard.putNumber("heading", heading.getDegrees());
         SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
         if(DriverControls.AimButton.getAsBoolean()) {
-            rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation(0, 0).getRadians());
+            rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation().getRadians());
         }
         else {
             rawSpeed = DriverControls.SwerveRotationAxis.getAsDouble() * SwerveInfo.TELOP_ROTATION_SPEED;

@@ -8,6 +8,6 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 
 public class AutoSpeakerCommand extends ShootCommand {
     public AutoSpeakerCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip led) {
-        super(shooter, hopper, led, RobotInfo.ShooterInfo.ShootingMode.AUTO_SPEAKER, false, false);
+        super(shooter, hopper, led, RobotInfo.ShooterInfo.ShootingMode.AUTO_SPEAKER, false);
     }
 }

@@ -64,12 +64,6 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
         isAuton = true;
-
-        if (autonomousCommand != null) {
-            new WaitCommand(robotContainer.autonDelay.getSelected())
-                .andThen(autonomousCommand)
-                .schedule();
-        }
     }
 
     @Override
