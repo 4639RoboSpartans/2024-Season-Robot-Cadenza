@@ -58,7 +58,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     private double getTargetSpeed() {
         return switch (shootingMode) {
-            case AUTO_SPEAKER, SPINUP -> AimUtil.getVelocityCompensatedShooterSetpoint().speed();
+            case AUTO_SPEAKER, SPINUP -> AimUtil.getShooterSetpoint().speed();
             case SPEAKER -> SHOOTER_SPEAKER_SETPOINT.speed();
             case AMP -> SHOOTER_AMP_SETPOINT.speed();
             case TRAP -> SHOOTER_TRAP_SETPOINT.speed();

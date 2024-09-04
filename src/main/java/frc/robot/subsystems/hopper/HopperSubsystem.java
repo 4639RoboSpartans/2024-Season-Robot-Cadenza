@@ -56,7 +56,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     }
 
     public boolean hasNote() {
-        return hasNote;
+        return hasNote && irActive;
     }
 
     public boolean isIrActive() {

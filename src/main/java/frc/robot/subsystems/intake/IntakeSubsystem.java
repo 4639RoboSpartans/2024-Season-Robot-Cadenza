@@ -2,8 +2,11 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -15,9 +18,10 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
     private final CANSparkMax pivotMotorRight;
     private final CANSparkMax intakeMotor;
+    private final RelativeEncoder leftEncoder;
+    private final double downPosition, upPosition;
 
     private final PIDController pivotPID;
-    private final DutyCycleEncoder encoder;
 
     public IntakeSubsystem(int pivotMotorLeftID, int pivotMotorRightID, int intakeMotorID, int encoderID) {
         pivotMotorLeft = new CANSparkMax(pivotMotorLeftID, CANSparkMax.MotorType.kBrushless);
@@ -32,14 +36,16 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotMotorLeft.setInverted(false);
         pivotMotorRight.follow(pivotMotorLeft, true);
 
-        encoder = new DutyCycleEncoder(IDs.INTAKE_ENCODER_DIO_PORT);
+        leftEncoder = pivotMotorLeft.getEncoder();
+        downPosition = leftEncoder.getPosition();
+        upPosition = downPosition - 55;
         setExtended(ExtensionState.RETRACTED);
     }
 
     public void setExtended(ExtensionState extended) {
         pivotPID.setSetpoint(switch (extended){
-            case EXTENDED -> IntakeInfo.INTAKE_PIVOT_EXTENDED_SETPOINT;
-            case RETRACTED -> IntakeInfo.INTAKE_PIVOT_DEFAULT_SETPOINT;
+            case EXTENDED -> downPosition;
+            case RETRACTED -> upPosition;
         });
     }
 
@@ -58,7 +64,10 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     @Override
     public void periodic() {
-        double pidOutput = -pivotPID.calculate(encoder.getAbsolutePosition());
+        double pidOutput = -pivotPID.calculate(getPosition());
+        SmartDashboard.putNumber("down postion", downPosition);
+        SmartDashboard.putNumber("up position", upPosition);
+        SmartDashboard.putNumber("pivot encoder angle", getPosition());
 
         if(pidOutput > 0) pidOutput *= Constants.INTAKE_PIVOT_UP_MULTIPLIER;
 
@@ -66,7 +75,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         // SmartDashboard.putNumber("current pivot pos", getPosition());
         // SmartDashboard.putNumber("pivot pid output", pidOutput);
 
-        pivotMotorLeft.set(pidOutput);
+        // pivotMotorLeft.set(pidOutput);
 
         // SmartDashboard.putNumber("intake pivot output", pivotMotorRight.getAppliedOutput());
     }
@@ -80,6 +89,6 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     }
 
     private double getPosition() {
-        return encoder.getAbsolutePosition();
+        return leftEncoder.getPosition();
     }
 }

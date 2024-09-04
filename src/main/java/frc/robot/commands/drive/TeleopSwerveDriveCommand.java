@@ -31,22 +31,17 @@ public class TeleopSwerveDriveCommand extends Command {
 
     @Override
     public void execute() {
-        double rawForwardsSpeed = DriverControls.SwerveForwardAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-        double rawSidewaysSpeed = DriverControls.SwerveStrafeAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
-        double rawRotationSpeed = DriverControls.SwerveRotationAxis.getAsDouble() * SwerveInfo.TELOP_ROTATION_SPEED;
-        double forwardsSpeed = getForwardsSpeed(rawForwardsSpeed), sidewaysSpeed = getSidewaysSpeed(rawSidewaysSpeed);
+        double forwardsSpeed = DriverControls.SwerveForwardAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        double sidewaysSpeed = DriverControls.SwerveStrafeAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
-        double rotateSpeed = getRotationSpeed(rawForwardsSpeed, rawSidewaysSpeed, rawRotationSpeed, rotationMultiplier);
+        double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setFieldCentricMovement(chassisSpeeds);
         // SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
     }
 
-    private double getRotationSpeed(double rawForwardsSpeed,
-                                    double rawSidewaysSpeed,
-                                    double rawRotationSpeed,
-                                    double rotationMultiplier) {
+    private double getRotationSpeed(double rotationMultiplier) {
         double rawSpeed;
         Rotation2d heading = swerveDriveSubsystem.getRotation2d();
         Rotation2d speaker = AimUtil.getSpeakerRotation(0, 0);
@@ -55,30 +50,13 @@ public class TeleopSwerveDriveCommand extends Command {
         SmartDashboard.putNumber("speaker y", AimUtil.getSpeakerVector().getY());
         SmartDashboard.putNumber("heading", heading.getDegrees());
         SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
-        if (DriverControls.AimButton.getAsBoolean()) {
-            rawSpeed = RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(),
-                    AimUtil.getSpeakerRotation(0, 0).getRadians());
-        } else if (DriverControls.SOTF.getAsBoolean()) {
-            rawSpeed = RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(),
-                    AimUtil.getSpeakerRotation(rawForwardsSpeed, rawSidewaysSpeed).getRadians());
-        } else {
-            rawSpeed = rawRotationSpeed;
+        if(DriverControls.AimButton.getAsBoolean()) {
+            rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation(0, 0).getRadians());
+        }
+        else {
+            rawSpeed = DriverControls.SwerveRotationAxis.getAsDouble() * SwerveInfo.TELOP_ROTATION_SPEED;
         }
         return rawSpeed * (1 + rotationMultiplier);
-    }
-
-    public double getForwardsSpeed(double forwardsSpeed) {
-        if (DriverControls.SOTF.getAsBoolean()) {
-            return forwardsSpeed / 2;//TODO: tune this
-        }
-        return forwardsSpeed;
-    }
-
-    public double getSidewaysSpeed(double sidewaysSpeed) {
-        if (DriverControls.SOTF.getAsBoolean()) {
-            return sidewaysSpeed / 2;//TODO: tune this
-        }
-        return sidewaysSpeed;
     }
 
     @Override
