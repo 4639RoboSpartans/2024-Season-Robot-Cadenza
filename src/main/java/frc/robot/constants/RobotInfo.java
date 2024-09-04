@@ -18,16 +18,16 @@ public final class RobotInfo {
         public static final PIDController choreoX = new PIDController(10, 0, 0);
         public static final PIDController choreoY = new PIDController(10, 0, 0);
         public static final PIDController choreoRotation = new PIDController(10, 0, 0);
-        public static final PIDTemplate TeleopRotationPID = new PIDTemplate(10, 0, 0);
+        public static final PIDTemplate TeleopRotationPID = new PIDTemplate(1, 0, 0);
         public static final double TIME_BEFORE_INTAKE_START = 1;
     }
 
     public static final class IntakeInfo {
 
-        public static final double INTAKE_SPEED = -0.7;
+        public static final double INTAKE_SPEED = -0.8;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
-        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.8, 0, 0);
+        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.008, 0, 0);
     }
 
     public static final class HopperInfo {
@@ -107,15 +107,15 @@ public final class RobotInfo {
         public static final double SHOOTER_IDLE_SPEED = 0.2;
         public static final double SHOOTER_AUTON_IDLE_SPEED = 0.35;
         public static final double SHOOTER_INTAKE_SPEED = -0.35;
-        public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .579;
+        public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .9;
         public static final double AngleOffset = -0.005;
 
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
 
         public static final ShooterInfo.ShooterSetpoint SHOOTER_AMP_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 6.8,
-                .49
-        );
+                .8
+       );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT = measurements[1].setpoint;
         public static final ShooterInfo.ShooterSetpoint SHOOTER_TRAP_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 20,

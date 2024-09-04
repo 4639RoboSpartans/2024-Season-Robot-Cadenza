@@ -41,6 +41,7 @@ import frc.robot.network.LimelightHelpers;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
+import frc.robot.util.AimUtil;
 import frc.robot.util.CommandsUtil;
 import frc.robot.util.DriverStationUtil;
 
@@ -143,7 +144,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("shooter angle", SubsystemManager.getShooterPivot(SubsystemManager.getShooter()).getCurrentAngle());
+        SmartDashboard.putNumber("dist", Math.hypot(AimUtil.getSpeakerVector().getX(), AimUtil.getSpeakerVector().getY()));
         field.setRobotPose(this.getState().Pose);
         SmartDashboard.putData("field", field);
         SmartDashboard.putNumber("heading", getRotation2d().getDegrees());

@@ -80,9 +80,9 @@ public class RobotContainer {
 //        
 //        autos = AutoBuilder.buildAutoChooser();
         autos = new SendableChooser<>();
-        for (Command i : AutoFactory.getAutos()) {
-            autos.addOption(i.getName(), i);
-        }
+        // for (Command i : AutoFactory.getAutos()) {
+        //     autos.addOption(i.getName(), i);
+        // }
         SmartDashboard.putData("Autons", autos);
 
         alliance = new SendableChooser<>();

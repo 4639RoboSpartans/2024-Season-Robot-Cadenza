@@ -90,8 +90,9 @@ public class AimUtil {
         return noteVector.minus(botVector);
     }
 
-    private static RobotInfo.ShooterInfo.ShooterSetpoint getShooterSetpoint(double dist) {
+    public static RobotInfo.ShooterInfo.ShooterSetpoint getShooterSetpoint() {
         Translation2d speakerRelativeBotPose = getSpeakerVector();
+        double dist = Math.hypot(speakerRelativeBotPose.getX(), speakerRelativeBotPose.getY());
         RobotInfo.ShooterInfo.ShooterSetpoint result =
                 ShooterMeasurementLERPer.get(dist);
 
@@ -106,6 +107,6 @@ public class AimUtil {
                 Controls.DriverControls.SwerveForwardAxis.getAsDouble(),
                 Controls.DriverControls.SwerveStrafeAxis.getAsDouble()
                 );
-        return getShooterSetpoint(speakerRelativeMovement.getY() / 5);//TODO: tune this
+        return getShooterSetpoint();//TODO: tune this
     }
 }
