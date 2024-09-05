@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IDs;
-import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.util.AimUtil;
 

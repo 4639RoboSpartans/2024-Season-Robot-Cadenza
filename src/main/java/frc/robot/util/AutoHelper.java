@@ -54,11 +54,12 @@ public class AutoHelper {
          Command shooterAutoSpinupCommand = new ShooterSpinupCommand(shooter).onlyWhile(Controls.spinupTrigger);
          Command shooterSOTFCommand = new AutoSpeakerCommand(shooter, hopper, ledStrip);
          Command ret =  Commands.deadline(
-                 intakeWhileMoving(pathName),
+                 AutoHelper.follow(pathName),
                  Commands.sequence(
                  Commands.waitUntil(Controls.spinupTrigger),
                  shooterAutoSpinupCommand.until(Controls.canSOTF),
-                 shooterSOTFCommand
+                 shooterSOTFCommand,
+                 new IntakeCommand(intake, hopper, ledStrip, oi)
                  )
          );
          return ret;

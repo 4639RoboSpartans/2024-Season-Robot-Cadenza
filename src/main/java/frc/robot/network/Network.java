@@ -43,7 +43,7 @@ public class Network {
         for(var entry : entries.entrySet()){
             String entryKey = entry.getKey();
             String entryValue = entry.getValue();
-            // SmartDashboard.putString(tableName + ":" + entryKey, entryValue);
+            SmartDashboard.putString("table/" + tableName + ":" + entryKey, entryValue);
         }
     }
 }

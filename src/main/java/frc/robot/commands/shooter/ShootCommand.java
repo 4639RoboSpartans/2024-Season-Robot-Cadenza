@@ -2,14 +2,12 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.constants.Controls;
 import frc.robot.constants.DisplayInfo;
 import frc.robot.constants.RobotInfo.HopperInfo;
 import frc.robot.constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.led.LEDPattern;
 import frc.robot.led.LEDStrip;
-import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 

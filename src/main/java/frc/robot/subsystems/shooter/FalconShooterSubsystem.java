@@ -5,7 +5,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
@@ -89,7 +88,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     @Override
     public void periodic() {
         switch (shootingMode) {
-            case AUTO_SPEAKER, SPEAKER, AMP, LAUNCH -> applyBangBangControl(getTargetSpeed());
+            case AUTO_SPEAKER, SPEAKER, AMP, LAUNCH, SPINUP -> applyBangBangControl(getTargetSpeed());
             case IDLE -> applyIdleSpeed();
             case INTAKE -> applyIntakeSpeed();
         }

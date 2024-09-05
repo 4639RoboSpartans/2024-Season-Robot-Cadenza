@@ -6,11 +6,9 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IDs;
-import frc.robot.subsystems.SubsystemManager;
-
-import static frc.robot.constants.RobotInfo.HopperInfo;
 
 public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final CANSparkMax motor;
@@ -66,7 +64,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     public Command toggleIR() {
         return Commands.runOnce(() -> {
             irActive = !irActive;
-        });
+        }, this);
     }
 
     @Override

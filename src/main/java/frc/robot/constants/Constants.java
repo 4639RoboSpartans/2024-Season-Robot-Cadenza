@@ -9,9 +9,9 @@ public final class Constants {
 
 
     public enum CurrentRobot {
-        ZEUS, SIREN
+        ZEUS, SIREN, SIM
     }
-    public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
+    public static final CurrentRobot currentRobot = CurrentRobot.SIM;
 
     private static final double[] oldOffsets = {
             -54.98, -122.4, 74.44, 121.92
@@ -24,6 +24,6 @@ public final class Constants {
     };
     static final double[] swerveOffsets = switch (currentRobot) {
         case ZEUS -> oldOffsets;
-        case SIREN -> newOffsets;
+        case SIREN, SIM -> newOffsets;
     };
 }

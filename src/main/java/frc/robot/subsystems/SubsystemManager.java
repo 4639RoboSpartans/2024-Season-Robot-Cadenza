@@ -21,6 +21,7 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
+import frc.robot.subsystems.swerve.DummySwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 import static frc.robot.constants.Constants.currentRobot;
@@ -45,7 +46,7 @@ public class SubsystemManager {
     public static LEDStrip getLedStrip() {
         if(ledStrip == null) {
             ledStrip = switch(currentRobot){
-                case ZEUS -> new DummyLEDStrip();
+                case ZEUS, SIM -> new DummyLEDStrip();
                 case SIREN -> new PhysicalLEDStrip(0, 64);
             };
         }
@@ -54,7 +55,10 @@ public class SubsystemManager {
 
     public static ISwerveDriveSubsystem getSwerveDrive() {
         if(swerveDrive == null) {
-            swerveDrive = TunerConstants.DriveTrain;
+            swerveDrive = switch (currentRobot) {
+                case ZEUS -> new DummySwerveDriveSubsystem();
+                case SIREN, SIM -> TunerConstants.DriveTrain;
+            };
         }
         return swerveDrive;
     }
@@ -62,7 +66,7 @@ public class SubsystemManager {
     public static IShooterPivotSubsystem getShooterPivot(IShooterSubsystem shooter) {
         if(shooterPivot == null) {
             shooterPivot = switch(currentRobot){
-                case ZEUS -> new DummyShooterPivotSubsystem();
+                case ZEUS, SIM -> new DummyShooterPivotSubsystem();
                 case SIREN -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
             };
         }
@@ -72,7 +76,7 @@ public class SubsystemManager {
     public static IShooterSubsystem getShooter() {
         if(shooter == null) {
             shooter = switch (currentRobot) {
-                case ZEUS -> new DummyShooterSubsystem();
+                case ZEUS, SIM -> new DummyShooterSubsystem();
                 case SIREN -> new FalconShooterSubsystem(
                     IDs.SHOOTER_SHOOTER_LEFT_MOTOR,
                     IDs.SHOOTER_SHOOTER_RIGHT_MOTOR
@@ -85,7 +89,7 @@ public class SubsystemManager {
     public static IIntakeSubsystem getIntake() {
         if(intake == null) {
             intake = switch(currentRobot){
-                case ZEUS -> new DummyIntakeSubsystem();
+                case ZEUS, SIM -> new DummyIntakeSubsystem();
                 case SIREN -> //new DummyIntakeSubsystem();
                  new IntakeSubsystem(
                     IDs.INTAKE_PIVOT_MOTOR_LEFT,
@@ -102,7 +106,7 @@ public class SubsystemManager {
     public static IHopperSubsystem getHopper() {
         if(hopper == null) {
             hopper = switch(currentRobot){
-                case ZEUS -> new DummyHopperSubsystem();
+                case ZEUS, SIM -> new DummyHopperSubsystem();
                 case SIREN -> //new DummyHopperSubsystem();
                  new HopperSubsystem(IDs.HOPPER_MOTOR);
             };
@@ -113,7 +117,7 @@ public class SubsystemManager {
     public static IClimberSubsystem getClimber() {
         if(climber == null) {
             climber = switch(currentRobot){
-                case ZEUS -> new DummyClimberSubsystem();
+                case ZEUS, SIM -> new DummyClimberSubsystem();
                 case SIREN -> new ClimberSubsystem(IDs.CLIMBER_LEFT, IDs.CLIMBER_RIGHT);
             };
         }

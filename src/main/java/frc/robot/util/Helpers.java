@@ -3,7 +3,6 @@ package frc.robot.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
 import com.choreo.lib.ChoreoTrajectoryState;
 import com.revrobotics.CANSparkBase;

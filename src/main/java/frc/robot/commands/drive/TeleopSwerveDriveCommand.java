@@ -7,20 +7,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.RobotInfo.SwerveInfo;
-import frc.robot.oi.OI;
-import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.util.AimUtil;
 
 public class TeleopSwerveDriveCommand extends Command {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
     private final PIDController RotationPID;
-    private final OI oi;
 
-    public TeleopSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem, OI oi) {
+    public TeleopSwerveDriveCommand(ISwerveDriveSubsystem swerveDriveSubsystem) {
         this.swerveDriveSubsystem = swerveDriveSubsystem;
         RotationPID = SwerveInfo.TeleopRotationPID.create();
-        this.oi = oi;
         addRequirements(swerveDriveSubsystem);
     }
 

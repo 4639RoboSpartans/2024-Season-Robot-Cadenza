@@ -88,7 +88,8 @@ public class TunerConstants {
 
     private static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
             .withPigeon2Id(kPigeonId)
-            .withCANbusName(kCANbusName);
+            .withCANbusName(kCANbusName)
+            .withPigeon2Configs(pigeonConfigs);
 
     private static final SwerveModuleConstantsFactory ConstantCreator = new SwerveModuleConstantsFactory()
             .withDriveMotorGearRatio(kDriveGearRatio)
@@ -105,7 +106,10 @@ public class TunerConstants {
             .withSteerFrictionVoltage(kSteerFrictionVoltage)
             .withDriveFrictionVoltage(kDriveFrictionVoltage)
             .withFeedbackSource(SteerFeedbackType.FusedCANcoder)
-            .withCouplingGearRatio(kCoupleRatio);
+            .withCouplingGearRatio(kCoupleRatio)
+            .withSteerMotorInitialConfigs(steerInitialConfigs)
+            .withDriveMotorInitialConfigs(driveInitialConfigs)
+            .withCANcoderInitialConfigs(cancoderInitialConfigs);
 
     // Front Left
     private static final int kFrontLeftDriveMotorId = 1;

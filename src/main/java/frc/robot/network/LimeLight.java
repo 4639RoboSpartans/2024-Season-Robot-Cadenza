@@ -1,6 +1,5 @@
 package frc.robot.network;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.constants.RobotInfo.ShooterInfo;
 
 public class LimeLight {

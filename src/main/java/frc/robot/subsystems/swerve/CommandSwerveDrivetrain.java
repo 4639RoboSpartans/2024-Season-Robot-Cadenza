@@ -1,17 +1,13 @@
 package frc.robot.subsystems.swerve;
 
-import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.constants.RobotInfo.SwerveInfo.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
-import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.*;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -20,7 +16,6 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -33,13 +28,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Robot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.network.LimelightHelpers;
-import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
 import frc.robot.util.AimUtil;
 import frc.robot.util.CommandsUtil;
@@ -49,7 +40,7 @@ import frc.robot.util.DriverStationUtil;
  * Class that extends the Phoenix SwerveDrivetrain class and implements
  * subsystem, so it can be used in command-based projects easily.
  */
-public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem, ISwerveDriveSubsystem {
+public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerveDriveSubsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -62,15 +53,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configurePathPlanner();
-        if (Utils.isSimulation()) {
+        if (Robot.isSimulation()) {
             startSimThread();
         }
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
+        seedFieldRelative(new Pose2d());
         configurePathPlanner();
-        if (Utils.isSimulation()) {
+        if (Robot.isSimulation()) {
             startSimThread();
         }
     }
@@ -144,8 +136,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("dist", Math.hypot(AimUtil.getSpeakerVector().getX(), AimUtil.getSpeakerVector().getY()));
-        field.setRobotPose(this.getState().Pose);
+        field.setRobotPose(getPose());
         SmartDashboard.putData("field", field);
         SmartDashboard.putNumber("heading", getRotation2d().getDegrees());
         PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
@@ -158,6 +149,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void simulationPeriodic() {
         /* Assume 20ms update rate, get battery voltage from WPILib */
         updateSimState(0.020, RobotController.getBatteryVoltage());
+        field.setRobotPose(getPose());
+        SmartDashboard.putData("field", field);
     }
 
     public void reset() {

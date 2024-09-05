@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
+import frc.robot.commands.autos.AutoFactory;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
@@ -66,9 +67,9 @@ public class RobotContainer {
 //        
 //        autos = AutoBuilder.buildAutoChooser();
         autos = new SendableChooser<>();
-        // for (Command i : AutoFactory.getAutos()) {
-        //     autos.addOption(i.getName(), i);
-        // }
+        for (Command i : AutoFactory.getAutos()) {
+            autos.addOption(i.getName(), i);
+        }
         SmartDashboard.putData("Autons", autos);
 
         alliance = new SendableChooser<>();
@@ -85,7 +86,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
         //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem, oi));
+        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, oi)));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
@@ -102,7 +103,7 @@ public class RobotContainer {
     private void configureBindings() {
 
         swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(
-                swerveDriveSubsystem, oi
+                swerveDriveSubsystem
         ));
 
         // TODO: extract to named class

@@ -1,6 +1,5 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotInfo;
 import frc.robot.led.LEDStrip;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
