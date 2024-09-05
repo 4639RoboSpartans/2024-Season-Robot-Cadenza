@@ -16,7 +16,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
     // Components
     private final CANSparkMax aimMotorLeft;
     private final CANSparkMax aimMotorRight;
-    
+
     private final DutyCycleEncoder encoder;
     // References to other subsystems
     private final IShooterSubsystem shooter;
@@ -28,24 +28,24 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         aimMotorLeft = new CANSparkMax(aimMotorLeftID, CANSparkMax.MotorType.kBrushless);
         aimMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
         encoder = new DutyCycleEncoder(IDs.SHOOTER_PIVOT_ENCODER_DIO_PORT);
-        
+
         aimMotorRight = new CANSparkMax(aimMotorRightID, CANSparkMax.MotorType.kBrushless);
         aimMotorRight.follow(aimMotorLeft, true);
 
         this.shooter = shooter;
-        
+
         aimPID = ShooterInfo.SHOOTER_AIM_PID_CONSTANTS.create();
         aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
     }
 
-    public boolean isAtSetPoint(){
+    public boolean isAtSetPoint() {
         double error = Math.abs(aimPID.getSetpoint() - encoder.getAbsolutePosition());
         return error < ShooterInfo.SHOOTER_PIVOT_ERROR;
     }
 
     @Override
     public void periodic() {
-        if(!isUsingPID) return;
+        if (!isUsingPID) return;
 
         double targetAngle = switch (shooter.getShootingMode()) {
             case AUTO_SPEAKER, SPINUP -> AimUtil.getShooterSetpoint()[1];
@@ -62,15 +62,15 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         double pidOutput = aimPID.calculate(currentAngle);
 
         aimMotorLeft.set(pidOutput);
-         SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
-         SmartDashboard.putNumber("AimPIDOutput", pidOutput);
+        SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
+        SmartDashboard.putNumber("AimPIDOutput", pidOutput);
     }
 
     public double getCurrentAngle() {
         return encoder.getAbsolutePosition();
     }
 
-    public void stop(){
+    public void stop() {
         aimMotorLeft.stopMotor();
     }
 }

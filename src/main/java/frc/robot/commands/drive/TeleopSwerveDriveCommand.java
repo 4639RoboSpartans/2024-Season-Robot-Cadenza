@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
@@ -30,17 +31,17 @@ public class TeleopSwerveDriveCommand extends Command {
         double forwardsSpeed = DriverControls.SwerveForwardAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         double sidewaysSpeed = DriverControls.SwerveStrafeAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
 
-        if (DriverControls.AimButton.getAsBoolean()){
-            forwardsSpeed /= 2;
-            sidewaysSpeed /= 2;
+        if (DriverControls.SOTF.getAsBoolean()){
+            forwardsSpeed /= 5;
+            sidewaysSpeed /= 5;
         }
 
-        double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
+        double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2 * (1 + sidewaysSpeed);
         double rotateSpeed = getRotationSpeed(rotationMultiplier);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setFieldCentricMovement(chassisSpeeds);
-        // SmartDashboard.putNumber("navX heading", SubsystemManager.getNavX().getHeading());
+        SmartDashboard.putBoolean("canShoot", Controls.canSOTF.and(DriverControls.SOTF).getAsBoolean());
     }
 
     private double getRotationSpeed(double rotationMultiplier) {
@@ -52,7 +53,7 @@ public class TeleopSwerveDriveCommand extends Command {
         SmartDashboard.putNumber("speaker y", AimUtil.getSpeakerVector().getY());
         SmartDashboard.putNumber("heading", heading.getDegrees());
         SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
-        if(DriverControls.AimButton.getAsBoolean()) {
+        if(DriverControls.SOTF.getAsBoolean()) {
             rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation().getRadians());
         }
         else {

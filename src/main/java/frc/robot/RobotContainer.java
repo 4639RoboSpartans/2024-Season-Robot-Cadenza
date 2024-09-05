@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.shooter.*;
+import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.commands.autos.AutoFactory;
@@ -23,6 +24,7 @@ import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.drive.AmpAimCommand;
 import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.intake.*;
+import frc.robot.constants.InterpolatingTables;
 import frc.robot.constants.RobotInfo;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
@@ -52,6 +54,7 @@ public class RobotContainer {
     
 
     public RobotContainer() {
+        InterpolatingTables.initializeTables();
         oi = new OI();
         ledStrip = SubsystemManager.getLedStrip();
 
@@ -140,6 +143,21 @@ public class RobotContainer {
 
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
                 whileTrue(new RunCommand(swerveDriveSubsystem::reset));
+
+        Controls.canSOTF.and(DriverControls.SOTF).whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip))
+                .onTrue(Commands.runOnce(
+                        () -> SmartDashboard.putBoolean("shooting", true)
+                ))
+                .onFalse(Commands.runOnce(
+                        () -> SmartDashboard.putBoolean("shooting", false)
+                ));
+        Controls.spinupTrigger
+                .onTrue(Commands.runOnce(
+                        () -> SmartDashboard.putBoolean("spinup", true)
+                ))
+                .onFalse(Commands.runOnce(
+                        () -> SmartDashboard.putBoolean("spinup", false)
+                ));
     }
 
     public Command getAutonomousCommand() {

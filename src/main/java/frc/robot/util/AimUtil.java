@@ -36,7 +36,7 @@ public class AimUtil {
 
     public static boolean inShootingRange() {
         Translation2d trans = getSpeakerVector();
-        return Math.hypot(trans.getX(), trans.getY()) <= 3;
+        return Math.hypot(trans.getX(), trans.getY()) <= 4;
     }
 
     public static boolean inShootingSector() {

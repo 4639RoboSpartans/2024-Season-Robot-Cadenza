@@ -66,8 +66,8 @@ public class SubsystemManager {
     public static IShooterPivotSubsystem getShooterPivot(IShooterSubsystem shooter) {
         if(shooterPivot == null) {
             shooterPivot = switch(currentRobot){
-                case ZEUS, SIM -> new DummyShooterPivotSubsystem();
-                case SIREN -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
+                case ZEUS -> new DummyShooterPivotSubsystem();
+                case SIREN, SIM -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
             };
         }
         return shooterPivot;
@@ -76,8 +76,8 @@ public class SubsystemManager {
     public static IShooterSubsystem getShooter() {
         if(shooter == null) {
             shooter = switch (currentRobot) {
-                case ZEUS, SIM -> new DummyShooterSubsystem();
-                case SIREN -> new FalconShooterSubsystem(
+                case ZEUS -> new DummyShooterSubsystem();
+                case SIREN, SIM -> new FalconShooterSubsystem(
                     IDs.SHOOTER_SHOOTER_LEFT_MOTOR,
                     IDs.SHOOTER_SHOOTER_RIGHT_MOTOR
                 );
