@@ -28,7 +28,7 @@ public class AutoFactory {
              AutoHelper.followThenShoot("C4-SS")
      ).withName("Rush0_45");
      public static Command Spikes = Commands.sequence(
-             AutoHelper.SOTFCommand("S2-A2 SOTF"),
+             AutoHelper.SOTFCommand("S2-A2"),
              AutoHelper.SOTFCommand("A2-A1 SOTF"),
              AutoHelper.SOTFCommand("A1-A3 SOTF"),
              AutoHelper.shoot()

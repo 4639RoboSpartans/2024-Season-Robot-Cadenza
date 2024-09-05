@@ -62,7 +62,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         super(driveTrainConstants, modules);
         seedFieldRelative(new Pose2d());
         configurePathPlanner();
-        if (Robot.isSimulation()) {
+        if (Utils.isSimulation()) {
             startSimThread();
         }
     }
@@ -203,7 +203,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
     private Command choreoSwerveCommand(ChoreoTrajectory trajectory) {
         return Choreo.choreoSwerveCommand(
                 trajectory,
-                () -> this.getPose(),
+                this::getPose,
                 choreoX,
                 choreoY,
                 choreoRotation,
