@@ -14,12 +14,17 @@ import frc.robot.commands.autos.AutoFactory;
 import frc.robot.led.LEDPattern;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.tuning.RobotConfiguration;
 
 public class Robot extends TimedRobot {
     private static boolean isAuton = false;
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
+
+    static {
+        RobotConfiguration.loadFile("config/shooter.rcfg");
+    }
 
     public static boolean isInAuton(){
         return isAuton;
@@ -33,6 +38,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        RobotConfiguration.updateAll();
 
         LimeLight.writeValuesToSmartDashboard();
     }
