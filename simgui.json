@@ -4,6 +4,7 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Alliance": "String Chooser",
       "/SmartDashboard/Autons": "String Chooser",
+      "/SmartDashboard/Row select for robot.shooter.SetPointTable": "String Chooser",
       "/SmartDashboard/field": "Field2d"
     }
   },

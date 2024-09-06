@@ -36,15 +36,15 @@ public class TeleopSwerveDriveCommand extends Command {
             sidewaysSpeed /= 4;
         }
 
-        double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2 * (1 + sidewaysSpeed);
-        double rotateSpeed = getRotationSpeed(rotationMultiplier);
+        double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2;
+        double rotateSpeed = getRotationSpeed(sidewaysSpeed, rotationMultiplier);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setFieldCentricMovement(chassisSpeeds);
         SmartDashboard.putBoolean("canShoot", Controls.canSOTF.and(DriverControls.SOTF).getAsBoolean());
     }
 
-    private double getRotationSpeed(double rotationMultiplier) {
+    private double getRotationSpeed(double sidewaysSpeed, double rotationMultiplier) {
         double rawSpeed;
         Rotation2d heading = swerveDriveSubsystem.getRotation2d();
         Rotation2d speaker = AimUtil.getSpeakerRotation();
@@ -54,7 +54,7 @@ public class TeleopSwerveDriveCommand extends Command {
         SmartDashboard.putNumber("heading", heading.getDegrees());
         SmartDashboard.putNumber("speaker offset", heading.getDegrees() - speaker.getDegrees());
         if(DriverControls.SOTF.getAsBoolean()) {
-            rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation().getRadians());
+            rawSpeed =  RotationPID.calculate(swerveDriveSubsystem.getRotation2d().getRadians(), AimUtil.getSpeakerRotation(sidewaysSpeed).getRadians());
         }
         else {
             rawSpeed = DriverControls.SwerveRotationAxis.getAsDouble() * SwerveInfo.TELOP_ROTATION_SPEED;

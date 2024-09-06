@@ -53,7 +53,7 @@ public class RobotContainer {
 
     private final SendableChooser<Command> autos;
     public static SendableChooser<Boolean> alliance;
-    
+
 
     public RobotContainer() {
         InterpolatingTables.initializeTables();
@@ -69,23 +69,23 @@ public class RobotContainer {
 
         nameCommands();
 
-       autos = AutoBuilder.buildAutoChooser();
-       autos.setDefaultOption("Spikes", AutoFactory.Spikes);
-        // autos = new SendableChooser<>();
-        // for (Command i : AutoFactory.getAutos()) {
-        //     autos.addOption(i.getName(), i);
-        // }
+//       autos = AutoBuilder.buildAutoChooser();
+        autos = new SendableChooser<>();
+        autos.setDefaultOption("Spikes", AutoFactory.Spikes);
+        for (Command i : AutoFactory.getAutos()) {
+            autos.addOption(i.getName(), i);
+        }
         SmartDashboard.putData("Autons", autos);
 
         alliance = new SendableChooser<>();
         alliance.addOption("Red", true);
         alliance.setDefaultOption("Blue", false);
-         SmartDashboard.putData("Alliance", alliance);
+        SmartDashboard.putData("Alliance", alliance);
 
         configureBindings();
     }
 
-    private void nameCommands(){
+    private void nameCommands() {
         //climber commands
         NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
@@ -113,10 +113,9 @@ public class RobotContainer {
 
         // TODO: extract to named class
         ledStrip.setDefaultCommand(new RunCommand(() -> {
-            if(hopper.hasNote()) {
+            if (hopper.hasNote()) {
                 ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(255, 50, 0), 3));
-            }
-            else {
+            } else {
                 ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
             }
         }, ledStrip));
@@ -127,7 +126,7 @@ public class RobotContainer {
         DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
 
         OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip, oi));
- 
+
         OperatorControls.OuttakeButton.whileTrue(new OuttakeCommand(intake, hopper));
 
         OperatorControls.IntakeExtendButton.whileTrue(new ExtendIntakeCommand(intake));
@@ -141,7 +140,16 @@ public class RobotContainer {
 
         OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
 
-        DriverControls.AmpAlignButton.whileTrue(new AmpAimCommand(swerveDriveSubsystem));
+        DriverControls.AmpAlignButton.whileTrue(new AmpAimCommand(swerveDriveSubsystem))
+                .onTrue(
+                        Commands.runOnce(
+                                () -> SmartDashboard.putBoolean("amp align", true)
+                        )
+                ).onFalse(
+                        Commands.runOnce(
+                                () -> SmartDashboard.putBoolean("amp align", false)
+                        )
+                );
 
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
                 whileTrue(new RunCommand(swerveDriveSubsystem::reset));
@@ -153,7 +161,7 @@ public class RobotContainer {
                 .onFalse(Commands.runOnce(
                         () -> SmartDashboard.putBoolean("shooting", false)
                 ));
-        Controls.spinupTrigger
+        Controls.spinupTrigger.whileTrue(new ShooterSpinupCommand(shooter))
                 .onTrue(Commands.runOnce(
                         () -> SmartDashboard.putBoolean("spinup", true)
                 ))
@@ -163,6 +171,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new AutoSpeakerCommand(shooter, hopper, ledStrip);
+        return autos.getSelected();
     }
 }

@@ -16,6 +16,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -117,7 +118,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
 
     @Override
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(m_pigeon2.getRotation2d().getDegrees() % 360 + 360);
+        return Rotation2d.fromDegrees(MathUtil.clamp(m_pigeon2.getRotation2d().getDegrees(), -360, 360));
     }
 
     @Override

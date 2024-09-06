@@ -94,6 +94,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
             case INTAKE -> applyIntakeSpeed();
         }
         SmartDashboard.putNumber("shooter speed", getTargetSpeed());
+        SmartDashboard.putString("shooting mode", shootingMode.toString());
     }
 
     public void setShootingMode(ShootingMode shooting) {

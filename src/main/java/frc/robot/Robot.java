@@ -7,6 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.*;
@@ -26,7 +27,7 @@ public class Robot extends TimedRobot {
         RobotConfiguration.loadFile("config/shooter.rcfg");
     }
 
-    public static boolean isInAuton(){
+    public static boolean isInAuton() {
         return isAuton;
     }
 
@@ -70,13 +71,17 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
+        if (autonomousCommand != null) {
+            SmartDashboard.putString("Auton selected", autonomousCommand.getName());
+            CommandScheduler.getInstance().schedule(autonomousCommand);
+        }
         isAuton = true;
     }
 
     @Override
     public void autonomousExit() {
         isAuton = false;
-        if(autonomousCommand != null){
+        if (autonomousCommand != null) {
             CommandScheduler.getInstance().removeComposedCommand(autonomousCommand);
         }
     }

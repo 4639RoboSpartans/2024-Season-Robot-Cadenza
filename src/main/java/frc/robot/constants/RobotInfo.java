@@ -16,6 +16,7 @@ public final class RobotInfo {
         public static final PIDController choreoY = new PIDController(10, 0, 0);
         public static final PIDController choreoRotation = new PIDController(10, 0, 0);
         public static final PIDTemplate TeleopRotationPID = new PIDTemplate(3.5, 0.1, 0);
+        public static final PIDTemplate TeleopTranslationPID = new PIDTemplate(0.5, 0, 0);
         public static final double TIME_BEFORE_INTAKE_START = 1;
     }
 

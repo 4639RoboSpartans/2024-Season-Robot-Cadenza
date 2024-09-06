@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -9,11 +10,8 @@ import frc.robot.constants.InterpolatingTables;
 import frc.robot.subsystems.SubsystemManager;
 
 public class AimUtil {
-    public static Rotation2d getSpeakerRotation(double forwardsSpeed, double sidewaysSpeed) {
-        Translation2d speakerVector = getSpeakerVector();
-        Translation2d botVector = new Translation2d(sidewaysSpeed, forwardsSpeed);
-        Translation2d shootingVector = getShootingVector(speakerVector, botVector);
-        return Rotation2d.fromRadians(Math.atan(shootingVector.getY() / shootingVector.getX()));
+    public static Rotation2d getSpeakerRotation(double sidewaysSpeed) {
+        return getSpeakerRotation().minus(Rotation2d.fromDegrees(sidewaysSpeed * 5));
     }
 
     public static Translation2d getSpeakerVector() {
@@ -53,7 +51,7 @@ public class AimUtil {
     }
 
     public static Rotation2d getSpeakerRotation() {
-        return Rotation2d.fromRadians(Math.atan(getSpeakerVector().getY() / getSpeakerVector().getX()) % (2 * Math.PI));
+        return Rotation2d.fromRadians(MathUtil.clamp(Math.atan(getSpeakerVector().getY() / getSpeakerVector().getX()), -2 * Math.PI, 2 * Math.PI));
     }
 
     public static Rotation2d getSpeakerOffset() {
@@ -62,11 +60,14 @@ public class AimUtil {
         return speakerRotation.minus(heading);
     }
 
-    public static Rotation2d getAmpRotation(double forwardsSpeed, double sidewaysSpeed) {
-        Translation2d ampVector = getAmpVector();
-        Translation2d botVector = new Translation2d(sidewaysSpeed, forwardsSpeed);
-        Translation2d shootingVector = getShootingVector(ampVector, botVector);
-        return new Rotation2d(Math.atan(shootingVector.getY() / shootingVector.getX()));
+    public static Rotation2d getAmpRotation() {
+        Rotation2d ampRot = Rotation2d.fromDegrees(0);
+        if (DriverStationUtil.isRed()) {
+            ampRot = ampRot.minus(Rotation2d.fromDegrees(90));
+        } else {
+            ampRot = ampRot.plus(Rotation2d.fromDegrees(90));
+        }
+        return Rotation2d.fromDegrees(MathUtil.clamp(ampRot.getDegrees(), -360, 360));
     }
 
     public static Translation2d getAmpVector() {
