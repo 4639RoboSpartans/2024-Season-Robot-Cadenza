@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
@@ -67,12 +69,12 @@ public class RobotContainer {
 
         nameCommands();
 
-//        
-//        autos = AutoBuilder.buildAutoChooser();
-        autos = new SendableChooser<>();
-        for (Command i : AutoFactory.getAutos()) {
-            autos.addOption(i.getName(), i);
-        }
+       autos = AutoBuilder.buildAutoChooser();
+       autos.setDefaultOption("Spikes", AutoFactory.Spikes);
+        // autos = new SendableChooser<>();
+        // for (Command i : AutoFactory.getAutos()) {
+        //     autos.addOption(i.getName(), i);
+        // }
         SmartDashboard.putData("Autons", autos);
 
         alliance = new SendableChooser<>();
@@ -97,7 +99,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
 
         // shooting commands
-        NamedCommands.registerCommand("ShootSpeaker", Commands.deadline(new WaitCommand(3), new AutoSpeakerCommand(shooter, hopper, ledStrip)));
+        NamedCommands.registerCommand("ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
         NamedCommands.registerCommand("ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
     }
@@ -161,6 +163,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return autos.getSelected();
+        return new AutoSpeakerCommand(shooter, hopper, ledStrip);
     }
 }

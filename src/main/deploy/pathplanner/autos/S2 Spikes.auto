@@ -53,15 +53,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "IntakeCommand"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootSpeaker"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootSpeaker"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeCommand"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -78,15 +85,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "IntakeCommand"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootSpeaker"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootSpeaker"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeCommand"
+                      }
+                    }
+                  ]
                 }
               }
             ]

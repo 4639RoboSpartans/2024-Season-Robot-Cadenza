@@ -1,7 +1,6 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-
 public final class Constants {
     public static final double DEADZONE_VALUE = 0.08;
     public static final int POSE_WINDOW_LENGTH = 1;
@@ -11,7 +10,7 @@ public final class Constants {
     public enum CurrentRobot {
         ZEUS, SIREN, SIM
     }
-    public static final CurrentRobot currentRobot = CurrentRobot.SIM;
+    public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
 
     private static final double[] oldOffsets = {
             -54.98, -122.4, 74.44, 121.92

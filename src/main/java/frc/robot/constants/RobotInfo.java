@@ -24,7 +24,7 @@ public final class RobotInfo {
         public static final double INTAKE_SPEED = -0.8;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
-        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.008, 0, 0);
+        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.016, 0, 0);
     }
 
     public static final class HopperInfo {
@@ -50,7 +50,7 @@ public final class RobotInfo {
         public static double LimelightOffsetZ = -0.1651;
         public static double LimelightOffsetX = -0.1267;
 
-        public static double ShooterLowerOffset = 0.9;
+        public static double ShooterLowerOffset = 0.93;
 
         public record ShooterSetpoint(double speed, double angle) {
         }
@@ -65,7 +65,7 @@ public final class RobotInfo {
         public static final double SHOOTER_IDLE_SPEED = 0.2;
         public static final double SHOOTER_AUTON_IDLE_SPEED = 0.35;
         public static final double SHOOTER_INTAKE_SPEED = -0.35;
-        public static final double SHOOTER_PIVOT_BOTTOM_SETPOINT = .9;
+        public static final double SHOOTER_IDLE_SETPOINT = .85;
         public static final double AngleOffset = -0.005;
 
         public static final double SHOOTER_PIVOT_ERROR = 0.01;
@@ -75,7 +75,7 @@ public final class RobotInfo {
                 .8
        );
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT =
-                new ShooterSetpointMeasurement(1.2, new ShooterSetpoint(24.5, ShooterLowerOffset - 0.083)).setpoint;
+                new ShooterSetpointMeasurement(1.2, new ShooterSetpoint(24.5, ShooterLowerOffset - 0.08)).setpoint;
         public static final ShooterInfo.ShooterSetpoint SHOOTER_LAUNCH_SETPOINT = new ShooterInfo.ShooterSetpoint(
                 40,
                 .8

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.commands.autos.AutoFactory;
 import frc.robot.led.LEDPattern;
 import frc.robot.network.LimeLight;
 import frc.robot.subsystems.SubsystemManager;

@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
@@ -77,7 +78,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
                 () -> this.getState().Pose, // Supplier of current robot pose
                 this::seedFieldRelative,  // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
-                (speeds) -> this.setControl(AutoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
+                (speeds) -> this.setFieldCentricMovement(speeds), // Consumer of ChassisSpeeds to drive the robot
                 new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
                         new PIDConstants(10, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
@@ -116,7 +117,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
 
     @Override
     public Rotation2d getRotation2d() {
-        return m_pigeon2.getRotation2d();
+        return Rotation2d.fromDegrees(m_pigeon2.getRotation2d().getDegrees() % 360 + 360);
     }
 
     @Override
@@ -139,6 +140,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         field.setRobotPose(getPose());
         SmartDashboard.putData("field", field);
         SmartDashboard.putNumber("heading", getRotation2d().getDegrees());
+        SmartDashboard.putBoolean("attempting shoot", OperatorControls.RunSpeakerShooterButton.getAsBoolean());
+        SmartDashboard.putNumber("dist", Math.hypot(AimUtil.getSpeakerVector().getX(), AimUtil.getSpeakerVector().getY()));
         PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
         if (pose != null) {
             addVisionMeasurement(pose.pose, Timer.getFPGATimestamp());

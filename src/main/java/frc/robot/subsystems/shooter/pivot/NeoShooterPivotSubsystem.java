@@ -35,7 +35,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         this.shooter = shooter;
 
         aimPID = ShooterInfo.SHOOTER_AIM_PID_CONSTANTS.create();
-        aimPID.setSetpoint(ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT);
+        aimPID.setSetpoint(ShooterInfo.SHOOTER_IDLE_SETPOINT);
     }
 
     public boolean isAtSetPoint() {
@@ -51,7 +51,7 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
             case AUTO_SPEAKER, SPINUP -> AimUtil.getShooterSetpoint()[1];
             case SPEAKER -> ShooterInfo.SHOOTER_SPEAKER_SETPOINT.angle();
             case AMP -> ShooterInfo.SHOOTER_AMP_SETPOINT.angle();
-            case IDLE -> ShooterInfo.SHOOTER_PIVOT_BOTTOM_SETPOINT;
+            case IDLE -> ShooterInfo.SHOOTER_IDLE_SETPOINT;
             case LAUNCH -> ShooterInfo.SHOOTER_LAUNCH_SETPOINT.angle();
             case INTAKE -> ShooterInfo.SHOOTER_INTAKE_SETPOINT.angle();
         } + ShooterInfo.AngleOffset;

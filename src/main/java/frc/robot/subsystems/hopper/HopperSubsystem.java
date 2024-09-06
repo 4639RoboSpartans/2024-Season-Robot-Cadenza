@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -15,7 +16,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     private final DigitalInput ir;
     private boolean hasNote = false;
     private boolean irActive;
-    private Debouncer irDebouncer = new Debouncer(0.1);
+    private Debouncer irDebouncer = new Debouncer(0.15);
 
     public HopperSubsystem(int motorID) {
         motor = new CANSparkMax(motorID, CANSparkMax.MotorType.kBrushed);
@@ -54,7 +55,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     }
 
     public boolean hasNote() {
-        return hasNote && irActive;
+        return hasNote;
     }
 
     public boolean isIrActive() {
@@ -70,5 +71,6 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     @Override
     public void periodic() {
         hasNote = irDebouncer.calculate(!ir.get());
+        SmartDashboard.putBoolean("has note", hasNote);
     }
 }

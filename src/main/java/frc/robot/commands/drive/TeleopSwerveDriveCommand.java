@@ -32,8 +32,8 @@ public class TeleopSwerveDriveCommand extends Command {
         double sidewaysSpeed = DriverControls.SwerveStrafeAxis.getAsDouble() * SwerveInfo.CURRENT_MAX_ROBOT_MPS;
 
         if (DriverControls.SOTF.getAsBoolean()){
-            forwardsSpeed /= 5;
-            sidewaysSpeed /= 5;
+            forwardsSpeed /= 4;
+            sidewaysSpeed /= 4;
         }
 
         double rotationMultiplier = Math.hypot(forwardsSpeed, sidewaysSpeed) / 2 * (1 + sidewaysSpeed);
