@@ -14,12 +14,12 @@ public class InterpolatingTables {
         speedTable = new InterpolatingDoubleTreeMap();
 
         double[][] shots = {
-                {1.2, 24.25, ShooterLowerOffset - 0.083},
-                {2.1, 26.5, ShooterLowerOffset - 0.06},
-                {3.1, 34.5, ShooterLowerOffset - 0.03},
-                {4.0, 55.75, ShooterLowerOffset - 0.02},
-                {4.1, 56.5, ShooterLowerOffset - 0.01},
-                {4.3, 58.5, ShooterLowerOffset}
+            {1.2, 24.25, ShooterLowerOffset - 0.09},
+            {2.1, 26.5, ShooterLowerOffset - 0.06},
+            {3.1, 34.5, ShooterLowerOffset - 0.02},
+            {4.0, 55.75, ShooterLowerOffset - 0.01},
+            {4.1, 56.5, ShooterLowerOffset - 0.005},
+            {4.3, 58.5, ShooterLowerOffset}
         };
 
         for (double[] shot : shots) {

@@ -10,7 +10,7 @@ public final class Constants {
     public enum CurrentRobot {
         ZEUS, SIREN, SIM
     }
-    public static final CurrentRobot currentRobot = CurrentRobot.SIM;
+    public static final CurrentRobot currentRobot = CurrentRobot.SIREN;
 
     private static final double[] oldOffsets = {
             -54.98, -122.4, 74.44, 121.92

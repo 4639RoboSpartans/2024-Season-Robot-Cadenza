@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
         RobotConfiguration.updateAll();
 
         LimeLight.writeValuesToSmartDashboard();
+        SmartDashboard.putBoolean("auton?", isAuton);
     }
 
     @Override

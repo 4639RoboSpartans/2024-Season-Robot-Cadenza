@@ -71,7 +71,7 @@ public class ShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return !hopper.hasNote() && Timer.getFPGATimestamp() - startTime >= 3;
+        return !hopper.hasNote();
     }
 
     @Override

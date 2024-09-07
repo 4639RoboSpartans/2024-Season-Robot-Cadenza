@@ -29,12 +29,12 @@ public class AimUtil {
 
     public static boolean inRange() {
         Translation2d trans = getSpeakerVector();
-        return Math.hypot(trans.getX(), trans.getY()) <= 5;
+        return Math.hypot(trans.getX(), trans.getY()) <= 4;
     }
 
     public static boolean inShootingRange() {
         Translation2d trans = getSpeakerVector();
-        return Math.hypot(trans.getX(), trans.getY()) <= 4;
+        return Math.hypot(trans.getX(), trans.getY()) <= 3;
     }
 
     public static boolean inShootingSector() {
