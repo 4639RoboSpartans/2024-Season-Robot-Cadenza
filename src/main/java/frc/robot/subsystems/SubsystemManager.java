@@ -47,7 +47,7 @@ public class SubsystemManager {
         if(ledStrip == null) {
             ledStrip = switch(currentRobot){
                 case ZEUS, SIM -> new DummyLEDStrip();
-                case SIREN -> new PhysicalLEDStrip(0, 64);
+                case CADENZA -> new PhysicalLEDStrip(0, 64);
             };
         }
         return ledStrip;
@@ -57,7 +57,7 @@ public class SubsystemManager {
         if(swerveDrive == null) {
             swerveDrive = switch (currentRobot) {
                 case ZEUS -> new DummySwerveDriveSubsystem();
-                case SIREN, SIM -> TunerConstants.DriveTrain;
+                case CADENZA, SIM -> TunerConstants.DriveTrain;
             };
         }
         return swerveDrive;
@@ -67,7 +67,7 @@ public class SubsystemManager {
         if(shooterPivot == null) {
             shooterPivot = switch(currentRobot){
                 case ZEUS -> new DummyShooterPivotSubsystem();
-                case SIREN, SIM -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
+                case CADENZA, SIM -> new NeoShooterPivotSubsystem(IDs.SHOOTER_PIVOT_MOTOR_LEFT, IDs.SHOOTER_PIVOT_MOTOR_RIGHT, shooter);
             };
         }
         return shooterPivot;
@@ -77,7 +77,7 @@ public class SubsystemManager {
         if(shooter == null) {
             shooter = switch (currentRobot) {
                 case ZEUS -> new DummyShooterSubsystem();
-                case SIREN, SIM -> new FalconShooterSubsystem(
+                case CADENZA, SIM -> new FalconShooterSubsystem(
                     IDs.SHOOTER_SHOOTER_LEFT_MOTOR,
                     IDs.SHOOTER_SHOOTER_RIGHT_MOTOR
                 );
@@ -90,7 +90,7 @@ public class SubsystemManager {
         if(intake == null) {
             intake = switch(currentRobot){
                 case ZEUS, SIM -> new DummyIntakeSubsystem();
-                case SIREN -> //new DummyIntakeSubsystem();
+                case CADENZA -> //new DummyIntakeSubsystem();
                  new IntakeSubsystem();
                 // case SIREN -> new DummyIntakeSubsystem();
             };
@@ -102,7 +102,7 @@ public class SubsystemManager {
         if(hopper == null) {
             hopper = switch(currentRobot){
                 case ZEUS, SIM -> new DummyHopperSubsystem();
-                case SIREN -> //new DummyHopperSubsystem();
+                case CADENZA -> //new DummyHopperSubsystem();
                  new HopperSubsystem(IDs.HOPPER_MOTOR);
             };
         }
@@ -113,7 +113,7 @@ public class SubsystemManager {
         if(climber == null) {
             climber = switch(currentRobot){
                 case ZEUS, SIM -> new DummyClimberSubsystem();
-                case SIREN -> new ClimberSubsystem(IDs.CLIMBER_LEFT, IDs.CLIMBER_RIGHT);
+                case CADENZA -> new ClimberSubsystem(IDs.CLIMBER_LEFT, IDs.CLIMBER_RIGHT);
             };
         }
         return climber;

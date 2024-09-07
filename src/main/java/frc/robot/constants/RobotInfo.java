@@ -30,7 +30,7 @@ public final class RobotInfo {
 
     public static final class HopperInfo {
 
-        public static final double HOPPER_SPEED = 0.9;
+        public static final double HOPPER_SPEED = 0.8;
     }
 
     public static final class ClimberInfo {
