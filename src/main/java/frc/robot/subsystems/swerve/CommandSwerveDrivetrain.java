@@ -52,41 +52,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
 
     private final Field2d field = new Field2d();
 
-    public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
-        super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        configurePathPlanner();
-        if (Robot.isSimulation()) {
-            startSimThread();
-        }
-    }
-
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         seedFieldRelative(new Pose2d());
-        configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
         }
-    }
-
-    private void configurePathPlanner() {
-        double driveBaseRadius = 0;
-        for (var moduleLocation : m_moduleLocations) {
-            driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
-        }
-
-        AutoBuilder.configureHolonomic(
-                () -> this.getState().Pose, // Supplier of current robot pose
-                this::seedFieldRelative,  // Consumer for seeding pose against auto
-                this::getCurrentRobotChassisSpeeds,
-                (speeds) -> this.setFieldCentricMovement(speeds), // Consumer of ChassisSpeeds to drive the robot
-                new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
-                        new PIDConstants(10, 0, 0),
-                        TunerConstants.kSpeedAt12VoltsMps,
-                        driveBaseRadius,
-                        new ReplanningConfig()),
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, // Assume the path needs to be flipped for Red vs Blue, this is normally the case
-                this); // Subsystem for requirements
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {

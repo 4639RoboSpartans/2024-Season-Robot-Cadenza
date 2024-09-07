@@ -7,7 +7,9 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.constants.IDs;
 
 import static frc.robot.constants.RobotInfo.IntakeInfo;
 
@@ -17,13 +19,17 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax intakeMotor;
     private final RelativeEncoder leftEncoder;
     private final double downPosition, upPosition;
+    private ExtensionState state;
 
     private final PIDController pivotPID;
 
-    public IntakeSubsystem(int pivotMotorLeftID, int pivotMotorRightID, int intakeMotorID, int encoderID) {
-        pivotMotorLeft = new CANSparkMax(pivotMotorLeftID, CANSparkMax.MotorType.kBrushless);
-        pivotMotorRight = new CANSparkMax(pivotMotorRightID, CANSparkMax.MotorType.kBrushless);
-        intakeMotor = new CANSparkMax(intakeMotorID, CANSparkMax.MotorType.kBrushless);
+    public IntakeSubsystem() {
+        pivotMotorLeft = new CANSparkMax(IDs.INTAKE_PIVOT_MOTOR_LEFT,
+                CANSparkMax.MotorType.kBrushless);
+        pivotMotorRight = new CANSparkMax(IDs.INTAKE_PIVOT_MOTOR_RIGHT,
+                CANSparkMax.MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(IDs.INTAKE_MOTOR,
+                CANSparkMax.MotorType.kBrushless);
 
         pivotPID = IntakeInfo.INTAKE_PIVOT_PID_CONSTANTS.create();
 
@@ -36,14 +42,11 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         leftEncoder = pivotMotorLeft.getEncoder();
         downPosition = leftEncoder.getPosition();
         upPosition = downPosition - 55;
-        setExtended(ExtensionState.RETRACTED);
+        state = ExtensionState.RETRACTED;
     }
 
     public void setExtended(ExtensionState extended) {
-        pivotPID.setSetpoint(switch (extended){
-            case EXTENDED -> downPosition;
-            case RETRACTED -> upPosition;
-        });
+        state = extended;
     }
 
     //Spins intake motor to intake notes
@@ -61,20 +64,15 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     @Override
     public void periodic() {
+        pivotPID.setSetpoint(switch (state) {
+            case RETRACTED -> upPosition;
+            case EXTENDED -> downPosition;
+        });
         double pidOutput = pivotPID.calculate(getPosition());
-        SmartDashboard.putNumber("down postion", downPosition);
-        SmartDashboard.putNumber("up position", upPosition);
-        SmartDashboard.putNumber("pivot encoder angle", getPosition());
+        SmartDashboard.putString("Intake position", state.toString());
 
-        // if(pidOutput > 0) pidOutput *= Constants.INTAKE_PIVOT_UP_MULTIPLIER;
-
-        // SmartDashboard.putNumber("target pivot pos", pivotPID.getSetpoint());
-        // SmartDashboard.putNumber("current pivot pos", getPosition());
-        SmartDashboard.putNumber("pivot pid output", pidOutput);
 
         pivotMotorLeft.set(pidOutput);
-
-        // SmartDashboard.putNumber("intake pivot output", pivotMotorRight.getAppliedOutput());
     }
 
     public void stop() {

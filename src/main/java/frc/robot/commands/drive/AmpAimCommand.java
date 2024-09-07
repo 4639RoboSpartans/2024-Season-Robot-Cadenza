@@ -39,6 +39,11 @@ public class AmpAimCommand extends Command {
         double forwardsCorrection = xPID.calculate(ampPose.getY(), SubsystemManager.getSwerveDrive().getPose().getY());
         double sidewaysCorrection = -yPID.calculate(ampPose.getX(), SubsystemManager.getSwerveDrive().getPose().getX());
 
+        if (DriverStationUtil.isRed()) {
+//            forwardsCorrection = -forwardsCorrection;
+//            sidewaysCorrection = -sidewaysCorrection;
+        }
+
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
                 forwardsCorrection,
                 sidewaysCorrection,

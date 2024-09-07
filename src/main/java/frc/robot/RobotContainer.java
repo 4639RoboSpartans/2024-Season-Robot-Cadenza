@@ -140,34 +140,19 @@ public class RobotContainer {
 
         OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
 
-        DriverControls.AmpAlignButton.whileTrue(new AmpAimCommand(swerveDriveSubsystem))
-                .onTrue(
-                        Commands.runOnce(
-                                () -> SmartDashboard.putBoolean("amp align", true)
-                        )
-                ).onFalse(
-                        Commands.runOnce(
-                                () -> SmartDashboard.putBoolean("amp align", false)
-                        )
-                );
+        DriverControls.AmpAlignButton
+                .whileTrue(new AmpAimCommand(swerveDriveSubsystem));
 
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
-                whileTrue(new RunCommand(swerveDriveSubsystem::reset));
+                whileTrue(Commands.runOnce(swerveDriveSubsystem::reset));
 
-        Controls.canSOTF.and(DriverControls.SOTF).whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip))
-                .onTrue(Commands.runOnce(
-                        () -> SmartDashboard.putBoolean("shooting", true)
-                ))
-                .onFalse(Commands.runOnce(
-                        () -> SmartDashboard.putBoolean("shooting", false)
-                ));
-        Controls.spinupTrigger.whileTrue(new ShooterSpinupCommand(shooter))
-                .onTrue(Commands.runOnce(
-                        () -> SmartDashboard.putBoolean("spinup", true)
-                ))
-                .onFalse(Commands.runOnce(
-                        () -> SmartDashboard.putBoolean("spinup", false)
-                ));
+        Controls.canSOTF.and(DriverControls.SOTF).and(() -> !Robot.isInAuton())
+                .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
+        Controls.spinupTrigger.and(() -> !Robot.isInAuton())
+                .whileTrue(new ShooterSpinupCommand(shooter).onlyIf(hopper::hasNote));
+        new Trigger(Robot::getDisabled).whileTrue(
+                new ExtendIntakeCommand(intake)
+        );
     }
 
     public Command getAutonomousCommand() {

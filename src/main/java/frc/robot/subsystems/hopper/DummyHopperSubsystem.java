@@ -12,7 +12,7 @@ public class DummyHopperSubsystem extends SubsystemBase implements IHopperSubsys
 
     @Override
     public boolean hasNote() {
-        return false;
+        return true;
     }
 
     @Override

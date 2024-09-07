@@ -91,12 +91,7 @@ public class SubsystemManager {
             intake = switch(currentRobot){
                 case ZEUS, SIM -> new DummyIntakeSubsystem();
                 case SIREN -> //new DummyIntakeSubsystem();
-                 new IntakeSubsystem(
-                    IDs.INTAKE_PIVOT_MOTOR_LEFT,
-                    IDs.INTAKE_PIVOT_MOTOR_RIGHT,
-                    IDs.INTAKE_MOTOR,
-                    IDs.INTAKE_ENCODER_DIO_PORT
-                );
+                 new IntakeSubsystem();
                 // case SIREN -> new DummyIntakeSubsystem();
             };
         };

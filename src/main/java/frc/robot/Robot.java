@@ -19,6 +19,7 @@ import frc.robot.tuning.RobotConfiguration;
 
 public class Robot extends TimedRobot {
     private static boolean isAuton = false;
+    private static boolean isDisabled = false;
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
@@ -45,6 +46,11 @@ public class Robot extends TimedRobot {
     }
 
     @Override
+    public void disabledInit() {
+        isDisabled = true;
+    }
+
+    @Override
     public void disabledPeriodic() {
 
         var alliance = DriverStation.getAlliance();
@@ -66,6 +72,15 @@ public class Robot extends TimedRobot {
         }).orElse(LEDPattern.BLANK);
 
         SubsystemManager.getLedStrip().usePattern(pattern);
+    }
+
+    @Override
+    public void disabledExit() {
+        isDisabled = false;
+    }
+
+    public static boolean getDisabled() {
+        return isDisabled;
     }
 
     @Override

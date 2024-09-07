@@ -81,6 +81,8 @@ public class AutoHelper {
     }
 
     public static Command shoot() {
-        return new AutoSpeakerCommand(shooter, hopper, ledStrip);
+        return Commands.deadline(new WaitCommand(2),
+                new AutoSpeakerCommand(shooter, hopper, ledStrip)
+        );
     }
 }

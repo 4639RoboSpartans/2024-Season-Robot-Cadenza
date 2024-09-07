@@ -8,7 +8,7 @@ public final class RobotInfo {
         public static final double centerToWheel = 0.245;
 
         // Change MOVEMENT_SPEED to 1.0 for max speed
-        public static final double CURRENT_MAX_ROBOT_MPS = 4.6;
+        public static final double CURRENT_MAX_ROBOT_MPS = 3.5;
         public static final double TELOP_ROTATION_SPEED = 12;
 
 
@@ -16,7 +16,7 @@ public final class RobotInfo {
         public static final PIDController choreoY = new PIDController(10, 0, 0);
         public static final PIDController choreoRotation = new PIDController(10, 0, 0);
         public static final PIDTemplate TeleopRotationPID = new PIDTemplate(3.5, 0.1, 0);
-        public static final PIDTemplate TeleopTranslationPID = new PIDTemplate(0.5, 0, 0);
+        public static final PIDTemplate TeleopTranslationPID = new PIDTemplate(2, 0, 0);
         public static final double TIME_BEFORE_INTAKE_START = 1;
     }
 

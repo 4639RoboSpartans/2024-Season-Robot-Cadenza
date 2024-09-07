@@ -29,7 +29,7 @@ public class AimUtil {
 
     public static boolean inRange() {
         Translation2d trans = getSpeakerVector();
-        return Math.hypot(trans.getX(), trans.getY()) <= 6;
+        return Math.hypot(trans.getX(), trans.getY()) <= 5;
     }
 
     public static boolean inShootingRange() {
@@ -38,12 +38,8 @@ public class AimUtil {
     }
 
     public static boolean inShootingSector() {
-        Translation2d trans = getSpeakerVector();
-        double angle = Math.atan(trans.getY() / trans.getX());
-        return (angle <= 45 && angle >= 0)
-                || (angle >= 315 && angle <= 360)
-                || (angle >= -45 && angle <= 0)
-                || (angle <= -315 && angle > -360);
+        Rotation2d rotation = getSpeakerRotation();
+        return Math.abs(rotation.getDegrees()) <= 40;
     }
 
     public static boolean aligned() {
@@ -56,18 +52,15 @@ public class AimUtil {
 
     public static Rotation2d getSpeakerOffset() {
         Rotation2d speakerRotation = getSpeakerRotation();
-        Rotation2d heading = SubsystemManager.getSwerveDrive().getRotation2d();
+        Rotation2d heading = Rotation2d.fromDegrees(MathUtil.clamp(
+                SubsystemManager.getSwerveDrive().getRotation2d().getDegrees() - 180,
+                -360, 360
+        ));
         return speakerRotation.minus(heading);
     }
 
     public static Rotation2d getAmpRotation() {
-        Rotation2d ampRot = Rotation2d.fromDegrees(0);
-        if (DriverStationUtil.isRed()) {
-            ampRot = ampRot.minus(Rotation2d.fromDegrees(90));
-        } else {
-            ampRot = ampRot.plus(Rotation2d.fromDegrees(90));
-        }
-        return Rotation2d.fromDegrees(MathUtil.clamp(ampRot.getDegrees(), -360, 360));
+        return Rotation2d.fromDegrees(-90);
     }
 
     public static Translation2d getAmpVector() {
