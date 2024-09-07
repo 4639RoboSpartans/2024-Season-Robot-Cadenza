@@ -41,7 +41,10 @@ public class TeleopSwerveDriveCommand extends Command {
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(forwardsSpeed, sidewaysSpeed, rotateSpeed);
         swerveDriveSubsystem.setFieldCentricMovement(chassisSpeeds);
-        SmartDashboard.putBoolean("canShoot", Controls.canSOTF.and(DriverControls.SOTF).getAsBoolean());
+        SmartDashboard.putBoolean("canShoot", Controls.canSOTF.getAsBoolean());
+        SmartDashboard.putBoolean("aligned", Controls.aligned.getAsBoolean());
+        SmartDashboard.putBoolean("in sector", Controls.inShootingSector.getAsBoolean());
+        SmartDashboard.putBoolean("in range", Controls.inShootingRange.getAsBoolean());
     }
 
     private double getRotationSpeed(double sidewaysSpeed, double rotationMultiplier) {

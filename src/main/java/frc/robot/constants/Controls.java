@@ -141,9 +141,9 @@ public final class Controls {
     }
 
 
-    private static Trigger inShootingRange = new Trigger(AimUtil::inShootingRange);
-    private static Trigger aligned = new Trigger(AimUtil::aligned);
-    private static Trigger inShootingSector = new Trigger(AimUtil::inShootingSector);
+    public static Trigger inShootingRange = new Trigger(AimUtil::inShootingRange);
+    public static Trigger aligned = new Trigger(AimUtil::aligned);
+    public static Trigger inShootingSector = new Trigger(AimUtil::inShootingSector);
 
     public static Trigger canSOTF = inShootingRange.and(aligned).and(inShootingSector);
 

@@ -15,6 +15,7 @@ import frc.robot.subsystems.intake.IIntakeSubsystem.ExtensionState;
 public class IntakeCommand extends SequentialCommandGroup {
     public IntakeCommand(IIntakeSubsystem intake, IHopperSubsystem hopper, LEDStrip strip, OI oi) {
         super(new ExtendIntakeCommand(intake),
-            new IntakeRollersCommand(intake, hopper, strip, oi));
+            new IntakeRollersCommand(intake, hopper, strip, oi),
+            new RetractIntakeCommand(intake));
     }
 }

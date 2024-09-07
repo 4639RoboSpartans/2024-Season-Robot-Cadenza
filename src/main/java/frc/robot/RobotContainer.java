@@ -38,6 +38,7 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.util.AutoHelper;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -100,7 +101,7 @@ public class RobotContainer {
 
         // shooting commands
         NamedCommands.registerCommand("ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));
-        NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(shooter, hopper, ledStrip));
+        NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(intake));
         NamedCommands.registerCommand("ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
     }
 
@@ -134,7 +135,7 @@ public class RobotContainer {
         OperatorControls.IntakeRetractButton.whileTrue(new RetractIntakeCommand(intake));
 
         OperatorControls.RunSpeakerShooterButton.whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
-        OperatorControls.RunAmpShooterButton.whileTrue(new AutoAmpCommand(shooter, hopper, ledStrip));
+        OperatorControls.RunAmpShooterButton.whileTrue(new AutoAmpCommand(intake));
         OperatorControls.ManualShooterButton.whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         OperatorControls.LaunchShooterButton.whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
 
@@ -146,8 +147,10 @@ public class RobotContainer {
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
                 whileTrue(Commands.runOnce(swerveDriveSubsystem::reset));
 
-        Controls.canSOTF.and(DriverControls.SOTF).and(() -> !Robot.isInAuton())
-                .whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
+        Controls.canSOTF
+            .and(DriverControls.SOTF)
+            .and(() -> !Robot.isInAuton())
+                .whileTrue(AutoHelper.shoot());
         Controls.spinupTrigger.and(() -> !Robot.isInAuton())
                 .whileTrue(new ShooterSpinupCommand(shooter).onlyIf(hopper::hasNote));
         new Trigger(Robot::getDisabled).whileTrue(

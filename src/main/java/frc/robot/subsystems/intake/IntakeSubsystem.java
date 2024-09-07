@@ -18,7 +18,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorRight;
     private final CANSparkMax intakeMotor;
     private final RelativeEncoder leftEncoder;
-    private final double downPosition, upPosition;
+    private final double downPosition, upPosition, ampPosition;
     private ExtensionState state;
 
     private final PIDController pivotPID;
@@ -42,6 +42,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         leftEncoder = pivotMotorLeft.getEncoder();
         downPosition = leftEncoder.getPosition();
         upPosition = downPosition - 55;
+        ampPosition = downPosition - 50;
         state = ExtensionState.RETRACTED;
     }
 
@@ -67,6 +68,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotPID.setSetpoint(switch (state) {
             case RETRACTED -> upPosition;
             case EXTENDED -> downPosition;
+            case AMP -> ampPosition;
         });
         double pidOutput = pivotPID.calculate(getPosition());
         SmartDashboard.putString("Intake position", state.toString());
