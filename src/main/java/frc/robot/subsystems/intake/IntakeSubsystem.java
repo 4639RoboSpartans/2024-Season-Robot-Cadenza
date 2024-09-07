@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IDs;
+import frc.robot.oi.OI;
+import frc.robot.subsystems.SubsystemManager;
 
 import static frc.robot.constants.RobotInfo.IntakeInfo;
 
@@ -18,7 +20,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorRight;
     private final CANSparkMax intakeMotor;
     private final RelativeEncoder leftEncoder;
-    private final double downPosition, upPosition, ampPosition;
+    private double downPosition, upPosition, ampPosition;
     private ExtensionState state;
 
     private final PIDController pivotPID;
@@ -50,6 +52,18 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         state = extended;
     }
 
+    public void manualExtend() {
+        state = ExtensionState.MANUAL;
+        pivotMotorLeft.set(Math.abs(SubsystemManager.getOI().operatorController().getAxis(OI.Axes.LEFT_STICK_Y) / 2));
+    }
+
+    public void updateOffset() {
+      downPosition = leftEncoder.getPosition();
+      upPosition = downPosition - 55;
+      ampPosition = downPosition - 50;
+      state = ExtensionState.RETRACTED;
+    }
+
     //Spins intake motor to intake notes
     public void intake() {
         intakeMotor.set(IntakeInfo.INTAKE_SPEED);
@@ -72,13 +86,14 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotPID.setSetpoint(switch (state) {
             case RETRACTED -> upPosition;
             case EXTENDED -> downPosition;
+            case MANUAL -> downPosition;
             case AMP -> ampPosition;
         });
         double pidOutput = pivotPID.calculate(getPosition());
         SmartDashboard.putString("Intake position", state.toString());
 
-
-        pivotMotorLeft.set(pidOutput);
+        if (state != ExtensionState.MANUAL)
+          pivotMotorLeft.set(pidOutput);
     }
 
     public void stop() {

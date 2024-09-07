@@ -51,6 +51,7 @@ public class RobotContainer {
     private final LEDStrip ledStrip;
 
     private final SendableChooser<Command> autos;
+    private final SendableChooser<Double> delayTime;
     public static SendableChooser<Boolean> alliance;
 
 
@@ -70,11 +71,20 @@ public class RobotContainer {
 
 //       autos = AutoBuilder.buildAutoChooser();
         autos = new SendableChooser<>();
-        autos.setDefaultOption("Spikes", AutoFactory.Spikes);
+        autos.setDefaultOption("null auto", new WaitCommand(1));
+        autos.addOption("preloaded", AutoHelper.shoot());
         for (Command i : AutoFactory.getAutos()) {
             autos.addOption(i.getName(), i);
         }
         SmartDashboard.putData("Autons", autos);
+        delayTime = new SendableChooser<Double>();
+        delayTime.setDefaultOption("0", 0.0);
+        delayTime.addOption("0", 0.0);
+        delayTime.addOption("1", 1.0);
+        delayTime.addOption("2", 2.0);
+        delayTime.addOption("3", 3.0);
+        delayTime.addOption("4", 4.0);
+        SmartDashboard.putData(delayTime);
 
         alliance = new SendableChooser<>();
         alliance.addOption("Red", true);
@@ -154,9 +164,41 @@ public class RobotContainer {
         new Trigger(Robot::getDisabled).whileTrue(
                 new ExtendIntakeCommand(intake)
         );
+
+        OperatorControls.resetIntakeOffset2.and(OperatorControls.resetIntakeOffset2).whileTrue(
+            new ManualIntakeExtendCommand(intake)
+        );
+    }
+
+    public Command getDelay() {
+        return Commands.waitSeconds(delayTime.getSelected());
     }
 
     public Command getAutonomousCommand() {
         return autos.getSelected();
     }
 }
+
+/*
+ * :30:24.782 PM
+ 	at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:365)  	
+    at edu.wpi.first.wpilibj.TimedRobot.startCompetition(TimedRobot.java:131)  
+    	at edu.wpi.first.wpilibj.IterativeRobotBase.loopFunc(IterativeRobotBase.java:345)  
+        	at frc.robot.Robot.autonomousInit(Robot.java:89)  	
+            at frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174) 
+             	at edu.wpi.first.wpilibj2.command.Commands.sequence(Commands.java:192)
+                 ERROR  1  The startCompetition() method (or methods called by it) should have handled the exception above. 
+                 
+    edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:386)  	
+    at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.<init>(SequentialCommandGroup.java:33) 
+     	at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.addCommands(SequentialCommandGroup.java:47)  
+        	at edu.wpi.first.wpilibj2.command.CommandScheduler.registerComposedCommands(CommandScheduler.java:599)
+             Warning  1  The robot program quit unexpectedly. This is usually due to a code error.
+  The above stacktrace can help determine where the error occurred.
+  See https://wpilib.org/stacktrace for more information.  edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:379)  
+  
+  Error at frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174): Unhandled exception: java.lang.Exception
+  : Originally composed at: ERROR
+    1  Unhandled exception: java.lang.Exception: Originally composed at:  frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174) 
+
+ */

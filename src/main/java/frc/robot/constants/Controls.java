@@ -138,6 +138,19 @@ public final class Controls {
                     OI oi = SubsystemManager.getOI();
                     return oi.operatorController().getButton(OI.Buttons.POV_LEFT).getAsBoolean();
                 });
+
+        public static final Trigger resetIntakeeOffset1 = new Trigger(
+            () -> {
+                OI oi = SubsystemManager.getOI();
+                return oi.operatorController().getButton(OI.Buttons.A_BUTTON).getAsBoolean();
+            }
+        ),
+        resetIntakeOffset2 = new Trigger(
+            () -> {
+                OI oi = SubsystemManager.getOI();
+                return oi.operatorController().getButton(OI.Buttons.B_BUTTON).getAsBoolean();
+            }
+        );
     }
 
 
