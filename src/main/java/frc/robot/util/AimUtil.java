@@ -11,7 +11,7 @@ import frc.robot.subsystems.SubsystemManager;
 
 public class AimUtil {
     public static Rotation2d getSpeakerRotation(double sidewaysSpeed) {
-        return getSpeakerRotation().minus(Rotation2d.fromDegrees(sidewaysSpeed * 2));
+        return getSpeakerRotation().minus(Rotation2d.fromDegrees(sidewaysSpeed * 5));
     }
 
     public static Translation2d getSpeakerVector() {
@@ -39,11 +39,11 @@ public class AimUtil {
 
     public static boolean inShootingSector() {
         Rotation2d rotation = getSpeakerRotation();
-        return Math.abs(rotation.getDegrees()) <= 40;
+        return Math.abs(rotation.getDegrees()) <= 30;
     }
 
     public static boolean aligned() {
-        return Math.abs(getSpeakerOffset().getDegrees()) <= 10; //TODO: tune this
+        return Math.abs(getSpeakerOffset().getDegrees()) <= 3.5; //TODO: tune this
     }
 
     public static Rotation2d getSpeakerRotation() {
@@ -58,7 +58,7 @@ public class AimUtil {
     }
 
     public static Rotation2d getAmpRotation() {
-        return Rotation2d.fromDegrees(-90);
+        return Rotation2d.fromDegrees(90);
     }
 
     public static Translation2d getAmpVector() {

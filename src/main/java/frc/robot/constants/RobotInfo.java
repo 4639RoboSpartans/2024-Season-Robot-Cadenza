@@ -12,9 +12,9 @@ public final class RobotInfo {
         public static final double TELOP_ROTATION_SPEED = 12;
 
 
-        public static final PIDController choreoX = new PIDController(20, 0, 0);
-        public static final PIDController choreoY = new PIDController(20, 0, 0);
-        public static final PIDController choreoRotation = new PIDController(20, 0, 0);
+        public static final PIDController choreoX = new PIDController(8, 0, 0.01);
+        public static final PIDController choreoY = new PIDController(8, 0, 0.1);
+        public static final PIDController choreoRotation = new PIDController(5, 0, 0.1);
         public static final PIDTemplate TeleopRotationPID = new PIDTemplate(5, 0.1, 0);
         public static final PIDTemplate TeleopTranslationPID = new PIDTemplate(2, 0, 0);
         public static final double TIME_BEFORE_INTAKE_START = 1;
@@ -22,7 +22,8 @@ public final class RobotInfo {
 
     public static final class IntakeInfo {
 
-        public static final double INTAKE_SPEED = -0.8;
+        public static final double INTAKE_SPEED = -0.95;
+        public static final double AMP_OUTTAKE_SPEED = 0.6;
         public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
         public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
         public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.016, 0, 0);
@@ -30,7 +31,7 @@ public final class RobotInfo {
 
     public static final class HopperInfo {
 
-        public static final double HOPPER_SPEED = 0.8;
+        public static final double HOPPER_SPEED = 0.7;
     }
 
     public static final class ClimberInfo {
@@ -78,7 +79,7 @@ public final class RobotInfo {
         public static final ShooterInfo.ShooterSetpoint SHOOTER_SPEAKER_SETPOINT =
                 new ShooterSetpointMeasurement(1.2, new ShooterSetpoint(24.25, ShooterLowerOffset - 0.09)).setpoint;
         public static final ShooterInfo.ShooterSetpoint SHOOTER_LAUNCH_SETPOINT = new ShooterInfo.ShooterSetpoint(
-                40,
+                30,
                 .875
         );
 

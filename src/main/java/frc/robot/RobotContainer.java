@@ -149,8 +149,8 @@ public class RobotContainer {
             .and(DriverControls.SOTF)
             .and(() -> !Robot.isInAuton())
                 .whileTrue(AutoHelper.shoot());
-        Controls.spinupTrigger.and(() -> !Robot.isInAuton())
-                .whileTrue(new ShooterSpinupCommand(shooter).onlyIf(hopper::hasNote));
+        Controls.spinupTrigger.and(() -> !Robot.isInAuton()).and(hopper::hasNote)
+            .whileTrue(new ShooterSpinupCommand(shooter));
         new Trigger(Robot::getDisabled).whileTrue(
                 new ExtendIntakeCommand(intake)
         );

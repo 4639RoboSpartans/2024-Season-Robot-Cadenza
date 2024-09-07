@@ -55,6 +55,10 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         intakeMotor.set(IntakeInfo.INTAKE_SPEED);
     }
 
+    public void amp() {
+      intakeMotor.set(IntakeInfo.AMP_OUTTAKE_SPEED);
+    }
+
     public void outtake() {
         intakeMotor.set(-IntakeInfo.INTAKE_SPEED);
     }

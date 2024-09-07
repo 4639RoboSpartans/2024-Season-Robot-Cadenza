@@ -14,8 +14,9 @@ public class InterpolatingTables {
         speedTable = new InterpolatingDoubleTreeMap();
 
         double[][] shots = {
-            {1.2, 24.25, ShooterLowerOffset - 0.09},
-            {2.1, 26.5, ShooterLowerOffset - 0.045},
+            {1.2, 24.25, ShooterLowerOffset - 0.095},
+            {2.1, 26.5, ShooterLowerOffset - 0.048},
+            {2.6, 30, ShooterLowerOffset - 0.0325},
             {3.1, 34.5, ShooterLowerOffset - 0.02},
             {4.0, 55.75, ShooterLowerOffset - 0.01},
             {4.1, 56.5, ShooterLowerOffset - 0.005},

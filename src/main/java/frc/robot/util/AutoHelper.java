@@ -5,6 +5,7 @@ import com.choreo.lib.ChoreoTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.intake.ExtendIntakeCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.shooter.AutoSpeakerCommand;
 import frc.robot.commands.shooter.ShooterSpinupCommand;
@@ -35,7 +36,7 @@ public class AutoHelper {
         ChoreoTrajectory traj = Choreo.getTrajectory(pathName);
         double time = traj.getTotalTime();
         double startTime = time - RobotInfo.SwerveInfo.TIME_BEFORE_INTAKE_START;
-        Command ret = Commands.deadline(
+        Command ret = Commands.parallel(
                 follow(pathName),
                 startTime < 0 ?
                         new IntakeCommand(intake, hopper, ledStrip, oi) :
@@ -81,8 +82,10 @@ public class AutoHelper {
     }
 
     public static Command shoot() {
-        return Commands.deadline(new WaitCommand(2),
-                new AutoSpeakerCommand(shooter, hopper, ledStrip)
+        return Commands.parallel(
+                Commands.race(new WaitCommand(1.5),
+                new AutoSpeakerCommand(shooter, hopper, ledStrip)),
+                new ExtendIntakeCommand(intake)
         );
     }
 }

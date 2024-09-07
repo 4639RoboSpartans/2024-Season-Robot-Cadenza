@@ -22,7 +22,7 @@ public class AutoAmpCommand extends Command {
 
     @Override
     public void execute() {
-        intake.outtake();
+        intake.amp();
     }
 
     @Override

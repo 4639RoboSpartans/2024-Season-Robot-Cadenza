@@ -11,6 +11,8 @@ public interface IIntakeSubsystem extends Subsystem {
 
     void outtake();
 
+    void amp();
+
     void stopIntake();
 
     void stop();
