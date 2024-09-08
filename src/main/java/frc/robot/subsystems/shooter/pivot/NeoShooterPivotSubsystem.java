@@ -62,8 +62,8 @@ public class NeoShooterPivotSubsystem extends SubsystemBase implements IShooterP
         double pidOutput = aimPID.calculate(currentAngle);
 
         aimMotorLeft.set(pidOutput);
-        SmartDashboard.putNumber("TargetShooterAngle", targetAngle);
-        SmartDashboard.putNumber("AimPIDOutput", pidOutput);
+        SmartDashboard.putNumber("Shooter/TargetShooterAngle", targetAngle);
+        SmartDashboard.putNumber("Shooter/AimPIDOutput", pidOutput);
     }
 
     public double getCurrentAngle() {

@@ -90,9 +90,7 @@ public class SubsystemManager {
         if(intake == null) {
             intake = switch(currentRobot){
                 case ZEUS, SIM -> new DummyIntakeSubsystem();
-                case CADENZA -> //new DummyIntakeSubsystem();
-                 new IntakeSubsystem();
-                // case SIREN -> new DummyIntakeSubsystem();
+                case CADENZA -> new IntakeSubsystem();
             };
         };
         return intake;
@@ -102,8 +100,7 @@ public class SubsystemManager {
         if(hopper == null) {
             hopper = switch(currentRobot){
                 case ZEUS, SIM -> new DummyHopperSubsystem();
-                case CADENZA -> //new DummyHopperSubsystem();
-                 new HopperSubsystem(IDs.HOPPER_MOTOR);
+                case CADENZA -> new HopperSubsystem(IDs.HOPPER_MOTOR);
             };
         }
         return hopper;

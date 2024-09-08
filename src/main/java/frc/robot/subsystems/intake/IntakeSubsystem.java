@@ -7,8 +7,6 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
-import frc.robot.constants.Constants;
 import frc.robot.constants.IDs;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
@@ -19,7 +17,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
     private final CANSparkMax pivotMotorRight;
     private final CANSparkMax intakeMotor;
-    private final RelativeEncoder leftEncoder;
+    private final RelativeEncoder encoder;
     private double downPosition, upPosition, ampPosition;
     private ExtensionState state;
 
@@ -35,14 +33,14 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
         pivotPID = IntakeInfo.INTAKE_PIVOT_PID_CONSTANTS.create();
 
-        pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
         pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-        pivotMotorLeft.setInverted(false);
-        pivotMotorRight.follow(pivotMotorLeft, true);
+        pivotMotorRight.setInverted(true);
+        pivotMotorLeft.follow(pivotMotorRight, true);
 
-        leftEncoder = pivotMotorLeft.getEncoder();
-        downPosition = leftEncoder.getPosition();
+        encoder = pivotMotorRight.getEncoder();
+        downPosition = encoder.getPosition();
         upPosition = downPosition - 55;
         ampPosition = downPosition - 50;
         state = ExtensionState.RETRACTED;
@@ -54,11 +52,11 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     public void manualExtend() {
         state = ExtensionState.MANUAL;
-        pivotMotorLeft.set(Math.abs(SubsystemManager.getOI().operatorController().getAxis(OI.Axes.LEFT_STICK_Y) / 2));
+        pivotMotorRight.set(Math.abs(SubsystemManager.getOI().operatorController().getAxis(OI.Axes.LEFT_STICK_Y) / 2));
     }
 
     public void updateOffset() {
-      downPosition = leftEncoder.getPosition();
+      downPosition = encoder.getPosition();
       upPosition = downPosition - 55;
       ampPosition = downPosition - 50;
       state = ExtensionState.RETRACTED;
@@ -90,10 +88,12 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
             case AMP -> ampPosition;
         });
         double pidOutput = pivotPID.calculate(getPosition());
-        SmartDashboard.putString("Intake position", state.toString());
+        SmartDashboard.putString("Intake/Intake position", state.toString());
+        SmartDashboard.putNumber("Intake/Intake angle", getPosition());
+        SmartDashboard.putNumber("Intake/Intake PID output", pidOutput);
 
         if (state != ExtensionState.MANUAL)
-          pivotMotorLeft.set(pidOutput);
+          pivotMotorRight.set(pidOutput);
     }
 
     public void stop() {
@@ -105,6 +105,6 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     }
 
     private double getPosition() {
-        return leftEncoder.getPosition();
+        return encoder.getPosition();
     }
 }

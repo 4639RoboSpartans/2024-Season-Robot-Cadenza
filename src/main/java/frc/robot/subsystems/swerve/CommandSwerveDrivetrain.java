@@ -111,9 +111,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
     public void periodic() {
         field.setRobotPose(getPose());
         SmartDashboard.putData("field", field);
-        SmartDashboard.putNumber("heading", getRotation2d().getDegrees());
-        SmartDashboard.putBoolean("attempting shoot", OperatorControls.RunSpeakerShooterButton.getAsBoolean());
-        SmartDashboard.putNumber("dist", Math.hypot(AimUtil.getSpeakerVector().getX(), AimUtil.getSpeakerVector().getY()));
+        SmartDashboard.putNumber("Drive/heading", getRotation2d().getDegrees());
+        SmartDashboard.putNumber("Drive/dist", Math.hypot(AimUtil.getSpeakerVector().getX(), AimUtil.getSpeakerVector().getY()));
         PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
         if (pose != null) {
             addVisionMeasurement(pose.pose, Timer.getFPGATimestamp());

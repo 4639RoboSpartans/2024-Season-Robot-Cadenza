@@ -71,7 +71,7 @@ public class HopperSubsystem extends SubsystemBase implements IHopperSubsystem {
     @Override
     public void periodic() {
         hasNote = irDebouncer.calculate(!ir.get());
-        SmartDashboard.putBoolean("has note", hasNote);
-        SmartDashboard.putBoolean("ir active", irActive);
+        SmartDashboard.putBoolean("Hopper/has note", hasNote);
+        SmartDashboard.putBoolean("Hopper/ir active", irActive);
     }
 }
