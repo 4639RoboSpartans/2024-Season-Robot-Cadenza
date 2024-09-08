@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
         pivotMotorRight.setInverted(true);
-        pivotMotorLeft.follow(pivotMotorRight, true);
+        // pivotMotorLeft.follow(pivotMotorRight, true);
 
         encoder = pivotMotorRight.getEncoder();
         downPosition = encoder.getPosition();
@@ -52,7 +52,8 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     public void manualExtend() {
         state = ExtensionState.MANUAL;
-        pivotMotorRight.set(Math.abs(SubsystemManager.getOI().operatorController().getAxis(OI.Axes.LEFT_STICK_Y) / 2));
+        // pivotMotorRight.set(Math.abs(SubsystemManager.getOI().operatorController().getAxis(OI.Axes.LEFT_STICK_Y) / 2));
+        // pivotMotorLeft.set(Math.abs(SubsystemManager.getOI().operatorController().getAxis(OI.Axes.LEFT_STICK_Y) / 2));
     }
 
     public void updateOffset() {
@@ -92,8 +93,8 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         SmartDashboard.putNumber("Intake/Intake angle", getPosition());
         SmartDashboard.putNumber("Intake/Intake PID output", pidOutput);
 
-        if (state != ExtensionState.MANUAL)
-          pivotMotorRight.set(pidOutput);
+            pivotMotorRight.set(pidOutput);
+            pivotMotorLeft.set(pidOutput);
     }
 
     public void stop() {

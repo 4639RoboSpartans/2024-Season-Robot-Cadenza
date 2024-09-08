@@ -31,8 +31,8 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
     public FalconShooterSubsystem(int shooterMotorLeftID, int shooterMotorRightID) {
         this.shooterPivot = SubsystemManager.getShooterPivot(this);
 
-        shooterMotorLeft = new TalonFX(shooterMotorLeftID);
-        shooterMotorRight = new TalonFX(shooterMotorRightID);
+        shooterMotorLeft = new TalonFX(shooterMotorLeftID, "Canivore1");
+        shooterMotorRight = new TalonFX(shooterMotorRightID, "Canivore1");
         shooterMotorLeft.setNeutralMode(NeutralModeValue.Coast);
         shooterMotorRight.setNeutralMode(NeutralModeValue.Coast);
 

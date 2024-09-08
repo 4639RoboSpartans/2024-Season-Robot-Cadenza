@@ -159,11 +159,11 @@ public class RobotContainer {
             .and(DriverControls.SOTF)
             .and(() -> !Robot.isInAuton())
                 .whileTrue(AutoHelper.shoot());
-        Controls.spinupTrigger.and(() -> !Robot.isInAuton()).and(hopper::hasNote)
-            .whileTrue(new ShooterSpinupCommand(shooter));
-        new Trigger(Robot::getDisabled).whileTrue(
-                new ExtendIntakeCommand(intake)
-        );
+        Controls.DriverControls.SOTF
+            .and(Controls.canSOTF.negate())
+            .and(() -> !Robot.isInAuton())
+            .and(hopper::hasNote)
+                .whileTrue(new ShooterSpinupCommand(shooter));
 
         OperatorControls.resetIntakeOffset2.and(OperatorControls.resetIntakeOffset2).whileTrue(
             new ManualIntakeExtendCommand(intake)
