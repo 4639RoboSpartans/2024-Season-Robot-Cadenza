@@ -10,22 +10,56 @@ import frc.robot.constants.InterpolatingTables;
 import frc.robot.subsystems.SubsystemManager;
 
 public class AimUtil {
-    public static Rotation2d getSpeakerRotation(double sidewaysSpeed) {
-        return getSpeakerRotation().minus(Rotation2d.fromDegrees(sidewaysSpeed * 5));
-    }
-
-    public static Translation2d getSpeakerVector() {
-        Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
-        Translation2d currBotTranslation = currBotPose.getTranslation();
+    public static Translation2d getSpeakerPose() {
         Translation2d speakerPose;
         if (DriverStationUtil.isRed()) {
             speakerPose = FieldConstants.speakerPose_red;
         } else {
             speakerPose = FieldConstants.speakerPose_blue;
         }
-        return currBotTranslation.minus(speakerPose);
+        return speakerPose;
     }
 
+    public static Translation2d getAmpPose() {
+        Translation2d ampPose;
+        if (DriverStationUtil.isRed()) {
+            ampPose = FieldConstants.ampPose_red;
+        } else {
+            ampPose = FieldConstants.ampPose_blue;
+        }
+        return ampPose;
+    }
+
+    public static Rotation2d getSpeakerRotation(double sidewaysSpeed) {
+        return getSpeakerRotation().minus(Rotation2d.fromDegrees(sidewaysSpeed * 5));
+    }
+
+    public static Translation2d getPoseVector(Translation2d targetTranslation) {
+        Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
+        Translation2d currBotTranslation = currBotPose.getTranslation();
+        return currBotTranslation.minus(targetTranslation);
+    }
+
+    public static Rotation2d getPoseRotation(Translation2d targetTranslation) {
+        return Rotation2d.fromRadians(
+                MathUtil.clamp(
+                        Math.atan(
+                                getPoseVector(targetTranslation).getY()
+                                / getPoseVector(targetTranslation).getX()
+                        ),
+                        -2 * Math.PI,
+                        2 * Math.PI
+                )
+        );
+    }
+
+    public static Translation2d getSpeakerVector() {
+        return getPoseVector(getSpeakerPose());
+    }
+
+    public static Rotation2d getSpeakerRotation() {
+        return getPoseRotation(getSpeakerPose());
+    }
 
     public static boolean inRange() {
         Translation2d trans = getSpeakerVector();
@@ -44,10 +78,6 @@ public class AimUtil {
 
     public static boolean aligned() {
         return Math.abs(getSpeakerOffset().getDegrees()) <= 3.5; //TODO: tune this
-    }
-
-    public static Rotation2d getSpeakerRotation() {
-        return Rotation2d.fromRadians(MathUtil.clamp(Math.atan(getSpeakerVector().getY() / getSpeakerVector().getX()), -2 * Math.PI, 2 * Math.PI));
     }
 
     public static Rotation2d getSpeakerOffset() {
@@ -71,11 +101,6 @@ public class AimUtil {
             ampPose = FieldConstants.ampPose_blue;
         }
         return currBotTranslation.minus(ampPose);
-    }
-
-    private static Translation2d getShootingVector(
-            Translation2d noteVector, Translation2d botVector) {
-        return noteVector.minus(botVector);
     }
 
     public static double[] getShooterSetpoint() {

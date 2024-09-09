@@ -2,6 +2,8 @@ package frc.robot.subsystems.swerve;
 
 import static frc.robot.constants.RobotInfo.SwerveInfo.*;
 
+import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -11,26 +13,28 @@ import com.choreo.lib.ChoreoTrajectory;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.*;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
-import frc.robot.constants.Controls.OperatorControls;
+import frc.robot.constants.Controls;
+import frc.robot.constants.FieldConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
@@ -48,27 +52,118 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
     private double m_lastSimTime;
 
     private final SwerveRequest.ApplyChassisSpeeds AutoRequest = new SwerveRequest.ApplyChassisSpeeds();
-    private final SwerveRequest.ApplyChassisSpeeds TeleopRequest = new SwerveRequest.ApplyChassisSpeeds();
+    private final SwerveRequest.ApplyChassisSpeeds FieldCentricRequest = new SwerveRequest.ApplyChassisSpeeds();
+    private final SwerveRequest.ApplyChassisSpeeds TrackTargetRequest = new SwerveRequest.ApplyChassisSpeeds();
+    private final SwerveRequest.ApplyChassisSpeeds SOTFRequest = new SwerveRequest.ApplyChassisSpeeds();
 
     private final Field2d field = new Field2d();
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         seedFieldRelative(new Pose2d());
+        configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
         }
     }
 
-    public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+    private SwerveRequest fieldCentricRequestSupplier() {
+        double forwardsSpeed = Controls.DriverControls.SwerveForwardAxis.getAsDouble();
+        double sidewaysSpeed = Controls.DriverControls.SwerveStrafeAxis.getAsDouble();
+        double rotationSpeed = Controls.DriverControls.SwerveRotationAxis.getAsDouble();
+        return new SwerveRequest.FieldCentric()
+                .withVelocityX(forwardsSpeed)
+                .withVelocityY(sidewaysSpeed)
+                .withRotationalRate(rotationSpeed);
+    }
+
+    private SwerveRequest robotCentricChassisSpeedsRequestSupplier(ChassisSpeeds speeds) {
+        return new SwerveRequest.RobotCentric()
+                .withVelocityX(speeds.vxMetersPerSecond)
+                .withVelocityY(speeds.vyMetersPerSecond)
+                .withRotationalRate(speeds.omegaRadiansPerSecond);
+    }
+
+    private SwerveRequest fieldCentricChassisSpeedsRequestSupplier(ChassisSpeeds speeds) {
+        return new SwerveRequest.FieldCentric()
+                .withVelocityX(speeds.vxMetersPerSecond)
+                .withVelocityY(speeds.vyMetersPerSecond)
+                .withRotationalRate(speeds.omegaRadiansPerSecond);
+    }
+
+    private SwerveRequest trackTargetRequestSupplier(Pose2d targetPose) {
+        return new SwerveRequest.FieldCentricFacingAngle()
+                .withTargetDirection(
+                        AimUtil.getPoseRotation(targetPose.getTranslation())
+                );
+    }
+
+    private SwerveRequest SOTFRequestSupplier() {
+        return new SwerveRequest.FieldCentricFacingAngle()
+                .withTargetDirection(
+                        AimUtil.getSpeakerRotation(
+                                Controls.DriverControls.SwerveStrafeAxis.getAsDouble()
+                        )
+                )
+                .withVelocityX(
+                        Controls.DriverControls.SwerveForwardAxis.getAsDouble() / 4
+                ).withVelocityY(
+                        Controls.DriverControls.SwerveStrafeAxis.getAsDouble() / 4
+                );
+    }
+
+    public Command pathfindCommand(Pose2d targetPose) {
+        List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+                getPose(),
+                new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
+        );
+        PathPlannerPath ppPath = new PathPlannerPath(
+                bezierPoints,
+                new PathConstraints(
+                        3.0,
+                        3.0,
+                        2 * Math.PI, 4 * Math.PI
+                ),
+                new GoalEndState(0.0, AimUtil.getAmpRotation())
+        );
+        double driveBaseRadius = 0;
+        for (var moduleLocation : m_moduleLocations) {
+            driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
+        }
+        return new FollowPathHolonomic(
+                ppPath,
+                this::getPose,
+                this::getCurrentRobotChassisSpeeds,
+                (ChassisSpeeds speeds) -> applyRequest(() -> robotCentricChassisSpeedsRequestSupplier(speeds)),
+                new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
+                        new PIDConstants(10, 0, 0),
+                        TunerConstants.kSpeedAt12VoltsMps,
+                        driveBaseRadius,
+                        new ReplanningConfig()),
+                DriverStationUtil::isRed,
+                this
+        );
+    }
+
+    public Command driveFieldCentricCommand() {
+        return applyRequest(this::fieldCentricRequestSupplier);
+    }
+
+    public Command trackTargetCommand(Pose2d targetPose) {
+        return applyRequest(
+                () -> trackTargetRequestSupplier(targetPose)
+        );
+    }
+
+    public Command SOTFCommand() {
+        return applyRequest(this::SOTFRequestSupplier);
+    }
+
+    private Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
-    public Command getAutoPath(String pathName) {
-        return new PathPlannerAuto(pathName);
-    }
-
-    public ChassisSpeeds getCurrentRobotChassisSpeeds() {
+    private ChassisSpeeds getCurrentRobotChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
@@ -85,26 +180,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
-    }
-
-    @Override
-    public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(MathUtil.clamp(m_pigeon2.getRotation2d().getDegrees(), -360, 360));
-    }
-
-    @Override
-    public void setFieldCentricMovement(ChassisSpeeds chassisSpeeds) {
-        setControl(TeleopRequest.withSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, getRotation2d())));
-    }
-
-    @Override
-    public void setRawMovement(ChassisSpeeds chassisSpeeds) {
-        setControl(new SwerveRequest.ApplyChassisSpeeds().withSpeeds(chassisSpeeds));
-    }
-
-    @Override
-    public void stop() {
-        this.setFieldCentricMovement(new ChassisSpeeds());
     }
 
     @Override
@@ -131,7 +206,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         m_pigeon2.reset();
     }
 
-    public PoseEstimate validatePoseEstimate(PoseEstimate poseEstimate, double deltaSeconds) {
+    private PoseEstimate validatePoseEstimate(PoseEstimate poseEstimate, double deltaSeconds) {
         if (poseEstimate == null) return null;
         Pose2d pose2d = poseEstimate.pose;
         Translation2d trans = pose2d.getTranslation();
@@ -141,8 +216,19 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         return poseEstimate;
     }
 
+    @Override
     public Pose2d getPose() {
         return this.getState().Pose;
+    }
+
+    @Override
+    public Rotation2d getRotation2d() {
+        return m_pigeon2.getRotation2d();
+    }
+
+    @Override
+    public void stop() {
+        setControl(new SwerveRequest.SwerveDriveBrake());
     }
 
     /**
@@ -181,9 +267,30 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
                 choreoX,
                 choreoY,
                 choreoRotation,
-                this::setFieldCentricMovement,
+                (ChassisSpeeds speeds) -> setControl(
+                        fieldCentricChassisSpeedsRequestSupplier(speeds)
+                ),
                 DriverStationUtil::isRed,
                 this
         );
+    }
+
+    private void configurePathPlanner() {
+        double driveBaseRadius = 0;
+        for (var moduleLocation : m_moduleLocations) {
+            driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
+        }
+        AutoBuilder.configureHolonomic(
+                ()->this.getState().Pose,
+                this::seedFieldRelative,
+                this::getCurrentRobotChassisSpeeds,
+                (speeds)->this.setControl(AutoRequest.withSpeeds(speeds)),
+                new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
+                        new PIDConstants(10, 0, 0),
+                        TunerConstants.kSpeedAt12VoltsMps,
+                        driveBaseRadius,
+                        new ReplanningConfig()),
+                DriverStationUtil::isRed,
+                this);
     }
 }

@@ -13,16 +13,6 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
-    public void setFieldCentricMovement(ChassisSpeeds chassisSpeeds) {
-
-    }
-
-    @Override
-    public void setRawMovement(ChassisSpeeds chassisSpeeds) {
-
-    }
-
-    @Override
     public void stop() {
 
     }
@@ -34,6 +24,26 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
 
     @Override
     public Pose2d getPose() {
+        return null;
+    }
+
+    @Override
+    public Command pathfindCommand(Pose2d targetPose) {
+        return null;
+    }
+
+    @Override
+    public Command driveFieldCentricCommand() {
+        return null;
+    }
+
+    @Override
+    public Command trackTargetCommand(Pose2d targetPose) {
+        return null;
+    }
+
+    @Override
+    public Command SOTFCommand() {
         return null;
     }
 

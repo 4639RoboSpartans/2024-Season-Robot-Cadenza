@@ -6,6 +6,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -22,8 +23,6 @@ import frc.robot.commands.autos.AutoFactory;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
-import frc.robot.commands.drive.AmpAimCommand;
-import frc.robot.commands.drive.TeleopSwerveDriveCommand;
 import frc.robot.commands.intake.*;
 import frc.robot.constants.InterpolatingTables;
 import frc.robot.led.LEDStrip;
@@ -36,6 +35,7 @@ import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.util.AimUtil;
 import frc.robot.util.AutoHelper;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
@@ -99,8 +99,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
         NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
         NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
-        //drive commands
-        NamedCommands.registerCommand("ManualSwerveDriveCommand", new TeleopSwerveDriveCommand(swerveDriveSubsystem));
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, oi)));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
@@ -116,9 +114,24 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-        swerveDriveSubsystem.setDefaultCommand(new TeleopSwerveDriveCommand(
-                swerveDriveSubsystem
-        ));
+        swerveDriveSubsystem.setDefaultCommand(
+                swerveDriveSubsystem.driveFieldCentricCommand()
+        );
+
+        DriverControls.AimButton.whileTrue(
+                swerveDriveSubsystem.SOTFCommand()
+        );
+
+        DriverControls.AmpAlignButton.whileTrue(
+                swerveDriveSubsystem.pathfindCommand(
+                        new Pose2d(
+                                AimUtil.getAmpPose(),
+                                AimUtil.getAmpRotation()
+                        )
+                )
+        );
+
+
 
         // TODO: extract to named class
         ledStrip.setDefaultCommand(new RunCommand(() -> {
@@ -148,9 +161,6 @@ public class RobotContainer {
         OperatorControls.LaunchShooterButton.whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
 
         OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
-
-        DriverControls.AmpAlignButton
-                .whileTrue(new AmpAimCommand(swerveDriveSubsystem));
 
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
                 whileTrue(Commands.runOnce(swerveDriveSubsystem::reset));
