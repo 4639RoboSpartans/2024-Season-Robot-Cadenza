@@ -2,8 +2,6 @@ package frc.robot.subsystems.swerve;
 
 import static frc.robot.constants.RobotInfo.SwerveInfo.*;
 
-import java.lang.reflect.Field;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -12,9 +10,9 @@ import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.*;
+import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -22,7 +20,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,7 +31,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Controls;
-import frc.robot.constants.FieldConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
@@ -51,12 +47,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    private final SwerveRequest.ApplyChassisSpeeds AutoRequest = new SwerveRequest.ApplyChassisSpeeds();
-    private final SwerveRequest.ApplyChassisSpeeds FieldCentricRequest = new SwerveRequest.ApplyChassisSpeeds();
-    private final SwerveRequest.ApplyChassisSpeeds TrackTargetRequest = new SwerveRequest.ApplyChassisSpeeds();
-    private final SwerveRequest.ApplyChassisSpeeds SOTFRequest = new SwerveRequest.ApplyChassisSpeeds();
+    private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
+    private final SwerveRequest.FieldCentric fieldCentricRequest = new SwerveRequest.FieldCentric();
+    private final SwerveRequest.RobotCentric pathFindRequest = new SwerveRequest.RobotCentric();
+    private final SwerveRequest.FieldCentricFacingAngle trackTargetRequest = new SwerveRequest.FieldCentricFacingAngle();
+    private final SwerveRequest.FieldCentricFacingAngle SOTFRequest = new SwerveRequest.FieldCentricFacingAngle();
 
     private final Field2d field = new Field2d();
+    private DriveState state;
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
@@ -65,54 +63,52 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        state = DriveState.TELEOP;
+        trackTargetRequest.HeadingController = new PhoenixPIDController(8, 0, 0);
+        SOTFRequest.HeadingController = new PhoenixPIDController(8, 0, 0);
+        SOTFRequest.HeadingController.setTolerance(Rotation2d.fromDegrees(7.5).getRadians());
     }
 
     private SwerveRequest fieldCentricRequestSupplier() {
         double forwardsSpeed = Controls.DriverControls.SwerveForwardAxis.getAsDouble();
         double sidewaysSpeed = Controls.DriverControls.SwerveStrafeAxis.getAsDouble();
         double rotationSpeed = Controls.DriverControls.SwerveRotationAxis.getAsDouble();
-        return new SwerveRequest.FieldCentric()
+        return fieldCentricRequest
                 .withVelocityX(forwardsSpeed)
                 .withVelocityY(sidewaysSpeed)
                 .withRotationalRate(rotationSpeed);
     }
 
-    private SwerveRequest robotCentricChassisSpeedsRequestSupplier(ChassisSpeeds speeds) {
-        return new SwerveRequest.RobotCentric()
-                .withVelocityX(speeds.vxMetersPerSecond)
-                .withVelocityY(speeds.vyMetersPerSecond)
-                .withRotationalRate(speeds.omegaRadiansPerSecond);
-    }
-
-    private SwerveRequest fieldCentricChassisSpeedsRequestSupplier(ChassisSpeeds speeds) {
-        return new SwerveRequest.FieldCentric()
-                .withVelocityX(speeds.vxMetersPerSecond)
-                .withVelocityY(speeds.vyMetersPerSecond)
-                .withRotationalRate(speeds.omegaRadiansPerSecond);
-    }
-
     private SwerveRequest trackTargetRequestSupplier(Pose2d targetPose) {
-        return new SwerveRequest.FieldCentricFacingAngle()
+        double forwardsSpeed = Controls.DriverControls.SwerveForwardAxis.getAsDouble();
+        double sidewaysSpeed = Controls.DriverControls.SwerveStrafeAxis.getAsDouble();
+        return trackTargetRequest
+                .withVelocityX(forwardsSpeed)
+                .withVelocityY(sidewaysSpeed)
                 .withTargetDirection(
                         AimUtil.getPoseRotation(targetPose.getTranslation())
                 );
     }
 
     private SwerveRequest SOTFRequestSupplier() {
-        return new SwerveRequest.FieldCentricFacingAngle()
+        return SOTFRequest
+                .withSteerRequestType(
+                        SwerveModule.SteerRequestType.MotionMagic
+                )
                 .withTargetDirection(
                         AimUtil.getSpeakerRotation(
                                 Controls.DriverControls.SwerveStrafeAxis.getAsDouble()
                         )
                 )
                 .withVelocityX(
-                        Controls.DriverControls.SwerveForwardAxis.getAsDouble() / 4
+                        Controls.DriverControls.SwerveForwardAxis.getAsDouble() / 2
                 ).withVelocityY(
-                        Controls.DriverControls.SwerveStrafeAxis.getAsDouble() / 4
+                        Controls.DriverControls.SwerveStrafeAxis.getAsDouble() / 2
                 );
     }
 
     public Command pathfindCommand(Pose2d targetPose) {
+        state = DriveState.PATHFIND;
         List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
                 getPose(),
                 new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
@@ -134,28 +130,37 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
                 ppPath,
                 this::getPose,
                 this::getCurrentRobotChassisSpeeds,
-                (ChassisSpeeds speeds) -> applyRequest(() -> robotCentricChassisSpeedsRequestSupplier(speeds)),
-                new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
-                        new PIDConstants(10, 0, 0),
+                (ChassisSpeeds speeds) -> setControl(
+                        pathFindRequest
+                                .withVelocityX(speeds.vxMetersPerSecond)
+                                .withVelocityY(speeds.vyMetersPerSecond)
+                                .withRotationalRate(speeds.omegaRadiansPerSecond)
+                ),
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(8, 0, 0),
+                        new PIDConstants(5, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
-                DriverStationUtil::isRed,
+                    DriverStationUtil::isRed,
                 this
         );
     }
 
     public Command driveFieldCentricCommand() {
+        state = DriveState.TELEOP;
         return applyRequest(this::fieldCentricRequestSupplier);
     }
 
     public Command trackTargetCommand(Pose2d targetPose) {
+        state = DriveState.TRACK_TARGET;
         return applyRequest(
                 () -> trackTargetRequestSupplier(targetPose)
         );
     }
 
     public Command SOTFCommand() {
+        state = DriveState.SOTF;
         return applyRequest(this::SOTFRequestSupplier);
     }
 
@@ -187,7 +192,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         field.setRobotPose(getPose());
         SmartDashboard.putData("field", field);
         SmartDashboard.putNumber("Drive/heading", getRotation2d().getDegrees());
-        SmartDashboard.putNumber("Drive/dist", Math.hypot(AimUtil.getSpeakerVector().getX(), AimUtil.getSpeakerVector().getY()));
+        SmartDashboard.putNumber("Drive/dist",AimUtil.getSpeakerDist());
+        SmartDashboard.putString("Drive/Drive Mode", state.toString());
+        SmartDashboard.putBoolean("Drive/Can SOTF", Controls.canSOTF.getAsBoolean());
+        SmartDashboard.putBoolean("Drive/SOTF", Controls.DriverControls.SOTF.getAsBoolean());
+        SmartDashboard.putBoolean("Drive/Amp Align", Controls.DriverControls.AmpAlignButton.getAsBoolean());
         PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
         if (pose != null) {
             addVisionMeasurement(pose.pose, Timer.getFPGATimestamp());
@@ -233,7 +242,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
 
     /**
      * Returns a command that makes the robot follow a Choreo path using the ChoreoLib library.
-     * @param pathName The name of a path located in the "deploy/choreo" directory
+     *
+     * @param pathName      The name of a path located in the "deploy/choreo" directory
      * @param resetPosition If the robot's position should be reset to the starting position of the path
      * @return A command that makes the robot follow the path
      */
@@ -243,7 +253,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
 
     /**
      * Returns a command that makes the robot follow a Choreo path using the ChoreoLib library.
-     * @param trajectory The Choreo trajectory to follow.
+     *
+     * @param trajectory    The Choreo trajectory to follow.
      * @param resetPosition If the robot's position should be reset to the starting position of the path
      * @return A command that makes the robot follow the path
      */
@@ -268,7 +279,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
                 choreoY,
                 choreoRotation,
                 (ChassisSpeeds speeds) -> setControl(
-                        fieldCentricChassisSpeedsRequestSupplier(speeds)
+                        autoRequest.withSpeeds(speeds)
                 ),
                 DriverStationUtil::isRed,
                 this
@@ -281,10 +292,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
         }
         AutoBuilder.configureHolonomic(
-                ()->this.getState().Pose,
+                () -> this.getState().Pose,
                 this::seedFieldRelative,
                 this::getCurrentRobotChassisSpeeds,
-                (speeds)->this.setControl(AutoRequest.withSpeeds(speeds)),
+                (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)),
                 new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
                         new PIDConstants(10, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
@@ -292,5 +303,22 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
                         new ReplanningConfig()),
                 DriverStationUtil::isRed,
                 this);
+    }
+
+    public boolean inShootingRange() {
+        return AimUtil.getSpeakerDist() <= 3.5;
+    }
+
+    public boolean inShootingSector() {
+        Rotation2d rotation = AimUtil.getSpeakerRotation();
+        return Math.abs(rotation.getDegrees()) <= 35;
+    }
+
+    public boolean isAligned() {
+        return SOTFRequest.HeadingController.atSetpoint();
+    }
+
+    public boolean inSpinupRange() {
+        return AimUtil.getSpeakerDist() <= 4;
     }
 }

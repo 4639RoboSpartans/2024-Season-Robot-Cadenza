@@ -13,11 +13,11 @@ public final class Controls {
     public static final class DriverControls {
         public static final DoubleSupplier SwerveForwardAxis = () -> {
             OI oi = SubsystemManager.getOI();
-            return oi.driverController().getAxis(OI.Axes.LEFT_STICK_Y);
+            return oi.driverController().getAxis(OI.Axes.LEFT_STICK_Y) * RobotInfo.SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         };
         public static final DoubleSupplier SwerveStrafeAxis = () -> {
             OI oi = SubsystemManager.getOI();
-            return -oi.driverController().getAxis(OI.Axes.LEFT_STICK_X);
+            return -oi.driverController().getAxis(OI.Axes.LEFT_STICK_X) * RobotInfo.SwerveInfo.CURRENT_MAX_ROBOT_MPS;
         };
         public static final DoubleSupplier SwerveRotationAxis = () -> {
             OI oi = SubsystemManager.getOI();
@@ -140,27 +140,36 @@ public final class Controls {
                 });
 
         public static final Trigger resetIntakeeOffset1 = new Trigger(
-            () -> {
-                OI oi = SubsystemManager.getOI();
-                return oi.operatorController().getButton(OI.Buttons.A_BUTTON).getAsBoolean();
-            }
+                () -> {
+                    OI oi = SubsystemManager.getOI();
+                    return oi.operatorController().getButton(OI.Buttons.A_BUTTON).getAsBoolean();
+                }
         ),
-        resetIntakeOffset2 = new Trigger(
-            () -> {
-                OI oi = SubsystemManager.getOI();
-                return oi.operatorController().getButton(OI.Buttons.B_BUTTON).getAsBoolean();
-            }
-        );
+                resetIntakeOffset2 = new Trigger(
+                        () -> {
+                            OI oi = SubsystemManager.getOI();
+                            return oi.operatorController().getButton(OI.Buttons.B_BUTTON).getAsBoolean();
+                        }
+                );
     }
 
 
-    public static Trigger inShootingRange = new Trigger(AimUtil::inShootingRange);
-    public static Trigger aligned = new Trigger(AimUtil::aligned);
-    public static Trigger inShootingSector = new Trigger(AimUtil::inShootingSector);
+    public static Trigger inShootingRange = new Trigger(
+            SubsystemManager.getSwerveDrive()::inShootingRange
+    );
+    public static Trigger aligned = new Trigger(
+            SubsystemManager.getSwerveDrive()::isAligned
+    );
+    public static Trigger inShootingSector = new Trigger(
+            SubsystemManager.getSwerveDrive()::inShootingSector
+    );
 
     public static Trigger canSOTF = inShootingRange.and(aligned).and(inShootingSector);
 
-    public static Trigger spinupTrigger = new Trigger(AimUtil::inRange).and(AimUtil::inShootingSector).and(DriverControls.SOTF.and(canSOTF).negate());
+    public static Trigger spinupTrigger = new Trigger(
+            SubsystemManager.getSwerveDrive()::inSpinupRange
+    )
+            .and(DriverControls.SOTF.and(canSOTF).negate());
 
     public static double rumbleStrength = 0.5;
 }

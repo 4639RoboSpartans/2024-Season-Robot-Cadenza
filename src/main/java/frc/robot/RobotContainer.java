@@ -7,6 +7,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -118,19 +119,30 @@ public class RobotContainer {
                 swerveDriveSubsystem.driveFieldCentricCommand()
         );
 
-        DriverControls.AimButton.whileTrue(
-                swerveDriveSubsystem.SOTFCommand()
-        );
+        DriverControls.SOTF
+                .whileTrue(
+                        swerveDriveSubsystem.SOTFCommand()
+                );
 
-        DriverControls.AmpAlignButton.whileTrue(
-                swerveDriveSubsystem.pathfindCommand(
-                        new Pose2d(
-                                AimUtil.getAmpPose(),
-                                AimUtil.getAmpRotation()
+        DriverControls.AmpAlignButton
+                .whileTrue(
+                        swerveDriveSubsystem.pathfindCommand(
+                                new Pose2d(
+                                        AimUtil.getAmpPose(),
+                                        AimUtil.getAmpRotation()
+                                )
                         )
-                )
-        );
+                );
 
+        DriverControls.AimButton
+                .whileTrue(
+                        swerveDriveSubsystem.trackTargetCommand(
+                                new Pose2d(
+                                        AimUtil.getSpeakerPose(),
+                                        new Rotation2d()
+                                )
+                        )
+                );
 
 
         // TODO: extract to named class
@@ -166,17 +178,17 @@ public class RobotContainer {
                 whileTrue(Commands.runOnce(swerveDriveSubsystem::reset));
 
         Controls.canSOTF
-            .and(DriverControls.SOTF)
-            .and(() -> !Robot.isInAuton())
+                .and(DriverControls.SOTF)
+                .and(() -> !Robot.isInAuton())
                 .whileTrue(AutoHelper.shoot());
         Controls.DriverControls.SOTF
-            .and(Controls.canSOTF.negate())
-            .and(() -> !Robot.isInAuton())
-            .and(hopper::hasNote)
+                .and(Controls.canSOTF.negate())
+                .and(() -> !Robot.isInAuton())
+                .and(hopper::hasNote)
                 .whileTrue(new ShooterSpinupCommand(shooter));
 
         OperatorControls.resetIntakeOffset2.and(OperatorControls.resetIntakeOffset2).whileTrue(
-            new ManualIntakeExtendCommand(intake)
+                new ManualIntakeExtendCommand(intake)
         );
     }
 

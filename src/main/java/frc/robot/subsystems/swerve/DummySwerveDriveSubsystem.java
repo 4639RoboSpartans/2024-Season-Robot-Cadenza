@@ -56,4 +56,24 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     public Command followChoreoPath(String pathName, boolean resetPosition) {
         return null;
     }
+
+    @Override
+    public boolean isAligned() {
+        return false;
+    }
+
+    @Override
+    public boolean inShootingRange() {
+        return false;
+    }
+
+    @Override
+    public boolean inShootingSector() {
+        return false;
+    }
+
+    @Override
+    public boolean inSpinupRange() {
+        return false;
+    }
 }

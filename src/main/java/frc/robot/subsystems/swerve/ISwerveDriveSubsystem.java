@@ -1,19 +1,18 @@
 package frc.robot.subsystems.swerve;
 
 import com.choreo.lib.ChoreoTrajectory;
-import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.generated.TunerConstants;
-import frc.robot.util.DriverStationUtil;
 
 public interface ISwerveDriveSubsystem extends Subsystem {
+    enum DriveState {
+        TELEOP,
+        TRACK_TARGET,
+        SOTF,
+        PATHFIND
+    }
 
     Rotation2d getRotation2d();
     void stop();
@@ -34,4 +33,12 @@ public interface ISwerveDriveSubsystem extends Subsystem {
 
 
     Command followChoreoPath(String pathName, boolean resetPosition);
+
+    boolean isAligned();
+
+    boolean inShootingRange();
+
+    boolean inShootingSector();
+
+    boolean inSpinupRange();
 }
