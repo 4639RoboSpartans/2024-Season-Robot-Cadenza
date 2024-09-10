@@ -1,9 +1,0 @@
-robot {
-    shooter {
-        SetPointTable ?= [
-            position : angle : speed ;
-            0.0      : 0.0   : 0.0   ;
-            0.0      : 0.0   : 0.0   ;
-        ]
-    }
-}

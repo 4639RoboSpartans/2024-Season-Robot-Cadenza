@@ -6,6 +6,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,6 +27,7 @@ import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.intake.*;
+import frc.robot.constants.FieldConstants;
 import frc.robot.constants.InterpolatingTables;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
@@ -70,7 +73,6 @@ public class RobotContainer {
 
         nameCommands();
 
-//       autos = AutoBuilder.buildAutoChooser();
         autos = new SendableChooser<>();
         autos.setDefaultOption("null auto", new WaitCommand(1));
         autos.addOption("preloaded", AutoHelper.shoot());
@@ -127,10 +129,7 @@ public class RobotContainer {
         DriverControls.AmpAlignButton
                 .whileTrue(
                         swerveDriveSubsystem.pathfindCommand(
-                                new Pose2d(
-                                        AimUtil.getAmpPose(),
-                                        AimUtil.getAmpRotation()
-                                )
+                                new Pose2d(FieldConstants.ampPose_blue, AimUtil.getAmpRotation())
                         )
                 );
 

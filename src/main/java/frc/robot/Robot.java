@@ -7,6 +7,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindHolonomic;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -30,9 +31,9 @@ public class Robot extends TimedRobot {
 
     private RobotContainer robotContainer;
 
-    static {
-        RobotConfiguration.loadFile("config/shooter.rcfg");
-    }
+//    static {
+//        RobotConfiguration.loadFile("config/shooter.rcfg");
+//    }
 
     public static boolean isInAuton() {
         return isAuton;

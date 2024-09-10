@@ -31,7 +31,11 @@ public class AimUtil {
     }
 
     public static Rotation2d getSpeakerRotation(double sidewaysSpeed) {
-        return getSpeakerRotation().minus(Rotation2d.fromDegrees(sidewaysSpeed * 3));
+        double aimMultiplier = -3;
+        if (DriverStationUtil.isRed()) {
+            aimMultiplier *= -1;
+        }
+        return getSpeakerRotation().minus(Rotation2d.fromDegrees(sidewaysSpeed * aimMultiplier));
     }
 
     public static Translation2d getPoseVector(Translation2d targetTranslation) {

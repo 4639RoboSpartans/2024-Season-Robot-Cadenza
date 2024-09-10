@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.constants.InterpolatingTables;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
 import frc.robot.util.AimUtil;
@@ -88,6 +89,7 @@ public class FalconShooterSubsystem extends SubsystemBase implements IShooterSub
 
     @Override
     public void periodic() {
+        InterpolatingTables.update();
         switch (shootingMode) {
             case AUTO_SPEAKER, SPEAKER, AMP, LAUNCH, SPINUP -> applyBangBangControl(getTargetSpeed());
             case IDLE -> applyIdleSpeed();
