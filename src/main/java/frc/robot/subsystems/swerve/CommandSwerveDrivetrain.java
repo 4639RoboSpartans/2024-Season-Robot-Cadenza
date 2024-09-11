@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.constants.Controls;
 import frc.robot.constants.FieldConstants;
 import frc.robot.generated.TunerConstants;
@@ -102,7 +103,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
         }
         PathConstraints constraints = new PathConstraints(
-                4.6, 3.0,
+                6, 3,
                 2 * Math.PI, 2 * Math.PI
         );
         return AutoBuilder.pathfindToPoseFlipped(
@@ -273,7 +274,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
     }
 
     public boolean isAligned() {
-        return SOTFRequest.HeadingController.atSetpoint();
+        if (!Robot.isInAuton()) {
+            return SOTFRequest.HeadingController.atSetpoint();
+        } else {
+            return Math.abs(AimUtil.getSpeakerOffset().getDegrees()) <= 5;
+        }
     }
 
     public boolean inSpinupRange() {

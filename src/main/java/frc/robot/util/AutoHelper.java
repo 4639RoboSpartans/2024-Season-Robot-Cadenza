@@ -84,8 +84,17 @@ public class AutoHelper {
     public static Command shoot() {
         return Commands.parallel(
                 Commands.race(new WaitCommand(1.5),
-                new AutoSpeakerCommand(shooter, hopper, ledStrip)),
+                        new AutoSpeakerCommand(shooter, hopper, ledStrip)),
                 new ExtendIntakeCommand(intake)
         );
+    }
+
+
+    public static Command ampPrepCommand() {
+        return Commands.parallel(
+                        Commands.run(intake::outtake),
+                        Commands.run(() -> intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED))
+                )
+                .until(() -> !hopper.hasNote());
     }
 }

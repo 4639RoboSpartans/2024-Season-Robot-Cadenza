@@ -6,6 +6,8 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IDs;
 import frc.robot.oi.OI;
@@ -57,10 +59,10 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     }
 
     public void updateOffset() {
-      downPosition = encoder.getPosition();
-      upPosition = downPosition - 55;
-      ampPosition = downPosition - 50;
-      state = ExtensionState.RETRACTED;
+        downPosition = encoder.getPosition();
+        upPosition = downPosition - 55;
+        ampPosition = downPosition - 50;
+        state = ExtensionState.RETRACTED;
     }
 
     //Spins intake motor to intake notes
@@ -69,7 +71,8 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     }
 
     public void amp() {
-      intakeMotor.set(IntakeInfo.AMP_OUTTAKE_SPEED);
+        setExtended(IIntakeSubsystem.ExtensionState.AMP);
+        intakeMotor.set(IntakeInfo.AMP_OUTTAKE_SPEED);
     }
 
     public void outtake() {
@@ -93,8 +96,8 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         SmartDashboard.putNumber("Intake/Intake angle", getPosition());
         SmartDashboard.putNumber("Intake/Intake PID output", pidOutput);
 
-            pivotMotorRight.set(pidOutput);
-            pivotMotorLeft.set(pidOutput);
+        pivotMotorRight.set(pidOutput);
+        pivotMotorLeft.set(pidOutput);
     }
 
     public void stop() {

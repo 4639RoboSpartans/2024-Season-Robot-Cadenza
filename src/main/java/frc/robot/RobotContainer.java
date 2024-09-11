@@ -129,15 +129,28 @@ public class RobotContainer {
 
         DriverControls.AmpAlignButton
                 .whileTrue(
-                        swerveDriveSubsystem.pathfindCommand(
-                                new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
-                        )
+                        Commands.parallel(
+                                        swerveDriveSubsystem.pathfindCommand(
+                                                new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
+                                        ),
+                                        AutoHelper.ampPrepCommand()
+                                )
+                                .andThen(
+                                        new AutoAmpCommand(intake)
+                                )
                 );
 
         DriverControls.AimButton
                 .whileTrue(
-                        swerveDriveSubsystem.pathfindCommand(
-                                AimUtil.getManualSpeakerPose()
+                        Commands.parallel(
+                                swerveDriveSubsystem.pathfindCommand(
+                                        AimUtil.getManualSpeakerPose()
+                                ),
+                                Commands.waitUntil(
+                                        Controls.canSOTF
+                                ).andThen(
+                                        new AutoSpeakerCommand(shooter, hopper, ledStrip)
+                                )
                         )
                 );
 

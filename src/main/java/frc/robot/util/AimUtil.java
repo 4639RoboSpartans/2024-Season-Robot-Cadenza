@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.Controls;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.InterpolatingTables;
 import frc.robot.subsystems.SubsystemManager;
@@ -27,7 +28,11 @@ public class AimUtil {
                                 new Translation2d(2, 0):
                                 new Translation2d(-2, 0)
                 ),
-                new Rotation2d()
+                Rotation2d.fromDegrees(
+                        DriverStationUtil.isRed()?
+                                0:
+                                180
+                )
         );
     }
 
@@ -120,6 +125,8 @@ public class AimUtil {
         double dist = getSpeakerDist();
         double angle = InterpolatingTables.getAngleTable().get(dist);
         double speed = InterpolatingTables.getSpeedTable().get(dist);
+        angle -= Controls.DriverControls.SwerveForwardAxis.getAsDouble();
+        speed -= Controls.DriverControls.SwerveForwardAxis.getAsDouble();
         return new double[]{speed, angle};
     }
 }
