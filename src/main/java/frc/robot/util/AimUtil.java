@@ -20,6 +20,17 @@ public class AimUtil {
         return speakerPose;
     }
 
+    public static Pose2d getManualSpeakerPose() {
+        return new Pose2d(
+                AimUtil.getSpeakerPose().minus(
+                        DriverStationUtil.isRed()?
+                                new Translation2d(2, 0):
+                                new Translation2d(-2, 0)
+                ),
+                new Rotation2d()
+        );
+    }
+
     public static Translation2d getAmpPose() {
         Translation2d ampPose;
         if (DriverStationUtil.isRed()) {

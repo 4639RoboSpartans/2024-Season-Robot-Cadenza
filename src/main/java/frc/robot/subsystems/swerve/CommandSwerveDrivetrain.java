@@ -14,6 +14,7 @@ import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 
+import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Controls;
+import frc.robot.constants.FieldConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
@@ -49,8 +51,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
 
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
     private final SwerveRequest.FieldCentric fieldCentricRequest = new SwerveRequest.FieldCentric();
-    private final SwerveRequest.RobotCentric pathFindRequest = new SwerveRequest.RobotCentric();
-    private final SwerveRequest.FieldCentricFacingAngle trackTargetRequest = new SwerveRequest.FieldCentricFacingAngle();
     private final SwerveRequest.FieldCentricFacingAngle SOTFRequest = new SwerveRequest.FieldCentricFacingAngle();
 
     private final Field2d field = new Field2d();
@@ -64,7 +64,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
             startSimThread();
         }
         state = DriveState.TELEOP;
-        trackTargetRequest.HeadingController = new PhoenixPIDController(8, 0, 0);
         SOTFRequest.HeadingController = new PhoenixPIDController(8, 0, 0);
         SOTFRequest.HeadingController.setTolerance(Rotation2d.fromDegrees(7.5).getRadians());
     }
@@ -77,17 +76,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
                 .withVelocityX(forwardsSpeed)
                 .withVelocityY(sidewaysSpeed)
                 .withRotationalRate(rotationSpeed);
-    }
-
-    private SwerveRequest trackTargetRequestSupplier(Pose2d targetPose) {
-        double forwardsSpeed = Controls.DriverControls.SwerveForwardAxis.getAsDouble();
-        double sidewaysSpeed = Controls.DriverControls.SwerveStrafeAxis.getAsDouble();
-        return trackTargetRequest
-                .withVelocityX(forwardsSpeed)
-                .withVelocityY(sidewaysSpeed)
-                .withTargetDirection(
-                        AimUtil.getPoseRotation(targetPose.getTranslation())
-                );
     }
 
     private SwerveRequest SOTFRequestSupplier() {
@@ -109,54 +97,23 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
 
     public Command pathfindCommand(Pose2d targetPose) {
         state = DriveState.PATHFIND;
-        List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-                getPose(),
-                new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
-        );
-        PathPlannerPath ppPath = new PathPlannerPath(
-                bezierPoints,
-                new PathConstraints(
-                        3.0,
-                        3.0,
-                        2 * Math.PI, 4 * Math.PI
-                ),
-                new GoalEndState(0.0, AimUtil.getAmpRotation())
-        );
         double driveBaseRadius = 0;
         for (var moduleLocation : m_moduleLocations) {
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
         }
-        return new FollowPathHolonomic(
-                ppPath,
-                this::getPose,
-                this::getCurrentRobotChassisSpeeds,
-                (ChassisSpeeds speeds) -> setControl(
-                        pathFindRequest
-                                .withVelocityX(speeds.vxMetersPerSecond)
-                                .withVelocityY(speeds.vyMetersPerSecond)
-                                .withRotationalRate(speeds.omegaRadiansPerSecond)
-                ),
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(8, 0, 0),
-                        new PIDConstants(5, 0, 0),
-                        TunerConstants.kSpeedAt12VoltsMps,
-                        driveBaseRadius,
-                        new ReplanningConfig()),
-                    DriverStationUtil::isRed,
-                this
+        PathConstraints constraints = new PathConstraints(
+                4.6, 3.0,
+                2 * Math.PI, 2 * Math.PI
+        );
+        return AutoBuilder.pathfindToPoseFlipped(
+                targetPose,
+                constraints
         );
     }
 
     public Command driveFieldCentricCommand() {
         state = DriveState.TELEOP;
         return applyRequest(this::fieldCentricRequestSupplier);
-    }
-
-    public Command trackTargetCommand(Pose2d targetPose) {
-        state = DriveState.TRACK_TARGET;
-        return applyRequest(
-                () -> trackTargetRequestSupplier(targetPose)
-        );
     }
 
     public Command SOTFCommand() {
@@ -192,11 +149,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         field.setRobotPose(getPose());
         SmartDashboard.putData("field", field);
         SmartDashboard.putNumber("Drive/heading", getRotation2d().getDegrees());
-        SmartDashboard.putNumber("Drive/dist",AimUtil.getSpeakerDist());
+        SmartDashboard.putNumber("Drive/dist", AimUtil.getSpeakerDist());
         SmartDashboard.putString("Drive/Drive Mode", state.toString());
         SmartDashboard.putBoolean("Drive/Can SOTF", Controls.canSOTF.getAsBoolean());
         SmartDashboard.putBoolean("Drive/SOTF", Controls.DriverControls.SOTF.getAsBoolean());
         SmartDashboard.putBoolean("Drive/Amp Align", Controls.DriverControls.AmpAlignButton.getAsBoolean());
+        SmartDashboard.putBoolean("is red", DriverStationUtil.isRed());
         PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
         if (pose != null) {
             addVisionMeasurement(pose.pose, Timer.getFPGATimestamp());

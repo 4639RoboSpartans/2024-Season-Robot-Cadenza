@@ -25,8 +25,6 @@ public interface ISwerveDriveSubsystem extends Subsystem {
 
     Command driveFieldCentricCommand();
 
-    Command trackTargetCommand(Pose2d targetPose);
-
     Command SOTFCommand();
 
     Command followChoreoPath(ChoreoTrajectory trajectory, boolean resetPosition);

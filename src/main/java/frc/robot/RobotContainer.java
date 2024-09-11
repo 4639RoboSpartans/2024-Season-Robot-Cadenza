@@ -41,6 +41,7 @@ import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.util.AimUtil;
 import frc.robot.util.AutoHelper;
+import frc.robot.util.DriverStationUtil;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -129,17 +130,14 @@ public class RobotContainer {
         DriverControls.AmpAlignButton
                 .whileTrue(
                         swerveDriveSubsystem.pathfindCommand(
-                                new Pose2d(FieldConstants.ampPose_blue, AimUtil.getAmpRotation())
+                                new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
                         )
                 );
 
         DriverControls.AimButton
                 .whileTrue(
-                        swerveDriveSubsystem.trackTargetCommand(
-                                new Pose2d(
-                                        AimUtil.getSpeakerPose(),
-                                        new Rotation2d()
-                                )
+                        swerveDriveSubsystem.pathfindCommand(
+                                AimUtil.getManualSpeakerPose()
                         )
                 );
 

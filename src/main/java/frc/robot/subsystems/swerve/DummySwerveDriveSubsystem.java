@@ -38,11 +38,6 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
-    public Command trackTargetCommand(Pose2d targetPose) {
-        return null;
-    }
-
-    @Override
     public Command SOTFCommand() {
         return null;
     }

@@ -4,6 +4,7 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Alliance": "String Chooser",
       "/SmartDashboard/Autons": "String Chooser",
+      "/SmartDashboard/Row select for Shooter/Shooter Setpoints": "String Chooser",
       "/SmartDashboard/Row select for robot.shooter.SetPointTable": "String Chooser",
       "/SmartDashboard/SendableChooser[2]": "String Chooser",
       "/SmartDashboard/field": "Field2d"
