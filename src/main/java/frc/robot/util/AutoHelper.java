@@ -5,6 +5,7 @@ import com.choreo.lib.ChoreoTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Robot;
 import frc.robot.commands.intake.ExtendIntakeCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.shooter.AutoSpeakerCommand;
@@ -76,14 +77,14 @@ public class AutoHelper {
         ChoreoTrajectory traj = Choreo.getTrajectory(pathname);
         Command ret = Commands.sequence(
                 swerve.followChoreoPath(traj, true),
-                new AutoSpeakerCommand(shooter, hopper, ledStrip)
+                shoot()
         );
         return ret;
     }
 
     public static Command shoot() {
         return Commands.parallel(
-                Commands.race(new WaitCommand(1.5),
+                Commands.race(new WaitCommand(Robot.isReal()?1.5:0),
                         new AutoSpeakerCommand(shooter, hopper, ledStrip)),
                 new ExtendIntakeCommand(intake)
         );
