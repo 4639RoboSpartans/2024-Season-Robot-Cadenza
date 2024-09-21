@@ -8,7 +8,7 @@ public final class RobotInfo {
         public static final double centerToWheel = 0.245;
 
         // Change MOVEMENT_SPEED to 1.0 for max speed
-        public static final double CURRENT_MAX_ROBOT_MPS = 3.5;
+        public static final double CURRENT_MAX_ROBOT_MPS = 4.6;
         public static final double TELOP_ROTATION_SPEED = 12;
 
 
@@ -22,9 +22,10 @@ public final class RobotInfo {
 
         public static final double INTAKE_SPEED = -0.95;
         public static final double AMP_OUTTAKE_SPEED = 0.6;
-        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.63;
-        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.87;
-        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.016, 0, 0);
+        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.154;
+        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.83;
+        public static final double INTAKE_PIVOT_AMP_SETPOINT = 0.254;
+        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(2.3, 0, 0);
     }
 
     public static final class HopperInfo {

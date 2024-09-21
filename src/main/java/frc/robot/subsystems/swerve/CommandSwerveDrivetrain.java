@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.constants.Controls;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotInfo;
 import frc.robot.generated.TunerConstants;
 import frc.robot.network.LimelightHelpers;
 import frc.robot.network.LimelightHelpers.PoseEstimate;
@@ -70,9 +71,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
     }
 
     private SwerveRequest fieldCentricRequestSupplier() {
-        double forwardsSpeed = Controls.DriverControls.SwerveForwardAxis.getAsDouble();
-        double sidewaysSpeed = Controls.DriverControls.SwerveStrafeAxis.getAsDouble();
-        double rotationSpeed = Controls.DriverControls.SwerveRotationAxis.getAsDouble();
+        double forwardsSpeed = Controls.DriverControls.SwerveForwardAxis.getAsDouble() * CURRENT_MAX_ROBOT_MPS;
+        double sidewaysSpeed = Controls.DriverControls.SwerveStrafeAxis.getAsDouble() * CURRENT_MAX_ROBOT_MPS;
+        double rotationSpeed = Controls.DriverControls.SwerveRotationAxis.getAsDouble() * CURRENT_MAX_ROBOT_MPS;
         return fieldCentricRequest
                 .withVelocityX(forwardsSpeed)
                 .withVelocityY(sidewaysSpeed)

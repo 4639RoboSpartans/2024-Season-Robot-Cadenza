@@ -138,6 +138,10 @@ public class RobotContainer {
                                 .andThen(
                                         new AutoAmpCommand(intake)
                                 )
+                ).onFalse(
+                        intake.runOnce(
+                                intake::stopIntake
+                        )
                 );
 
         DriverControls.AimButton
@@ -196,10 +200,6 @@ public class RobotContainer {
                 .and(() -> !Robot.isInAuton())
                 .and(hopper::hasNote)
                 .whileTrue(new ShooterSpinupCommand(shooter));
-
-        OperatorControls.resetIntakeOffset2.and(OperatorControls.resetIntakeOffset2).whileTrue(
-                new ManualIntakeExtendCommand(intake)
-        );
     }
 
     public Command getDelay() {

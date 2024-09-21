@@ -38,11 +38,4 @@ public class DummyIntakeSubsystem extends SubsystemBase implements IIntakeSubsys
     public void periodic() {
         SmartDashboard.putString("Intake state", state.toString());
     }
-
-    @Override
-    public void manualExtend() {
-    }
-
-    @Override
-    public void updateOffset() {}
 }

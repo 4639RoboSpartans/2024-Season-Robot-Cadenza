@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public interface IIntakeSubsystem extends Subsystem {
     enum ExtensionState {
-        EXTENDED, RETRACTED, AMP, MANUAL
+        EXTENDED, RETRACTED, AMP
     }
 
     void setExtended(ExtensionState extended);
@@ -18,8 +18,4 @@ public interface IIntakeSubsystem extends Subsystem {
     void stop();
 
     void intake();
-    
-    void manualExtend();
-
-    void updateOffset();
 }
