@@ -13,6 +13,8 @@ import frc.robot.subsystems.shooter.shooter.IShooter;
 import frc.robot.subsystems.shooter.shooter.Shooter;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
+import frc.robot.util.AimUtil;
+import frc.robot.util.Helpers;
 
 public class CommandFactory {
     private static final IShooter shooter = Shooter.getInstance();
@@ -44,9 +46,8 @@ public class CommandFactory {
             intakeState.on(hopper.hasNote(), hasNoteState);
 
             hasNoteState.on(Controls.OperatorControls.OuttakeButton, outtakeState);
-            outtakeState.on(Controls.OperatorControls.OuttakeButton.negate(), hasNoteState);
-
-            outtakeState.on(hopper.hasNote().negate(), idleState);
+            outtakeState.on(Controls.OperatorControls.OuttakeButton.negate().and(hopper.hasNote().negate()), idleState);
+            outtakeState.on(Controls.OperatorControls.OuttakeButton.negate().and(hopper.hasNote()), idleState);
 
             hasNoteState.on(swerve.inShootingRange().and(swerve.inShootingSector()).and(Controls.DriverControls.SOTF), spinupState);
             spinupState.on(Controls.DriverControls.SOTF.negate(), hasNoteState);
@@ -59,7 +60,17 @@ public class CommandFactory {
             manualState.on(Controls.OperatorControls.ManualShooterButton.negate(), hasNoteState);
             manualState.on(hopper.hasNote().negate(), idleState);
 
+            hasNoteState.on(Controls.OperatorControls.RunAmpShooterButton, ampPrep);
+            ampPrep.on(hopper.hasNote().negate(), ampReady);
+            ampReady.on(() -> Helpers.withinTolerance(swerve.getPose().getTranslation().minus(AimUtil.getAmpPose()), 0.1), amping);
 
+            amping.on(Controls.OperatorControls.RunAmpShooterButton.negate(), idleState);
+
+            hasNoteState.on(Controls.OperatorControls.LaunchShooterButton.and(swerve.inLaunchRange().negate()), launchSpinupState);
+            hasNoteState.on(Controls.OperatorControls.LaunchShooterButton.and(swerve.inLaunchRange()), launchState);
+            launchSpinupState.on(swerve.inLaunchRange(), launchState);
+            launchSpinupState.on(Controls.OperatorControls.LaunchShooterButton.negate(), hasNoteState);
+            launchState.on(hopper.hasNote().negate(), idleState);
 
             superstructureStateMachine.setInitial(idleState);
         }

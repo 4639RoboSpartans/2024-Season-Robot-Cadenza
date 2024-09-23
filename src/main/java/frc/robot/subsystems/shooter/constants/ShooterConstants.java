@@ -1,7 +1,5 @@
 package frc.robot.subsystems.shooter.constants;
 
-import frc.robot.constants.RobotInfo;
-
 public class ShooterConstants {
     public static final double SHOOTER_IDLE_SPEED = 0.2;
     public static final double SHOOTER_IDLE_SETPOINT = .85;

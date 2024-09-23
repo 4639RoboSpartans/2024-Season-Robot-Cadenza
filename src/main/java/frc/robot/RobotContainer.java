@@ -5,51 +5,27 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.shooter.*;
-import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
-import frc.robot.constants.Controls.OperatorControls;
-import frc.robot.commands.autos.AutoFactory;
-import frc.robot.commands.climber.ExtendClimberCommand;
-import frc.robot.commands.climber.ManualClimbCommand;
-import frc.robot.commands.climber.RetractClimberCommand;
-import frc.robot.commands.intake.*;
 import frc.robot.constants.InterpolatingTables;
-import frc.robot.led.LEDStrip;
-import frc.robot.led.PhasingLEDPattern;
-import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
-import frc.robot.subsystems.climber.IClimberSubsystem;
-import frc.robot.subsystems.hopper.IHopperSubsystem;
-import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.shooter.shooter.IShooter;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.pivot.Pivot;
+import frc.robot.subsystems.shooter.shooter.Shooter;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.util.AimUtil;
 import frc.robot.util.AutoHelper;
-
-import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     public static OI oi;
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
-
-    private final IShooter shooter;
-    private final IIntakeSubsystem intake;
-    private final IClimberSubsystem climber;
-    private final IHopperSubsystem hopper;
-
-    private final LEDStrip ledStrip;
-
     private final SendableChooser<Command> autos;
     private final SendableChooser<Double> delayTime;
     public static SendableChooser<Boolean> alliance;
@@ -57,24 +33,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         InterpolatingTables.initializeTables();
-        oi = new OI();
-        ledStrip = SubsystemManager.getLedStrip();
 
-        swerveDriveSubsystem = SubsystemManager.getSwerveDrive();
-
-        shooter = SubsystemManager.getShooter();
-        intake = SubsystemManager.getIntake();
-        hopper = SubsystemManager.getHopper();
-        climber = SubsystemManager.getClimber();
-
-        nameCommands();
+        swerveDriveSubsystem = CommandSwerveDrivetrain.getInstance();
 
         autos = new SendableChooser<>();
         autos.setDefaultOption("null auto", new WaitCommand(1));
-        autos.addOption("preloaded", AutoHelper.shoot());
-        for (Command i : AutoFactory.getAutos()) {
-            autos.addOption(i.getName(), i);
-        }
         SmartDashboard.putData("Autons", autos);
         delayTime = new SendableChooser<Double>();
         delayTime.setDefaultOption("0", 0.0);
@@ -93,26 +56,7 @@ public class RobotContainer {
         configureBindings();
     }
 
-    private void nameCommands() {
-        //climber commands
-        NamedCommands.registerCommand("ExtendClimberCommand", new ExtendClimberCommand(climber));
-        NamedCommands.registerCommand("ManualClimbCommand", new ManualClimbCommand(climber, 0, 0));
-        NamedCommands.registerCommand("RetractClimberCommand", new RetractClimberCommand(climber));
-        //intake commands
-        NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, oi)));
-        NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
-        NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
-        NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
-
-        // shooting commands
-        NamedCommands.registerCommand("ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));
-        NamedCommands.registerCommand("ShootAmp", new AutoAmpCommand(intake));
-        NamedCommands.registerCommand("ManualSpeaker", new ManualShootCommand(shooter, hopper, ledStrip));
-    }
-
-
     private void configureBindings() {
-
         swerveDriveSubsystem.setDefaultCommand(
                 swerveDriveSubsystem.driveFieldCentricCommand()
         );
@@ -122,86 +66,14 @@ public class RobotContainer {
                         swerveDriveSubsystem.SOTFCommand()
                 );
 
-        DriverControls.AmpAlignButton
-                .whileTrue(
-                        Commands.parallel(
-                                        swerveDriveSubsystem.pathfindCommand(
-                                                new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
-                                        ),
-                                        AutoHelper.ampPrepCommand()
-                                                .andThen(runOnce(
-                                                        () -> intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED)
-                                                ))
-                                )
-                                .andThen(
-                                        new AutoAmpCommand(intake)
-                                )
-                ).onFalse(
-                        intake.runOnce(
-                                intake::stopIntake
-                        ).alongWith(
-                                runOnce(
-                                        () -> intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED)
-                                )
-                        )
-                );
-
         DriverControls.AimButton
                 .whileTrue(
                         Commands.parallel(
                                 swerveDriveSubsystem.pathfindCommand(
                                         AimUtil.getManualSpeakerPose()
-                                ),
-                                Commands.waitUntil(
-                                        Controls.canSOTF
-                                ).andThen(
-                                        new AutoSpeakerCommand(shooter, hopper, ledStrip)
                                 )
                         )
                 );
-
-
-        // TODO: extract to named class
-        ledStrip.setDefaultCommand(new RunCommand(() -> {
-            if (hopper.hasNote()) {
-                ledStrip.usePattern(new PhasingLEDPattern(new Color8Bit(255, 50, 0), 3));
-            } else {
-                ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
-            }
-        }, ledStrip));
-
-        DriverControls.ClimberExtendButton.whileTrue(new ExtendClimberCommand(climber));
-        DriverControls.ClimberRetractButton.whileTrue(new RetractClimberCommand(climber));
-        DriverControls.ClimberSwap1Button.whileTrue(new ManualClimbCommand(climber, 1, -1));
-        DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
-
-        OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip, oi));
-
-        OperatorControls.OuttakeButton.whileTrue(new OuttakeCommand(intake, hopper));
-
-        OperatorControls.IntakeExtendButton.whileTrue(new ExtendIntakeCommand(intake));
-
-        OperatorControls.IntakeRetractButton.whileTrue(new RetractIntakeCommand(intake));
-
-        OperatorControls.RunSpeakerShooterButton.whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
-        OperatorControls.RunAmpShooterButton.whileTrue(new AutoAmpCommand(intake));
-        OperatorControls.ManualShooterButton.whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
-        OperatorControls.LaunchShooterButton.whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
-
-        OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
-
-        DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
-                whileTrue(runOnce(swerveDriveSubsystem::reset));
-
-        Controls.canSOTF
-                .and(DriverControls.SOTF)
-                .and(() -> !Robot.isInAuton())
-                .whileTrue(AutoHelper.shoot());
-        Controls.DriverControls.SOTF
-                .and(Controls.canSOTF.negate())
-                .and(() -> !Robot.isInAuton())
-                .and(hopper::hasNote)
-                .whileTrue(new ShooterSpinupCommand(shooter));
     }
 
     public Command getDelay() {
@@ -210,5 +82,13 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return autos.getSelected();
+    }
+
+    public void sendSubsystems() {
+        SmartDashboard.putData(swerveDriveSubsystem);
+        SmartDashboard.putData(Intake.getInstance());
+        SmartDashboard.putData(Hopper.getInstance());
+        SmartDashboard.putData(Shooter.getInstance());
+        SmartDashboard.putData(Pivot.getInstance());
     }
 }

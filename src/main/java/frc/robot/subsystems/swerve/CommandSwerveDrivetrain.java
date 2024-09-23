@@ -30,11 +30,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
 import frc.robot.constants.Controls;
 import frc.robot.subsystems.swerve.constants.TunerConstants;
-import frc.robot.network.LimelightHelpers;
-import frc.robot.network.LimelightHelpers.PoseEstimate;
 import frc.robot.util.AimUtil;
 import frc.robot.util.CommandsUtil;
 import frc.robot.util.DriverStationUtil;
+import frc.robot.util.LimelightHelpers;
 
 import static frc.robot.subsystems.swerve.constants.SwerveConstants.*;
 
@@ -153,7 +152,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
     public void periodic() {
         field.setRobotPose(getPose());
         SmartDashboard.putData("Drive/Field", field);
-        PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
+        LimelightHelpers.PoseEstimate pose = validatePoseEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight"), Timer.getFPGATimestamp());
         if (pose != null) {
             addVisionMeasurement(pose.pose, Timer.getFPGATimestamp());
         }
@@ -171,7 +170,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements ISwerve
         m_pigeon2.reset();
     }
 
-    private PoseEstimate validatePoseEstimate(PoseEstimate poseEstimate, double deltaSeconds) {
+    private LimelightHelpers.PoseEstimate validatePoseEstimate(LimelightHelpers.PoseEstimate poseEstimate, double deltaSeconds) {
         if (poseEstimate == null) return null;
         Pose2d pose2d = poseEstimate.pose;
         Translation2d trans = pose2d.getTranslation();

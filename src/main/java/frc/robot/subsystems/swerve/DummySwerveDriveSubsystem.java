@@ -45,6 +45,11 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
+    public Trigger inLaunchRange() {
+        return null;
+    }
+
+    @Override
     public Command followChoreoPath(ChoreoTrajectory trajectory, boolean resetPosition) {
         return null;
     }
