@@ -1,21 +1,27 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public interface IIntakeSubsystem extends Subsystem {
-    enum ExtensionState {
-        EXTENDED, RETRACTED, AMP
-    }
+public interface IIntakeSubsystem extends Subsystem, Sendable {
+    Command intake();
 
-    void setExtended(ExtensionState extended);
+    Command outtake();
 
-    void outtake();
+    Command pivotExtend();
 
-    void amp();
+    Command pivotRetract();
 
-    void stopIntake();
+    Command pivotOuttake();
 
-    void stop();
+    Command ampPrep();
 
-    void intake();
+    Command pivotIntake();
+
+    Command pivotAmp();
+
+    Command stopIntake();
+
+    Command stop();
 }

@@ -8,9 +8,9 @@ public final class Constants {
 
 
     public enum CurrentRobot {
-        ZEUS, CADENZA, SIM
+        CADENZA, SIM
     }
-    public static final CurrentRobot currentRobot = CurrentRobot.CADENZA;
+    public static final CurrentRobot currentRobot = CurrentRobot.SIM;
 
     private static final double[] oldOffsets = {
             -54.98, -122.4, 74.44, 121.92
@@ -21,8 +21,5 @@ public final class Constants {
             Rotation2d.fromRotations(-0.265 + 0.5).getDegrees(),
             Rotation2d.fromRotations(0.474).getDegrees(),
     };
-    static final double[] swerveOffsets = switch (currentRobot) {
-        case ZEUS -> oldOffsets;
-        case CADENZA, SIM -> newOffsets;
-    };
+    static final double[] swerveOffsets = newOffsets;
 }

@@ -3,12 +3,11 @@ package frc.robot.constants;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.tuning.TunableTableSource;
 
-import static frc.robot.constants.RobotInfo.ShooterInfo.ShooterLowerOffset;
-
 public class InterpolatingTables {
     private static TunableTableSource table;
     private static double[][] shots;
     private static InterpolatingDoubleTreeMap angleTable, speedTable;
+    private static double ShooterLowerOffset = 0.92;
 
     private static double ANGLE_OFFSET = 0;
 
