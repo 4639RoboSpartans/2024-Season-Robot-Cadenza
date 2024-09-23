@@ -6,10 +6,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -17,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
@@ -27,28 +23,27 @@ import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.intake.*;
-import frc.robot.constants.FieldConstants;
 import frc.robot.constants.InterpolatingTables;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
 import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
-import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.subsystems.shooter.shooter.IShooter;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.util.AimUtil;
 import frc.robot.util.AutoHelper;
-import frc.robot.util.DriverStationUtil;
+
+import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
     public static OI oi;
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
 
-    private final IShooterSubsystem shooter;
+    private final IShooter shooter;
     private final IIntakeSubsystem intake;
     private final IClimberSubsystem climber;
     private final IHopperSubsystem hopper;
@@ -134,6 +129,9 @@ public class RobotContainer {
                                                 new Pose2d(AimUtil.getAmpPose(), AimUtil.getAmpRotation())
                                         ),
                                         AutoHelper.ampPrepCommand()
+                                                .andThen(runOnce(
+                                                        () -> intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED)
+                                                ))
                                 )
                                 .andThen(
                                         new AutoAmpCommand(intake)
@@ -141,6 +139,10 @@ public class RobotContainer {
                 ).onFalse(
                         intake.runOnce(
                                 intake::stopIntake
+                        ).alongWith(
+                                runOnce(
+                                        () -> intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED)
+                                )
                         )
                 );
 
@@ -189,7 +191,7 @@ public class RobotContainer {
         OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
 
         DriverControls.ResetGyroButton1.and(DriverControls.ResetGyroButton2).
-                whileTrue(Commands.runOnce(swerveDriveSubsystem::reset));
+                whileTrue(runOnce(swerveDriveSubsystem::reset));
 
         Controls.canSOTF
                 .and(DriverControls.SOTF)
@@ -210,27 +212,3 @@ public class RobotContainer {
         return autos.getSelected();
     }
 }
-
-/*
- * :30:24.782 PM
- 	at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:365)  	
-    at edu.wpi.first.wpilibj.TimedRobot.startCompetition(TimedRobot.java:131)  
-    	at edu.wpi.first.wpilibj.IterativeRobotBase.loopFunc(IterativeRobotBase.java:345)  
-        	at frc.robot.Robot.autonomousInit(Robot.java:89)  	
-            at frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174) 
-             	at edu.wpi.first.wpilibj2.command.Commands.sequence(Commands.java:192)
-                 ERROR  1  The startCompetition() method (or methods called by it) should have handled the exception above. 
-                 
-    edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:386)  	
-    at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.<init>(SequentialCommandGroup.java:33) 
-     	at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.addCommands(SequentialCommandGroup.java:47)  
-        	at edu.wpi.first.wpilibj2.command.CommandScheduler.registerComposedCommands(CommandScheduler.java:599)
-             Warning  1  The robot program quit unexpectedly. This is usually due to a code error.
-  The above stacktrace can help determine where the error occurred.
-  See https://wpilib.org/stacktrace for more information.  edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:379)  
-  
-  Error at frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174): Unhandled exception: java.lang.Exception
-  : Originally composed at: ERROR
-    1  Unhandled exception: java.lang.Exception: Originally composed at:  frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174) 
-
- */

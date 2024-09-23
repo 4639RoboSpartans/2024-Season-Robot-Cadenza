@@ -2,7 +2,6 @@ package frc.robot.oi;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -16,14 +15,11 @@ public class Controller {
     private static final int NUM_POV_BUTTONS = 4;
     private static final int NUM_SPECIAL_BUTTONS = 2;
 
-    private final XboxController controller;
-
     private final Joystick stick;
     private final Trigger[] buttons;
 
-    public Controller(int joystickID) {
+    Controller(int joystickID) {
         stick = new Joystick(joystickID);
-        controller = new XboxController(joystickID);
 
         buttons = new Trigger[NUM_BUTTONS + NUM_POV_BUTTONS + NUM_SPECIAL_BUTTONS];
 
@@ -36,8 +32,8 @@ public class Controller {
         }
 
         BooleanSupplier[] special_buttons = {
-                () -> getAxis(OI.Axes.LEFT_TRIGGER) > 0.5,
-                () -> getAxis(OI.Axes.RIGHT_TRIGGER) > 0.5,
+                () -> axis(OI.Axes.LEFT_TRIGGER) > 0.5,
+                () -> axis(OI.Axes.RIGHT_TRIGGER) > 0.5,
         };
         for (int i = 0; i < NUM_SPECIAL_BUTTONS; i++) {
             buttons[i + NUM_BUTTONS + NUM_POV_BUTTONS] = new Trigger(special_buttons[i]);
@@ -49,7 +45,7 @@ public class Controller {
      * and so there is a margin of error for where they should be considered
      * neutral
      */
-    private static double deadzone(double value) {
+    private static double applyDeadzone(double value) {
         // When the axis is LESS than the magic number, the
         // joystick is in the loose position so return zero - as if the
         // joystick was not moved
@@ -61,25 +57,24 @@ public class Controller {
         // scale the value so that the point right after the
         // deadzone is 0 so the robot does not jerk forward
         // when it passes the deadzone.
-        return (value / Math.abs(value)) * ((Math.abs(value) - DEADZONE_VALUE) / (1 - DEADZONE_VALUE));
+        return Math.signum(value) * ((Math.abs(value) - DEADZONE_VALUE) / (1 - DEADZONE_VALUE));
     }
 
-    public double getAxis(OI.Axes axis) {
+    public double axis(OI.Axes axis) {
         double rawAxisValue = stick.getRawAxis(axis.getID());
         double multiplier = axis.shouldInvert() ? -1 : 1;
-        return deadzone(multiplier * rawAxisValue);
-
+        return applyDeadzone(multiplier * rawAxisValue);
     }
 
-    public Trigger getButton(OI.Buttons button) {
+    public Trigger button(OI.Buttons button) {
         return buttons[button.getID()];
     }
 
-    public void rumble(double rumbleStrength) {
-        controller.setRumble(GenericHID.RumbleType.kBothRumble, rumbleStrength);
+    public void setRumble(double strength) {
+        stick.setRumble(GenericHID.RumbleType.kBothRumble, strength);
     }
 
     public void stopRumble() {
-        controller.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+        stick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
     }
 }

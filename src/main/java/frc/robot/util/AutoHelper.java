@@ -15,15 +15,14 @@ import frc.robot.constants.RobotInfo;
 import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.led.LEDStrip;
 import frc.robot.oi.OI;
-import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.subsystems.shooter.shooter.IShooter;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 public class AutoHelper {
     private static ISwerveDriveSubsystem swerve = SubsystemManager.getSwerveDrive();
-    private static IShooterSubsystem shooter = SubsystemManager.getShooter();
+    private static IShooter shooter = SubsystemManager.getShooter();
     private static IIntakeSubsystem intake = SubsystemManager.getIntake();
     private static IHopperSubsystem hopper = SubsystemManager.getHopper();
     private static LEDStrip ledStrip = SubsystemManager.getLedStrip();

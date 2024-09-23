@@ -4,7 +4,9 @@ import com.choreo.lib.ChoreoTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     @Override
@@ -53,22 +55,27 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
-    public boolean isAligned() {
-        return false;
+    public Trigger isAligned() {
+        return null;
     }
 
     @Override
-    public boolean inShootingRange() {
-        return false;
+    public Trigger inShootingRange() {
+        return null;
     }
 
     @Override
-    public boolean inShootingSector() {
-        return false;
+    public Trigger inShootingSector() {
+        return null;
     }
 
     @Override
-    public boolean inSpinupRange() {
-        return false;
+    public Trigger inSpinupRange() {
+        return null;
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+
     }
 }
