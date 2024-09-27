@@ -7,19 +7,19 @@ import frc.robot.constants.DisplayInfo;
 import frc.robot.constants.RobotInfo.HopperInfo;
 import frc.robot.led.LEDStrip;
 import frc.robot.oi.OI;
-import frc.robot.subsystems.hopper.IHopperSubsystem;
-import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.intake.IIntakeSubsystem.ExtensionState;
+import frc.robot.subsystems.hopper.HopperSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem.ExtensionState;
 
 public class IntakeRollersCommand extends Command {
-    private final IIntakeSubsystem intake;
-    private final IHopperSubsystem hopper;
+    private final IntakeSubsystem intake;
+    private final HopperSubsystem hopper;
     private final LEDStrip strip;
     private final OI oi;
     private double noteTime;
     private boolean seen = false;
 
-    public IntakeRollersCommand(IIntakeSubsystem intake, IHopperSubsystem hopper, LEDStrip strip, OI oi) {
+    public IntakeRollersCommand(IntakeSubsystem intake, HopperSubsystem hopper, LEDStrip strip, OI oi) {
         this.intake = intake;
         this.hopper = hopper;
         this.strip = strip;
@@ -31,7 +31,7 @@ public class IntakeRollersCommand extends Command {
 
     @Override
     public void execute() {
-        intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED);
+        intake.setExtended(IntakeSubsystem.ExtensionState.EXTENDED);
         intake.intake();
         if (!seen){
             hopper.run(false, HopperInfo.HOPPER_SPEED);
@@ -55,7 +55,7 @@ public class IntakeRollersCommand extends Command {
         hopper.stop();
 
         if(!interrupted) {
-            intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED);
+            intake.setExtended(IntakeSubsystem.ExtensionState.RETRACTED);
         }
 
         seen = false;

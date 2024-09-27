@@ -16,16 +16,16 @@ import frc.robot.constants.RobotInfo.SwerveInfo;
 import frc.robot.led.LEDStrip;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.hopper.IHopperSubsystem;
-import frc.robot.subsystems.intake.IIntakeSubsystem;
-import frc.robot.subsystems.shooter.IShooterSubsystem;
+import frc.robot.subsystems.hopper.HopperSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
 public class AutoHelper {
     private static ISwerveDriveSubsystem swerve = SubsystemManager.getSwerveDrive();
     private static IShooterSubsystem shooter = SubsystemManager.getShooter();
-    private static IIntakeSubsystem intake = SubsystemManager.getIntake();
-    private static IHopperSubsystem hopper = SubsystemManager.getHopper();
+    private static IntakeSubsystem intake = SubsystemManager.getIntake();
+    private static HopperSubsystem hopper = SubsystemManager.getHopper();
     private static LEDStrip ledStrip = SubsystemManager.getLedStrip();
     private static OI oi = SubsystemManager.getOI();
 
@@ -94,7 +94,7 @@ public class AutoHelper {
     public static Command ampPrepCommand() {
         return Commands.parallel(
                         Commands.run(intake::outtake),
-                        Commands.run(() -> intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED))
+                        Commands.run(() -> intake.setExtended(IntakeSubsystem.ExtensionState.EXTENDED))
                 )
                 .until(() -> !hopper.hasNote());
     }
