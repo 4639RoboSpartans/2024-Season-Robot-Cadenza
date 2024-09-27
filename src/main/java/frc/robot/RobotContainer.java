@@ -173,16 +173,16 @@ public class RobotContainer {
         DriverControls.ClimberSwap1Button.whileTrue(new ManualClimbCommand(climber, 1, -1));
         DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        OperatorControls.IntakeButton.whileTrue(new IntakeCommand(intake, hopper, ledStrip, oi));
+        OperatorControls.IntakeButton.whileTrue(intake.intake());
 
-        OperatorControls.OuttakeButton.whileTrue(new OuttakeCommand(intake, hopper));
+        OperatorControls.OuttakeButton.whileTrue(intake.outtake());
 
-        OperatorControls.IntakeExtendButton.whileTrue(new ExtendIntakeCommand(intake));
+        OperatorControls.IntakeExtendButton.onTrue(intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED));
 
-        OperatorControls.IntakeRetractButton.whileTrue(new RetractIntakeCommand(intake));
+        OperatorControls.IntakeRetractButton.onTrue(intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED));
 
         OperatorControls.RunSpeakerShooterButton.whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
-        OperatorControls.RunAmpShooterButton.whileTrue(new AutoAmpCommand(intake));
+        OperatorControls.RunAmpShooterButton.whileTrue(intake.setExtended(IIntakeSubsystem.ExtensionState.AMP).andThen(intake.amp()));
         OperatorControls.ManualShooterButton.whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         OperatorControls.LaunchShooterButton.whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
 
@@ -210,27 +210,3 @@ public class RobotContainer {
         return autos.getSelected();
     }
 }
-
-/*
- * :30:24.782 PM
- 	at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:365)  	
-    at edu.wpi.first.wpilibj.TimedRobot.startCompetition(TimedRobot.java:131)  
-    	at edu.wpi.first.wpilibj.IterativeRobotBase.loopFunc(IterativeRobotBase.java:345)  
-        	at frc.robot.Robot.autonomousInit(Robot.java:89)  	
-            at frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174) 
-             	at edu.wpi.first.wpilibj2.command.Commands.sequence(Commands.java:192)
-                 ERROR  1  The startCompetition() method (or methods called by it) should have handled the exception above. 
-                 
-    edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:386)  	
-    at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.<init>(SequentialCommandGroup.java:33) 
-     	at edu.wpi.first.wpilibj2.command.SequentialCommandGroup.addCommands(SequentialCommandGroup.java:47)  
-        	at edu.wpi.first.wpilibj2.command.CommandScheduler.registerComposedCommands(CommandScheduler.java:599)
-             Warning  1  The robot program quit unexpectedly. This is usually due to a code error.
-  The above stacktrace can help determine where the error occurred.
-  See https://wpilib.org/stacktrace for more information.  edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:379)  
-  
-  Error at frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174): Unhandled exception: java.lang.Exception
-  : Originally composed at: ERROR
-    1  Unhandled exception: java.lang.Exception: Originally composed at:  frc.robot.RobotContainer.getAutonomousCommand(RobotContainer.java:174) 
-
- */

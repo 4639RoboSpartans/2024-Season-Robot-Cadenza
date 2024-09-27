@@ -14,7 +14,7 @@ public final class RobotInfo {
 
         public static final PIDController choreoX = new PIDController(7, 0, 0.1);
         public static final PIDController choreoY = new PIDController(7, 0, 0.1);
-        public static final PIDController choreoRotation = new PIDController(4, 0, 0.1);
+        public static final PIDController choreoRotation = new PIDController(1.5, 0, 0);
         public static final double TIME_BEFORE_INTAKE_START = 1;
     }
 
@@ -22,10 +22,10 @@ public final class RobotInfo {
 
         public static final double INTAKE_SPEED = -0.95;
         public static final double AMP_OUTTAKE_SPEED = 0.6;
-        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.154;
-        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.83;
-        public static final double INTAKE_PIVOT_AMP_SETPOINT = 0.254;
-        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(2.3, 0, 0);
+        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.04;
+        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.732;
+        public static final double INTAKE_PIVOT_AMP_SETPOINT = 0.179;
+        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(1.2, 0, 0);
     }
 
     public static final class HopperInfo {
@@ -52,6 +52,14 @@ public final class RobotInfo {
         public static double LimelightOffsetX = -0.1267;
 
         public static double ShooterLowerOffset = 0.92;
+
+        public static double ShooterKv = 0.0000001;
+
+        public static double ShooterKp = 0;
+
+        public static double ShooterKi = 0;
+
+        public static double ShooterKd = 0;
 
         public record ShooterSetpoint(double speed, double angle) {
         }

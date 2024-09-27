@@ -1,21 +1,23 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public interface IIntakeSubsystem extends Subsystem {
     enum ExtensionState {
         EXTENDED, RETRACTED, AMP
     }
 
-    void setExtended(ExtensionState extended);
+    Command setExtended(ExtensionState extended);
 
-    void outtake();
+    Command outtake();
 
-    void amp();
+    Command amp();
 
-    void stopIntake();
+    Command stopIntake();
 
-    void stop();
+    Command stop();
 
-    void intake();
+    Command intake();
 }

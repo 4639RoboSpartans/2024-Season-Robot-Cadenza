@@ -16,6 +16,7 @@ import frc.robot.subsystems.intake.DummyIntakeSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
+import frc.robot.subsystems.shooter.FalconShooterFeedforward;
 import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
@@ -77,7 +78,7 @@ public class SubsystemManager {
         if(shooter == null) {
             shooter = switch (currentRobot) {
                 case ZEUS -> new DummyShooterSubsystem();
-                case CADENZA, SIM -> new FalconShooterSubsystem(
+                case CADENZA, SIM -> new FalconShooterFeedforward(
                     IDs.SHOOTER_SHOOTER_LEFT_MOTOR,
                     IDs.SHOOTER_SHOOTER_RIGHT_MOTOR
                 );

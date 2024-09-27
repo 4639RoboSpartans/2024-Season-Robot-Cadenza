@@ -73,6 +73,11 @@ public final class Controls {
     }
 
     public static final class OperatorControls {
+
+        public static final DoubleSupplier manualPivot = () -> {
+            OI oi = SubsystemManager.getOI();
+            return oi.operatorController().getAxis(OI.Axes.LEFT_STICK_Y) * RobotInfo.SwerveInfo.CURRENT_MAX_ROBOT_MPS;
+        };
         public static final Trigger RunSpeakerShooterButton = new Trigger(
                 () -> {
                     OI oi = SubsystemManager.getOI();

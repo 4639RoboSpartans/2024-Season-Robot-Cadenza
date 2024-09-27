@@ -24,6 +24,6 @@ public abstract class IntakeExtensionsCommand extends Command {
 
     @Override
     public boolean isFinished(){
-        return Timer.getFPGATimestamp() - startTime >= 3;
+        return false;
     }
 }
