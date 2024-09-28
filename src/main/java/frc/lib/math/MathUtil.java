@@ -1,4 +1,4 @@
-package math;
+package frc.lib.math;
 
 public class MathUtil {
     private MathUtil() {}

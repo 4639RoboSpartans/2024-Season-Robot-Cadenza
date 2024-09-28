@@ -1,9 +1,9 @@
 package frc.robot.commands.intake;
 
-import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class RetractIntakeCommand extends IntakeExtensionsCommand {
-    public RetractIntakeCommand(IIntakeSubsystem intake) {
-        super(intake, IIntakeSubsystem.ExtensionState.RETRACTED);
+    public RetractIntakeCommand(IntakeSubsystem intake) {
+        super(intake, IntakeSubsystem.ExtensionState.RETRACTED);
     }
 }

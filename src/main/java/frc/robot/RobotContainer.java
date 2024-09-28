@@ -6,10 +6,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -17,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
@@ -27,7 +23,6 @@ import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
 import frc.robot.commands.climber.RetractClimberCommand;
 import frc.robot.commands.intake.*;
-import frc.robot.constants.FieldConstants;
 import frc.robot.constants.InterpolatingTables;
 import frc.robot.led.LEDStrip;
 import frc.robot.led.PhasingLEDPattern;
@@ -35,13 +30,12 @@ import frc.robot.led.SolidLEDPattern;
 import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.climber.IClimberSubsystem;
-import frc.robot.subsystems.hopper.IHopperSubsystem;
-import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.hopper.HopperSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.util.AimUtil;
 import frc.robot.util.AutoHelper;
-import frc.robot.util.DriverStationUtil;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class RobotContainer {
@@ -49,9 +43,9 @@ public class RobotContainer {
     private final ISwerveDriveSubsystem swerveDriveSubsystem;
 
     private final IShooterSubsystem shooter;
-    private final IIntakeSubsystem intake;
+    private final IntakeSubsystem intake;
     private final IClimberSubsystem climber;
-    private final IHopperSubsystem hopper;
+    private final HopperSubsystem hopper;
 
     private final LEDStrip ledStrip;
 
@@ -177,12 +171,12 @@ public class RobotContainer {
 
         OperatorControls.OuttakeButton.whileTrue(intake.outtake());
 
-        OperatorControls.IntakeExtendButton.onTrue(intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED));
+        OperatorControls.IntakeExtendButton.onTrue(intake.setExtended(IntakeSubsystem.ExtensionState.EXTENDED));
 
-        OperatorControls.IntakeRetractButton.onTrue(intake.setExtended(IIntakeSubsystem.ExtensionState.RETRACTED));
+        OperatorControls.IntakeRetractButton.onTrue(intake.setExtended(IntakeSubsystem.ExtensionState.RETRACTED));
 
         OperatorControls.RunSpeakerShooterButton.whileTrue(new AutoSpeakerCommand(shooter, hopper, ledStrip));
-        OperatorControls.RunAmpShooterButton.whileTrue(intake.setExtended(IIntakeSubsystem.ExtensionState.AMP).andThen(intake.amp()));
+        OperatorControls.RunAmpShooterButton.whileTrue(intake.setExtended(IntakeSubsystem.ExtensionState.AMP).andThen(intake.amp()));
         OperatorControls.ManualShooterButton.whileTrue(new ManualShootCommand(shooter, hopper, ledStrip));
         OperatorControls.LaunchShooterButton.whileTrue(new LaunchCommand(shooter, hopper, ledStrip));
 

@@ -1,4 +1,4 @@
-package math;
+package frc.lib.math;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

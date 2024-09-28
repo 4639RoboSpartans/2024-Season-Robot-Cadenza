@@ -4,19 +4,17 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import frc.lib.util.VelocityDutyCycleEncoder;
-import frc.robot.constants.IDs;
 
-import static edu.wpi.first.units.Units.*;
 import static frc.robot.constants.RobotInfo.IntakeInfo;
 
-public class IntakeSubsystem extends IIntakeSubsystem {
+public class ConcreteIntakeSubsystem extends IntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
     private final CANSparkMax pivotMotorRight;
     private final CANSparkMax intakeMotor;
@@ -24,51 +22,41 @@ public class IntakeSubsystem extends IIntakeSubsystem {
 
     private final ProfiledPIDController pivotPID;
 
-    SysIdRoutine routine;
+    private MechanismRoot2d pivotRoot;
+    private MechanismLigament2d pivot;
 
-    public IntakeSubsystem() {
-        pivotMotorLeft = new CANSparkMax(IDs.INTAKE_PIVOT_MOTOR_LEFT,
+    public ConcreteIntakeSubsystem() {
+        pivotMotorLeft = new CANSparkMax(IntakeConstants.IDs.INTAKE_PIVOT_MOTOR_LEFT,
                 CANSparkMax.MotorType.kBrushless);
-        pivotMotorRight = new CANSparkMax(IDs.INTAKE_PIVOT_MOTOR_RIGHT,
+        pivotMotorRight = new CANSparkMax(IntakeConstants.IDs.INTAKE_PIVOT_MOTOR_RIGHT,
                 CANSparkMax.MotorType.kBrushless);
-        intakeMotor = new CANSparkMax(IDs.INTAKE_MOTOR,
+        intakeMotor = new CANSparkMax(IntakeConstants.IDs.INTAKE_MOTOR,
                 CANSparkMax.MotorType.kBrushless);
         pivotMotorLeft.restoreFactoryDefaults();
         pivotMotorRight.restoreFactoryDefaults();
 
         pivotMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
         pivotMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        intakeMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
 
         pivotMotorLeft.setSmartCurrentLimit(40);
         pivotMotorRight.setSmartCurrentLimit(40);
+        intakeMotor.setSmartCurrentLimit(40);
+
+        pivotMotorRight.follow(pivotMotorLeft, true);
 
         pivotPID = new ProfiledPIDController(
-                IntakeInfo.INTAKE_PIVOT_PID_CONSTANTS.kp(),
-                IntakeInfo.INTAKE_PIVOT_PID_CONSTANTS.ki(),
-                IntakeInfo.INTAKE_PIVOT_PID_CONSTANTS.kd(),
+                IntakeConstants.INTAKE_PIVOT_kp,
+                IntakeConstants.INTAKE_PIVOT_ki,
+                IntakeConstants.INTAKE_PIVOT_kd,
                 new TrapezoidProfile.Constraints(
-                        2, 2
+                        IntakeConstants.INTAKE_PIVOT_VELOCITY,
+                        IntakeConstants.INTAKE_PIVOT_ACCELERATION
                 )
         );
 
-        encoder = new VelocityDutyCycleEncoder(IDs.INTAKE_ENCODER_DIO_PORT);
+        encoder = new VelocityDutyCycleEncoder(IntakeConstants.IDs.INTAKE_ENCODER_DIO_PORT);
         encoder.setDutyCycleRange(-2, 2);
-
-        routine = new SysIdRoutine(
-                new SysIdRoutine.Config(null, Volts.of(5), Seconds.of(100), null),
-                new SysIdRoutine.Mechanism((Measure<Voltage> volts) -> {
-                    pivotMotorLeft.setVoltage(volts.in(Volts));
-                    pivotMotorRight.setVoltage(volts.in(Volts));
-                },
-                        log -> {
-                            log.motor("intake-pivot")
-                                    .voltage(Volts.of(pivotMotorLeft.get() * RobotController.getBatteryVoltage()))
-                                    .angularPosition(Rotations.of(encoder.getAbsolutePosition()))
-                                    .angularVelocity(RotationsPerSecond.of(encoder.getRate()));
-                        }, this)
-        );
-
-        pivotMotorRight.follow(pivotMotorLeft, true);
     }
 
     @Override
@@ -98,7 +86,7 @@ public class IntakeSubsystem extends IIntakeSubsystem {
     @Override
     protected void stopRun() {
         intakeMotor.set(0);
-        pivotPID.setGoal(encoder.getAbsolutePosition());
+        pivotPID.setGoal(getRotations());
     }
 
     @Override
@@ -108,9 +96,34 @@ public class IntakeSubsystem extends IIntakeSubsystem {
 
     @Override
     public void periodic() {
-        double PIDOutput = pivotPID.calculate(encoder.getAbsolutePosition());
-        pivotMotorLeft.set(PIDOutput);
-        pivotMotorLeft.setIdleMode(DriverStation.isDisabled() ?
-                CANSparkBase.IdleMode.kCoast : CANSparkBase.IdleMode.kBrake);
+        double PIDOutput = pivotPID.calculate(getRotations());
+        if (pivot != null) {
+            pivotMotorLeft.set(PIDOutput);
+            pivotMotorLeft.setIdleMode(DriverStation.isDisabled() ?
+                    CANSparkBase.IdleMode.kCoast : CANSparkBase.IdleMode.kBrake);
+            pivot.setAngle(measuredPivotRotationsToMechanismDegrees(getRotations()));
+        }
+    }
+
+    private double measuredPivotRotationsToMechanismDegrees(double rotations) {
+        double angle = Rotation2d.fromRotations(rotations).getDegrees() % 360;
+        return angle + IntakeConstants.INTAKE_PIVOT_MECHANISM_OFFSET_DEGREES;
+    }
+
+    @Override
+    public double getRotations() {
+        return encoder.getAbsolutePosition();
+    }
+
+    @Override
+    public void instantiateMech(Mechanism2d mech) {
+        pivotRoot = mech.getRoot("Pivot", 3, 1);
+        pivot = pivotRoot.append(
+                new MechanismLigament2d(
+                        "Arm",
+                        3,
+                        getRotations()
+                )
+        );
     }
 }

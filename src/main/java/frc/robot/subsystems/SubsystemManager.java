@@ -9,18 +9,16 @@ import frc.robot.oi.OI;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.DummyClimberSubsystem;
 import frc.robot.subsystems.climber.IClimberSubsystem;
-import frc.robot.subsystems.hopper.DummyHopperSubsystem;
+import frc.robot.subsystems.hopper.SimHopperSubsystem;
 import frc.robot.subsystems.hopper.HopperSubsystem;
-import frc.robot.subsystems.hopper.IHopperSubsystem;
-import frc.robot.subsystems.intake.DummyIntakeSubsystem;
-import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.intake.SimIntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.ConcreteIntakeSubsystem;
 import frc.robot.subsystems.shooter.DummyShooterSubsystem;
 import frc.robot.subsystems.shooter.FalconShooterFeedforward;
-import frc.robot.subsystems.shooter.FalconShooterSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.shooter.pivot.DummyShooterPivotSubsystem;
-import frc.robot.subsystems.shooter.pivot.IShooterPivotSubsystem;
+import frc.robot.subsystems.shooter.pivot.PivotSubsystem;
 import frc.robot.subsystems.shooter.pivot.NeoShooterPivotSubsystem;
 import frc.robot.subsystems.swerve.DummySwerveDriveSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
@@ -32,9 +30,9 @@ public class SubsystemManager {
     private static LEDStrip ledStrip;
     private static ISwerveDriveSubsystem swerveDrive;
     private static IShooterSubsystem shooter;
-    private static IShooterPivotSubsystem shooterPivot;
-    private static IIntakeSubsystem intake;
-    private static IHopperSubsystem hopper;
+    private static PivotSubsystem shooterPivot;
+    private static IntakeSubsystem intake;
+    private static HopperSubsystem hopper;
     private static IClimberSubsystem climber;
 
     public static OI getOI() {
@@ -64,7 +62,7 @@ public class SubsystemManager {
         return swerveDrive;
     }
 
-    public static IShooterPivotSubsystem getShooterPivot(IShooterSubsystem shooter) {
+    public static PivotSubsystem getShooterPivot(IShooterSubsystem shooter) {
         if(shooterPivot == null) {
             shooterPivot = switch(currentRobot){
                 case ZEUS -> new DummyShooterPivotSubsystem();
@@ -87,20 +85,20 @@ public class SubsystemManager {
         return shooter;
     }
 
-    public static IIntakeSubsystem getIntake() {
+    public static IntakeSubsystem getIntake() {
         if(intake == null) {
             intake = switch(currentRobot){
-                case ZEUS, SIM -> new DummyIntakeSubsystem();
-                case CADENZA -> new IntakeSubsystem();
+                case ZEUS, SIM -> new SimIntakeSubsystem();
+                case CADENZA -> new ConcreteIntakeSubsystem();
             };
         };
         return intake;
     }
 
-    public static IHopperSubsystem getHopper() {
+    public static HopperSubsystem getHopper() {
         if(hopper == null) {
             hopper = switch(currentRobot){
-                case ZEUS, SIM -> new DummyHopperSubsystem();
+                case ZEUS, SIM -> new SimHopperSubsystem();
                 case CADENZA -> new HopperSubsystem(IDs.HOPPER_MOTOR);
             };
         }

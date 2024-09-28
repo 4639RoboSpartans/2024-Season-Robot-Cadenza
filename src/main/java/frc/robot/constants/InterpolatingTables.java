@@ -3,7 +3,7 @@ package frc.robot.constants;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.tuning.TunableTableSource;
 
-import static frc.robot.constants.RobotInfo.ShooterInfo.ShooterLowerOffset;
+import static frc.robot.subsystems.shooter.ShooterConstants.SHOOTER_LOWER_OFFSET;
 
 public class InterpolatingTables {
     private static TunableTableSource table;
@@ -17,13 +17,13 @@ public class InterpolatingTables {
         speedTable = new InterpolatingDoubleTreeMap();
 
         shots = new double[][]{
-            {1.2, 24.25, ShooterLowerOffset - 0.095},
-            {2.1, 26.5, ShooterLowerOffset - 0.048},
-            {2.6, 30, ShooterLowerOffset - 0.0325},
-            {3.1, 34.5, ShooterLowerOffset - 0.02},
-            {4.0, 55.75, ShooterLowerOffset - 0.01},
-            {4.1, 56.5, ShooterLowerOffset - 0.005},
-            {4.3, 58.5, ShooterLowerOffset}
+            {1.2, 24.25, SHOOTER_LOWER_OFFSET - 0.095},
+            {2.1, 26.5, SHOOTER_LOWER_OFFSET - 0.048},
+            {2.6, 30, SHOOTER_LOWER_OFFSET - 0.0325},
+            {3.1, 34.5, SHOOTER_LOWER_OFFSET - 0.02},
+            {4.0, 55.75, SHOOTER_LOWER_OFFSET - 0.01},
+            {4.1, 56.5, SHOOTER_LOWER_OFFSET - 0.005},
+            {4.3, 58.5, SHOOTER_LOWER_OFFSET}
         };
 
         table = new TunableTableSource(

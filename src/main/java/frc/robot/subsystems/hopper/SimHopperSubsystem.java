@@ -1,27 +1,43 @@
 package frc.robot.subsystems.hopper;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.util.sendable.SendableBuilder;
 
-public class DummyHopperSubsystem extends SubsystemBase implements IHopperSubsystem {
-    public void run(boolean checkNote, double speed) {}
-    public void runBackwards(double speed) {}
-    public void stop() {}
-    public void run(boolean checkNote, double speed, boolean reversed) {}
+public class SimHopperSubsystem extends HopperSubsystem {
+    private double hopperOutput;
+
+    public SimHopperSubsystem() {
+        hopperOutput = 0;
+    }
 
     @Override
-    public boolean hasNote() {
+    protected void feedRun() {
+        hopperOutput = HopperConstants.HOPPER_SPEED;
+    }
+
+    @Override
+    protected void outtakeRun() {
+        hopperOutput = -HopperConstants.HOPPER_SPEED;
+
+    }
+
+    @Override
+    protected void stopRun() {
+        hopperOutput = 0;
+    }
+
+    @Override
+    protected void toggleIRRun() {}
+
+    @Override
+    protected boolean hasNoteSupplier() {
         return true;
     }
 
     @Override
-    public Command toggleIR() {
-        return new RunCommand(() -> hasNote(), this);
-    }
-
-    public void periodic() {
-        SmartDashboard.putBoolean("has note", hasNote());
+    protected void buildSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Hopper");
+        builder.addDoubleProperty("Hopper output",
+                () -> hopperOutput,
+                null);
     }
 }

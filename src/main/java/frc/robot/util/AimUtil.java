@@ -9,6 +9,7 @@ import frc.robot.constants.Controls;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.InterpolatingTables;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class AimUtil {
     public static Translation2d getSpeakerPose() {
@@ -121,12 +122,12 @@ public class AimUtil {
         return getPoseVector(getAmpPose());
     }
 
-    public static double[] getShooterSetpoint() {
+    public static ShooterConstants.ShooterSetpoint getShooterSetpoint() {
         double dist = getSpeakerDist();
         double angle = InterpolatingTables.getAngleTable().get(dist);
         double speed = InterpolatingTables.getSpeedTable().get(dist);
         angle -= Controls.DriverControls.SwerveForwardAxis.getAsDouble();
         speed -= Controls.DriverControls.SwerveForwardAxis.getAsDouble();
-        return new double[]{speed, angle};
+        return new ShooterConstants.ShooterSetpoint(speed, angle);
     }
 }

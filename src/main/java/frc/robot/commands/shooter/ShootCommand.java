@@ -1,7 +1,6 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Controls;
 import frc.robot.constants.DisplayInfo;
@@ -9,12 +8,12 @@ import frc.robot.constants.RobotInfo.HopperInfo;
 import frc.robot.constants.RobotInfo.ShooterInfo.ShootingMode;
 import frc.robot.led.LEDPattern;
 import frc.robot.led.LEDStrip;
-import frc.robot.subsystems.hopper.IHopperSubsystem;
+import frc.robot.subsystems.hopper.HopperSubsystem;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 
 public class ShootCommand extends Command {
     private final IShooterSubsystem shooter;
-    private final IHopperSubsystem hopper;
+    private final HopperSubsystem hopper;
     private final ShootingMode mode;
     private final LEDStrip ledStrip;
     private final boolean hopperReverse;
@@ -23,7 +22,7 @@ public class ShootCommand extends Command {
 
     private double startTime;
 
-    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean hopperReverse, boolean requireSeperateShootButton) {
+    public ShootCommand(IShooterSubsystem shooter, HopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean hopperReverse, boolean requireSeperateShootButton) {
         this.shooter = shooter;
         this.hopper = hopper;
         this.mode = mode;
@@ -34,7 +33,7 @@ public class ShootCommand extends Command {
 
         this.hopperReverse = hopperReverse;
     }
-    public ShootCommand(IShooterSubsystem shooter, IHopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean requireSeperateShootButton) {
+    public ShootCommand(IShooterSubsystem shooter, HopperSubsystem hopper, LEDStrip ledStrip, ShootingMode mode, boolean requireSeperateShootButton) {
         this(shooter, hopper, ledStrip, mode, false, requireSeperateShootButton);
     }
 

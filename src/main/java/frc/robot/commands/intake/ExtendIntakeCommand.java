@@ -1,9 +1,9 @@
 package frc.robot.commands.intake;
 
-import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.ConcreteIntakeSubsystem;
 
 public class ExtendIntakeCommand extends IntakeExtensionsCommand {
-    public ExtendIntakeCommand(IntakeSubsystem intake) {
-        super(intake, IntakeSubsystem.ExtensionState.EXTENDED);
+    public ExtendIntakeCommand(ConcreteIntakeSubsystem intake) {
+        super(intake, ConcreteIntakeSubsystem.ExtensionState.EXTENDED);
     }
 }

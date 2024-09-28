@@ -2,14 +2,14 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotInfo.HopperInfo;
-import frc.robot.subsystems.hopper.IHopperSubsystem;
-import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.hopper.HopperSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class OuttakeCommand extends Command {
-    private final IIntakeSubsystem intake;
-    private final IHopperSubsystem hopper;
+    private final IntakeSubsystem intake;
+    private final HopperSubsystem hopper;
 
-    public OuttakeCommand(IIntakeSubsystem intake, IHopperSubsystem hopper) {
+    public OuttakeCommand(IntakeSubsystem intake, HopperSubsystem hopper) {
         this.intake = intake;
         this.hopper = hopper;
 
