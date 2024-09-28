@@ -143,7 +143,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
     @Override
     public void periodic(){
 
-        double pidOutput = pivotPID.calculate(getCurrentAngle());
+        double pidOutput = -pivotPID.calculate(getCurrentAngle());
         
         SmartDashboard.putNumber("Intake Pivot Angle", getCurrentAngle());
         SmartDashboard.putNumber("Intake Pivot Goal", pivotPID.getGoal().position);
