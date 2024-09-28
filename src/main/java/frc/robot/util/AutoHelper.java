@@ -18,6 +18,7 @@ import frc.robot.oi.OI;
 import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.intake.IIntakeSubsystem.ExtensionState;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 
@@ -86,7 +87,7 @@ public class AutoHelper {
         return Commands.parallel(
                 Commands.race(new WaitCommand(Robot.isReal()?1.5:0),
                         new AutoSpeakerCommand(shooter, hopper, ledStrip)),
-                new ExtendIntakeCommand(intake)
+                intake.setExtended(ExtensionState.EXTENDED)
         );
     }
 

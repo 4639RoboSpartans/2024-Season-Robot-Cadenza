@@ -37,6 +37,7 @@ import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.climber.IClimberSubsystem;
 import frc.robot.subsystems.hopper.IHopperSubsystem;
 import frc.robot.subsystems.intake.IIntakeSubsystem;
+import frc.robot.subsystems.intake.IIntakeSubsystem.ExtensionState;
 import frc.robot.subsystems.shooter.IShooterSubsystem;
 import frc.robot.subsystems.swerve.ISwerveDriveSubsystem;
 import frc.robot.util.AimUtil;
@@ -106,8 +107,8 @@ public class RobotContainer {
         //intake commands
         NamedCommands.registerCommand("IntakeCommand", Commands.deadline(new WaitCommand(3), new IntakeCommand(intake, hopper, ledStrip, oi)));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake, hopper));
-        NamedCommands.registerCommand("ExtendIntake", new ExtendIntakeCommand(intake));
-        NamedCommands.registerCommand("RetractIntake", new RetractIntakeCommand(intake));
+        NamedCommands.registerCommand("ExtendIntake", intake.setExtended(ExtensionState.EXTENDED));
+        NamedCommands.registerCommand("RetractIntake", intake.setExtended(ExtensionState.RETRACTED));
 
         // shooting commands
         NamedCommands.registerCommand("ShootSpeaker", new AutoSpeakerCommand(shooter, hopper, ledStrip));

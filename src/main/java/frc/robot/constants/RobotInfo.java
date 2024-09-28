@@ -22,10 +22,10 @@ public final class RobotInfo {
 
         public static final double INTAKE_SPEED = -0.95;
         public static final double AMP_OUTTAKE_SPEED = 0.6;
-        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.04;
-        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.732;
+        public static final double INTAKE_PIVOT_DEFAULT_SETPOINT = 0.16;
+        public static final double INTAKE_PIVOT_EXTENDED_SETPOINT = 0.91;
         public static final double INTAKE_PIVOT_AMP_SETPOINT = 0.179;
-        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(1.2, 0, 0);
+        public static final PIDTemplate INTAKE_PIVOT_PID_CONSTANTS = new PIDTemplate(.75, 0, 0);
     }
 
     public static final class HopperInfo {
