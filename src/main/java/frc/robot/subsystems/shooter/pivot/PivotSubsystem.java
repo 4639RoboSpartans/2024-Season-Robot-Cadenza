@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Robot;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterConstants.ShootingMode;
 import frc.robot.util.AimUtil;
@@ -13,13 +14,16 @@ import java.util.Objects;
 
 public abstract class PivotSubsystem extends SubsystemBase {
     private static PivotSubsystem instance;
+    private ShootingMode mode = ShootingMode.IDLE;
 
     public static PivotSubsystem getInstance() {
-        return instance = Objects.requireNonNullElseGet(instance, ConcretePivotSubsystem::new);
+        return instance = Objects.requireNonNullElseGet(instance,
+                Robot.isReal()? ConcretePivotSubsystem::new
+                : SimPivotSubsystem::new);
     }
 
-    public Command runShootingMode(ShooterConstants.ShootingMode mode) {
-        return run(() -> runShootingAngle(getTargetAngle(mode)));
+    public Command setShootingMode(ShooterConstants.ShootingMode mode) {
+        return runOnce(() -> this.mode = mode);
     }
 
     public Trigger atSetPoint() {
@@ -29,19 +33,22 @@ public abstract class PivotSubsystem extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         buildSendable(builder);
+        builder.addStringProperty("Mode",
+                () -> mode.name(),
+                null);
     }
 
     protected abstract void buildSendable(SendableBuilder builder);
 
     public abstract double getRotations();
 
-    public abstract void instantiateMech(Mechanism2d mech);
+    public abstract void initMech(Mechanism2d mech);
 
     public abstract void runShootingAngle(double angle);
 
     protected abstract boolean atSetPointSupplier();
 
-    private double getTargetAngle(ShootingMode mode) {
+    protected double getTargetAngle() {
         return switch (mode) {
             case IDLE -> ShooterConstants.SHOOTER_IDLE.angle();
             case AUTO_SPEAKER -> AimUtil.getShooterSetpoint().angle();

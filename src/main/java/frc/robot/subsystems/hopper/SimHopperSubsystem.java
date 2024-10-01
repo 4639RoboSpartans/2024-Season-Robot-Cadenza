@@ -1,12 +1,15 @@
 package frc.robot.subsystems.hopper;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class SimHopperSubsystem extends HopperSubsystem {
+    private boolean hasNoteBool;
     private double hopperOutput;
 
     public SimHopperSubsystem() {
         hopperOutput = 0;
+        hasNoteBool = false;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class SimHopperSubsystem extends HopperSubsystem {
 
     @Override
     protected boolean hasNoteSupplier() {
-        return true;
+        return hasNoteBool;
     }
 
     @Override
@@ -39,5 +42,12 @@ public class SimHopperSubsystem extends HopperSubsystem {
         builder.addDoubleProperty("Hopper output",
                 () -> hopperOutput,
                 null);
+        builder.addBooleanProperty("Has note",
+                () -> hasNoteBool,
+                null);
+    }
+
+    public Command simToggleHasNote(boolean hasNote) {
+        return runOnce(() -> hasNoteBool = hasNote);
     }
 }

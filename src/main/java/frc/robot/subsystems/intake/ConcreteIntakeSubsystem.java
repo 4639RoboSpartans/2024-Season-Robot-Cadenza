@@ -6,13 +6,13 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.VelocityDutyCycleEncoder;
-
-import static frc.robot.constants.RobotInfo.IntakeInfo;
 
 public class ConcreteIntakeSubsystem extends IntakeSubsystem {
     private final CANSparkMax pivotMotorLeft;
@@ -55,6 +55,8 @@ public class ConcreteIntakeSubsystem extends IntakeSubsystem {
                 )
         );
 
+        pivotPID.setTolerance(IntakeConstants.INTAKE_PIVOT_TOLERANCE);
+
         encoder = new VelocityDutyCycleEncoder(IntakeConstants.IDs.INTAKE_ENCODER_DIO_PORT);
         encoder.setDutyCycleRange(-2, 2);
     }
@@ -62,20 +64,21 @@ public class ConcreteIntakeSubsystem extends IntakeSubsystem {
     @Override
     protected void setExtendedState(ExtensionState extended) {
         pivotPID.setGoal(switch (extended) {
-            case EXTENDED -> IntakeInfo.INTAKE_PIVOT_EXTENDED_SETPOINT;
-            case RETRACTED -> IntakeInfo.INTAKE_PIVOT_DEFAULT_SETPOINT;
-            case AMP -> IntakeInfo.INTAKE_PIVOT_AMP_SETPOINT;
+            case EXTENDED -> IntakeConstants.INTAKE_PIVOT_EXTENDED_SETPOINT;
+            case RETRACTED -> IntakeConstants.INTAKE_PIVOT_RETRACTED_SETPOINT;
+            case AMP -> IntakeConstants.INTAKE_PIVOT_AMP_SETPOINT;
         });
     }
 
     @Override
     protected void outtakeRun() {
-        intakeMotor.set(-IntakeInfo.INTAKE_SPEED);
+        intakeMotor.set(-IntakeConstants.INTAKE_SPEED);
     }
 
     @Override
     protected void ampRun() {
-        intakeMotor.set(-IntakeInfo.INTAKE_SPEED);
+        intakeMotor.set(-IntakeConstants.INTAKE_SPEED);
+        setExtendedState(ExtensionState.AMP);
     }
 
     @Override
@@ -91,7 +94,7 @@ public class ConcreteIntakeSubsystem extends IntakeSubsystem {
 
     @Override
     protected void intakeRun() {
-        intakeMotor.set(IntakeInfo.INTAKE_SPEED);
+        intakeMotor.set(IntakeConstants.INTAKE_SPEED);
     }
 
     @Override
@@ -116,7 +119,7 @@ public class ConcreteIntakeSubsystem extends IntakeSubsystem {
     }
 
     @Override
-    public void instantiateMech(Mechanism2d mech) {
+    public void initMech(Mechanism2d mech) {
         pivotRoot = mech.getRoot("Pivot", 3, 1);
         pivot = pivotRoot.append(
                 new MechanismLigament2d(
@@ -125,5 +128,20 @@ public class ConcreteIntakeSubsystem extends IntakeSubsystem {
                         getRotations()
                 )
         );
+    }
+
+    @Override
+    protected Trigger atSetPoint() {
+        return new Trigger(pivotPID::atGoal);
+    }
+
+    @Override
+    protected void buildSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Position",
+                this::getRotations,
+                null);
+        builder.addDoubleProperty("Intake output",
+                intakeMotor::getAppliedOutput,
+                null);
     }
 }

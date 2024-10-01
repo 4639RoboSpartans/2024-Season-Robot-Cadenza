@@ -5,23 +5,15 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.commands.PathfindHolonomic;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.commands.autos.AutoFactory;
 import frc.robot.led.LEDPattern;
-import frc.robot.network.LimeLight;
-import frc.robot.subsystems.SubsystemManager;
+import frc.robot.led.LEDStrip;
 import frc.robot.tuning.RobotConfiguration;
 
 public class Robot extends TimedRobot {
@@ -42,15 +34,15 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robotContainer = new RobotContainer();
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         RobotConfiguration.updateAll();
-
-        LimeLight.writeValuesToSmartDashboard();
-        SmartDashboard.putBoolean("auton?", isAuton);
+        robotContainer.sendSubsystems();
     }
 
     @Override
@@ -79,7 +71,7 @@ public class Robot extends TimedRobot {
             };
         }).orElse(LEDPattern.BLANK);
 
-        SubsystemManager.getLedStrip().usePattern(pattern);
+        LEDStrip.getInstance().usePattern(pattern);
     }
 
     @Override

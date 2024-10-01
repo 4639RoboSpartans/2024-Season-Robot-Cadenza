@@ -1,16 +1,25 @@
 package frc.robot.led;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public interface LEDStrip extends Subsystem {
-    void usePattern(LEDPattern pattern);
+import java.util.Objects;
 
-    void update();
+public abstract class LEDStrip extends SubsystemBase {
+    private static LEDStrip instance;
+
+    public static LEDStrip getInstance() {
+        return instance = Objects.requireNonNullElseGet(instance, () -> new PhysicalLEDStrip(0, 64));
+    }
+
+    public abstract void usePattern(LEDPattern pattern);
+
+    public abstract void update();
 
     @Override
-    default void periodic() {
+    public void periodic() {
         update();
     }
 
-    void resetToBlank();
+    public abstract void resetToBlank();
 }

@@ -1,10 +1,12 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.hopper.ConcreteHopperSubsystem;
-import frc.robot.subsystems.hopper.HopperSubsystem;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Robot;
 
 import java.util.Objects;
 
@@ -12,12 +14,14 @@ public abstract class IntakeSubsystem extends SubsystemBase {
     private static IntakeSubsystem instance;
 
     public static IntakeSubsystem getInstance() {
-        return instance = Objects.requireNonNullElseGet(instance, ConcreteIntakeSubsystem::new);
+        return instance = Objects.requireNonNullElseGet(instance,
+                Robot.isReal()? ConcreteIntakeSubsystem::new
+                : SimIntakeSubsystem::new);
     }
 
     public abstract double getRotations();
 
-    public abstract void instantiateMech(Mechanism2d mech);
+    public abstract void initMech(Mechanism2d mech);
 
     public enum ExtensionState {
         EXTENDED, RETRACTED, AMP
@@ -36,7 +40,12 @@ public abstract class IntakeSubsystem extends SubsystemBase {
     protected abstract void intakeRun();
 
     public Command setExtended(ExtensionState state) {
-        return runOnce(() -> setExtendedState(state));
+        return runOnce(() -> setExtendedState(state))
+                .andThen(
+                        Commands.waitUntil(
+                                atSetPoint()
+                        )
+                );
     }
 
     public Command intake() {
@@ -58,4 +67,14 @@ public abstract class IntakeSubsystem extends SubsystemBase {
     public Command stop() {
         return runOnce(this::stopRun);
     }
+
+    protected abstract Trigger atSetPoint();
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        buildSendable(builder);
+        builder.setSmartDashboardType("Intake");
+    }
+
+    protected abstract void buildSendable(SendableBuilder builder);
 }

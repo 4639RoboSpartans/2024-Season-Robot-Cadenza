@@ -6,8 +6,10 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.util.Helpers;
+import frc.lib.util.Helpers;
 
 public class FalconShooterSubsystem extends ShooterSubsystem {
     private final TalonFX shooterLeft, shooterRight;
@@ -30,7 +32,7 @@ public class FalconShooterSubsystem extends ShooterSubsystem {
                                 .withStatorCurrentLimitEnable(true));
         shooterLeft.getConfigurator().apply(shooterConfig);
         shooterRight.getConfigurator().apply(shooterConfig);
-        shooterLeft.setControl(new Follower(shooterRight.getDeviceID(), true));
+        shooterRight.setControl(new Follower(shooterLeft.getDeviceID(), true));
         targetVelocity = ShooterConstants.SHOOTER_IDLE.speed();
         controller = new BangBangController(ShooterConstants.SHOOTER_SPEED_TOLERANCE);
     }
@@ -49,11 +51,29 @@ public class FalconShooterSubsystem extends ShooterSubsystem {
         targetVelocity = speed;
         double controllerOutput = controller.calculate(
                 getCurrentSpeed(), speed);
-        shooterLeft.setVoltage(speed * ShooterConstants.SHOOTER_VOLTAGE_MULTIPLIER);
+        shooterLeft.setVoltage(controllerOutput * ShooterConstants.SHOOTER_VOLTAGE_MULTIPLIER);
     }
 
     @Override
     protected double getCurrentSpeed() {
         return shooterLeft.getVelocity().getValueAsDouble();
+    }
+
+    @Override
+    protected void buildSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Shooter");
+        builder.addDoubleProperty("Speed",
+                this::getCurrentSpeed,
+                null);
+    }
+
+    @Override
+    public Command getSysIDQuasistaticCommand() {
+        return null;
+    }
+
+    @Override
+    public Command getSysIDDynamicCommand() {
+        return null;
     }
 }

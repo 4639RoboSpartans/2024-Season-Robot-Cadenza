@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PhysicalLEDStrip extends SubsystemBase implements LEDStrip {
+public class PhysicalLEDStrip extends LEDStrip {
     private final AddressableLED led;
     private final AddressableLEDBuffer buffer;
     private final int length;

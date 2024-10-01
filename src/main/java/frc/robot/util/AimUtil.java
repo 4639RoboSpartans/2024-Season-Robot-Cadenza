@@ -4,12 +4,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.util.DriverStationUtil;
 import frc.robot.constants.Controls;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.InterpolatingTables;
-import frc.robot.subsystems.SubsystemManager;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 public class AimUtil {
     public static Translation2d getSpeakerPose() {
@@ -56,7 +56,7 @@ public class AimUtil {
     }
 
     public static Translation2d getPoseVector(Translation2d targetTranslation) {
-        Pose2d currBotPose = SubsystemManager.getSwerveDrive().getPose();
+        Pose2d currBotPose = SwerveDriveSubsystem.getInstance().getPose();
         Translation2d currBotTranslation = currBotPose.getTranslation();
         return currBotTranslation.minus(targetTranslation);
     }
@@ -81,7 +81,7 @@ public class AimUtil {
 
     public static Rotation2d getPoseOffset(Translation2d targetTranslation) {
         Rotation2d targetRotation = getPoseRotation(targetTranslation);
-        Rotation2d heading = SubsystemManager.getSwerveDrive().getRotation2d();
+        Rotation2d heading = SwerveDriveSubsystem.getInstance().getRotation2d();
         return Rotation2d.fromDegrees(MathUtil.clamp(
                 heading.minus(targetRotation).getDegrees(),
                 -360,
@@ -110,7 +110,7 @@ public class AimUtil {
     }
 
     public static Rotation2d getAmpOffset() {
-        Rotation2d heading = SubsystemManager.getSwerveDrive().getRotation2d();
+        Rotation2d heading = SwerveDriveSubsystem.getInstance().getRotation2d();
         return Rotation2d.fromDegrees(MathUtil.clamp(
             getAmpRotation().minus(heading).getDegrees(),
                 -360,
@@ -126,8 +126,8 @@ public class AimUtil {
         double dist = getSpeakerDist();
         double angle = InterpolatingTables.getAngleTable().get(dist);
         double speed = InterpolatingTables.getSpeedTable().get(dist);
-        angle -= Controls.DriverControls.SwerveForwardAxis.getAsDouble();
-        speed -= Controls.DriverControls.SwerveForwardAxis.getAsDouble();
+        angle -= Controls.DriverControls.SwerveForwardAxis.getAsDouble() * 0.001;
+        speed -= Controls.DriverControls.SwerveForwardAxis.getAsDouble() * 0.001;
         return new ShooterConstants.ShooterSetpoint(speed, angle);
     }
 }

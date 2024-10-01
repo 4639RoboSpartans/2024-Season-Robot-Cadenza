@@ -1,35 +1,62 @@
 package frc.robot.subsystems.climber;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkMax;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
-import static frc.robot.constants.RobotInfo.ClimberInfo;
+import java.util.Objects;
 
-public class ClimberSubsystem extends SubsystemBase implements IClimberSubsystem {
-    private final CANSparkMax leftMotor, rightMotor;
+public abstract class ClimberSubsystem extends SubsystemBase {
+    private static ClimberSubsystem instance;
 
-    public ClimberSubsystem(int leftMotorID, int rightMotorID) {
-        leftMotor = new CANSparkMax(leftMotorID, CANSparkMax.MotorType.kBrushless);
-        rightMotor = new CANSparkMax(rightMotorID, CANSparkMax.MotorType.kBrushless);
-
-        leftMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-        rightMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-
-        rightMotor.setInverted(true);
+    public static ClimberSubsystem getInstance() {
+        return instance = Objects.requireNonNullElseGet(instance,
+                Robot.isReal()? ConcreteClimberSubsystem::new
+                : SimClimberSubsystem::new);
     }
 
-    public void setLeftSpeed(double speed) {
-        leftMotor.set(speed * ClimberInfo.CLIMBER_SPEED);
+    public Command applyPIDControl() {
+        return run(this::runPID);
     }
 
-    public void setRightSpeed(double speed) {
-        rightMotor.set(speed * ClimberInfo.CLIMBER_SPEED);
+    public Command up() {
+        return runOnce(this::runUp);
     }
+
+    public Command down() {
+        return runOnce(this::runDown);
+    }
+
+    public Command swapLeftUp() {
+        return runOnce(this::runSwapLeftUp);
+    }
+
+    public Command swapRightUp() {
+        return runOnce(this::runSwapRightUp);
+    }
+
+    protected abstract void runPID();
+
+    protected abstract void runUp();
+
+    protected abstract void runDown();
+
+    protected abstract void runSwapLeftUp();
+
+    protected abstract void runSwapRightUp();
+
+    public abstract void transitionToPIDControl();
 
     @Override
-    public void stop() {
-        leftMotor.stopMotor();
-        rightMotor.stopMotor();
+    public void initSendable(SendableBuilder builder) {
+        buildSendable(builder);
     }
+
+    protected abstract void buildSendable(SendableBuilder builder);
+
+    public abstract void initMech(Mechanism2d mech);
+
+    public abstract Command rootMech();
 }

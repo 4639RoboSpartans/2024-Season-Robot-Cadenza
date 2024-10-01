@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.util.Helpers;
+import frc.lib.util.Helpers;
 
 public class ConcretePivotSubsystem extends PivotSubsystem {
     private final CANSparkMax leftPivot, rightPivot;
@@ -49,8 +49,7 @@ public class ConcretePivotSubsystem extends PivotSubsystem {
 
     @Override
     public void periodic() {
-        double PIDOutput = pivotPID.calculate(getRotations());
-        leftPivot.set(PIDOutput);
+        runShootingAngle(getTargetAngle());
         pivot.setAngle(measuredPivotRotationsToMechanismDegrees(getRotations()));
     }
 
@@ -72,7 +71,7 @@ public class ConcretePivotSubsystem extends PivotSubsystem {
     }
 
     @Override
-    public void instantiateMech(Mechanism2d mech) {
+    public void initMech(Mechanism2d mech) {
         pivotRoot = mech.getRoot("Pivot", 3, 1);
         pivot = pivotRoot.append(
                 new MechanismLigament2d("Shooter", 1, getRotations())
@@ -91,7 +90,7 @@ public class ConcretePivotSubsystem extends PivotSubsystem {
         return Helpers.withinTolerance(
                 getRotations(),
                 pivotPID.getGoal().position,
-                ShooterConstants.SHOOTER_PIVOT_ERROR
+                ShooterConstants.SHOOTER_PIVOT_TOLERANCE
         );
     }
 

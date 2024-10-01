@@ -1,63 +1,49 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class SimIntakeSubsystem extends IntakeSubsystem {
-    private ExtensionState state;
-    private final DCMotorSim simPivot;
-    private final ProfiledPIDController pivotPID;
+    private double rawTargetAngle;
     private double intakeOutput;
 
-    private final Mechanism2d pivotMech;
-    private final MechanismRoot2d pivotRoot;
-    private final MechanismLigament2d pivot;
+    private MechanismRoot2d pivotRoot;
+    private MechanismLigament2d pivot;
 
     public SimIntakeSubsystem() {
-        state = ExtensionState.RETRACTED;
-        simPivot = new DCMotorSim(DCMotor.getNeo550(2),
-                IntakeConstants.INTAKE_PIVOT_GEARING,
-                IntakeConstants.INTAKE_PIVOT_MOI);
-        simPivot.setState(
-                measuredPivotRotationsToMechanismDegrees(IntakeConstants.INTAKE_PIVOT_DEFAULT_SETPOINT),
-                0
-        );
-        pivotPID = new ProfiledPIDController(
-                IntakeConstants.INTAKE_PIVOT_kp,
-                IntakeConstants.INTAKE_PIVOT_ki,
-                IntakeConstants.INTAKE_PIVOT_kd,
-                new TrapezoidProfile.Constraints(
-                        IntakeConstants.INTAKE_PIVOT_VELOCITY,
-                        IntakeConstants.INTAKE_PIVOT_ACCELERATION
-                )
-        );
         setExtendedState(ExtensionState.RETRACTED);
         intakeOutput = 0;
+    }
 
-        pivotMech = new Mechanism2d(3, 3);
-        pivotRoot = pivotMech.getRoot("intake", 1, 1);
+    @Override
+    public double getRotations() {
+        return rawTargetAngle;
+    }
+
+    @Override
+    public void initMech(Mechanism2d mech) {
+        pivotRoot = mech.getRoot("intake", 1, 1);
         pivot = pivotRoot.append(
                 new MechanismLigament2d(
                         "pivot",
-                        2,
-                        measuredPivotRotationsToMechanismDegrees(getAngle())
+                        1,
+                        measuredPivotRotationsToMechanismDegrees(getRotations())
+//                        90
                 )
         );
     }
 
     @Override
     protected void setExtendedState(ExtensionState extended) {
-        pivotPID.setGoal(switch (extended) {
-            case RETRACTED -> IntakeConstants.INTAKE_PIVOT_DEFAULT_SETPOINT;
+        rawTargetAngle = switch (extended) {
+            case RETRACTED -> IntakeConstants.INTAKE_PIVOT_RETRACTED_SETPOINT;
             case EXTENDED -> IntakeConstants.INTAKE_PIVOT_EXTENDED_SETPOINT;
             case AMP -> IntakeConstants.INTAKE_PIVOT_AMP_SETPOINT;
-        });
+        };
     }
 
     @Override
@@ -72,12 +58,12 @@ public class SimIntakeSubsystem extends IntakeSubsystem {
 
     @Override
     protected void stopIntakeRun() {
-
+        intakeOutput = 0;
     }
 
     @Override
     protected void stopRun() {
-
+        intakeOutput = 0;
     }
 
     @Override
@@ -86,18 +72,27 @@ public class SimIntakeSubsystem extends IntakeSubsystem {
     }
 
     @Override
-    public void periodic() {
-        double PIDOutput = pivotPID.calculate(getAngle());
-        simPivot.setInputVoltage(PIDOutput);
-        pivot.setAngle(measuredPivotRotationsToMechanismDegrees(getAngle()));
+    protected Trigger atSetPoint() {
+        return new Trigger(() -> true);
     }
 
-    private double getAngle() {
-        return simPivot.getAngularPositionRotations();
+    @Override
+    public void periodic() {
+        pivot.setAngle(measuredPivotRotationsToMechanismDegrees(getRotations()));
     }
 
     private double measuredPivotRotationsToMechanismDegrees(double rotations) {
-        double angle = rotations % 1;
-        return angle + Rotation2d.fromDegrees(IntakeConstants.INTAKE_PIVOT_MECHANISM_OFFSET_DEGREES).getRotations();
+        return -Rotation2d.fromRotations(rotations).getDegrees() + IntakeConstants.INTAKE_PIVOT_MECHANISM_OFFSET_DEGREES;
+    }
+
+    @Override
+    protected void buildSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Intake");
+        builder.addDoubleProperty("Rotations",
+                this::getRotations,
+                null);
+        builder.addDoubleProperty("Intake output",
+                () -> intakeOutput,
+                null);
     }
 }

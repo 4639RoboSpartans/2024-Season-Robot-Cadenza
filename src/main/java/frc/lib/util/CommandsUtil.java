@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.lib.util;
 
 import com.choreo.lib.ChoreoTrajectory;
 import com.choreo.lib.ChoreoTrajectoryState;

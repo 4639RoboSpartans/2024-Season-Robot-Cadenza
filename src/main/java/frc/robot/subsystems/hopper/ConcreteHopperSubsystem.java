@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class ConcreteHopperSubsystem extends HopperSubsystem {
     private final CANSparkMax motor;
@@ -59,5 +60,10 @@ public class ConcreteHopperSubsystem extends HopperSubsystem {
         builder.addBooleanProperty("Has note",
                 this::hasNoteSupplier,
                 null);
+    }
+
+    @Override
+    public Command simToggleHasNote(boolean hasNote) {
+        return run(this::hasNoteSupplier); // ignore this since it is only for simulation purposes
     }
 }

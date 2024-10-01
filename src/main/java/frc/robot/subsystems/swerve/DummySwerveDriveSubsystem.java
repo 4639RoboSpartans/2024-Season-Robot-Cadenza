@@ -1,15 +1,21 @@
 package frc.robot.subsystems.swerve;
 
 import com.choreo.lib.ChoreoTrajectory;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
+public class DummySwerveDriveSubsystem extends SwerveDriveSubsystem {
+    public DummySwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
+        super(driveTrainConstants, modules);
+    }
+
     @Override
     public Rotation2d getRotation2d() {
-        return new Rotation2d();
+        return null;
     }
 
     @Override
@@ -53,22 +59,22 @@ public class DummySwerveDriveSubsystem implements ISwerveDriveSubsystem {
     }
 
     @Override
-    public boolean isAligned() {
+    protected boolean isAlignedSupplier() {
         return false;
     }
 
     @Override
-    public boolean inShootingRange() {
+    protected boolean inShootingRangeSupplier() {
         return false;
     }
 
     @Override
-    public boolean inShootingSector() {
+    protected boolean inShootingSectorSupplier() {
         return false;
     }
 
     @Override
-    public boolean inSpinupRange() {
-        return false;
+    protected void buildSendable(SendableBuilder builder) {
+
     }
 }

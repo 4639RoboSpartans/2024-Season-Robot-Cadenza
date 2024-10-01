@@ -5,6 +5,11 @@
         "header": {
           "open": true
         }
+      },
+      "Talon FX (v6)[7]": {
+        "header": {
+          "open": true
+        }
       }
     }
   },
@@ -13,10 +18,41 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Alliance": "String Chooser",
       "/SmartDashboard/Autons": "String Chooser",
+      "/SmartDashboard/FalconShooterFeedforward": "Subsystem",
+      "/SmartDashboard/Robot Mechanism": "Mechanism2d",
       "/SmartDashboard/Row select for Shooter/Shooter Setpoints": "String Chooser",
       "/SmartDashboard/Row select for robot.shooter.SetPointTable": "String Chooser",
       "/SmartDashboard/SendableChooser[2]": "String Chooser",
+      "/SmartDashboard/SimIntakeSubsystem": "Subsystem",
       "/SmartDashboard/field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Robot Mechanism": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "FalconShooterFeedforward": {
+          "open": true
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {
@@ -29,8 +65,5 @@
       }
     },
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }

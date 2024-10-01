@@ -8,7 +8,7 @@ public class OI {
     private final Controller driverController;
     private final Controller operatorController;
 
-    public OI() {
+    private OI() {
         driverController = new Controller(0);
         operatorController = new Controller(1);
     }
@@ -63,10 +63,10 @@ public class OI {
         RIGHT_BUMPER(6),
         LEFT_STICK(8),
         RIGHT_STICK(9),
-        POV_UP(10),
-        POV_RIGHT(11),
-        POV_DOWN(12),
-        POV_LEFT(13),
+        D_PAD_UP(10),
+        D_PAD_RIGHT(11),
+        D_PAD_DOWN(12),
+        D_PAD_LEFT(13),
         LEFT_TRIGGER(14),
         RIGHT_TRIGGER(15);
 
@@ -79,5 +79,16 @@ public class OI {
         public int getID() {
             return id;
         }
+    }
+
+    // Only one instance of OI can exist at a time, and it should be accessible from
+    // anywhere using getInstance()
+    private static OI instance = null;
+
+    public static OI getInstance() {
+        if (instance != null) {
+            return instance;
+        }
+        return instance = new OI();
     }
 }
