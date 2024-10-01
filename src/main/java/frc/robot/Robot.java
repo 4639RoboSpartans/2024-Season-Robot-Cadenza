@@ -109,6 +109,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+        CommandScheduler.getInstance().schedule(CommandFactory.getSuperstructureCSM());
     }
 
     @Override

@@ -59,11 +59,17 @@ public abstract class SwerveDriveSubsystem extends SwerveDrivetrain implements S
         return new Trigger(this::inShootingSectorSupplier);
     }
 
+    public Trigger inLaunchRange() {
+        return new Trigger(this::inLaunchRangeSupplier);
+    }
+
     protected abstract boolean isAlignedSupplier();
 
     protected abstract boolean inShootingRangeSupplier();
 
     protected abstract boolean inShootingSectorSupplier();
+
+    protected abstract boolean inLaunchRangeSupplier();
 
     @Override
     public void initSendable(SendableBuilder builder) {

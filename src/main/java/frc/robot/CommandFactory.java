@@ -3,6 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.CSM.CommandStateMachine;
+import frc.lib.CSM.State;
+import frc.lib.util.Helpers;
+import frc.robot.constants.Controls;
 import frc.robot.constants.DisplayInfo;
 import frc.robot.led.LEDStrip;
 import frc.robot.subsystems.hopper.HopperSubsystem;
@@ -10,6 +14,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterSuperstructure;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.util.AimUtil;
 
 public class CommandFactory {
     private static final SwerveDriveSubsystem swerve = SwerveDriveSubsystem.getInstance();
@@ -53,8 +58,21 @@ public class CommandFactory {
                 .until(hopper.hasNote().negate());
     }
 
+    public static Command manualShoot() {
+        return shooter.runShootingMode(ShooterConstants.ShootingMode.MANUAL_SPEAKER)
+                .until(hopper.hasNote().negate());
+    }
+
+    public static Command launchSpinup() {
+        return shooter.runShootingMode(ShooterConstants.ShootingMode.LAUNCH);
+    }
+
+    public static Command launchCommand() {
+        return launchSpinup().until(hopper.hasNote().negate());
+    }
+
     public static Command shooterIdleCommand() {
-        return Commands.runOnce(() -> shooter.runShootingMode(ShooterConstants.ShootingMode.IDLE));
+        return shooter.runShootingMode(ShooterConstants.ShootingMode.IDLE);
     }
 
     public static Command ampPrepCommand() {
@@ -90,5 +108,94 @@ public class CommandFactory {
                         .andThen(
                                 intake.setExtended(IntakeSubsystem.ExtensionState.RETRACTED)
                         );
+    }
+
+    public static Command getSuperstructureCSM() {
+        CommandStateMachine superstructureStateMachine = new CommandStateMachine();
+
+        State idleState = superstructureStateMachine.addState(
+                shooterIdleCommand(),
+                hopper.stop(),
+                resetIntakeCommand());
+        State hasNoteState = superstructureStateMachine.addState(
+                shooterIdleCommand(),
+                hopper.stop(),
+                resetIntakeCommand());
+        State SOTFState = superstructureStateMachine.addState(
+                pureShoot(),
+                hopper.feed(),
+                resetIntakeCommand());
+        State spinupState = superstructureStateMachine.addState(
+                pureShoot(),
+                hopper.stop(),
+                resetIntakeCommand());
+        State manualState = superstructureStateMachine.addState(
+                manualShoot(),
+                hopper.feed(),
+                resetIntakeCommand());
+        State launchSpinupState = superstructureStateMachine.addState(
+                launchSpinup(),
+                hopper.stop(),
+                resetIntakeCommand());
+        State launchState = superstructureStateMachine.addState(
+                launchCommand(),
+                hopper.feed(),
+                resetIntakeCommand());
+        State intakeState = superstructureStateMachine.addState(
+                shooterIdleCommand(),
+                hopper.feed(),
+                intakeCommand());
+        State outtakeState = superstructureStateMachine.addState(
+                shooterIdleCommand(),
+                hopper.outtake(),
+                outtakeCommand());
+        State ampPrep = superstructureStateMachine.addState(
+                shooterIdleCommand(),
+                ampPrepCommand());
+        State ampReady = superstructureStateMachine.addState(
+                shooterIdleCommand(),
+                hopper.stop(),
+                resetIntakeCommand());
+        State amping = superstructureStateMachine.addState(
+                shooterIdleCommand(),
+                hopper.stop(),
+                ampCommand());
+
+        //define all transitions
+        idleState.on(Controls.OperatorControls.IntakeButton, intakeState); // complete
+        intakeState.on(Controls.OperatorControls.IntakeButton.negate(), idleState);
+
+        intakeState.on(hopper.hasNote(), hasNoteState);
+
+        hasNoteState.on(Controls.OperatorControls.OuttakeButton, outtakeState);
+        outtakeState.on(Controls.OperatorControls.OuttakeButton.negate().and(hopper.hasNote().negate()), idleState);
+        outtakeState.on(Controls.OperatorControls.OuttakeButton.negate().and(hopper.hasNote()), idleState);
+
+        hasNoteState.on(swerve.inShootingRange().and(swerve.inShootingSector()).and(Controls.DriverControls.SOTF), spinupState);
+        spinupState.on(Controls.DriverControls.SOTF.negate(), hasNoteState);
+
+        spinupState.on(swerve.isAligned(), SOTFState);
+        SOTFState.on(swerve.isAligned().negate(), spinupState);
+        SOTFState.on(Controls.DriverControls.SOTF.negate(), hasNoteState);
+
+        hasNoteState.on(Controls.OperatorControls.ManualShooterButton, manualState);
+        manualState.on(Controls.OperatorControls.ManualShooterButton.negate(), hasNoteState);
+        manualState.on(hopper.hasNote().negate(), idleState);
+
+        hasNoteState.on(Controls.OperatorControls.RunAmpShooterButton, ampPrep);
+        ampPrep.on(hopper.hasNote().negate(), ampReady);
+        ampReady.on(() -> Helpers.withinTolerance(swerve.getPose().getTranslation().minus(AimUtil.getAmpPose()), 0.1), amping);
+
+        amping.on(Controls.OperatorControls.RunAmpShooterButton.negate(), idleState);
+
+        hasNoteState.on(Controls.OperatorControls.LaunchShooterButton.and(swerve.inLaunchRange().negate()), launchSpinupState);
+        hasNoteState.on(Controls.OperatorControls.LaunchShooterButton.and(swerve.inLaunchRange()), launchState);
+        launchSpinupState.on(swerve.inLaunchRange(), launchState);
+        launchSpinupState.on(Controls.OperatorControls.LaunchShooterButton.negate(), hasNoteState);
+        launchState.on(hopper.hasNote().negate(), idleState);
+
+        superstructureStateMachine.setInitial(idleState);
+        superstructureStateMachine.completeSetup();
+        return superstructureStateMachine;
     }
 }

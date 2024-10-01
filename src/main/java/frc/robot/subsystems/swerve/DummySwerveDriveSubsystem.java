@@ -74,6 +74,11 @@ public class DummySwerveDriveSubsystem extends SwerveDriveSubsystem {
     }
 
     @Override
+    protected boolean inLaunchRangeSupplier() {
+        return false;
+    }
+
+    @Override
     protected void buildSendable(SendableBuilder builder) {
 
     }

@@ -274,6 +274,11 @@ public class ConcreteSwerveDriveSubsystem extends SwerveDriveSubsystem {
     }
 
     @Override
+    protected boolean inLaunchRangeSupplier() {
+        return AimUtil.getSpeakerVector().getX() <= 10.6934;
+    }
+
+    @Override
     protected void buildSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Swerve");
         builder.addDoubleProperty("Heading",

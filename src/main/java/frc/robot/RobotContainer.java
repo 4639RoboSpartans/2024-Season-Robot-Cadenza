@@ -97,10 +97,7 @@ public class RobotContainer {
                         swerve.SOTFCommand())
                         .onFalse(
                                 CommandFactory.shooterIdleCommand()
-                        )
-                                .onTrue(
-                                        CommandFactory.shootCommand()
-                                );
+                        );
 
         DriverControls.AmpAlignButton
                 .whileTrue(
@@ -121,8 +118,6 @@ public class RobotContainer {
                 .whileTrue(
                         swerve.pathfindCommand(
                                 AimUtil.getManualSpeakerPose()
-                        ).andThen(
-                                CommandFactory.shootCommand()
                         ));
 
         DriverControls.SOTF.or(DriverControls.AimButton).negate().whileTrue(
@@ -137,18 +132,6 @@ public class RobotContainer {
                 ledStrip.usePattern(new SolidLEDPattern(new Color8Bit(0, 0, 255)));
             }
         }, ledStrip));
-
-        OperatorControls.IntakeButton.whileTrue(CommandFactory.intakeCommand())
-                .onFalse(CommandFactory.resetIntakeCommand()
-                        .alongWith(hopper.simToggleHasNote(true)));
-
-        OperatorControls.OuttakeButton.whileTrue(CommandFactory.outtakeCommand())
-                .onFalse(CommandFactory.resetIntakeCommand()
-                        .alongWith(hopper.simToggleHasNote(false)));
-
-        OperatorControls.IntakeExtendButton.onTrue(intake.setExtended(IntakeSubsystem.ExtensionState.EXTENDED));
-
-        OperatorControls.IntakeRetractButton.onTrue(intake.setExtended(IntakeSubsystem.ExtensionState.RETRACTED));
 
         OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
 
