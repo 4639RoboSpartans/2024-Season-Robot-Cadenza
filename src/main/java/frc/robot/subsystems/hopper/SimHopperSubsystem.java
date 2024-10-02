@@ -1,7 +1,10 @@
 package frc.robot.subsystems.hopper;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 public class SimHopperSubsystem extends HopperSubsystem {
     private boolean hasNoteBool;
@@ -33,6 +36,7 @@ public class SimHopperSubsystem extends HopperSubsystem {
 
     @Override
     protected boolean hasNoteSupplier() {
+        if (Robot.isInAuton()) return true;
         return hasNoteBool;
     }
 

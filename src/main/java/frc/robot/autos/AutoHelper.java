@@ -21,10 +21,10 @@ public class AutoHelper {
         return Commands.parallel(
                 follow(pathName),
                 startTime < 0 ?
-                        CommandFactory.intakeCommand() :
+                        CommandFactory.intakeCommand().withTimeout(1) :
                         Commands.sequence(
                                 new WaitCommand(startTime),
-                                CommandFactory.intakeCommand()
+                                CommandFactory.intakeCommand().withTimeout(1)
                         )
         );
     }
@@ -35,14 +35,14 @@ public class AutoHelper {
          * should generate the path so that bot is facing the speaker during SOTF portion
          */
         ChoreoTrajectory traj = Choreo.getTrajectory(pathName);
-        return Commands.deadline(
+        return Commands.parallel(
                 AutoHelper.follow(pathName),
                 Commands.sequence(
                         Commands.deadline(
                                 new WaitCommand(traj.getTotalTime() - SwerveConstants.TIME_BEFORE_INTAKE_START),
                                 CommandFactory.shootCommand()
                         ),
-                        CommandFactory.intakeCommand()
+                        CommandFactory.intakeCommand().alongWith(CommandFactory.shooterIdleCommand()).withTimeout(1)
                 )
         );
     }

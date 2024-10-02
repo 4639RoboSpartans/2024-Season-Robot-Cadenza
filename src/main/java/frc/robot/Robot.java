@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        isAuton = true;
         autonomousCommand = robotContainer.getAutonomousCommand();
         if (autonomousCommand != null) {
             SmartDashboard.putString("Auton selected", autonomousCommand.getName());
@@ -92,7 +93,6 @@ public class Robot extends TimedRobot {
                 Commands.sequence(robotContainer.getDelay(), autonomousCommand)
             );
         }
-        isAuton = true;
     }
 
     @Override

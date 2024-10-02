@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.autos.Autos;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
 import frc.robot.constants.InterpolatingTables;
@@ -72,6 +73,7 @@ public class RobotContainer {
         autos = new SendableChooser<>();
         autos.setDefaultOption("null auto", new WaitCommand(1));
         autos.addOption("preloaded", AutoHelper.shoot());
+        autos.addOption("generated auto", Autos.getAutoCommand());
         SmartDashboard.putData("Autons", autos);
         delayTime = new SendableChooser<Double>();
         delayTime.setDefaultOption("0", 0.0);
@@ -95,12 +97,10 @@ public class RobotContainer {
         DriverControls.SOTF
                 .whileTrue(
                         swerve.SOTFCommand())
-                        .onFalse(
-                                CommandFactory.shooterIdleCommand()
-                        )
-                                .onTrue(
-                                        CommandFactory.shootCommand()
-                                );
+                .onTrue(
+                        CommandFactory.shootCommand())
+                .onFalse(
+                        hopper.simToggleHasNote(false));
 
         DriverControls.AmpAlignButton
                 .whileTrue(
@@ -122,8 +122,8 @@ public class RobotContainer {
                         swerve.pathfindCommand(
                                 AimUtil.getManualSpeakerPose()
                         ).andThen(
-                                CommandFactory.shootCommand()
-                        ));
+                                CommandFactory.pureShoot()))
+                .onFalse(hopper.simToggleHasNote(false));
 
         DriverControls.SOTF.or(DriverControls.AimButton).negate().whileTrue(
                 shooter.runShootingMode(ShooterConstants.ShootingMode.IDLE)
@@ -140,11 +140,11 @@ public class RobotContainer {
 
         OperatorControls.IntakeButton.whileTrue(CommandFactory.intakeCommand())
                 .onFalse(CommandFactory.resetIntakeCommand()
-                        .alongWith(hopper.simToggleHasNote(true)));
+                        .andThen(hopper.simToggleHasNote(true)));
 
         OperatorControls.OuttakeButton.whileTrue(CommandFactory.outtakeCommand())
                 .onFalse(CommandFactory.resetIntakeCommand()
-                        .alongWith(hopper.simToggleHasNote(false)));
+                        .andThen(hopper.simToggleHasNote(false)));
 
         OperatorControls.IntakeExtendButton.onTrue(intake.setExtended(IntakeSubsystem.ExtensionState.EXTENDED));
 

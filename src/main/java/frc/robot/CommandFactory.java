@@ -19,7 +19,7 @@ public class CommandFactory {
 
     public static class Triggers {
         public static Trigger canSpinup = swerve.inShootingRange();
-        public static Trigger canSOTF = canSpinup.and(swerve.inShootingSector()).and(swerve.isAligned());
+        public static Trigger canSOTF = canSpinup.and(swerve.inShootingSector()).and(swerve.isAligned()).and(shooter.atSetPoint());
     }
 
     public static Command intakeCommand() {
@@ -29,10 +29,10 @@ public class CommandFactory {
     }
 
     public static Command shootCommand() {
-        return Commands.repeatingSequence(
+        return Commands.sequence(
                         shooterIdleCommand().until(Triggers.canSpinup.and(hopper.hasNote())),
-                        Commands.deadline(
-                                pureShoot(),
+                        Commands.race(
+                                autoSpinup(),
                                 Commands.sequence(
                                         Commands.waitUntil(Triggers.canSOTF).alongWith(
                                                 Commands.run(
@@ -42,19 +42,26 @@ public class CommandFactory {
                                                 Commands.run(
                                                         () -> LEDStrip.getInstance().usePattern(DisplayInfo.readyPattern)
                                                 )
-                                        )
-                                ).withTimeout(3)
-                        ).until(Triggers.canSOTF.negate()))
-                .andThen(hopper.simToggleHasNote(false));
+                                        ).deadlineWith(Commands.waitSeconds(3))
+                                )
+                        )
+                ).andThen(hopper.simToggleHasNote(false));
     }
 
-    public static Command pureShoot() {
+    public static Command autoSpinup() {
         return shooter.runShootingMode(ShooterConstants.ShootingMode.AUTO_SPEAKER)
                 .until(hopper.hasNote().negate());
     }
 
+    public static Command pureShoot() {
+        return shooter.runShootingMode(ShooterConstants.ShootingMode.AUTO_SPEAKER)
+                .alongWith(hopper.feed())
+                .withTimeout(1)
+                .until(() -> !hopper.hasNote().getAsBoolean());
+    }
+
     public static Command shooterIdleCommand() {
-        return Commands.runOnce(() -> shooter.runShootingMode(ShooterConstants.ShootingMode.IDLE));
+        return shooter.runShootingMode(ShooterConstants.ShootingMode.IDLE);
     }
 
     public static Command ampPrepCommand() {
@@ -78,7 +85,7 @@ public class CommandFactory {
     }
 
     public static Command followPathCommand(String path) {
-        return swerve.followChoreoPath(path, false);
+        return swerve.followChoreoPath(path, true);
     }
 
     public static Command aimCommand() {
@@ -86,9 +93,9 @@ public class CommandFactory {
     }
 
     public static Command resetIntakeCommand() {
-        return intake.stopIntake()
-                        .andThen(
-                                intake.setExtended(IntakeSubsystem.ExtensionState.RETRACTED)
-                        );
+        return intake.stopIntake().alongWith(hopper.stop())
+                .andThen(
+                        intake.setExtended(IntakeSubsystem.ExtensionState.RETRACTED)
+                );
     }
 }
