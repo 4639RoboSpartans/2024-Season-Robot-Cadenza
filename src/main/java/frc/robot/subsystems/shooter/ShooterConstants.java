@@ -25,11 +25,18 @@ public class ShooterConstants {
     public static final double SHOOTER_PIVOT_TOLERANCE = 0.01;
     public static final double SHOOTER_SPEED_TOLERANCE = 0.001;
 
-    public static final double SHOOTER_PID_kp = 640;
+    public static final double SIM_SHOOTER_PID_kp = 640;
+    public static final double SIM_SHOOTER_PID_ki = 0;
+    public static final double SIM_SHOOTER_PID_kd = 0;
+    public static final double SIM_SHOOTER_PID_kv = 1.22;
+    public static final double SIM_SHOOTER_PID_ka = 10000;
+
+    //TODO: use sysID to tune these values
+    public static final double SHOOTER_PID_kp = 0;
     public static final double SHOOTER_PID_ki = 0;
     public static final double SHOOTER_PID_kd = 0;
-    public static final double SHOOTER_PID_kv = 1.22;
-    public static final double SHOOTER_PID_ka = 10000;
+    public static final double SHOOTER_PID_kv = 0;
+    public static final double SHOOTER_PID_ka = 0;
 
     public static final double SHOOTER_PIVOT_kp = 4;
     public static final double SHOOTER_PIVOT_ki = 0;

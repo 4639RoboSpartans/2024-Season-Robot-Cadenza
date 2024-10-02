@@ -38,8 +38,8 @@ public class ConcretePivotSubsystem extends PivotSubsystem {
 
         pivotPID = new ProfiledPIDController(
                 ShooterConstants.SHOOTER_PIVOT_kp,
-                ShooterConstants.SHOOTER_PID_ki,
-                ShooterConstants.SHOOTER_PID_kd,
+                ShooterConstants.SIM_SHOOTER_PID_ki,
+                ShooterConstants.SIM_SSHOOTER_PID_kd,
                 new Constraints(
                         ShooterConstants.SHOOTER_PIVOT_VELOCITY,
                         ShooterConstants.SHOOTER_PIVOT_ACCELERATION

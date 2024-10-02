@@ -4,11 +4,9 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Measure;
@@ -36,11 +34,11 @@ public class SimShooterSubsystem extends ShooterSubsystem {
         TalonFXConfiguration shooterConfig = new TalonFXConfiguration()
                 .withSlot0(
                         new Slot0Configs()
-                                .withKP(ShooterConstants.SHOOTER_PID_kp)
-                                .withKI(ShooterConstants.SHOOTER_PID_ki)
-                                .withKD(ShooterConstants.SHOOTER_PID_kd)
-                                .withKV(ShooterConstants.SHOOTER_PID_kv)
-                                .withKA(ShooterConstants.SHOOTER_PID_ka))
+                                .withKP(ShooterConstants.SIM_SHOOTER_PID_kp)
+                                .withKI(ShooterConstants.SIM_SHOOTER_PID_ki)
+                                .withKD(ShooterConstants.SIM_SHOOTER_PID_kd)
+                                .withKV(ShooterConstants.SIM_SHOOTER_PID_kv)
+                                .withKA(ShooterConstants.SIM_SHOOTER_PID_ka))
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
                                 .withStatorCurrentLimit(4)

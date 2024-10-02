@@ -20,12 +20,6 @@ public class FalconShooterSubsystem extends ShooterSubsystem {
         shooterLeft = new TalonFX(ShooterConstants.IDs.SHOOTER_SHOOTER_LEFT_MOTOR, "Canivore1");
         shooterRight = new TalonFX(ShooterConstants.IDs.SHOOTER_SHOOTER_RIGHT_MOTOR, "Canivore1");
         TalonFXConfiguration shooterConfig = new TalonFXConfiguration()
-                .withSlot0(
-                        new Slot0Configs()
-                                .withKP(ShooterConstants.SHOOTER_PID_kp)
-                                .withKI(ShooterConstants.SHOOTER_PID_ki)
-                                .withKD(ShooterConstants.SHOOTER_PID_kd)
-                                .withKV(ShooterConstants.SHOOTER_PID_kv))
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
                                 .withStatorCurrentLimit(4)
