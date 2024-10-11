@@ -74,7 +74,7 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
         );
 
         pivotMotorRight.setInverted(true);
-        setExtended(ExtensionState.RETRACTED);
+        setExtendedState(ExtensionState.RETRACTED);
     }
 
     @Override
