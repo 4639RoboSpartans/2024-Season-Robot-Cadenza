@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.autos.Autos;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
@@ -138,17 +139,22 @@ public class RobotContainer {
             }
         }, ledStrip));
 
-        OperatorControls.IntakeButton.whileTrue(CommandFactory.intakeCommand())
-                .onFalse(CommandFactory.resetIntakeCommand()
-                        .andThen(hopper.simToggleHasNote(true)));
+//        OperatorControls.IntakeButton.whileTrue(CommandFactory.intakeCommand())
+//                .onFalse(CommandFactory.resetIntakeCommand()
+//                        .andThen(hopper.simToggleHasNote(true)));
+//
+//        OperatorControls.OuttakeButton.whileTrue(CommandFactory.outtakeCommand())
+//                .onFalse(CommandFactory.resetIntakeCommand()
+//                        .andThen(hopper.simToggleHasNote(false)));
 
-        OperatorControls.OuttakeButton.whileTrue(CommandFactory.outtakeCommand())
-                .onFalse(CommandFactory.resetIntakeCommand()
-                        .andThen(hopper.simToggleHasNote(false)));
 
-        OperatorControls.IntakeExtendButton.onTrue(intake.setExtended(IntakeSubsystem.ExtensionState.EXTENDED));
+        OperatorControls.IntakeButton.whileTrue(shooter.shooterSysIDQuasistatic(SysIdRoutine.Direction.kForward));
 
-        OperatorControls.IntakeRetractButton.onTrue(intake.setExtended(IntakeSubsystem.ExtensionState.RETRACTED));
+        OperatorControls.OuttakeButton.whileTrue(shooter.shooterSysIDDynamic(SysIdRoutine.Direction.kForward));
+
+        OperatorControls.IntakeExtendButton.whileTrue(shooter.shooterSysIDQuasistatic(SysIdRoutine.Direction.kReverse));
+
+        OperatorControls.IntakeRetractButton.whileTrue(shooter.shooterSysIDDynamic(SysIdRoutine.Direction.kReverse));
 
         OperatorControls.ToggleIR.onTrue(hopper.toggleIR());
 

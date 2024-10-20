@@ -4,12 +4,15 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Time;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotController;
@@ -30,7 +33,7 @@ public class SimShooterSubsystem extends ShooterSubsystem {
 
     public SimShooterSubsystem() {
         shooter = new TalonFX(ShooterConstants.IDs.SHOOTER_SHOOTER_LEFT_MOTOR, "Canivore1");
-        simShooter = new DCMotorSim(DCMotor.getFalcon500(2), 1.5, 0.1);
+        simShooter = new DCMotorSim(DCMotor.getFalcon500(2), 1.5, 0.001);
         TalonFXConfiguration shooterConfig = new TalonFXConfiguration()
                 .withSlot0(
                         new Slot0Configs()
@@ -48,7 +51,7 @@ public class SimShooterSubsystem extends ShooterSubsystem {
         targetVelocity = ShooterConstants.SHOOTER_IDLE.speed();
 
         routine = new SysIdRoutine(
-                new SysIdRoutine.Config(),
+                new SysIdRoutine.Config(Volts.of(0.1).per(Seconds.of(1)), Volts.of(2), Seconds.of(300)),
                 new SysIdRoutine.Mechanism(
                         (Measure<Voltage> output) -> runShootingVoltage(output.in(Volts)),
                         log -> {
@@ -110,12 +113,12 @@ public class SimShooterSubsystem extends ShooterSubsystem {
     }
 
     @Override
-    public Command getSysIDQuasistaticCommand() {
-        return routine.quasistatic(SysIdRoutine.Direction.kForward);
+    public Command getSysIDQuasistaticCommand(SysIdRoutine.Direction dir) {
+        return routine.quasistatic(dir);
     }
 
     @Override
-    public Command getSysIDDynamicCommand() {
-        return routine.dynamic(SysIdRoutine.Direction.kForward);
+    public Command getSysIDDynamicCommand(SysIdRoutine.Direction dir) {
+        return routine.dynamic(dir);
     }
 }

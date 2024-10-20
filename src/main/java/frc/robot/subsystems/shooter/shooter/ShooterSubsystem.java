@@ -5,6 +5,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterConstants.ShootingMode;
@@ -56,7 +57,7 @@ public abstract class ShooterSubsystem extends SubsystemBase {
 
     protected abstract void buildSendable(SendableBuilder builder);
 
-    public abstract Command getSysIDQuasistaticCommand();
+    public abstract Command getSysIDQuasistaticCommand(SysIdRoutine.Direction dir);
 
-    public abstract Command getSysIDDynamicCommand();
+    public abstract Command getSysIDDynamicCommand(SysIdRoutine.Direction dir);
 }

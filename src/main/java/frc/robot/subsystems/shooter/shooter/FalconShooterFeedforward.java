@@ -87,12 +87,12 @@ public class FalconShooterFeedforward extends ShooterSubsystem {
     }
 
     @Override
-    public Command getSysIDQuasistaticCommand() {
-        return routine.quasistatic(SysIdRoutine.Direction.kForward);
+    public Command getSysIDQuasistaticCommand(SysIdRoutine.Direction dir) {
+        return routine.quasistatic(dir);
     }
 
     @Override
-    public Command getSysIDDynamicCommand() {
-        return routine.dynamic(SysIdRoutine.Direction.kForward);
+    public Command getSysIDDynamicCommand(SysIdRoutine.Direction dir) {
+        return routine.dynamic(dir);
     }
 }

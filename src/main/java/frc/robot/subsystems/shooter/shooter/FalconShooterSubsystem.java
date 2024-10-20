@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.lib.util.Helpers;
 
@@ -62,12 +63,12 @@ public class FalconShooterSubsystem extends ShooterSubsystem {
     }
 
     @Override
-    public Command getSysIDQuasistaticCommand() {
+    public Command getSysIDQuasistaticCommand(SysIdRoutine.Direction dir) {
         return null;
     }
 
     @Override
-    public Command getSysIDDynamicCommand() {
+    public Command getSysIDDynamicCommand(SysIdRoutine.Direction dir) {
         return null;
     }
 }

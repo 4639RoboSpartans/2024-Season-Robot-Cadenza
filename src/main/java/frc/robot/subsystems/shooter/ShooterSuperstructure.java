@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.shooter.pivot.PivotSubsystem;
 import frc.robot.subsystems.shooter.shooter.ShooterSubsystem;
 
@@ -37,11 +38,11 @@ public class ShooterSuperstructure extends SubsystemBase {
         SmartDashboard.putData(pivotSubsystem);
     }
 
-    public Command shooterSysIDQuasistatic() {
-        return shooterSubsystem.getSysIDQuasistaticCommand();
+    public Command shooterSysIDQuasistatic(SysIdRoutine.Direction dir) {
+        return shooterSubsystem.getSysIDQuasistaticCommand(dir);
     }
 
-    public Command shooterSysIDDynamic() {
-        return shooterSubsystem.getSysIDDynamicCommand();
+    public Command shooterSysIDDynamic(SysIdRoutine.Direction dir) {
+        return shooterSubsystem.getSysIDDynamicCommand(dir);
     }
 }
