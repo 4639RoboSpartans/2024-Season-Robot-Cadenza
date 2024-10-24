@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.util.VelocityDutyCycleEncoder;
@@ -92,7 +93,8 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     @Override
     public Command outtake() {
-        return runOnce(this::outtakeRun);
+        return Commands.runOnce(this::outtakeRun)
+        .alongWith(setExtended(ExtensionState.RETRACTED));
     }
 
     @Override
@@ -112,7 +114,8 @@ public class IntakeSubsystem extends SubsystemBase implements IIntakeSubsystem {
 
     @Override
     public Command intake() {
-        return runOnce(this::intakeRun);
+        return Commands.runOnce(this::intakeRun)
+        .alongWith(setExtended(ExtensionState.EXTENDED));
     }
 
     private void outtakeRun() {

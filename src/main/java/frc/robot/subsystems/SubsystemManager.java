@@ -78,7 +78,7 @@ public class SubsystemManager {
         if(shooter == null) {
             shooter = switch (currentRobot) {
                 case ZEUS -> new DummyShooterSubsystem();
-                case CADENZA, SIM -> new FalconShooterFeedforward(
+                case CADENZA, SIM -> new FalconShooterSubsystem(
                     IDs.SHOOTER_SHOOTER_LEFT_MOTOR,
                     IDs.SHOOTER_SHOOTER_RIGHT_MOTOR
                 );

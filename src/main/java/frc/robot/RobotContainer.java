@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import org.opencv.core.Algorithm;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -22,6 +24,7 @@ import frc.robot.commands.shooter.*;
 import frc.robot.constants.Controls;
 import frc.robot.constants.Controls.DriverControls;
 import frc.robot.constants.Controls.OperatorControls;
+import frc.robot.constants.RobotInfo.HopperInfo;
 import frc.robot.commands.autos.AutoFactory;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.ManualClimbCommand;
@@ -174,9 +177,9 @@ public class RobotContainer {
         DriverControls.ClimberSwap1Button.whileTrue(new ManualClimbCommand(climber, 1, -1));
         DriverControls.ClimberSwap2Button.whileTrue(new ManualClimbCommand(climber, -1, 1));
 
-        OperatorControls.IntakeButton.whileTrue(intake.intake());
+        OperatorControls.IntakeButton.whileTrue(intake.intake().alongWith(Commands.run(() -> hopper.run(true, HopperInfo.HOPPER_SPEED)))).onFalse(intake.stopIntake().alongWith(Commands.runOnce(hopper::stop)));
 
-        OperatorControls.OuttakeButton.whileTrue(intake.outtake());
+        OperatorControls.OuttakeButton.whileTrue(intake.outtake().alongWith(Commands.run(() -> hopper.run(false, -HopperInfo.HOPPER_SPEED)))).onFalse(intake.stopIntake().alongWith(Commands.runOnce(hopper::stop)));
 
         OperatorControls.IntakeExtendButton.onTrue(intake.setExtended(IIntakeSubsystem.ExtensionState.EXTENDED));
 
